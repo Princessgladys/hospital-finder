@@ -6,6 +6,10 @@
 - Change Manager table to Administrator
 - Remove PremiumType from Administrator
 - Add attribute Email, Phone_Number for Administrator
-- Add 'upload' relation between Administrator and Photo
-- Add 'import' relation between Administrator and Hospital
-- Add 'upload' relation between PremiumUser and Photo
+- Add 'Upload' relation between Administrator and Photo
+- Add 'Import' relation between Administrator and Hospital
+- Add 'Upload' relation between PremiumUser and Photo
+
+1.2
+- Add 'Reply' relation for comment
+- Add 'Feedback' relation between Feedback and District
