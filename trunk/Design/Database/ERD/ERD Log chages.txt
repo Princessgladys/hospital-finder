@@ -1,0 +1,11 @@
+1.0
+- Add initial ERD
+
+1.1
+- Add primary key for Photo and PremiumType table
+- Change Manager table to Administrator
+- Remove PremiumType from Administrator
+- Add attribute Email, Phone_Number for Administrator
+- Add 'upload' relation between Administrator and Photo
+- Add 'import' relation between Administrator and Hospital
+- Add 'upload' relation between PremiumUser and Photo
