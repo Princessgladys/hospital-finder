@@ -4,12 +4,16 @@
 1.1
 - Add primary key for Photo and PremiumType table
 - Change Manager table to Administrator
-- Remove PremiumType from Administrator
-- Add attribute Email, Phone_Number for Administrator
+- Remove PremiumType attribute from Administrator
+- Add attribute Email, Phone_Number to Administrator
 - Add 'Upload' relation between Administrator and Photo
 - Add 'Import' relation between Administrator and Hospital
 - Add 'Upload' relation between PremiumUser and Photo
 
 1.2
-- Add 'Reply' relation for comment
+- Add 'Reply' relation to Comment
 - Add 'Feedback' relation between Feedback and District
+- Remove Is_Acpproved from Feedback
+- Remove Speciality attribute from Doctor
+- Add attribute Start_Active_Time To PremiumUser
+- Add Is_Active attribute to Doctor
