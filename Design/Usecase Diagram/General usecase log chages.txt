@@ -1,0 +1,9 @@
+v1.0
+- Add initial general use case
+
+v1.1
+- Rename Role Guest to User
+- Change case 'rating hospital/clinic' to 'rate hospital/clinic'
+- Change case 'de-active members' to 'deactivate members'
+- Change case 'active members' to 'activate members'
+- Seperate case 'view statistics' to 2 different cases, 'view administrator statistics' and 'view hospital statistics'
