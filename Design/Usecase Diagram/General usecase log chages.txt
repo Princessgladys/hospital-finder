@@ -2,7 +2,9 @@ v1.0
 - Add initial general use case
 
 v1.1
-- Rename Role Guest to User
+- Rename role Guest to User
+- Rename role Hospital Member to Hospital User
+- Rename role Normal Member to Normal User
 - Change case 'rating hospital/clinic' to 'rate hospital/clinic'
 - Change case 'de-active members' to 'deactivate members'
 - Change case 'active members' to 'activate members'
