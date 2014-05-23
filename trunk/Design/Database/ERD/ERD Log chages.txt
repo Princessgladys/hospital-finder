@@ -2,18 +2,33 @@
 - Add initial ERD
 
 1.1
-- Add primary key for Photo and PremiumType table
-- Change Manager table to Administrator
-- Remove PremiumType attribute from Administrator
-- Add attribute Email, Phone_Number to Administrator
-- Add 'Upload' relation between Administrator and Photo
-- Add 'Import' relation between Administrator and Hospital
-- Add 'Upload' relation between PremiumUser and Photo
+- Add primary key for Photo and PremiumType entity
+- Change Manager entity to Administrator
+- Remove PremiumType attribute from Administrator entitiy
+- Add attribute Email, Phone_Number to Administrator entitiy
+- Add 'Upload' relation between Administrator entitiy and Photo entitiy
+- Add 'Import' relation between Administrator entitiy and Hospital entitiy
+- Add 'Upload' relation between PremiumUser entitiy and Photo entitiy
 
 1.2
-- Add 'Reply' relation to Comment
-- Add 'Feedback' relation between Feedback and District
-- Remove Is_Acpproved from Feedback
-- Remove Speciality attribute from Doctor
-- Add attribute Start_Active_Time To PremiumUser
-- Add Is_Active attribute to Doctor
+- Add 'Reply' relation to Comment entitiy
+- Add 'Feedback' relation between Feedback entitiy and District entitiy
+- Remove Is_Acpproved from Feedback entitiy
+- Remove Speciality attribute from Doctor entitiy
+- Add attribute Start_Active_Time to PremiumUser entitiy
+- Add Is_Active attribute to Doctor entitiy
+
+2.0
+- Rename PremiumUser entitiy to HospitalUser
+- Remove Comment entitiy
+- Remove 'Approve' relation between HospitalUser entitiy and Appointment entitiy
+- Remove NormalUser entity, PremiumUser entity, Administrator entity, 
+and modify all association that associated to those entties to associate with User entity
+- Add patient's profile to Appointment entity
+- Add WordDictionary entity
+- Add SentenceDictionary entity
+- Modify attributes of Feedback entity
+- Add attribute Latitued, Longitude to Hospital entity
+- Add attribute First_Name, Last_Name, Phone_Number to User entity
+- Remove PremiumType entity
+- Add FeedbackType entity
