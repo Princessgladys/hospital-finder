@@ -187,7 +187,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="LinqDB.designer.cs">
+    <Compile Include="Models\LinqDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LinqDB.dbml</DependentUpon>
@@ -253,7 +253,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="LinqDB.dbml">
+    <Content Include="Models\LinqDB.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>LinqDB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
@@ -301,7 +301,7 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LinqDB.dbml.layout">
+    <Content Include="Models\LinqDB.dbml.layout">
       <DependentUpon>LinqDB.dbml</DependentUpon>
     </Content>
   </ItemGroup>
