@@ -16,3 +16,16 @@ v1.2
 - Change association relation of Create Hospital Members' account to genenalized
 Manage Account case.
 - Add new association relation between "update account information" case and hospital user actor.
+
+v1.3
+- Add new case "create hospital/clinic", "insert doctor", "upload photo", "insert speciality" use cases.
+- Change case "create hospital member's account" to "create hospital user's account"
+- Add new extend relationship points from the "create hospital/clinic" use case to the "create hospital user's account" use case.
+- Add new extend relationship points from the "insert doctor" use case to the "insert" use case.
+- Add new extend relationship points from the "insert doctor" use case to the "update" use case.
+- Add new extend relationship points from the "upload photo" use case to the "insert" use case.
+- Add new extend relationship points from the "upload photo" use case to the "update" use case.
+- Add new extend relationship points from the "insert speciality" use case to the "insert" use case.
+- Add new extend relationship points from the "insert speciality" use case to the "update" use case.
+- Add extension points "Doctor is not enough", "Update new photos", "Speciality is not enough" for "insert", "update" use cases.\
+- Add extension points "Hospital/clinic is not existed" for "create hospital user's account" use case.
