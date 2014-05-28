@@ -21,8 +21,8 @@
 2.0
 - Rename PremiumUser entitiy to HospitalUser
 - Remove Comment entitiy
-- Remove 'Approve' relation between HospitalUser entitiy and Appointment entitiy
-- Remove NormalUser entity, PremiumUser entity, Administrator entity, 
+- Remove 'Approve' relation between HospitalUser and Appointment entitities
+- Remove NormalUser, PremiumUser, Administrator entities, 
 and modify all association that associated to those entties to associate with User entity
 - Add patient's profile to Appointment entity
 - Add WordDictionary entity
@@ -32,3 +32,14 @@ and modify all association that associated to those entties to associate with Us
 - Add attribute First_Name, Last_Name, Phone_Number to User entity
 - Remove PremiumType entity
 - Add FeedbackType entity
+
+3.0
+- Add priority attribute for WordDictionary and SentenceDictionary entities
+- Add Ward entity
+- Remove relation between District and City entities
+- Add HospitalType entity
+- Add relation between HospitalType and Hospital entities
+- Add Facility entity
+- Add relation between Facility and Hospital entities
+- Add Patient_Email attribute to Appointment entity
+- Add Start_Time and End_Time attributes to Hospital entity
