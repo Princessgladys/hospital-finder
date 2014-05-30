@@ -1,0 +1,47 @@
+﻿body
+{
+	font-family: Arial;
+	font-size: 14px;
+	height: 100%;
+	overflow: auto;
+	padding: 0;
+    margin: 0;
+}
+
+#header
+{
+	position: fixed !important;
+	width: 100%;
+	top: 0;
+	z-index: 1000;
+}
+
+#content
+{
+	margin-top: 5%;
+	background-color: #FFF;
+}
+
+#content-results
+{
+	margin-top: 5%;
+}
+
+#main-logo
+{
+	background-image: url("../img/UIE-hospital-logo.png");
+	background-repeat: no-repeat;
+	background-size: 25%;
+	background-position: center;
+	margin-bottom: 10px;
+}
+
+#map-canvas
+{
+	height: 500px;
+	width: 100%;
+	background-color: #cccccc;
+	margin: 0px;
+	padding: 0px;
+}
+
