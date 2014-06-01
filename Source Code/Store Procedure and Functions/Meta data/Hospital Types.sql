@@ -6,4 +6,5 @@ INSERT INTO HospitalType VALUES
 	(N'Phòng mạch tư nhân'),
 	(N'Trung tâm y tế'),
 	(N'Bệnh viện thú y'),
-	(N'Nhà thuốc')
+	(N'Nhà thuốc'),
+	(N'Bệnh viện quốc tế')
