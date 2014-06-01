@@ -43,3 +43,18 @@ and modify all association that associated to those entties to associate with Us
 - Add relation between Facility and Hospital entities
 - Add Patient_Email attribute to Appointment entity
 - Add Start_Time and End_Time attributes to Hospital entity
+
+3.1
+- Add relation between Ward and District entities
+- Add relation between District and City entities
+- Add relation between WordDictionary and Hospital entities
+- Add relation between WordDictionary and SenetenceDictionary
+- Remove attribute Priority in SentenceDictionary entity
+- Remove attribute Longitude and Latitute of Hospital entity
+- Add attribute Coordinate to Hospital entity
+- Add attribute Type to City entity
+- Add attribute Type to District entity
+- Add attribute Type to Ward entity
+- Add attribute Coordinate to District entity
+- Add attribute Coordinate to Ward entity
+- Add Service entity

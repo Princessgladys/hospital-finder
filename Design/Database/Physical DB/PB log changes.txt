@@ -4,3 +4,6 @@
 1.1
 - Base on ERD v3.0
 - Fix script for function FU_AUTO_GENERATE_ENTITIES_CLASS
+
+1.2
+- Base one ERD v3.1
