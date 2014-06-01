@@ -47,4 +47,6 @@ INSERT INTO Speciality VALUES
 	(N'Xương khớp'),
 	(N'Y học cổ truyền'),
 	(N'Y học hạt nhân'),
-	(N'Y học thể thao')
+	(N'Y học thể thao'),
+	(N'Đa khoa'),
+	(N'General')
