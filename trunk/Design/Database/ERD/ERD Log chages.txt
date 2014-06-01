@@ -45,6 +45,7 @@ and modify all association that associated to those entties to associate with Us
 - Add Start_Time and End_Time attributes to Hospital entity
 
 3.1
+- Add attribute Header to Feedback entity
 - Add relation between Ward and District entities
 - Add relation between District and City entities
 - Add relation between WordDictionary and Hospital entities
