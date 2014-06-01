@@ -1,0 +1,25 @@
+﻿-- SCRIPT DEFINE FACILITIES FOR HOSPITAL
+
+INSERT INTO Facility VALUES
+	(N'Bãi giữ xe đạp'),
+	(N'Bãi giữ xe máy'),
+	(N'Bãi giữ xe ô tô'),
+	(N'Chỗ đậu xe cho người khuyết tật'),
+	(N'Đường đi riêng cho người khuyết tật'),
+	(N'Nhà vệ sinh cho người khuyết tật'),
+	(N'Khu vui chơi thiếu nhi'),
+	(N'Thư viện tra cứu thông tin'),
+	(N'Tap hóa'),
+	(N'Quán café'),
+	(N'Khu ăn uống'),
+	(N'Khu dành riêng cho người hút thuốc'),
+	(N'Khu nghỉ ngơi cho người nuôi bệnh'),
+	(N'Khu vực cây xanh'),
+	(N'Khu vực rèn luyện sức khỏe'),
+	(N'Đặt lịch khám Onine'),
+	(N'Đặt lịch khám qua tổng đài 1080'),
+	(N'Kết nối không dây'),
+	(N'Truy cập máy vi tính'),
+	(N'Điện thoại công cộng'),
+	(N'Tra cứu thông tin trực tuyến'),
+	(N'Thông báo tái khám qua tin nhắn')
