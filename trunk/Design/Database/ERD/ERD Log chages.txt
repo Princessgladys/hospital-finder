@@ -60,3 +60,4 @@ and modify all association that associated to those entties to associate with Us
 - Add attribute Coordinate to Ward entity
 - Add Service entity
 - Add attributes Degree and Working_Day to Doctor entity
+- Remove relation between Appointment and User
