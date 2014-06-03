@@ -62,3 +62,5 @@ and modify all association that associated to those entties to associate with Us
 - Add attributes Degree and Working_Day to Doctor entity
 - Remove relation between Appointment and User
 - Add attribute Caption to Photo entity
+- Change relation between Doctor and Hospital entities to many to many
+- Change relation between Doctor and Speciality entites to many to many
