@@ -38,6 +38,13 @@ namespace HospitalF
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            // Bundle for Home page
+            bundles.Add(new StyleBundle("~/Content/smartadmin").Include(
+                        "~/Content/smartadmin/bootstrap.min.css",
+                        "~/Content/smartadmin/font-awesome.min.css",
+                        "~/Content/smartadmin/smartadmin-production.css",
+                        "~/Content/smartadmin/smartadmin-skins.css"));
         }
     }
 }

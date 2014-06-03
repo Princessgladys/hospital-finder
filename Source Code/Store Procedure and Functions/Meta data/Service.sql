@@ -4,6 +4,7 @@ INSERT INTO [Service] VALUES
 	(N'Đăng ký bảo hiệm y tế'),
 	(N'Khám bệnh bảo hiểm y tế'),
 	(N'Khám bệnh dịch vụ'),
+	(N'Khám sức khỏe tổng quát'),
 	(N'Cấp cứu khẩn cấp'),
 	(N'Tiếp nhận bệnh nhân mới'),
 	(N'Chấp nhận bệnh nhân chuyển lên từ tuyến dưới'),

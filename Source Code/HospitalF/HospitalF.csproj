@@ -184,9 +184,38 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constant\Constants.cs" />
     <Compile Include="Constant\ErrorMessage.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Entities\Appointment.cs" />
+    <Compile Include="Entities\City.cs" />
+    <Compile Include="Entities\Disease.cs" />
+    <Compile Include="Entities\District.cs" />
+    <Compile Include="Entities\Doctor.cs" />
+    <Compile Include="Entities\DoctorHospital.cs" />
+    <Compile Include="Entities\DoctorSpeciality.cs" />
+    <Compile Include="Entities\Facility.cs" />
+    <Compile Include="Entities\Feedback.cs" />
+    <Compile Include="Entities\FeedbackType.cs" />
+    <Compile Include="Entities\Hospital.cs" />
+    <Compile Include="Entities\HospitalFacility.cs" />
+    <Compile Include="Entities\HospitalService.cs" />
+    <Compile Include="Entities\HospitalSpeciality.cs" />
+    <Compile Include="Entities\HospitalType.cs" />
+    <Compile Include="Entities\Photo.cs" />
+    <Compile Include="Entities\Rating.cs" />
+    <Compile Include="Entities\Role.cs" />
+    <Compile Include="Entities\SentenceDictionary.cs" />
+    <Compile Include="Entities\SentenceWord.cs" />
+    <Compile Include="Entities\Service.cs" />
+    <Compile Include="Entities\Speciality.cs" />
+    <Compile Include="Entities\SpecialityDisease.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\Ward.cs" />
+    <Compile Include="Entities\WordDictionary.cs" />
+    <Compile Include="Entities\WordHospital.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Models\LinqDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -197,6 +226,53 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\font\fontawesome-webfont.svg" />
+    <Content Include="Content\font\fontawesome-webfont1fc6-2.html" />
+    <Content Include="Content\font\fontawesome-webfont1fc6-3.html" />
+    <Content Include="Content\font\fontawesome-webfont1fc6.html" />
+    <Content Include="Content\font\fontawesome-webfont1fc6.svg" />
+    <Content Include="Content\font\fontawesome-webfontd41d.html" />
+    <Content Include="Content\font\glyphicons-halflings-regular-2.html" />
+    <Content Include="Content\font\glyphicons-halflings-regular-3.html" />
+    <Content Include="Content\font\glyphicons-halflings-regular.html" />
+    <Content Include="Content\font\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\font\glyphicons-halflings-regulard41d.html" />
+    <Content Include="Content\image\ajax-loader.gif" />
+    <Content Include="Content\image\alpha.png" />
+    <Content Include="Content\image\avatars\sunny-big.png" />
+    <Content Include="Content\image\avatars\sunny.png" />
+    <Content Include="Content\image\clear.png" />
+    <Content Include="Content\image\demo\iphoneview.png" />
+    <Content Include="Content\image\dropzone\spritemap.png" />
+    <Content Include="Content\image\favicon\favicon.ico" />
+    <Content Include="Content\image\flags\de.png" />
+    <Content Include="Content\image\flags\es.png" />
+    <Content Include="Content\image\flags\us.png" />
+    <Content Include="Content\image\hue.png" />
+    <Content Include="Content\image\loading.gif" />
+    <Content Include="Content\image\logo-o.png" />
+    <Content Include="Content\image\logo.png" />
+    <Content Include="Content\image\saturation.png" />
+    <Content Include="Content\image\sort_asc.png" />
+    <Content Include="Content\image\sort_asc_disabled.png" />
+    <Content Include="Content\image\sort_both.png" />
+    <Content Include="Content\image\sort_desc.png" />
+    <Content Include="Content\image\sort_desc_disabled.png" />
+    <Content Include="Content\image\splash\ipad-landscape.png" />
+    <Content Include="Content\image\splash\ipad-portrait.png" />
+    <Content Include="Content\image\splash\iphone.png" />
+    <Content Include="Content\image\splash\sptouch-icon-iphone.png" />
+    <Content Include="Content\image\splash\touch-icon-ipad-retina.png" />
+    <Content Include="Content\image\splash\touch-icon-ipad.png" />
+    <Content Include="Content\image\splash\touch-icon-iphone-retina.png" />
+    <Content Include="Content\image\UIE-hospital-logo.png" />
+    <Content Include="Content\smartadmin\bootstrap.min.css" />
+    <Content Include="Content\smartadmin\custom.css" />
+    <Content Include="Content\smartadmin\demo.css" />
+    <Content Include="Content\smartadmin\font-awesome.min.css" />
+    <Content Include="Content\smartadmin\lockscreen.css" />
+    <Content Include="Content\smartadmin\smartadmin-production.css" />
+    <Content Include="Content\smartadmin\smartadmin-skins.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -258,6 +334,16 @@
       <LastGenOutput>LinqDB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Content\font\fontawesome-webfont.eot" />
+    <Content Include="Content\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\font\fontawesome-webfont.woff" />
+    <Content Include="Content\font\FontAwesome.otf" />
+    <Content Include="Content\image\avatars\Thumbs.db" />
+    <Content Include="Content\image\demo\Thumbs.db" />
+    <Content Include="Content\image\dropzone\Thumbs.db" />
+    <Content Include="Content\image\favicon\Thumbs.db" />
+    <Content Include="Content\image\flags\Thumbs.db" />
+    <Content Include="Content\image\splash\Thumbs.db" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -273,6 +359,23 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\smartadmin\app.js" />
+    <Content Include="Scripts\smartadmin\bootstrap\bootstrap.min.js" />
+    <Content Include="Scripts\smartadmin\custom.js" />
+    <Content Include="Scripts\smartadmin\demo.js" />
+    <Content Include="Scripts\smartadmin\libs\jquery-2.0.2.min.js" />
+    <Content Include="Scripts\smartadmin\libs\jquery-ui-1.10.3.min.js" />
+    <Content Include="Scripts\smartadmin\notification\SmartNotification.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\bootstrap-slider\bootstrap-slider.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\easy-pie-chart\jquery.easy-pie-chart.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\fastclick\fastclick.js" />
+    <Content Include="Scripts\smartadmin\plugin\jquery-validate\jquery.validate.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\masked-input\jquery.maskedinput.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\msie-fix\jquery.mb.browser.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\pace\pace.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\select2\select2.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\sparkline\jquery.sparkline.min.js" />
+    <Content Include="Scripts\smartadmin\smartwidgets\jarvis.widget.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -287,11 +390,10 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Entities\" />
     <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
