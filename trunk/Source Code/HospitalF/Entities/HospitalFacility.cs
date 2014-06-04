@@ -5,7 +5,7 @@ namespace HospitalF.Entities
     /// <summary>
     /// Class defines properties for Hospital_Facility table
     /// <summary>
-    public class HospitalFacility
+    public class HospitalFacilityEntity
     {
         #region Hospital_Facility Properties
 

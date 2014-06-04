@@ -5,7 +5,7 @@ namespace HospitalF.Entities
     /// <summary>
     /// Class defines properties for Appointment table
     /// <summary>
-    public class Appointment
+    public class AppointmentEntity
     {
         #region Appointment Properties
 

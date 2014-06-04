@@ -5,7 +5,7 @@ namespace HospitalF.Entities
     /// <summary>
     /// Class defines properties for FeedbackType table
     /// <summary>
-    public class FeedbackType
+    public class FeedbackTypeEntity
     {
         #region FeedbackType Properties
 

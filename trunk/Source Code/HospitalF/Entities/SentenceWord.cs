@@ -5,7 +5,7 @@ namespace HospitalF.Entities
     /// <summary>
     /// Class defines properties for Sentence_Word table
     /// <summary>
-    public class SentenceWord
+    public class SentenceWordEntity
     {
         #region Sentence_Word Properties
 
