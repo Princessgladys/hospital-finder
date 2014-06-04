@@ -5,7 +5,7 @@ namespace HospitalF.Entities
     /// <summary>
     /// Class defines properties for Rating table
     /// <summary>
-    public class Rating
+    public class RatingEntity
     {
         #region Rating Properties
 

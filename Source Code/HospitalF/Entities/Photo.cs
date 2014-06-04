@@ -5,7 +5,7 @@ namespace HospitalF.Entities
     /// <summary>
     /// Class defines properties for Photo table
     /// <summary>
-    public class Photo
+    public class PhotoEntity
     {
         #region Photo Properties
 

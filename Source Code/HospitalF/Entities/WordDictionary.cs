@@ -5,7 +5,7 @@ namespace HospitalF.Entities
     /// <summary>
     /// Class defines properties for WordDictionary table
     /// <summary>
-    public class WordDictionary
+    public class WordDictionaryEntity
     {
         #region WordDictionary Properties
 
