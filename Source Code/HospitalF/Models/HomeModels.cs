@@ -134,7 +134,7 @@ namespace HospitalF.Models
         /// Load word dictionary in database
         /// </summary>
         /// <returns>List[string] of words</returns>
-        private async Task<List<string>> LoadWordDictionaryAsync()
+        private async Task<List<string>> LoadRelationWordDictionaryAsync()
         {
             // Create an instance of Linq database
             LinqDBDataContext data = new LinqDBDataContext();
@@ -194,7 +194,7 @@ namespace HospitalF.Models
             foreach (string word in dictionary)
             {
                 // Find matching result
-                if (word.Equals(inputStr))
+                if (word.ToLower().Equals(inputStr))
                 {
                     return true;
                 }
@@ -215,14 +215,14 @@ namespace HospitalF.Models
             foreach (HomeModels model in dictionary)
             {
                 // Find matching result for cities
-                if (model.CityName.Equals(inputStr))
+                if (model.CityName.ToLower().Equals(inputStr))
                 {
                     return true;
                 }
                 else
                 {
                     // Find matching reuslt for district
-                    if (model.DistrictName.Equals(inputStr))
+                    if (model.DistrictName.ToLower().Equals(inputStr))
                     {
                         return true;
                     }
@@ -252,7 +252,7 @@ namespace HospitalF.Models
             int sizeOfTokens = tokens.Count();
 
             // Load word dictionary
-            List<string> wordDic = await LoadWordDictionaryAsync();
+            List<string> wordDic = await LoadRelationWordDictionaryAsync();
             // Load location dictionary
             List<HomeModels> locationDic = await LoadLocationDictionaryAsync();
 
