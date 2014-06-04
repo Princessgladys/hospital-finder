@@ -292,10 +292,12 @@ namespace HospitalF.Models
             }
 
             // Handle query in case of input string is not well-formed
-            // with What - Relation - Where condition
+            // with Relation word and Where phrase is not found.
+            // Auto check Where phrase with default location value,
+            // if Where phrase is valid, auto assign Relation word with default value.
             if (string.IsNullOrEmpty(relation) && string.IsNullOrEmpty(where))
             {
-                int i = inputQuery.IndexOf("HCM");
+                int i = inputQuery.IndexOf("Hồ Chí Minh");
                 if (i >= 0)
                 {
                     tempWhat = inputQuery.Substring(0, i);
@@ -315,7 +317,9 @@ namespace HospitalF.Models
                 where = string.Empty;
             }
 
-            // Check if What phrase is valid
+            // Make sure What phrase have the value.
+            // At the worst case if the input query is not well-formed,
+            // assign What phrase with the input query
             if (!string.IsNullOrEmpty(tempWhat))
             {
                 what = tempWhat;
