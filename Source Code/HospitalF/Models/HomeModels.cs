@@ -107,7 +107,7 @@ namespace HospitalF.Models
         }
 
         /// <summary>
-        /// Concatenate tokens in a list
+        /// Concate tokens in a list
         /// </summary>
         /// <param name="tokenList">Input token list</param>
         /// <param name="begin">Begin index</param>
@@ -239,6 +239,7 @@ namespace HospitalF.Models
             string tempRelation = string.Empty;     // Temporary value for Relation word 
             string where = string.Empty;            // Where phrase
             string tempWhere = string.Empty;        // Temporary value for Where phrase
+            bool isComplete = false;                // Indicate if the process is complete or not
 
             // Create a list of tokens
             List<string> tokens = StringTokenizer(inputQuery);
@@ -276,6 +277,8 @@ namespace HospitalF.Models
                         // Check if Where phrase is matched with locaitons in database
                         if (IsValidWherePhrase(where, locationDic))
                         {
+                            // Change status of isComplete varialbe
+                            isComplete = true;
                             // If matches, assign Relation word is with the value
                             // of temporary relation 
                             relation = tempRelation;
@@ -291,38 +294,42 @@ namespace HospitalF.Models
                 }
             }
 
-            // Handle query in case of input string is not well-formed
-            // with Relation word and Where phrase is not found.
-            // Auto check Where phrase with default location value,
-            // if Where phrase is valid, auto assign Relation word with default value.
-            if (string.IsNullOrEmpty(relation) && string.IsNullOrEmpty(where))
+            // Check if the process is completely finished
+            if (!isComplete)
             {
-                int i = inputQuery.IndexOf("Hồ Chí Minh");
-                if (i >= 0)
+                // Handle query in case of input string is not well-formed
+                // with Relation word and Where phrase is not found.
+                // Auto check Where phrase with default location value,
+                // if Where phrase is valid, auto assign Relation word with default value.
+                if (string.IsNullOrEmpty(relation) && string.IsNullOrEmpty(where))
                 {
-                    tempWhat = inputQuery.Substring(0, i);
-                    where = inputQuery.Substring(i);
-                    relation = "ở";
+                    int i = inputQuery.IndexOf("Hồ Chí Minh");
+                    if (i >= 0)
+                    {
+                        tempWhat = inputQuery.Substring(0, i);
+                        where = inputQuery.Substring(i);
+                        relation = "ở";
+                    }
                 }
-            }
 
-            // If Where phrase is invalid, erase value of
-            // What phrase and Relation word.
-            // Because of if Where phrase is invalid, the input query is not well-formed,
-            // so it might lead to Relation word or Where phrase is invalid.
-            if (!IsValidWherePhrase(where, locationDic))
-            {
-                tempWhat = what;
-                relation = string.Empty;
-                where = string.Empty;
-            }
+                // If Where phrase is invalid, erase value of
+                // What phrase and Relation word.
+                // Because of if Where phrase is invalid, the input query is not well-formed,
+                // so it might lead to Relation word or Where phrase is invalid.
+                if (!IsValidWherePhrase(where, locationDic))
+                {
+                    tempWhat = what;
+                    relation = string.Empty;
+                    where = string.Empty;
+                }
 
-            // Make sure What phrase have the value.
-            // At the worst case if the input query is not well-formed,
-            // assign What phrase with the input query
-            if (!string.IsNullOrEmpty(tempWhat))
-            {
-                what = tempWhat;
+                // Make sure What phrase have the value.
+                // At the worst case if the input query is not well-formed,
+                // assign What phrase with the input query
+                if (!string.IsNullOrEmpty(tempWhat))
+                {
+                    what = tempWhat;
+                }
             }
 
             // Return value of What - Relation - Where
