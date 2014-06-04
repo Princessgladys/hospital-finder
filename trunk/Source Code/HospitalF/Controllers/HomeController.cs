@@ -20,6 +20,11 @@ namespace HospitalF.Controllers
         {
             try
             {
+                // Load the list of Cities and Specialities
+
+
+                // Add the list of Cities and Specialities to view
+
 
             }
             catch (Exception)
@@ -38,6 +43,9 @@ namespace HospitalF.Controllers
         /// <returns>ActionResult</returns>
         public async Task<ActionResult> Index(HomeModels model)
         {
+            // Add the list of Cities and Specialities to view
+
+
             // Check if all validations are correct
             if (!ModelState.IsValid)
             {

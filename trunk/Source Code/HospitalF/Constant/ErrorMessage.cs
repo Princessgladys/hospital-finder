@@ -22,6 +22,11 @@
         /// </summary>
         public const string CEM003 = "{0} không thể vượt quá {1} ký tự.";
 
+        /// <summary>
+        /// Drop down list required field is blank
+        /// </summary>
+        public const string CEM012 = "Xin hãy chọn {0}";
+
         #endregion
 
         #region Server Error Messages
