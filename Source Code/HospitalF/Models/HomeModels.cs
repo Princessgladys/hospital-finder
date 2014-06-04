@@ -231,14 +231,14 @@ namespace HospitalF.Models
         /// Analyze input query to 3 different phases of What - Relation - Where
         /// </summary>
         /// <param name="inputQuery">inputQuery</param>
-        public async Task GIRQueryAnalyzerAsync(string inputQuery)
+        public async Task<string> GIRQueryAnalyzerAsync(string inputQuery)
         {
-            string what = string.Empty;
-            string tempWhat = string.Empty;
-            string relation = string.Empty;
-            string tempRelation = string.Empty;
-            string where = string.Empty;
-            string tempWhere = string.Empty;
+            string what = string.Empty;             // What phrase
+            string tempWhat = string.Empty;         // Temporary value for What phrase
+            string relation = string.Empty;         // Relation word
+            string tempRelation = string.Empty;     // Temporary value for Relation word 
+            string where = string.Empty;            // Where phrase
+            string tempWhere = string.Empty;        // Temporary value for Where phrase
 
             // Create a list of tokens
             List<string> tokens = StringTokenizer(inputQuery);
@@ -256,18 +256,36 @@ namespace HospitalF.Models
             {
                 for (int i = n; i < sizeOfTokens; i++)
                 {
+                    // Concate tokens to create a string with the original starting
+                    // word is the first token, and this word is shift to left one index every n loop
+                    // if relaton word is not found.
+                    // New tokens is add to original token every i loop to check for valid relation word
                     tempRelation = ConcatTokens(tokens, n, i);
+
+                    // Check if token string is matched with relation word in database
                     if (IsValidRelationWord(tempRelation, wordDic))
                     {
-                        tempWhat = inputQuery.Substring(0, inputQuery.IndexOf(tempRelation));
+                        // If it matches, assign temporary What phrase value with 
+                        // the value of leading words before Relation word
+                        tempWhat = inputQuery.Substring(0, inputQuery.IndexOf(tempRelation) - 1);
+
+                        // Assign Where phrase value with the value of trailing
+                        // words after Relation word
                         where = ConcatTokens(tokens, i + 1, sizeOfTokens - 1);
+
+                        // Check if Where phrase is matched with locaitons in database
                         if (IsValidWherePhrase(where, locationDic))
                         {
+                            // If matches, assign Relation word is with the value
+                            // of temporary relation 
                             relation = tempRelation;
                             // Assign n value again to break the outside loop
                             n = sizeOfTokens;
                             break;
                         }
+
+                        // Assign Relation word with the value of temporary relation
+                        // every i loop
                         relation = tempRelation;
                     }
                 }
@@ -286,18 +304,25 @@ namespace HospitalF.Models
                 }
             }
 
+            // If Where phrase is invalid, erase value of
+            // What phrase and Relation word.
+            // Because of if Where phrase is invalid, the input query is not well-formed,
+            // so it might lead to Relation word or Where phrase is invalid.
             if (!IsValidWherePhrase(where, locationDic))
             {
                 tempWhat = what;
                 relation = string.Empty;
                 where = string.Empty;
-
             }
 
+            // Check if What phrase is valid
             if (!string.IsNullOrEmpty(tempWhat))
             {
                 what = tempWhat;
             }
+
+            // Return value of What - Relation - Where
+            return string.Format("[{0}][{1}][{2}]", what, relation, where);
         }
     }
 }
