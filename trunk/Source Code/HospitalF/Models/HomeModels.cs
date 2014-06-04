@@ -22,7 +22,7 @@ namespace HospitalF.Models
         /// Get/Set value for property CityID
         /// </summary>
         [Display(Name = Constants.City)]
-        [Required(ErrorMessage = ErrorMessage.CEM012)]
+        [Required(ErrorMessage = ErrorMessage.CEM011)]
         public int CityID { get; set; }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace HospitalF.Models
         /// Get/Set value for property DistrictID
         /// </summary>
         [Display(Name = Constants.District)]
-        [Required(ErrorMessage = ErrorMessage.CEM012)]
+        [Required(ErrorMessage = ErrorMessage.CEM011)]
         public int DistrictID { get; set; }
 
         /// <summary>

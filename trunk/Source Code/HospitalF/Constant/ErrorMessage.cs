@@ -23,9 +23,21 @@
         public const string CEM003 = "{0} không thể vượt quá {1} ký tự.";
 
         /// <summary>
+        /// Field's length (min,max) is not valid
+        /// </summary>
+        public const string CEM004 = "{0} hợp lệ trong khoảng từ {2} đến {1} ký tự.";
+
+        /// <summary>
+        /// Filed's expression is invalid
+        /// </summary>
+        public const string CEM005 = "{0} không hợp lệ.";
+
+
+
+        /// <summary>
         /// Drop down list required field is blank
         /// </summary>
-        public const string CEM012 = "Xin hãy chọn {0}";
+        public const string CEM011 = "Xin hãy chọn {0}";
 
         #endregion
 
