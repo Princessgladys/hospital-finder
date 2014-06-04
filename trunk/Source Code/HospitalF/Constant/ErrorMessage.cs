@@ -33,6 +33,16 @@
         public const string CEM005 = "{0} không hợp lệ.";
 
         /// <summary>
+        /// Field's value's existed already
+        /// </summary>
+        public const string CEM006 = "{0} này đã được sử dụng.";
+
+        /// <summary>
+        /// Field's value is not existed
+        /// </summary>
+        public const string CEM007 = "{0} không tồn tại.";
+
+        /// <summary>
         /// Drop down list required field is blank
         /// </summary>
         public const string CEM011 = "Xin hãy chọn {0}";
