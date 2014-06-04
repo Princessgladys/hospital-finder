@@ -248,9 +248,6 @@ namespace HospitalF.Models
             string tempWhere = string.Empty;        // Temporary value for Where phrase
             bool isComplete = false;                // Indicate if the process is complete or not
 
-            // Remove special chacracter in input query
-            inputQuery = Utils.RemoveSpecialCharacter(inputQuery);
-
             // Create a list of tokens
             List<string> tokens = StringTokenizer(inputQuery);
             int sizeOfTokens = tokens.Count();
