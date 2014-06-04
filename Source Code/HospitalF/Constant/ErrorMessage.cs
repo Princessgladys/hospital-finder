@@ -32,8 +32,6 @@
         /// </summary>
         public const string CEM005 = "{0} không hợp lệ.";
 
-
-
         /// <summary>
         /// Drop down list required field is blank
         /// </summary>

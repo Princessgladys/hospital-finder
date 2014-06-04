@@ -1,1 +1,310 @@
-﻿
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="HospitalF" Class="LinqDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=SONNXSE60727\SQLEXPRESS;Initial Catalog=HospitalF;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="HospitalFConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Appointment" Member="Appointments">
+    <Type Name="Appointment">
+      <Column Name="Appointment_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Patient_First_Name" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="Patient_Last_Name" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="Patient_Gender" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Patient_Birthday" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Patient_Phone_Number" Type="System.String" DbType="VarChar(13)" CanBeNull="true" />
+      <Column Name="Patient_Email" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="Appointment_Date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Start_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="End_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="In_Charge_Doctor" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Curing_Hospital" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Created_Person" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Is_Confirm" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Doctor_Appointment" Member="Doctor" ThisKey="In_Charge_Doctor" OtherKey="Doctor_ID" Type="Doctor" IsForeignKey="true" />
+      <Association Name="Hospital_Appointment" Member="Hospital" ThisKey="Curing_Hospital" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+      <Association Name="User_Appointment" Member="User" ThisKey="Created_Person" OtherKey="User_ID" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WordDictionary" Member="WordDictionaries">
+    <Type Name="WordDictionary">
+      <Column Name="Word_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Word" Type="System.String" DbType="NVarChar(8)" CanBeNull="true" />
+      <Column Name="Priority" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="WordDictionary_Sentence_Word" Member="Sentence_Words" ThisKey="Word_ID" OtherKey="Word_ID" Type="Sentence_Word" />
+      <Association Name="WordDictionary_Word_Hospital" Member="Word_Hospitals" ThisKey="Word_ID" OtherKey="Word_ID" Type="Word_Hospital" />
+    </Type>
+  </Table>
+  <Table Name="dbo.City" Member="Cities">
+    <Type Name="City">
+      <Column Name="City_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="City_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="Type" Type="System.String" DbType="NVarChar(9)" CanBeNull="true" />
+      <Association Name="City_District" Member="Districts" ThisKey="City_ID" OtherKey="City_ID" Type="District" />
+      <Association Name="City_Hospital" Member="Hospitals" ThisKey="City_ID" OtherKey="City_ID" Type="Hospital" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Disease" Member="Diseases">
+    <Type Name="Disease">
+      <Column Name="Disease_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Disease_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Association Name="Disease_Speciality_Disease" Member="Speciality_Diseases" ThisKey="Disease_ID" OtherKey="Disease_ID" Type="Speciality_Disease" />
+    </Type>
+  </Table>
+  <Table Name="dbo.District" Member="Districts">
+    <Type Name="District">
+      <Column Name="District_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="District_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="Type" Type="System.String" DbType="NVarChar(9)" CanBeNull="true" />
+      <Column Name="Coordinate" Type="System.String" DbType="VarChar(26)" CanBeNull="true" />
+      <Column Name="City_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="District_Hospital" Member="Hospitals" ThisKey="District_ID" OtherKey="District_ID" Type="Hospital" />
+      <Association Name="District_Ward" Member="Wards" ThisKey="District_ID" OtherKey="District_ID" Type="Ward" />
+      <Association Name="City_District" Member="City" ThisKey="City_ID" OtherKey="City_ID" Type="City" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Doctor" Member="Doctors">
+    <Type Name="Doctor">
+      <Column Name="Doctor_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="First_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="Last_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="Gender" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Speciality" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Working_Hospital" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Degree" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Column Name="Experience" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
+      <Column Name="Working_Day" Type="System.String" DbType="VarChar(33)" CanBeNull="true" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Doctor_Appointment" Member="Appointments" ThisKey="Doctor_ID" OtherKey="In_Charge_Doctor" Type="Appointment" />
+      <Association Name="Doctor_Doctor_Hospital" Member="Doctor_Hospitals" ThisKey="Doctor_ID" OtherKey="Doctor_ID" Type="Doctor_Hospital" />
+      <Association Name="Doctor_Doctor_Speciality" Member="Doctor_Specialities" ThisKey="Doctor_ID" OtherKey="Doctor_ID" Type="Doctor_Speciality" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Doctor_Hospital" Member="Doctor_Hospitals">
+    <Type Name="Doctor_Hospital">
+      <Column Name="Doctor_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Doctor_Doctor_Hospital" Member="Doctor" ThisKey="Doctor_ID" OtherKey="Doctor_ID" Type="Doctor" IsForeignKey="true" />
+      <Association Name="Hospital_Doctor_Hospital" Member="Hospital" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Doctor_Speciality" Member="Doctor_Specialities">
+    <Type Name="Doctor_Speciality">
+      <Column Name="Doctor_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Speciality_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Doctor_Doctor_Speciality" Member="Doctor" ThisKey="Doctor_ID" OtherKey="Doctor_ID" Type="Doctor" IsForeignKey="true" />
+      <Association Name="Speciality_Doctor_Speciality" Member="Speciality" ThisKey="Speciality_ID" OtherKey="Speciality_ID" Type="Speciality" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Facility" Member="Facilities">
+    <Type Name="Facility">
+      <Column Name="Facility_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Facility_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Association Name="Facility_Hospital_Facility" Member="Hospital_Facilities" ThisKey="Facility_ID" OtherKey="Facility_ID" Type="Hospital_Facility" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Feedback" Member="Feedbacks">
+    <Type Name="Feedback">
+      <Column Name="Feedback_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Header" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Feedback_Content" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Column Name="Created_Person" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Feedback_Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Created_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="FeedbackType_Feedback" Member="FeedbackType" ThisKey="Feedback_Type" OtherKey="Type_ID" Type="FeedbackType" IsForeignKey="true" />
+      <Association Name="Hospital_Feedback" Member="Hospital" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+      <Association Name="User_Feedback" Member="User" ThisKey="Created_Person" OtherKey="User_ID" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FeedbackType" Member="FeedbackTypes">
+    <Type Name="FeedbackType">
+      <Column Name="Type_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Type_Name" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="FeedbackType_Feedback" Member="Feedbacks" ThisKey="Type_ID" OtherKey="Feedback_Type" Type="Feedback" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Hospital" Member="Hospitals">
+    <Type Name="Hospital">
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Hospital_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Hospital_Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="Ward_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="District_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="City_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Phone_Number" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="Fax" Type="System.String" DbType="VarChar(16)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="Website" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="Start_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="End_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="Coordinate" Type="System.String" DbType="VarChar(26)" CanBeNull="true" />
+      <Column Name="Created_Person" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Hospital_Appointment" Member="Appointments" ThisKey="Hospital_ID" OtherKey="Curing_Hospital" Type="Appointment" />
+      <Association Name="Hospital_Doctor_Hospital" Member="Doctor_Hospitals" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Doctor_Hospital" />
+      <Association Name="Hospital_Feedback" Member="Feedbacks" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Feedback" />
+      <Association Name="Hospital_Hospital_Facility" Member="Hospital_Facilities" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital_Facility" />
+      <Association Name="Hospital_Hospital_Service" Member="Hospital_Services" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital_Service" />
+      <Association Name="Hospital_Hospital_Speciality" Member="Hospital_Specialities" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital_Speciality" />
+      <Association Name="Hospital_Photo" Member="Photos" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Photo" />
+      <Association Name="Hospital_Rating" Member="Ratings" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Rating" />
+      <Association Name="Hospital_User" Member="Users" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="User" />
+      <Association Name="Hospital_Word_Hospital" Member="Word_Hospitals" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Word_Hospital" />
+      <Association Name="City_Hospital" Member="City" ThisKey="City_ID" OtherKey="City_ID" Type="City" IsForeignKey="true" />
+      <Association Name="District_Hospital" Member="District" ThisKey="District_ID" OtherKey="District_ID" Type="District" IsForeignKey="true" />
+      <Association Name="HospitalType_Hospital" Member="HospitalType" ThisKey="Hospital_Type" OtherKey="Type_ID" Type="HospitalType" IsForeignKey="true" />
+      <Association Name="User_Hospital" Member="User" ThisKey="Created_Person" OtherKey="User_ID" Type="User" IsForeignKey="true" />
+      <Association Name="Ward_Hospital" Member="Ward" ThisKey="Ward_ID" OtherKey="Ward_ID" Type="Ward" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Hospital_Facility" Member="Hospital_Facilities">
+    <Type Name="Hospital_Facility">
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Facility_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Facility_Hospital_Facility" Member="Facility" ThisKey="Facility_ID" OtherKey="Facility_ID" Type="Facility" IsForeignKey="true" />
+      <Association Name="Hospital_Hospital_Facility" Member="Hospital" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Hospital_Service" Member="Hospital_Services">
+    <Type Name="Hospital_Service">
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Service_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Hospital_Hospital_Service" Member="Hospital" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+      <Association Name="Service_Hospital_Service" Member="Service" ThisKey="Service_ID" OtherKey="Service_ID" Type="Service" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Hospital_Speciality" Member="Hospital_Specialities">
+    <Type Name="Hospital_Speciality">
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Speciality_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Is_Main_Speciality" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Hospital_Hospital_Speciality" Member="Hospital" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+      <Association Name="Speciality_Hospital_Speciality" Member="Speciality" ThisKey="Speciality_ID" OtherKey="Speciality_ID" Type="Speciality" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.HospitalType" Member="HospitalTypes">
+    <Type Name="HospitalType">
+      <Column Name="Type_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Type_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Association Name="HospitalType_Hospital" Member="Hospitals" ThisKey="Type_ID" OtherKey="Hospital_Type" Type="Hospital" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Photo" Member="Photos">
+    <Type Name="Photo">
+      <Column Name="Photo_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="File_Path" Type="System.String" DbType="VarChar(128)" CanBeNull="true" />
+      <Column Name="Caption" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="Add_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Uploaded_Person" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Hospital_Photo" Member="Hospital" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+      <Association Name="User_Photo" Member="User" ThisKey="Uploaded_Person" OtherKey="User_ID" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Rating" Member="Ratings">
+    <Type Name="Rating">
+      <Column Name="Rating_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Score" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Created_Person" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Hospital_Rating" Member="Hospital" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+      <Association Name="User_Rating" Member="User" ThisKey="Created_Person" OtherKey="User_ID" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Role" Member="Roles">
+    <Type Name="Role">
+      <Column Name="Role_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Role_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Association Name="Role_User" Member="Users" ThisKey="Role_ID" OtherKey="Role_ID" Type="User" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Sentence_Word" Member="Sentence_Words">
+    <Type Name="Sentence_Word">
+      <Column Name="Sentence_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Word_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Added_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="WordDictionary_Sentence_Word" Member="WordDictionary" ThisKey="Word_ID" OtherKey="Word_ID" Type="WordDictionary" IsForeignKey="true" />
+      <Association Name="SentenceDictionary_Sentence_Word" Member="SentenceDictionary" ThisKey="Sentence_ID" OtherKey="Sentence_ID" Type="SentenceDictionary" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SentenceDictionary" Member="SentenceDictionaries">
+    <Type Name="SentenceDictionary">
+      <Column Name="Sentence_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Sentence" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Search_Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="SentenceDictionary_Sentence_Word" Member="Sentence_Words" ThisKey="Sentence_ID" OtherKey="Sentence_ID" Type="Sentence_Word" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Service" Member="Services">
+    <Type Name="Service">
+      <Column Name="Service_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Service_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Association Name="Service_Hospital_Service" Member="Hospital_Services" ThisKey="Service_ID" OtherKey="Service_ID" Type="Hospital_Service" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Speciality" Member="Specialities">
+    <Type Name="Speciality">
+      <Column Name="Speciality_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Speciality_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Association Name="Speciality_Doctor_Speciality" Member="Doctor_Specialities" ThisKey="Speciality_ID" OtherKey="Speciality_ID" Type="Doctor_Speciality" />
+      <Association Name="Speciality_Hospital_Speciality" Member="Hospital_Specialities" ThisKey="Speciality_ID" OtherKey="Speciality_ID" Type="Hospital_Speciality" />
+      <Association Name="Speciality_Speciality_Disease" Member="Speciality_Diseases" ThisKey="Speciality_ID" OtherKey="Speciality_ID" Type="Speciality_Disease" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Speciality_Disease" Member="Speciality_Diseases">
+    <Type Name="Speciality_Disease">
+      <Column Name="Speciality_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Disease_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Disease_Speciality_Disease" Member="Disease" ThisKey="Disease_ID" OtherKey="Disease_ID" Type="Disease" IsForeignKey="true" />
+      <Association Name="Speciality_Speciality_Disease" Member="Speciality" ThisKey="Speciality_ID" OtherKey="Speciality_ID" Type="Speciality" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[User]" Member="Users">
+    <Type Name="User">
+      <Column Name="User_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="First_Name" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="Last_Name" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="Phone_Number" Type="System.String" DbType="VarChar(13)" CanBeNull="true" />
+      <Column Name="Role_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Created_Person" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="User_Appointment" Member="Appointments" ThisKey="User_ID" OtherKey="Created_Person" Type="Appointment" />
+      <Association Name="User_Feedback" Member="Feedbacks" ThisKey="User_ID" OtherKey="Created_Person" Type="Feedback" />
+      <Association Name="User_Hospital" Member="Hospitals" ThisKey="User_ID" OtherKey="Created_Person" Type="Hospital" />
+      <Association Name="User_Photo" Member="Photos" ThisKey="User_ID" OtherKey="Uploaded_Person" Type="Photo" />
+      <Association Name="User_Rating" Member="Ratings" ThisKey="User_ID" OtherKey="Created_Person" Type="Rating" />
+      <Association Name="User_User" Member="Users" ThisKey="User_ID" OtherKey="Created_Person" Type="User" />
+      <Association Name="Hospital_User" Member="Hospital" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+      <Association Name="Role_User" Member="Role" ThisKey="Role_ID" OtherKey="Role_ID" Type="Role" IsForeignKey="true" />
+      <Association Name="User_User" Member="User1" ThisKey="Created_Person" OtherKey="User_ID" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Ward" Member="Wards">
+    <Type Name="Ward">
+      <Column Name="Ward_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Ward_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="Type" Type="System.String" DbType="NVarChar(9)" CanBeNull="true" />
+      <Column Name="Coordinate" Type="System.String" DbType="VarChar(26)" CanBeNull="true" />
+      <Column Name="District_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Ward_Hospital" Member="Hospitals" ThisKey="Ward_ID" OtherKey="Ward_ID" Type="Hospital" />
+      <Association Name="District_Ward" Member="District" ThisKey="District_ID" OtherKey="District_ID" Type="District" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Word_Hospital" Member="Word_Hospitals">
+    <Type Name="Word_Hospital">
+      <Column Name="Word_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Hospital_Word_Hospital" Member="Hospital" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Hospital" IsForeignKey="true" />
+      <Association Name="WordDictionary_Word_Hospital" Member="WordDictionary" ThisKey="Word_ID" OtherKey="Word_ID" Type="WordDictionary" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
