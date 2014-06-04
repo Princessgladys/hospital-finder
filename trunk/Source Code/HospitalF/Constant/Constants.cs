@@ -1,4 +1,5 @@
-﻿namespace HospitalF.Constant
+﻿using System.Collections.Generic;
+namespace HospitalF.Constant
 {
     /// <summary>
     /// Class define constant values for project
@@ -55,6 +56,21 @@
         ///  Vietnamese name of property AppointedAddress
         /// </summary>
         public const string AppointedAddress = "Địa điểm chỉ định";
+
+        #endregion
+
+        #region Regular express
+
+        /// <summary>
+        /// Regular expression to find white spaces
+        /// </summary>
+        public const string FindWhiteSpaceRegex = @"\w+";
+
+        #endregion
+
+        #region Constant value in database
+
+
 
         #endregion
     }

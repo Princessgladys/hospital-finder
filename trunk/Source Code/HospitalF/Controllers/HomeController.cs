@@ -41,6 +41,7 @@ namespace HospitalF.Controllers
         /// </summary>
         /// <param name="model">HomeModels</param>
         /// <returns>ActionResult</returns>
+        [HttpPost]
         public async Task<ActionResult> Index(HomeModels model)
         {
             // Add the list of Cities and Specialities to view
@@ -55,7 +56,7 @@ namespace HospitalF.Controllers
             {
                 try
                 {
-
+                    await model.GIRQueryAnalyzerAsync(model.SearchValue);
                 }
                 catch (Exception)
                 {
