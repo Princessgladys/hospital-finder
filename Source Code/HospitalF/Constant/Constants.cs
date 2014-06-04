@@ -39,7 +39,7 @@
         /// <summary>
         /// Vietnamese name of property Province
         /// </summary>
-        public const string Province = "Tỉnh thành";
+        public const string City = "Tỉnh thành";
 
         /// <summary>
         /// Vietnamese name of property District
