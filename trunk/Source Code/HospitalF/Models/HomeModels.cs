@@ -240,7 +240,7 @@ namespace HospitalF.Models
             string where = string.Empty;
             string tempWhere = string.Empty;
 
-            // Danh sách các tiếng trong câu
+            // Create a list of tokens
             List<string> tokens = StringTokenizer(inputQuery);
             int sizeOfTokens = tokens.Count();
 
@@ -250,21 +250,22 @@ namespace HospitalF.Models
             List<HomeModels> locationDic = await LoadLocationDictionaryAsync();
 
             what = ConcatTokens(tokens, 0, sizeOfTokens - 1);
-            // Duyệt từng tiếng trong câu
-            for (int i = 0; i < sizeOfTokens; i++)
+
+            // Check every token in the list
+            for (int n = 0; n < sizeOfTokens; n++)
             {
-                for (int j = i; j < sizeOfTokens; j++)
+                for (int i = n; i < sizeOfTokens; i++)
                 {
-                    tempRelation = ConcatTokens(tokens, i, j);
+                    tempRelation = ConcatTokens(tokens, n, i);
                     if (IsValidRelationWord(tempRelation, wordDic))
                     {
                         tempWhat = inputQuery.Substring(0, inputQuery.IndexOf(tempRelation));
-                        where = ConcatTokens(tokens, j + 1, sizeOfTokens - 1);
+                        where = ConcatTokens(tokens, i + 1, sizeOfTokens - 1);
                         if (IsValidWherePhrase(where, locationDic))
                         {
                             relation = tempRelation;
-                            // Break vòng lặp i
-                            i = sizeOfTokens;
+                            // Assign n value again to break the outside loop
+                            n = sizeOfTokens;
                             break;
                         }
                         relation = tempRelation;
@@ -272,6 +273,8 @@ namespace HospitalF.Models
                 }
             }
 
+            // Handle query in case of input string is not well-formed
+            // with What - Relation - Where condition
             if (string.IsNullOrEmpty(relation) && string.IsNullOrEmpty(where))
             {
                 int i = inputQuery.IndexOf("HCM");
@@ -295,8 +298,6 @@ namespace HospitalF.Models
             {
                 what = tempWhat;
             }
-
-            Console.WriteLine(what + " - " + relation + " - " + where);
         }
     }
 }
