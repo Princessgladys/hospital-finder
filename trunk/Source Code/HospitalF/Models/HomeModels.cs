@@ -15,6 +15,8 @@ namespace HospitalF.Models
 {
     public class HomeModels
     {
+        #region Properties
+
         /// <summary>
         /// Get/Set value for property SearchValue
         /// </summary>
@@ -82,6 +84,10 @@ namespace HospitalF.Models
         [Display(Name = Constants.AppointedAddress)]
         [StringLength(128, ErrorMessage = ErrorMessage.CEM003)]
         public string AppointedAddress { get; set; }
+
+        #endregion
+
+        #region GIRQueryAnalyzer
 
         /// <summary>
         /// Split words in a string to every token
@@ -335,5 +341,7 @@ namespace HospitalF.Models
             // Return value of What - Relation - Where
             return string.Format("[{0}][{1}][{2}]", what, relation, where);
         }
+
+        #endregion
     }
 }
