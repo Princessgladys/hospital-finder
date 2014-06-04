@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using HospitalF.Entities;
 using HospitalF.Constant;
 using HospitalF.Models;
+using HospitalF.Utilities;
 
 namespace HospitalF.Models
 {
@@ -246,6 +247,9 @@ namespace HospitalF.Models
             string where = string.Empty;            // Where phrase
             string tempWhere = string.Empty;        // Temporary value for Where phrase
             bool isComplete = false;                // Indicate if the process is complete or not
+
+            // Remove special chacracter in input query
+            inputQuery = Utils.RemoveSpecialCharacter(inputQuery);
 
             // Create a list of tokens
             List<string> tokens = StringTokenizer(inputQuery);

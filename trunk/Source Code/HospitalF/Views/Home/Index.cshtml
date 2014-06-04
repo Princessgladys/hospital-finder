@@ -1,0 +1,17 @@
+﻿@using HospitalF.Constant
+@model HospitalF.Models.HomeModels
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm(Constants.IndexMethod, Constants.HomeController, FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    @Html.TextBoxFor(m => m.SearchValue)
+    @Html.ValidationMessageFor(m => m.SearchValue)
+
+<input type="submit" value="Cha mày" />
+}
