@@ -78,5 +78,14 @@ namespace HospitalF.Constant
 
 
         #endregion
+
+        #region Characters
+
+        /// <summary>
+        /// Constant for character " "
+        /// </summary>
+        public const string WhiteSpace = " ";
+
+        #endregion
     }
 }
