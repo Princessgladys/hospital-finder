@@ -605,10 +605,10 @@ namespace HospitalF.Models
 
                     // Take first location in input query string
                     // and handle Where phrase (if any) to locate exactly search locations
-                    string firstLocation = TakeFirstLocationInQueryString(inputQuery, cityList, districtList).ToLower();
+                    string firstLocation = TakeFirstLocationInQueryString(inputQuery, cityList, districtList);
                     if (!string.IsNullOrEmpty(firstLocation))
                     {
-                        i = inputQuery.IndexOf(firstLocation);
+                        i = inputQuery.IndexOf(firstLocation.ToLower());
                         tempWhat = inputQuery.Substring(0, i);
                         where = inputQuery.Substring(i);
                     }
