@@ -605,7 +605,7 @@ namespace HospitalF.Models
 
                     // Take first location in input query string
                     // and handle Where phrase (if any) to locate exactly search locations
-                    string firstLocation = TakeFirstLocationInQueryString(inputQuery, cityList, districtList);
+                    string firstLocation = TakeFirstLocationInQueryString(inputQuery, cityList, districtList).ToLower();
                     if (!string.IsNullOrEmpty(firstLocation))
                     {
                         i = inputQuery.IndexOf(firstLocation);
@@ -647,14 +647,14 @@ namespace HospitalF.Models
             }
 
             string a = string.Format("[{0}][{1}][{2}]", what, relation, where);
-            int b = this.CityID;
-            string c = this.CityName;
-            int d = this.DistrictID;
-            string e = this.DistrictName;
-            int f = this.SpecialityID;
-            string g = this.SpecialityName;
-            int h = this.DiseaseID;
-            string k = this.DiseaseName;
+            int cityId = this.CityID;
+            string cityName = this.CityName;
+            int districtId = this.DistrictID;
+            string districtName = this.DistrictName;
+            int specialityId = this.SpecialityID;
+            string speacialityName = this.SpecialityName;
+            int diseaseId = this.DiseaseID;
+            string diseaseName = this.DiseaseName;
 
             // Return value of What - Relation - Where
             return string.Format("[{0}][{1}][{2}]", what, relation, where);
