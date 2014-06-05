@@ -337,8 +337,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\font\" />
-    <Folder Include="Content\image\" />
     <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>

@@ -88,7 +88,76 @@ namespace HospitalF.Models
 
         #endregion
 
-        #region GIRQueryAnalyzer
+        #region Boyer Moore matching algorithm
+
+        /// <summary>
+        /// Prepare bad match table for Boyer Moore algorithm
+        /// </summary>
+        /// <param name="pattern">Pattern that needed to find in a string</param>
+        /// <returns>
+        /// Integer array that contains shifting index
+        /// for each character in the input pattern
+        /// </returns>
+        private int[] CreateBadMatchTable(string pattern)
+        {
+            int a = 0;
+            // Create an array of shifting index
+            int[] occurrence = new int[999999];
+            // Assign shifting index
+            for (int n = 0; n < pattern.Length; n++)
+            {
+                char b = pattern[n];
+                occurrence[pattern[n]] = n;
+                a = occurrence[pattern[n]];
+            }
+            // Return bad match table of a pattern
+            return occurrence;
+        }
+
+        /// <summary>
+        /// Implement Boyer Moore algorithm
+        /// </summary>
+        /// <param name="text">Input query text</param>
+        /// <param name="pattern">Pattern that needed to find in a string</param>
+        /// <returns>9999: Not match, #9999: matching position</returns>
+        private int IsPatternMatch(string text, string pattern)
+        {
+            // Shifiting index
+            int shift = 0;
+
+            // Take text length and pattern length
+            int textLength = text.Length;
+            int patternLength = pattern.Length;
+            // Create bad match table
+            int[] occurrence = CreateBadMatchTable(pattern);
+
+            // Compare the pattern int the text and using bad match table to
+            // shift the pattern to the right of the string for continuing comparation
+            for (int n = 0; n <= textLength - patternLength; n += shift)
+            {
+                shift = 0;
+                for (int i = patternLength - 1; i >= 0; i--)
+                {
+                    if (text[i] != text[n + i])
+                    {
+                        shift = Math.Max(1, i - occurrence[text[n + i]]);
+                        break;
+                    }
+                }
+
+                // Return true if pattern is match
+                if (shift == 0)
+                {
+                    return n;
+                }
+            }
+            // Return false as default
+            return Constants.DefaultMatchingValue;
+        }
+
+        #endregion
+
+        #region GIR query analyzer
 
         /// <summary>
         /// Split words in a string to every token
@@ -216,21 +285,178 @@ namespace HospitalF.Models
             foreach (HomeModels model in dictionary)
             {
                 // Find matching result for cities
-                if (model.CityName.ToLower().Equals(inputStr))
+                if (!string.IsNullOrEmpty(model.CityName) &&
+                    IsPatternMatch(inputStr, model.CityName) != Constants.DefaultMatchingValue)
                 {
+                    this.CityID = model.CityID;
+                    this.CityName = model.CityName;
                     return true;
                 }
                 else
                 {
                     // Find matching reuslt for district
-                    if (model.DistrictName.ToLower().Equals(inputStr))
+                    if (!string.IsNullOrEmpty(model.DistrictName) &&
+                        IsPatternMatch(inputStr, model.DistrictName) != Constants.DefaultMatchingValue)
                     {
+                        this.DistrictID = model.CityID;
+                        this.DistrictName = model.CityName;
                         return true;
                     }
                 }
             }
             // Return false as default
             return false;
+        }
+
+        /// <summary>
+        /// Take first location in input query string
+        /// </summary>
+        /// <param name="queryStr">Query string</param>
+        /// <param name="dictionary">Location dictionary</param>
+        /// <returns>First location in Where phrase</returns>
+        private string TakeFirstLocationInQueryString(string queryStr, List<HomeModels> dictionary)
+        {
+            int cityPosition = 0;           // City index in Where phrase
+            int tempCityIndex = 0;          // Temp city index
+            bool isCityFound = false;       // Indicate if a city is found
+            int districtPosition = 0;       // District index in Where phrase
+            int tempDistrictIndex = 0;      // Temp district index
+            bool isDistrictFound = false;   // Indicate if a district is found
+
+            // Check every word in dictionary to see in the input token is match
+            foreach (HomeModels model in dictionary)
+            {
+                // Find matching result for cities
+                if (!string.IsNullOrEmpty(model.CityName))
+                {
+                    tempCityIndex = IsPatternMatch(queryStr, model.CityName);
+                    if (tempCityIndex != Constants.DefaultMatchingValue)
+                    {
+                        cityPosition = tempCityIndex;
+                        isCityFound = true;
+                        this.CityID = model.CityID;
+                        this.CityName = model.CityName;
+                    }
+                }
+                else
+                {
+                    // Find matching reuslt for district
+                    if (!string.IsNullOrEmpty(model.DistrictName))
+                    {
+                        tempDistrictIndex = IsPatternMatch(queryStr, model.DistrictName);
+                        if (tempDistrictIndex != Constants.DefaultMatchingValue)
+                        {
+                            districtPosition = tempCityIndex;
+                            isDistrictFound = true;
+                            this.DistrictID = model.CityID;
+                            this.DistrictName = model.CityName;
+                        }
+
+                        // If both city and District are found, break the loop
+                        if (isCityFound && isDistrictFound)
+                        {
+                            // Check to see whether City appears first or District appears First
+                            if (cityPosition < districtPosition)
+                            {
+                                return model.CityName;
+                            }
+
+                            if (districtPosition < cityPosition)
+                            {
+                                return model.DistrictName;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }     
+
+            // Return null as default
+            return null;
+        }
+
+        /// <summary>
+        /// Load all specialities in database
+        /// </summary>
+        /// <returns></returns>
+        private async Task<List<HomeModels>> LoadSpecialityAsync()
+        {
+            // Create an instance of Linq database
+            LinqDBDataContext data = new LinqDBDataContext();
+            // Return list of specialities
+            try
+            {
+                return await Task.Run(() =>
+                    (from s in data.Specialities
+                     select new HomeModels 
+                    {
+                        SpecialityID = s.Speciality_ID,
+                        SpecialityName = s.Speciality_Name
+                    }).ToList());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine(ErrorMessage.SEM001);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Load all diseases in database
+        /// </summary>
+        /// <returns></returns>
+        private async Task<List<HomeModels>> LoadDiseaseAsync()
+        {
+            // Create an instance of Linq database
+            LinqDBDataContext data = new LinqDBDataContext();
+            // Return list of diseases
+            try
+            {
+                return await Task.Run(() =>
+                    (from d in data.Diseases
+                     select new HomeModels
+                     {
+                         DiseaseID = d.Disease_ID,
+                         DiseaseName = d.Disease_Name
+                     }).ToList());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine(ErrorMessage.SEM001);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Handle well-formed What phrase
+        /// </summary>
+        /// <param name="whatPhrase">Well-formed What phrase</param>
+        /// <param name="specialityList">Speciality List</param>
+        /// <param name="diseaseList">Disease List</param>
+        private void HandleWellFormedWhatPhrase(string whatPhrase,
+            List<HomeModels> specialityList, List<HomeModels> diseaseList)
+        {
+            // Check every word in dictionary to see in the input token is match
+            foreach (HomeModels model in specialityList)
+            {
+                // Find matching result for cities
+                if (!string.IsNullOrEmpty(model.SpecialityName) &&
+                    IsPatternMatch(whatPhrase, model.SpecialityName) != Constants.DefaultMatchingValue)
+                {
+                    this.SpecialityID = model.SpecialityID;
+                    this.SpecialityName = model.SpecialityName;
+                }
+                else
+                {
+                    // Find matching reuslt for district
+                    if (!string.IsNullOrEmpty(model.DiseaseName) &&
+                        IsPatternMatch(whatPhrase, model.DiseaseName) != Constants.DefaultMatchingValue)
+                    {
+                        this.DiseaseID = model.DiseaseID;
+                        this.DiseaseName = model.DiseaseName;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -252,10 +478,16 @@ namespace HospitalF.Models
             List<string> tokens = StringTokenizer(inputQuery);
             int sizeOfTokens = tokens.Count();
 
-            // Load word dictionary
+            // Load relation word dictionary
             List<string> wordDic = await LoadRelationWordDictionaryAsync();
             // Load location dictionary
             List<HomeModels> locationDic = await LoadLocationDictionaryAsync();
+
+            // Check if the lists are load successfully
+            if ((wordDic == null) && (locationDic == null))
+            {
+                return ErrorMessage.CEM001;
+            }
 
             what = ConcatTokens(tokens, 0, sizeOfTokens - 1);
 
@@ -282,6 +514,7 @@ namespace HospitalF.Models
                         where = ConcatTokens(tokens, i + 1, sizeOfTokens - 1);
 
                         // Check if Where phrase is matched with locaitons in database
+                        // and handle Where phrase to locate exactly search locations
                         if (IsValidWherePhrase(where, locationDic))
                         {
                             // Change status of isComplete varialbe
@@ -306,38 +539,64 @@ namespace HospitalF.Models
             {
                 // Handle query in case of input string is not well-formed
                 // with Relation word and Where phrase is not found.
-                // Auto check Where phrase with default location value,
+                // Auto check Where phrase with the first location value in input query,
                 // if Where phrase is valid, auto assign Relation word with default value.
                 if (string.IsNullOrEmpty(relation) && string.IsNullOrEmpty(where))
                 {
-                    int i = inputQuery.IndexOf("Hồ Chí Minh");
-                    if (i >= 0)
+                    int i = 0;
+
+                    // Take first location in input query string
+                    // and handle Where phrase (if any) to locate exactly search locations
+                    string firstLocation = TakeFirstLocationInQueryString(inputQuery, locationDic);
+                    if (!string.IsNullOrEmpty(firstLocation))
                     {
+                        i = inputQuery.IndexOf(firstLocation);
                         tempWhat = inputQuery.Substring(0, i);
                         where = inputQuery.Substring(i);
-                        relation = "ở";
+                    }
+                    else
+                    {
+                        tempWhat = what;
+                        relation = string.Empty;
+                        where = string.Empty;
                     }
                 }
-
-                // If Where phrase is invalid, erase value of
-                // What phrase and Relation word.
-                // Because of if Where phrase is invalid, the input query is not well-formed,
-                // so it might lead to Relation word or Where phrase is invalid.
-                if (!IsValidWherePhrase(where, locationDic))
-                {
-                    tempWhat = what;
-                    relation = string.Empty;
-                    where = string.Empty;
-                }
-
-                // Make sure What phrase have the value.
-                // At the worst case if the input query is not well-formed,
-                // assign What phrase with the input query
-                if (!string.IsNullOrEmpty(tempWhat))
-                {
-                    what = tempWhat;
-                }
             }
+
+            // Make sure What phrase have the value.
+            // At the worst case if the input query is not well-formed,
+            // assign What phrase with the input query
+            if (!string.IsNullOrEmpty(tempWhat))
+            {
+                what = tempWhat;
+            }
+
+            // Handle What phrase
+            // Load relation word dictionary
+            List<HomeModels> specialityList = await LoadSpecialityAsync();
+            // Load location dictionary
+            List<HomeModels> diseaseList = await LoadDiseaseAsync();
+
+            // Check if the lists are load successfully
+            if ((specialityList != null) && (diseaseList != null))
+            {
+                // Handle well-formed What phrase
+                HandleWellFormedWhatPhrase(what, specialityList, diseaseList);
+            }
+            else
+            {
+                return ErrorMessage.CEM001;
+            }
+
+            string a = string.Format("[{0}][{1}][{2}]", what, relation, where);
+            int b = this.CityID;
+            string c = this.CityName;
+            int d = this.DistrictID;
+            string e = this.DistrictName;
+            int f = this.SpecialityID;
+            string g = this.SpecialityName;
+            int h = this.DiseaseID;
+            string k = this.DiseaseName;
 
             // Return value of What - Relation - Where
             return string.Format("[{0}][{1}][{2}]", what, relation, where);

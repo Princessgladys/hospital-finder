@@ -54,15 +54,9 @@ namespace HospitalF.Controllers
             }
             else
             {
-                try
-                {
+                
                     await model.GIRQueryAnalyzerAsync(model.SearchValue);
-                }
-                catch (Exception)
-                {
-                    Response.Write(ErrorMessage.SEM001);
-                    return View();
-                }
+                                
 
                 // Move to result page
                 return RedirectToAction(string.Empty, Constants.HomeController);
