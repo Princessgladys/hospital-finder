@@ -503,8 +503,8 @@ namespace HospitalF.Models
             foreach (HomeModels model in diseaseList)
             {
                 // Find matching reuslt for disease
-                if (!string.IsNullOrEmpty(model.DiseaseName.ToLower()) &&
-                    IsPatternMatch(whatPhrase, model.DiseaseName) != Constants.DefaultMatchingValue)
+                if (!string.IsNullOrEmpty(model.DiseaseName) &&
+                    IsPatternMatch(whatPhrase, model.DiseaseName.ToLower()) != Constants.DefaultMatchingValue)
                 {
                     this.DiseaseID = model.DiseaseID;
                     this.DiseaseName = model.DiseaseName;
