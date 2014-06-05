@@ -57,6 +57,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string AppointedAddress = "Địa điểm chỉ định";
 
+        /// <summary>
+        /// Default matching value
+        /// </summary>
+        public const int DefaultMatchingValue = 9999;
+
         #endregion
 
         #region Regular express
