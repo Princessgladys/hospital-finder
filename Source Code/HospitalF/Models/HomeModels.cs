@@ -317,7 +317,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for cities
                 if (!string.IsNullOrEmpty(model.CityName) &&
-                    IsPatternMatch(inputStr, model.CityName) != Constants.DefaultMatchingValue)
+                    IsPatternMatch(inputStr, model.CityName.ToLower()) != Constants.DefaultMatchingValue)
                 {
                     this.CityID = model.CityID;
                     this.CityName = model.CityName;
@@ -331,7 +331,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for districts
                 if (!string.IsNullOrEmpty(model.DistrictName) &&
-                    IsPatternMatch(inputStr, model.DistrictName) != Constants.DefaultMatchingValue)
+                    IsPatternMatch(inputStr, model.DistrictName.ToLower()) != Constants.DefaultMatchingValue)
                 {
                     this.DistrictID = model.DistrictID;
                     this.DistrictName = model.DistrictName;
@@ -375,7 +375,7 @@ namespace HospitalF.Models
                 // Find matching result for cities
                 if (!string.IsNullOrEmpty(model.CityName))
                 {
-                    tempCityIndex = IsPatternMatch(queryStr, model.CityName);
+                    tempCityIndex = IsPatternMatch(queryStr, model.CityName.ToLower());
                     if (tempCityIndex != Constants.DefaultMatchingValue)
                     {
                         cityPosition = tempCityIndex;
@@ -393,7 +393,7 @@ namespace HospitalF.Models
             {
                 if (!string.IsNullOrEmpty(model.DistrictName))
                 {
-                    tempDistrictIndex = IsPatternMatch(queryStr, model.DistrictName);
+                    tempDistrictIndex = IsPatternMatch(queryStr, model.DistrictName.ToLower());
                     if (tempDistrictIndex != Constants.DefaultMatchingValue)
                     {
                         districtPosition = tempDistrictIndex;
@@ -486,15 +486,12 @@ namespace HospitalF.Models
         private void HandleWellFormedWhatPhrase(string whatPhrase,
             List<HomeModels> specialityList, List<HomeModels> diseaseList)
         {
-            bool isSpecialityFound = false;         // Indicate if speciality is found
-            bool isDiseaseFount = false;            // Indicate if disease is found
-
             // Check every word in speciality list to see in the input token is match
             foreach (HomeModels model in specialityList)
             {
                 // Find matching result for speciality
                 if (!string.IsNullOrEmpty(model.SpecialityName) &&
-                    IsPatternMatch(whatPhrase, model.SpecialityName) != Constants.DefaultMatchingValue)
+                    IsPatternMatch(whatPhrase, model.SpecialityName.ToLower()) != Constants.DefaultMatchingValue)
                 {
                     this.SpecialityID = model.SpecialityID;
                     this.SpecialityName = model.SpecialityName;
@@ -506,7 +503,7 @@ namespace HospitalF.Models
             foreach (HomeModels model in diseaseList)
             {
                 // Find matching reuslt for disease
-                if (!string.IsNullOrEmpty(model.DiseaseName) &&
+                if (!string.IsNullOrEmpty(model.DiseaseName.ToLower()) &&
                     IsPatternMatch(whatPhrase, model.DiseaseName) != Constants.DefaultMatchingValue)
                 {
                     this.DiseaseID = model.DiseaseID;
