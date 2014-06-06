@@ -114,10 +114,10 @@ VALUES
 	NULL, NULL,
 	'10.774559, 106.681403', 1, 'True'),
 
-	(N'Bệnh viện Nhân Dân 115', 1, N'88 Thành Thái, Phường 12, Quận 10',
+	(N'Bệnh viện Nhân Dân 115', 1, N'527 Sư Vạn Hạnh, Phường 12, Quận 10',
 	27172, 771, 79, '(08) 38683496', '(08) 38655193',
 	NULL, NULL,
-	'10.775171, 106.667545', 1, 'True'),
+	'10.775143, 106.667568', 1, 'True'),
 
 	(N'Bệnh viện 30/4', 1, N'9 Sư Vạn Hạnh, Phường 9, Quận 5',
 	27304, 774, 79, '(08) 38354986', '(08) 38399170',
@@ -186,7 +186,7 @@ VALUES
 	(N'Viện tim thành phố Hồ Chí Minh', 1, N'88 Thành Thái, Phường 12, Quận 10',
 	27172, 771, 79, '(08) 38651586', '(08) 38654026',
 	NULL, NULL,
-	'10.773183, 106.666946', 1, 'True'),
+	'10.773235, 106.666956', 1, 'True'),
 
 	(N'Viện tim Tâm Đức', 1, N'4 Nguyễn Lương Bằng, Phường Tân Phú, Quận 7',
 	27487, 778, 79, '(08) 54110036 / 54110025', '(08) 54110029',
@@ -200,10 +200,10 @@ VALUES
 	'10.754445, 106.678281', 1, 'True'),
 
 	-- MENTAL ILLNESS (THẦN KINH)
-	(N'Bệnh viện Ngoại Thần Kinh Quốc Tế', 2, N'88 Thành Thái, Phường 12, Quận 10',
-	27172, 774, 79, '(08) 39616996', '(08) 39613978',
+	(N'Bệnh viện Ngoại Thần Kinh Quốc Tế', 2, N'65 Lũy Bán Bích, Phường Tân Thới Hoà, Quận Tân Phú',
+	27040, 767, 79, '(08) 39616996', '(08) 39613978',
 	NULL, NULL,
-	'10.761387, 106.632358', 1, 'True'),
+	'10.761397, 106.632411', 1, 'True'),
 
 	-- TURBERCULOSIS HOSPITAL (BỆNH LAO)
 	(N'Bệnh viện Phạm Ngọc Thạch', 1, N'120 Hùng Vương, Phường 12, Quận 5',
@@ -233,7 +233,7 @@ VALUES
 	'10.784017, 106.703627', 1, 'True'),
 
 	(N'Bệnh viện Hạnh Phúc', 7, N'13 Vĩnh Phú, Thị Xã Thuận An',
-	27310, 774, 74, '(650) 39111860', '(650) 3636069',
+	27310, 725, 74, '(650) 39111860', '(650) 3636069',
 	NULL, NULL,
 	'10.756425, 106.661917', 1, 'True'),
 
