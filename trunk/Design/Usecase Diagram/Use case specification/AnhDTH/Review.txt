@@ -1,0 +1,3 @@
++ Update usecase diagram: "is not existed" --> "does not exist"
++ Wrong usecase HF003
++ 
