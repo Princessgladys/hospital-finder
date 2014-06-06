@@ -86,6 +86,24 @@ namespace HospitalF.Models
         [StringLength(128, ErrorMessage = ErrorMessage.CEM003)]
         public string AppointedAddress { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property HospitalName
+        /// </summary>
+        [Display(Name = Constants.HospitalAddress)]
+        public string HospitalName { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property Coordinate
+        /// </summary>
+        [Display(Name = Constants.Coordinate)]
+        public string Coordinate { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property HospitalAddres
+        /// </summary>
+        [Display(Name = Constants.HospitalAddress)]
+        public string HospitalAddres { get; set; }
+
         #endregion
 
         #region Boyer Moore matching algorithm
@@ -657,7 +675,43 @@ namespace HospitalF.Models
             string diseaseName = this.DiseaseName;
 
             // Return value of What - Relation - Where
-            return string.Format("[{0}][{1}][{2}]", what, relation, where);
+            return string.Format("{0}-{1}-{2}-{3}", cityId, districtId, specialityId, diseaseId);
+        }
+
+        #endregion
+
+        #region Search Hospital
+
+        /// <summary>
+        ///  Search hospitals in database
+        /// </summary>
+        /// <param name="inputValue"></param>
+        /// <returns>List[HomeModels]</returns>
+        public async Task<List<HospitalEntity>> SearchHospital()
+        {
+            // Create an instance of Linq database
+            LinqDBDataContext data = new LinqDBDataContext();
+
+            int cityId = this.CityID;
+            int districtId = this.DistrictID;
+            int specialityId = this.SpecialityID;
+            int diseaseId = this.DiseaseID;
+
+            var result = await Task.Run(() =>
+                data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId).ToList());
+
+
+            List<HospitalEntity> list = new List<HospitalEntity>();
+
+            foreach (SP_SEARCH_HOSPITALResult re in result)
+            {
+                HospitalEntity hospital = new HospitalEntity();
+                hospital.HospitalName = re.Hospital_Name;
+                hospital.Address = re.Address;
+                list.Add(hospital);
+            }
+
+            return list;
         }
 
         #endregion
