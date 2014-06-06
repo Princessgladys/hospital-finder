@@ -1,0 +1,3 @@
++ UC001 - Login: "Actors are automatically transfer back to homepage"
++ UC002 - Change password: exception no.5 and no.6, "User must entered valid.." 
++ UC003 - wrong name
