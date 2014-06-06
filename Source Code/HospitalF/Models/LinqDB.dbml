@@ -307,4 +307,15 @@
       <Association Name="WordDictionary_Word_Hospital" Member="WordDictionary" ThisKey="Word_ID" OtherKey="Word_ID" Type="WordDictionary" IsForeignKey="true" />
     </Type>
   </Table>
+  <Function Name="dbo.SP_SEARCH_HOSPITAL" Method="SP_SEARCH_HOSPITAL">
+    <Parameter Name="CityID" Parameter="cityID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DistrictID" Parameter="districtID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SpecialityID" Parameter="specialityID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DiseaseID" Parameter="diseaseID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="SP_SEARCH_HOSPITALResult">
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Hospital_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>

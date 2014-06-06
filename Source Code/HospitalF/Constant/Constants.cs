@@ -58,6 +58,21 @@ namespace HospitalF.Constant
         public const string AppointedAddress = "Địa điểm chỉ định";
 
         /// <summary>
+        /// Vietnamese name of property HospitalName
+        /// </summary>
+        public const string HospitalName = "Tên bệnh viện";
+
+        /// <summary>
+        /// Vietnamese name of property HospitalAddress
+        /// </summary>
+        public const string HospitalAddress = "Địa chỉ bệnh viện";
+
+        /// <summary>
+        /// Vietnamese name of property Coordinate
+        /// </summary>
+        public const string Coordinate = "Tọa độ";
+
+        /// <summary>
         /// Default matching value
         /// </summary>
         public const int DefaultMatchingValue = 9999;

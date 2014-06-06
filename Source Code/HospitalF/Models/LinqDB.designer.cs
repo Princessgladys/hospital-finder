@@ -358,6 +358,13 @@ namespace HospitalF.Models
 				return this.GetTable<Word_Hospital>();
 			}
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_SEARCH_HOSPITAL")]
+		public ISingleResult<SP_SEARCH_HOSPITALResult> SP_SEARCH_HOSPITAL([global::System.Data.Linq.Mapping.ParameterAttribute(Name="CityID", DbType="Int")] System.Nullable<int> cityID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DistrictID", DbType="Int")] System.Nullable<int> districtID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SpecialityID", DbType="Int")] System.Nullable<int> specialityID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DiseaseID", DbType="Int")] System.Nullable<int> diseaseID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), cityID, districtID, specialityID, diseaseID);
+			return ((ISingleResult<SP_SEARCH_HOSPITALResult>)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Appointment")]
@@ -6914,6 +6921,68 @@ namespace HospitalF.Models
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	public partial class SP_SEARCH_HOSPITALResult
+	{
+		
+		private int _Hospital_ID;
+		
+		private string _Hospital_Name;
+		
+		private string _Address;
+		
+		public SP_SEARCH_HOSPITALResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hospital_ID", DbType="Int NOT NULL")]
+		public int Hospital_ID
+		{
+			get
+			{
+				return this._Hospital_ID;
+			}
+			set
+			{
+				if ((this._Hospital_ID != value))
+				{
+					this._Hospital_ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hospital_Name", DbType="NVarChar(64)")]
+		public string Hospital_Name
+		{
+			get
+			{
+				return this._Hospital_Name;
+			}
+			set
+			{
+				if ((this._Hospital_Name != value))
+				{
+					this._Hospital_Name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(128)")]
+		public string Address
+		{
+			get
+			{
+				return this._Address;
+			}
+			set
+			{
+				if ((this._Address != value))
+				{
+					this._Address = value;
+				}
 			}
 		}
 	}

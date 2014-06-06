@@ -15,17 +15,11 @@ namespace HospitalF.Controllers
         /// <summary>
         /// GET: /Home/Index
         /// </summary>
-        /// <returns>ActionResult</returns>
+        /// <returns>Task[ActionResult]</returns>
         public async Task<ActionResult> Index()
         {
             try
             {
-                // Load the list of Cities and Specialities
-
-
-                // Add the list of Cities and Specialities to view
-
-
             }
             catch (Exception)
             {
@@ -40,7 +34,7 @@ namespace HospitalF.Controllers
         /// POST: /Home/Index
         /// </summary>
         /// <param name="model">HomeModels</param>
-        /// <returns>ActionResult</returns>
+        /// <returns>Task[ActionResult]</returns>
         [HttpPost]
         public async Task<ActionResult> Index(HomeModels model)
         {
@@ -54,13 +48,40 @@ namespace HospitalF.Controllers
             }
             else
             {
-                
+                try
+                {
                     await model.GIRQueryAnalyzerAsync(model.SearchValue);
-                                
+                    List<HospitalEntity> list = await model.SearchHospital();
+                    TempData["list"] = list;
+                }
+                catch(Exception)
+                {
+                    Response.Write(ErrorMessage.SEM001);
+                }
 
                 // Move to result page
-                return RedirectToAction(string.Empty, Constants.HomeController);
+                return RedirectToAction("Result", Constants.HomeController);
             }
+        }
+
+        /// <summary>
+        /// GET: /Home/Index
+        /// </summary>
+        /// <returns>Task[ActionResult]</returns>
+        public async Task<ActionResult> Result()
+        {
+            try
+            {
+                List<HospitalEntity> list = (List<HospitalEntity>)TempData["list"];
+                return View(list);
+            }
+            catch (Exception)
+            {
+                Response.Write(ErrorMessage.SEM001);
+                return View();
+            }
+
+            return View();
         }
     }
 }
