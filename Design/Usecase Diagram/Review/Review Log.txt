@@ -1,0 +1,7 @@
+v1.0
+- Apply for report 3.
+- All use cases in report 3 are not the final version. This review is only apply for report 3.
+- Incorrect grammars have been fixed.
+- Incorrect diagrams and missing cases are waiting for updates by the person in charged.
+- Fields and executing procedures in a specific use case is not considered to review in this review.
+All of them will be updated in the final version and will be reviewd one more time.
