@@ -66,3 +66,5 @@ and modify all association that associated to those entties to associate with Us
 - Change relation between Doctor and Speciality entites to many to many
 - Replace attributes Patient_First_Name and Patient_Last_Name in Appoint entity by attribute Patient_Full_Name
 - Add relation between Doctor and Photo entities
+- Remove attribute Working_Hospital in Doctor entity
+- Remove relation between Feedback and User entities
