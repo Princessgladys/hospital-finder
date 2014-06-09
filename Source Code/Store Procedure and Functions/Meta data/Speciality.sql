@@ -1,5 +1,5 @@
 ﻿-- SCRIPT TO CREATE SPECIALITIES OF HOSPITALS
-use
+
 
 
 INSERT INTO Speciality VALUES
@@ -27,6 +27,7 @@ INSERT INTO Speciality VALUES
 	(N'Nhi khoa'),
 	(N'Nội soi'),
 	(N'Nội tiết'),
+	(N'Nội tiết và đường máu'),
 	(N'Nội tim mạch'),
 	(N'Nội tổng hợp'),
 	(N'Nội tổng quát'),
@@ -37,18 +38,21 @@ INSERT INTO Speciality VALUES
 	(N'Răng - Hàm - Mặt'),
 	(N'Sản khoa - Phụ khoa'),
 	(N'Sinh hóa'),
+	(N'Sinh lý sinh sản'),
 	(N'Tai - Mũi - Họng'),
 	(N'Thần kinh'),
+	(N'Thận nội tiết'),
+	(N'Thận tiết niệu'),
 	(N'Tiết niệu'),
 	(N'Tiêu hóa - Gan - Mật'),
-	(N'Tiêu hóa'),
+	--(N'Tiêu hóa'),
 	(N'Tim mạch'),
 	(N'Tư vấn tâm lý - Tâm thần'),
 	(N'Ung bướu'),
 	(N'Vật lý trị liệu'),
 	(N'Vi sinh'),
 	(N'Xét nghiệm'),
-	(N'Xét nghiệm'),
+	--(N'Xét nghiệm'),
 	(N'Xương khớp'),
 	(N'Y học cổ truyền'),
 	(N'Y học hạt nhân'),
