@@ -64,4 +64,5 @@ and modify all association that associated to those entties to associate with Us
 - Add attribute Caption to Photo entity
 - Change relation between Doctor and Hospital entities to many to many
 - Change relation between Doctor and Speciality entites to many to many
+- Replace attributes Patient_First_Name and Patient_Last_Name in Appoint entity by attribute Patient_Full_Name
 - Add relation between Doctor and Photo entities
