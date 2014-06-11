@@ -58,6 +58,11 @@ VALUES
 	'giadinhhospital@colombiaasia.com', NULL,
 	'10.802870, 106.694922', 1, 'True'),
 
+	(N'Phòng khám đa khoa quốc tế CMI', 3, N'1 Hàn Thuyên, Phường Bến Thành, Quận 1',
+	 26743, 760, 79, '(08) 38272366 / 38272367', '(08)38272365',
+	 'info@cmi-vietnam.com', 'www.cmi-vietnam.com', 
+	 '10.779533, 106.698693', 1, 'True'),
+
 	(N'Bệnh viện quốc tế Victoria Healthcare', 7, N'79 Điện Biên Phủ, Phường Đakao, Quận 1',
 	26737, 760, 79, '(08) 39104545', '(08) 39103334',
 	NULL, 'www.victoriavn.com',
@@ -72,6 +77,11 @@ VALUES
 	26740, 760, 79, '(08) 38222057', '(08) 38221780',
 	'1hcm.ops@internationalsos.com', 'www.internationalsos.com',
 	'10.781206, 106.697611', 1, 'True'),
+
+	(N'Phòng khám đa khoa SAIGON - ITO', 3, N'800 Trần Hưng Đạo, Phường 7, Quận 5',
+	 27322, 774, 79, '(08) 39225995 / 39225979', NULL,
+	 'saigonito123@gmail.com', 'www.saigonitohospital.com', 
+	 '10.753821, 106.676066', 1, 'True'),
 
 	-- LOCAL HOSPITALS - MULTI SPECILITIES
 	(N'Bệnh viện Chợ Rẫy', 1, N'205 Nguyễn Chí Thanh, Phường Bến Nghé, Phường 12, Quận 5',
@@ -182,6 +192,11 @@ VALUES
 	'hemato@vnn.vn', NULL,
 	'10.767515, 106.684456', 1, 'True'),
 
+	(N'Trung tâm chẩn đoán Y khoa Medic', 4, N'254 Hòa Hảo, Phường 4, Quận 10',
+	27310, 774, 79, '(08) 39557858', '(08) 38552978',
+	'hemato@vnn.vn', NULL,
+	'10.762655, 106.670095', 1, 'True'),
+
 	-- CARDIOLOGY (BỆNH TIM)
 	(N'Viện tim thành phố Hồ Chí Minh', 1, N'88 Thành Thái, Phường 12, Quận 10',
 	27172, 771, 79, '(08) 38651586', '(08) 38654026',
@@ -199,11 +214,21 @@ VALUES
 	NULL, 'www.tamduchearthospital.com',
 	'10.754445, 106.678281', 1, 'True'),
 
+	(N'Bệnh viện Chấn Thương Chỉnh Hình SAIGON - ITO', 1, N'305 Lê Văn Sỹ, Phường 1, Quận Tân Bình',
+	26977, 766, 79, '(08) 38441399 / 39912029 / 39912030', '(08) 39236554',
+	'saigon-ito@hcm.vnn.vn', 'saigonitohospital.com',
+	'10.796768, 106.664768', 1, 'True'),
+
 	-- MENTAL ILLNESS (THẦN KINH)
 	(N'Bệnh viện Ngoại Thần Kinh Quốc Tế', 2, N'65 Lũy Bán Bích, Phường Tân Thới Hoà, Quận Tân Phú',
-	27040, 767, 79, '(08) 39616996', '(08) 39613978',
+	27040, 767, 79, '(08) 39616996', '(08) 384441399',
 	NULL, NULL,
 	'10.761397, 106.632411', 1, 'True'),
+
+	(N'Bệnh viện tâm thần thành phố Hồ Chí Minh', 2, N'766 Võ Văn Kiệt, Phường 1, Quận 5',
+	27325, 774, 79, '(08) 39234675', '(08) 39234880',
+	NULL, 'www.bvtt-tphcm.org.vn',
+	'10.746131, 106.653795', 1, 'True'),
 
 	-- TURBERCULOSIS HOSPITAL (BỆNH LAO)
 	(N'Bệnh viện Phạm Ngọc Thạch', 1, N'120 Hùng Vương, Phường 12, Quận 5',
@@ -227,15 +252,20 @@ VALUES
 	NULL, NULL,
 	'10.756425, 106.661917', 1, 'True'),
 
-	(N'Bệnh viện Hạnh Phúc', 7, N'Lầu 2 tòa nhà Trung tâm thương mại Sài Gòn 37 Tôn Đức Thắng, Phường Bến Nghé, Quận 1',
+	(N'Phòng khám Bệnh viện Quốc tế HẠNH PHÚC', 3, N'Lầu 2 tòa nhà Trung tâm thương mại Sài Gòn 37 Tôn Đức Thắng, Phường Bến Nghé, Quận 1',
 	26740, 760, 79, '(08) 39111860', '(08) 39111861',
-	NULL, NULL,
+	'www.hanhphuchospital.com', NULL,
 	'10.784017, 106.703627', 1, 'True'),
 
 	(N'Bệnh viện Hạnh Phúc', 7, N'13 Vĩnh Phú, Thị Xã Thuận An',
 	27310, 725, 74, '(650) 39111860', '(650) 3636069',
-	NULL, NULL,
+	'www.hanhphuchospital.com', 'info@hanhphuchospital.com',
 	'10.756425, 106.661917', 1, 'True'),
+
+	(N'Trung tâm Chăm sóc Sức khỏe Quốc tế HẠNH PHÚC', 4, N'97 Nguyễn Thị Minh Khai, Phường Bến Thành, Quận 1',
+	26743, 760, 79, '(08) 39259797', '(08) 39259949',
+	'www.hanhphuchospital.com', 'saigonclinic@hanhphuchospital.com',
+	'10.774563, 106.690308', 1, 'True'),
 
 	-- ONCOLOGY (UNG THƯ)
 	(N'Bệnh viện Ung Bướu', 1, N'3 Nơ Trang Long, Phường 7, Quận Bình Thạnh',
@@ -255,11 +285,61 @@ VALUES
 	NULL, NULL,
 	'10.776437, 106.686602', 1, 'True'),
 
+	(N'Stamford Skin Clinic', 1, N'99 Sương Nguyệt Ánh Phường Bến Thành, Quận 1',
+	26743, 760, 79, '(08) 39251990', NULL,
+	NULL, 'stamfordskin.com',
+	'10.771251, 106.688506', 1, 'True'),
+
 	-- DENTAL CARE (NHA KHOA)
 	(N'Bệnh viện Răng Hàm Mặt', 1, N'263-264 Trần Hưng Đạo, Phường Cô Giang, Quận 1',
 	26755, 760, 79, '(08) 38360191', '(08) 38367319',
 	'bvranghammat@vnn.vn', 'www.bvranghammat.com',
 	'10.763476, 106.691719', 1, 'True'),
+
+	(N'Nha Khoa Koseikai', 3, N'21 Nguyễn Trung Ngạn, Phường Bến Nghé, Quận 1',
+	26740, 760, 79, '(08) 39106255', '(08) 39106256',
+	'koseikaivietnam@hcm.vnn.vn', 'www.hcpg.jp',
+	'10.782974, 106.704898', 1, 'True'),
+
+	(N'Grand Dentistry', 3, N'32-34 Ngô Đức Kế, Phường Bến Nghé, Quận 1',
+	26740, 760, 79, '(08) 38219446', '(08) 39104018',
+	'granddentist@yahoo.com', NULL,
+	'10.773357, 106.70535', 1, 'True'),
+
+	(N'Maple Health Care', 3, N'72 Võ Thị Sáu, Phường Đa Kao, Quận 1',
+	26737, 760, 79, '(08) 38201999', '(08) 38204619',
+	NULL, 'www.maplehealthcare.net',
+	'10.789092, 106.693103', 1, 'True'),
+
+	(N'Nha khoa Starlight', 3, N'2 Bis Công trường Quốc Tế, Phường 6, Quận 3',
+	27139, 770, 79, '(08) 38226222 / 38239294', '(08) 38239275',
+	'starlightdental@gmail.com', 'www.starlightdental.net',
+	'10.782699, 106.696305', 1, 'True'),
+
+	(N'Nha khoa Viễn Đông', 3, N'249 Lê Thánh Tôn, Phường Bến Thành, Quận 1',
+	26743, 760, 79, '(08) 822448888 / 38233405', '(08) 38257789',
+	'info@fareastdental.com', 'www.fareastdental.com',
+	'10.782699, 106.696305', 1, 'True'),
+		
+	(N'Nha khoa Quốc tế Westcoast Bến Thành', 3, N'27 Nguyễn Trung Trực, Phường Bến Thành, Quận 1',
+	26743, 760, 79, '(08) 38256999', '(08) 38257485',
+	'benthanh@westcoastinternational.com', 'www.westcoastinternational.com',
+	'10.774564, 106.698468', 1, 'True'),
+
+	(N'Nha khoa Quốc tế Westcoast Đồng Khởi', 3, N'71-79 Đồng Khởi, Phường Bến Nghé, Quận 1',
+	26740, 760, 79, '(08) 38256777', '(08) 38257838',
+	'dongkhoi@westcoastinternational.com', 'www.westcoastinternational.com',
+	'10.774712, 106.70453', 1, 'True'),
+	
+	(N'Khoa Răng Hàm Mặt - Đại Học Y Dược TP.HCM', 1, N'652 Nguyễn Trãi, Phường 11, Quận 5',
+	27328, 774, 79, '(08) 38558735 / 38552641', '(08) 38552300',
+	NULL, 'www.bvdaihoc.com.vn',
+	'10.753483, 106.663706', 1, 'True'),
+
+	(N'Nha khoa Quốc tế German', 3, N'Đảo Kim Cương, Phường Bình Trưng Tây, Quận 2',
+	27100, 769, 79, '(08) 35001636', NULL,
+	'info@gid-dentistry.com', 'www.gid-dentistry.com',
+	'10.778752, 106.746685', 1, 'True'),
 
 	-- OPTHTHALMOLOGY (BỆNH VIỆN MẮT)
 	(N'Bệnh viện Mắt', 1, N'280 Điện Biên Phủ, Phường 7, Quận 3',
@@ -271,6 +351,16 @@ VALUES
 	26743, 760, 79, '(08) 39256155 / 39256158', NULL,
 	NULL, NULL,
 	'10.771174, 106.691099', 1, 'True'),
+
+	(N'Phòng khám mắt Cao Thắng', 1, N'135 Trần Bình Trọng, Phường 2, Quận 5',
+	27313, 774, 79, '(08) 39238435', '38384464',
+	'info@cthospital.vn', 'www.cthospital.vn',
+	'10.757510, 106.681045', 1, 'True'),
+	
+	(N'Phòng khám chuyên khoa mắt - American Eye Center', 1, N'Lầu 5 Crescent Plaza, 105 Tôn Dật Tiên, Phường Tân Phong, Quận 7',
+	27490, 778, 79, '(08) 54136758 / 54136759', '(08) 54136760',
+	'info@americaneyecentervn.com', 'www.americaneyecentervn.com',
+	'10.722882, 106.71425', 1, 'True'),
 
 	-- OTORHINOLARYNGOLOGY HOSPITAL (TAI MŨI HỌNG)
 	(N'Bệnh viện Tai Mũi Họng', 1, N'155B Trần Quốc Thảo, Phường 9, Quận 3',
