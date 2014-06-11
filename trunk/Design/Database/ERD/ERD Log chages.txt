@@ -68,3 +68,4 @@ and modify all association that associated to those entties to associate with Us
 - Add relation between Doctor and Photo entities
 - Remove attribute Working_Hospital in Doctor entity
 - Remove relation between Feedback and User entities
+- Add attribute Confirm_Code to Appointment entity
