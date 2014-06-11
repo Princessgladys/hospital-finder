@@ -349,18 +349,23 @@ VALUES
 
 	(N'Bệnh viện Mắt Sài Gòn', 1, N'100 Lê Thị Riêng, Phường Bến Thành, Quận 1',
 	26743, 760, 79, '(08) 39256155 / 39256158', NULL,
-	NULL, NULL,
+	NULL, 'www.matsaigon.com',
 	'10.771174, 106.691099', 1, 'True'),
 
-	(N'Phòng khám mắt Cao Thắng', 1, N'135 Trần Bình Trọng, Phường 2, Quận 5',
+	(N'Phòng khám mắt Cao Thắng', 3, N'135 Trần Bình Trọng, Phường 2, Quận 5',
 	27313, 774, 79, '(08) 39238435', '38384464',
 	'info@cthospital.vn', 'www.cthospital.vn',
 	'10.757510, 106.681045', 1, 'True'),
 	
-	(N'Phòng khám chuyên khoa mắt - American Eye Center', 1, N'Lầu 5 Crescent Plaza, 105 Tôn Dật Tiên, Phường Tân Phong, Quận 7',
+	(N'Phòng khám chuyên khoa mắt - American Eye Center', 3, N'Lầu 5 Crescent Plaza, 105 Tôn Dật Tiên, Phường Tân Phong, Quận 7',
 	27490, 778, 79, '(08) 54136758 / 54136759', '(08) 54136760',
 	'info@americaneyecentervn.com', 'www.americaneyecentervn.com',
 	'10.722882, 106.71425', 1, 'True'),
+
+	(N'Bệnh viện mắt Việt Hàn', 1, N'355 Ngô Gia Tự, Phường 3, Quận 10',
+	27205, 771, 79, '(08) 38300999', NULL,
+	NULL, 'www.matsaigon.com',
+	'10.761315, 106.670058', 1, 'True'),
 
 	-- OTORHINOLARYNGOLOGY HOSPITAL (TAI MŨI HỌNG)
 	(N'Bệnh viện Tai Mũi Họng', 1, N'155B Trần Quốc Thảo, Phường 9, Quận 3',
