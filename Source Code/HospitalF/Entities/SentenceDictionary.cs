@@ -22,7 +22,7 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Search_Date attribute
         /// <summary>
-        public DateTime? SearchDate;
+        public DateTime SearchDate;
 
         #endregion
     }

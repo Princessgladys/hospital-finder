@@ -22,7 +22,7 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Is_Active attribute
         /// <summary>
-        public bool? IsActive;
+        public bool IsActive;
 
         #endregion
     }

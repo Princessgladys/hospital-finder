@@ -22,7 +22,7 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Priority attribute
         /// <summary>
-        public int? Priority;
+        public int Priority;
 
         #endregion
     }

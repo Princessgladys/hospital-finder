@@ -32,7 +32,7 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for District_ID attribute
         /// <summary>
-        public int? DistrictID;
+        public int DistrictID;
 
         #endregion
     }

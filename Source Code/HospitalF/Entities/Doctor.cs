@@ -27,17 +27,7 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Gender attribute
         /// <summary>
-        public bool? Gender;
-
-        /// <summary>
-        /// Property for Speciality attribute
-        /// <summary>
-        public int? Speciality;
-
-        /// <summary>
-        /// Property for Working_Hospital attribute
-        /// <summary>
-        public int? WorkingHospital;
+        public bool Gender;
 
         /// <summary>
         /// Property for Degree attribute
@@ -55,9 +45,14 @@ namespace HospitalF.Entities
         public string WorkingDay;
 
         /// <summary>
+        /// Property for Photo_ID attribute
+        /// <summary>
+        public int? PhotoID;
+
+        /// <summary>
         /// Property for Is_Active attribute
         /// <summary>
-        public bool? IsActive;
+        public bool IsActive;
 
         #endregion
     }

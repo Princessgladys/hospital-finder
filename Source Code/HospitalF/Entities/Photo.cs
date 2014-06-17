@@ -27,22 +27,27 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Add_Date attribute
         /// <summary>
-        public DateTime? AddDate;
+        public DateTime AddDate;
 
         /// <summary>
-        /// Property for Hospital_ID attribute
+        /// Property for Target_Type attribute
         /// <summary>
-        public int? HospitalID;
+        public int TargetType;
+
+        /// <summary>
+        /// Property for Target_ID attribute
+        /// <summary>
+        public int TargetID;
 
         /// <summary>
         /// Property for Uploaded_Person attribute
         /// <summary>
-        public int? UploadedPerson;
+        public int UploadedPerson;
 
         /// <summary>
         /// Property for Is_Active attribute
         /// <summary>
-        public bool? IsActive;
+        public bool IsActive;
 
         #endregion
     }

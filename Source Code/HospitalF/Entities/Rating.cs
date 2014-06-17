@@ -17,17 +17,17 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Score attribute
         /// <summary>
-        public int? Score;
+        public int Score;
 
         /// <summary>
         /// Property for Hospital_ID attribute
         /// <summary>
-        public int? HospitalID;
+        public int HospitalID;
 
         /// <summary>
         /// Property for Created_Person attribute
         /// <summary>
-        public int? CreatedPerson;
+        public int CreatedPerson;
 
         #endregion
     }
