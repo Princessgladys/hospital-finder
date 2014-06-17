@@ -1,0 +1,264 @@
+﻿@*@using HospitalF.Constant
+@using HospitalF.Entities;
+@model List<HospitalEntity>
+
+@{
+    ViewBag.Title = "Result";
+}
+
+
+<h2>Result</h2>
+@foreach (HospitalEntity hospital in Model)
+{
+    <p>@(hospital.Address)</p>
+}*@
+
+<!-- MAIN CONTENT -->
+<div id="content-results" class="col-md-10 col-md-offset-1 well">
+    <div class="col-md-8">
+        <form class="form-horizontal">
+            <legend>Nhập từ khóa về bệnh viện</legend>
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Nhập thông tin tìm kiếm..." list="list">
+                <datalist id="list">
+                    <option value="Chợ Rẫy">Chợ Rẫy</option>
+                    <option value="Nhi Đồng">Nhi Đồng</option>
+                    <option value="Chấn Thương Chỉnh Hình">Chấn Thương Chỉnh Hình</option>
+                    <option value="Bệnh Viện Mắt">Bệnh Viện Mắt</option>
+                </datalist>
+                <div class="input-group-btn">
+                    <button class="btn btn-default btn-primary" type="button">
+                        <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
+                    </button>
+                </div>
+            </div>
+            <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
+        </form>
+    </div>
+    <div class="col-md-12">
+        <form class="form-horizontal">
+            <fieldset>
+                <legend>Kết quả tìm kiếm với từ khóa "tai mũi họng"</legend>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="control-label col-md-4" for="prepend">Đánh Giá</label>
+                        <div class="col-md-8">
+                            <div class="icon-addon addon-sm">
+                                <select class="form-control">
+                                    <option>Cao Nhất</option>
+                                    <option>Thấp Nhât</option>
+                                </select>
+                                <label class="glyphicon glyphicon-sort" rel="tooltip" title="Đánh Giá"></label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group col-md-4">
+                        <label class="control-label col-md-4" for="prepend">Loại</label>
+                        <div class="col-md-8">
+                            <div class="icon-addon addon-sm">
+                                <select class="form-control">
+                                    <option>Tất Cả</option>
+                                    <option>Bệnh Viện Công</option>
+                                    <option>Phòng Khám Tư</option>
+                                </select>
+                                <label class="glyphicon glyphicon-list-alt" rel="tooltip" title="Loại Bệnh Viện"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary pull-right" type="button">
+                            <i class="fa fa-refresh"></i>&nbsp;
+                            Cập Nhật
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="col-md-12">
+        <hr />
+        <div id="hospital-list-results" class="col-md-4">
+            <h1 class="font-md">Thông tin <span class="semi-bold">hospital</span><small class="text-danger"> &nbsp;&nbsp;(2,281 kết quả)</small></h1>
+
+            <div class="search-results clearfix smart-form">
+
+                <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">SmartAdmin - Responsive Dashboard Template</a></h4>
+
+                <div>
+                    <div class="rating display-inline">
+                        <input type="radio" name="stars-rating" id="stars-rating-5">
+                        <label for="stars-rating-5"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-4">
+                        <label for="stars-rating-4"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-3">
+                        <label for="stars-rating-3"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-2">
+                        <label for="stars-rating-2"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-1">
+                        <label for="stars-rating-1"><i class="fa fa-star"></i></label>
+                    </div>
+                    <br>
+                    <div class="url text-success">
+                        http://www.wrapbootstrap.com <i class="fa fa-caret-down"></i>
+                    </div>
+                    <p class="description">
+                        Lorem Ipsum is simply dummy text of the p...
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="search-results clearfix smart-form">
+
+                <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">SmartAdmin - Responsive Dashboard Template</a></h4>
+
+                <div>
+                    <div class="rating display-inline">
+                        <input type="radio" name="stars-rating" id="stars-rating-5">
+                        <label for="stars-rating-5"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-4">
+                        <label for="stars-rating-4"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-3">
+                        <label for="stars-rating-3"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-2">
+                        <label for="stars-rating-2"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-1">
+                        <label for="stars-rating-1"><i class="fa fa-star"></i></label>
+                    </div>
+                    <br>
+                    <div class="url text-success">
+                        http://www.wrapbootstrap.com <i class="fa fa-caret-down"></i>
+                    </div>
+                    <p class="description">
+                        Lorem Ipsum is simply dummy text of the p...
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="search-results clearfix smart-form">
+
+                <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">SmartAdmin - Responsive Dashboard Template</a></h4>
+
+                <div>
+                    <div class="rating display-inline">
+                        <input type="radio" name="stars-rating" id="stars-rating-5">
+                        <label for="stars-rating-5"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-4">
+                        <label for="stars-rating-4"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-3">
+                        <label for="stars-rating-3"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-2">
+                        <label for="stars-rating-2"><i class="fa fa-star"></i></label>
+                        <input type="radio" name="stars-rating" id="stars-rating-1">
+                        <label for="stars-rating-1"><i class="fa fa-star"></i></label>
+                    </div>
+                    <br>
+                    <div class="url text-success">
+                        http://www.wrapbootstrap.com <i class="fa fa-caret-down"></i>
+                    </div>
+                    <p class="description">
+                        Lorem Ipsum is simply dummy text of the p...
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="text-center">
+                <hr>
+                <ul class="pagination no-margin">
+                    <li class="prev disabled">
+                        <a href="javascript:void(0);">Previous</a>
+                    </li>
+                    <li class="active">
+                        <a href="javascript:void(0);">1</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">2</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">3</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">4</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">5</a>
+                    </li>
+                    <li class="next">
+                        <a href="javascript:void(0);">Next</a>
+                    </li>
+                </ul>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+        <div id="map-results" class="col-md-8">
+            <div id="map-canvas"></div>
+        </div>
+    </div>
+</div>
+<!-- END MAIN CONTENT -->
+
+<!-- GOOGLE API -->
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi"></script>
+
+<script type="text/javascript">
+    // Google Map API - Geolocation
+
+    var map;
+
+    function initialize() {
+        var mapOptions = {
+            zoom: 6
+        };
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+
+        // Try HTML5 geolocation
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var pos = new google.maps.LatLng(position.coords.latitude,
+                                                 position.coords.longitude);
+
+                var infowindow = new google.maps.InfoWindow({
+                    map: map,
+                    position: pos,
+                    content: 'Vị trí hiện tại của bạn.'
+                });
+
+                map.setCenter(pos);
+            }, function () {
+                handleNoGeolocation(true);
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleNoGeolocation(false);
+        }
+    }
+
+    function handleNoGeolocation(errorFlag) {
+        if (errorFlag) {
+            var content = 'Error: The Geolocation service failed.';
+        } else {
+            var content = 'Error: Your browser doesn\'t support geolocation.';
+        }
+
+        var options = {
+            map: map,
+            position: new google.maps.LatLng(60, 105),
+            content: content
+        };
+
+        var infowindow = new google.maps.InfoWindow(options);
+        map.setCenter(options.position);
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+
+</script>
