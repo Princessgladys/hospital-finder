@@ -25,14 +25,9 @@ namespace HospitalF.Entities
         public string FeedbackContent;
 
         /// <summary>
-        /// Property for Created_Person attribute
-        /// <summary>
-        public int? CreatedPerson;
-
-        /// <summary>
         /// Property for Feedback_Type attribute
         /// <summary>
-        public int? FeedbackType;
+        public int FeedbackType;
 
         /// <summary>
         /// Property for Email attribute
@@ -42,12 +37,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Hospital_ID attribute
         /// <summary>
-        public int? HospitalID;
+        public int HospitalID;
 
         /// <summary>
         /// Property for Created_Date attribute
         /// <summary>
-        public DateTime? CreatedDate;
+        public DateTime CreatedDate;
 
         #endregion
     }

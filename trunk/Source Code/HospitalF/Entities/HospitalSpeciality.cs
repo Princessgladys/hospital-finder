@@ -22,12 +22,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Is_Main_Speciality attribute
         /// <summary>
-        public bool? IsMainSpeciality;
+        public bool IsMainSpeciality;
 
         /// <summary>
         /// Property for Is_Active attribute
         /// <summary>
-        public bool? IsActive;
+        public bool IsActive;
 
         #endregion
     }

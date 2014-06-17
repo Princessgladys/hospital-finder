@@ -25,6 +25,11 @@ namespace HospitalF.Entities
         public string Password;
 
         /// <summary>
+        /// Property for Secondary_Email attribute
+        /// <summary>
+        public string SecondaryEmail;
+
+        /// <summary>
         /// Property for First_Name attribute
         /// <summary>
         public string FirstName;
@@ -42,12 +47,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Role_ID attribute
         /// <summary>
-        public int? RoleID;
+        public int RoleID;
 
         /// <summary>
-        /// Property for Created_Person attribute
+        /// Property for Confirmed_Person attribute
         /// <summary>
-        public int? CreatedPerson;
+        public int? ConfirmedPerson;
 
         /// <summary>
         /// Property for Hospital_ID attribute
@@ -57,7 +62,7 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Is_Active attribute
         /// <summary>
-        public bool? IsActive;
+        public bool IsActive;
 
         #endregion
     }

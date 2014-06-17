@@ -15,24 +15,19 @@ namespace HospitalF.Entities
         public int AppointmentID;
 
         /// <summary>
-        /// Property for Patient_First_Name attribute
+        /// Property for Patient_Full_Name attribute
         /// <summary>
-        public string PatientFirstName;
-
-        /// <summary>
-        /// Property for Patient_Last_Name attribute
-        /// <summary>
-        public string PatientLastName;
+        public string PatientFullName;
 
         /// <summary>
         /// Property for Patient_Gender attribute
         /// <summary>
-        public bool? PatientGender;
+        public bool PatientGender;
 
         /// <summary>
         /// Property for Patient_Birthday attribute
         /// <summary>
-        public DateTime? PatientBirthday;
+        public DateTime PatientBirthday;
 
         /// <summary>
         /// Property for Patient_Phone_Number attribute
@@ -47,42 +42,42 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Appointment_Date attribute
         /// <summary>
-        public DateTime? AppointmentDate;
+        public DateTime AppointmentDate;
 
         /// <summary>
         /// Property for Start_Time attribute
         /// <summary>
-        public TimeSpan? StartTime;
+        public TimeSpan StartTime;
 
         /// <summary>
         /// Property for End_Time attribute
         /// <summary>
-        public TimeSpan? EndTime;
+        public TimeSpan EndTime;
 
         /// <summary>
         /// Property for In_Charge_Doctor attribute
         /// <summary>
-        public int? InChargeDoctor;
+        public int InChargeDoctor;
 
         /// <summary>
         /// Property for Curing_Hospital attribute
         /// <summary>
-        public int? CuringHospital;
+        public int CuringHospital;
 
         /// <summary>
-        /// Property for Created_Person attribute
+        /// Property for Confirm_Code attribute
         /// <summary>
-        public int? CreatedPerson;
+        public string ConfirmCode;
 
         /// <summary>
         /// Property for Is_Confirm attribute
         /// <summary>
-        public bool? IsConfirm;
+        public bool IsConfirm;
 
         /// <summary>
         /// Property for Is_Active attribute
         /// <summary>
-        public bool? IsActive;
+        public bool IsActive;
 
         #endregion
     }

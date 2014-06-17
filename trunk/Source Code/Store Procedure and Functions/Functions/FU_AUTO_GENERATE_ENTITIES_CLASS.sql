@@ -23,7 +23,7 @@ BEGIN
 		'	/// Class defines properties for ' + @TableName + ' table' + CHAR(13) +
 		'	/// <summary>' + CHAR(13) +
 		'	public class ' +
-		REPLACE(@TableName, '_', '') + CHAR(13) + '	{' + CHAR(13)
+		REPLACE(@TableName, '_', '') + 'Entity' + CHAR(13) + '	{' + CHAR(13)
 
 	SET @result = @result + '		#region ' + @TableName + ' Properties' + CHAR(13) 
 

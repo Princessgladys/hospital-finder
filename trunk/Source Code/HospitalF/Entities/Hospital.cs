@@ -22,7 +22,7 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Hospital_Type attribute
         /// <summary>
-        public int? HospitalType;
+        public int HospitalType;
 
         /// <summary>
         /// Property for Address attribute
@@ -32,17 +32,17 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Ward_ID attribute
         /// <summary>
-        public int? WardID;
+        public int WardID;
 
         /// <summary>
         /// Property for District_ID attribute
         /// <summary>
-        public int? DistrictID;
+        public int DistrictID;
 
         /// <summary>
         /// Property for City_ID attribute
         /// <summary>
-        public int? CityID;
+        public int CityID;
 
         /// <summary>
         /// Property for Phone_Number attribute
@@ -67,12 +67,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Start_Time attribute
         /// <summary>
-        public TimeSpan? StartTime;
+        public TimeSpan StartTime;
 
         /// <summary>
         /// Property for End_Time attribute
         /// <summary>
-        public TimeSpan? EndTime;
+        public TimeSpan EndTime;
 
         /// <summary>
         /// Property for Coordinate attribute
@@ -82,12 +82,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Created_Person attribute
         /// <summary>
-        public int? CreatedPerson;
+        public int CreatedPerson;
 
         /// <summary>
         /// Property for Is_Active attribute
         /// <summary>
-        public bool? IsActive;
+        public bool IsActive;
 
         #endregion
     }
