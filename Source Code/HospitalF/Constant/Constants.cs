@@ -9,6 +9,21 @@ namespace HospitalF.Constant
         #region Controller and View name
 
         /// <summary>
+        /// Name of _HomeLayout
+        /// </summary>
+        public const string HomeLayout = "_HomeLayout";
+
+        /// <summary>
+        /// Name of _AdminLayout
+        /// </summary>
+        public const string AdmidLayout = "_AdminLayout";
+
+        /// <summary>
+        /// Name of _HospitalUserLayout
+        /// </summary>
+        public const string HospitalUserLayout = "_HospitalUserLayout";
+
+        /// <summary>
         /// Name of HomeController
         /// </summary>
         public const string HomeController = "Home";

@@ -9,7 +9,7 @@ namespace HospitalF.Utilities
     /// <summary>
     /// Class define public methods that being used in project
     /// </summary>
-    public class Utils
+    public class ExcelUtil
     {
         
     }

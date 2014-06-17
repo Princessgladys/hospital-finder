@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using HospitalF.Constant;
 using HospitalF.Models;
 using HospitalF.Entities;
+using HospitalF.App_Start;
 
 namespace HospitalF.Controllers
 {
@@ -16,6 +17,7 @@ namespace HospitalF.Controllers
         /// GET: /Home/Index
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> Index()
         {
             try
@@ -36,6 +38,7 @@ namespace HospitalF.Controllers
         /// <param name="model">HomeModels</param>
         /// <returns>Task[ActionResult]</returns>
         [HttpPost]
+        [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> Index(HomeModels model)
         {
             // Add the list of Cities and Specialities to view
@@ -68,7 +71,8 @@ namespace HospitalF.Controllers
         /// GET: /Home/Index
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
-        public async Task<ActionResult> Result()
+        [LayoutInjecter(Constants.HomeLayout)]
+        public async Task<ActionResult> SearchResult()
         {
             try
             {
@@ -80,8 +84,6 @@ namespace HospitalF.Controllers
                 Response.Write(ErrorMessage.SEM001);
                 return View();
             }
-
-            return View();
         }
     }
 }

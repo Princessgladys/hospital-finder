@@ -41,10 +41,10 @@ namespace HospitalF
 
             // Bundle for Home page
             bundles.Add(new StyleBundle("~/Content/smartadmin").Include(
-                        "~/Content/smartadmin/bootstrap.min.css",
-                        "~/Content/smartadmin/font-awesome.min.css",
-                        "~/Content/smartadmin/smartadmin-production.css",
-                        "~/Content/smartadmin/smartadmin-skins.css"));
+                        "~/Content/css/bootstrap.min.css",
+                        "~/Content/css/font-awesome.min.css",
+                        "~/Content/css/smartadmin-production.css",
+                        "~/Content/css/smartadmin-skins.css"));
         }
     }
 }
