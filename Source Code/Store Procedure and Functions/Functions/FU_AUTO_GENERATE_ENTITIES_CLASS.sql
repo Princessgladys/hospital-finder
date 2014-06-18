@@ -32,7 +32,7 @@ BEGIN
 		   '		/// Property for ' + orgColName + ' attribute' + CHAR(13) +
 		   '		/// <summary>' + CHAR(13) +
 		   '		public ' +
-		   ColumnType + ' ' + ColumnName + ';' + CHAR(13)
+		   ColumnType + ' ' + ColumnName + ' { get; set; }' + CHAR(13)
 	FROM
 	(
 		SELECT REPLACE(col.name, '_', '') ColumnName,

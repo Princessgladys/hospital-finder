@@ -24,14 +24,24 @@ namespace HospitalF.Constant
         public const string HospitalUserLayout = "_HospitalUserLayout";
 
         /// <summary>
-        /// Name of Error page
+        /// Name of SystemFailureHome page
         /// </summary>
-        public const string ErrorPage = "Error";
+        public const string HomeErrorPage = "SystemFailureHome";
+
+        /// <summary>
+        /// Name of SystemFailureAdmin page
+        /// </summary>
+        public const string AdminErrorPage = "SystemFailureAdmin";
 
         /// <summary>
         /// Name of HomeController
         /// </summary>
         public const string HomeController = "Home";
+
+        /// <summary>
+        /// Name of ErrorController
+        /// </summary>
+        public const string ErrorController = "Error";
 
         /// <summary>
         /// Name of Index method
@@ -96,6 +106,46 @@ namespace HospitalF.Constant
         /// Vietnamese name of property Coordinate
         /// </summary>
         public const string Coordinate = "Tọa độ";
+
+        /// <summary>
+        /// English name of property CityID
+        /// </summary>
+        public const string CityID = "CityID";
+
+        /// <summary>
+        /// English name of property CityName
+        /// </summary>
+        public const string CityName = "CityName";
+
+        /// <summary>
+        /// English name of property DistrictID
+        /// </summary>
+        public const string DistrictID = "DistrictID";
+
+        /// <summary>
+        /// English name of property DistrictName
+        /// </summary>
+        public const string DistrictName = "DistrictName";
+
+        /// <summary>
+        /// Vietnamese message request for City
+        /// </summary>
+        public const string RequireCity = "Xin chọn tỉnh / thành phố";
+
+        /// <summary>
+        /// Vietnamese message request for District
+        /// </summary>
+        public const string RequireDistrict = "Xin chọn quận / huyện";
+
+        /// <summary>
+        /// Vietnamese message request for Speciality
+        /// </summary>
+        public const string RequireSpeciality = "Xin chọn chuyên khoa";
+
+        /// <summary>
+        /// Vietnamese message request for Disease
+        /// </summary>
+        public const string RequireDisease = "Xin chọn triệu chứng";
 
         /// <summary>
         /// Default matching value
