@@ -57,6 +57,8 @@ namespace HospitalF.Constant
 
         #region HomeModel
 
+        #region Property Vietnamese name
+
         /// <summary>
         /// Vietnamese name of property SearchValue
         /// </summary>
@@ -107,6 +109,10 @@ namespace HospitalF.Constant
         /// </summary>
         public const string Coordinate = "Tọa độ";
 
+        #endregion
+
+        #region Property English Name
+
         /// <summary>
         /// English name of property CityID
         /// </summary>
@@ -126,6 +132,28 @@ namespace HospitalF.Constant
         /// English name of property DistrictName
         /// </summary>
         public const string DistrictName = "DistrictName";
+
+        /// <summary>
+        ///  English name of property SpecialityID
+        /// </summary>
+        public const string SpecialityID = "SpecialityID";
+
+        /// <summary>
+        /// English name of property SpecialityName
+        /// </summary>
+        public const string SpecialityName = "SpecialityName";
+
+        /// <summary>
+        /// English name of property DiseaseID
+        /// </summary>
+        public const string DiseaseID = "DiseaseID";
+
+        /// <summary>
+        /// English name of property DiseaseName
+        /// </summary>
+        public const string DiseaseName = "DiseaseName";
+
+        #endregion
 
         /// <summary>
         /// Vietnamese message request for City

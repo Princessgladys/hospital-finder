@@ -14,6 +14,8 @@ namespace HospitalF.Controllers
 {
     public class HomeController : Controller
     {
+        public static List<CityEntity> cityList = new List<CityEntity>();
+
         /// <summary>
         /// GET: /Home/Index
         /// </summary>
@@ -21,17 +23,17 @@ namespace HospitalF.Controllers
         [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> Index()
         {
-            //try
-            //{
+            try
+            {
                 // Load list of city
-                List<CityEntity> cityList = await LocationUtil.LoadCityAsync();
-                ViewBag.CityList = new SelectList(cityList, "CityID", "CityName");
-            //}
-            //catch (Exception)
-            //{
-            //    // Move to error page
-            //    return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
-            //}
+                cityList = await LocationUtil.LoadCityAsync();
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+            }
+            catch (Exception)
+            {
+                // Move to error page
+                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+            }
 
             return View();
         }
@@ -45,12 +47,11 @@ namespace HospitalF.Controllers
         [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> Index(HomeModels model)
         {
-            // Add the list of Cities and Specialities to view
-
-
             // Check if all validations are correct
             if (!ModelState.IsValid)
             {
+                // Add the list of Cities and Specialities to view
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
                 return View(model);
             }
             else
@@ -67,7 +68,7 @@ namespace HospitalF.Controllers
                 }
 
                 // Move to result page
-                return RedirectToAction("Result", Constants.HomeController);
+                return RedirectToAction(Constants.SearchResultMethod, Constants.HomeController);
             }
         }
 
