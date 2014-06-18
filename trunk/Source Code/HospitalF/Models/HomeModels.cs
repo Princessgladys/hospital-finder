@@ -447,33 +447,35 @@ namespace HospitalF.Models
         /// <summary>
         ///  Search hospitals in database
         /// </summary>
-        /// <param name="inputValue"></param>
-        /// <returns>List[HomeModels]</returns>
+        /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
         public async Task<List<HospitalEntity>> SearchHospital()
         {
-            // Create an instance of Linq database
-            LinqDBDataContext data = new LinqDBDataContext();
-
+            // Take input values
             int cityId = this.CityID;
             int districtId = this.DistrictID;
             int specialityId = this.SpecialityID;
             int diseaseId = this.DiseaseID;
 
-            var result = await Task.Run(() =>
+            List<SP_SEARCH_HOSPITALResult> result = null;
+            // Search for suitable hospitals in database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() =>
                 data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId).ToList());
-
-
-            List<HospitalEntity> list = new List<HospitalEntity>();
-
+            }
+                
+            List<HospitalEntity> hospitalList = null;
+            // Assign values for each hospital
             foreach (SP_SEARCH_HOSPITALResult re in result)
             {
                 HospitalEntity hospital = new HospitalEntity();
                 hospital.HospitalName = re.Hospital_Name;
                 hospital.Address = re.Address;
-                list.Add(hospital);
+                hospitalList.Add(hospital);
             }
 
-            return list;
+            // Return list of hospitals
+            return hospitalList;
         }
 
         #endregion
