@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web;
 using HospitalF.Models;
 using HospitalF.Entities;
-using HospitalF.Constant;
 
 namespace HospitalF.Utilities
 {

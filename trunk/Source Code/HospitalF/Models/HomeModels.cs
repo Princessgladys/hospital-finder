@@ -258,88 +258,36 @@ namespace HospitalF.Models
         }
 
         /// <summary>
-        /// Load all specialities in database
-        /// </summary>
-        /// <returns></returns>
-        private async Task<List<HomeModels>> LoadSpecialityAsync()
-        {
-            // Create an instance of Linq database
-            LinqDBDataContext data = new LinqDBDataContext();
-            // Return list of specialities
-            try
-            {
-                return await Task.Run(() =>
-                    (from s in data.Specialities
-                     select new HomeModels
-                    {
-                        SpecialityID = s.Speciality_ID,
-                        SpecialityName = s.Speciality_Name
-                    }).ToList());
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(ErrorMessage.SEM001);
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Load all diseases in database
-        /// </summary>
-        /// <returns></returns>
-        private async Task<List<HomeModels>> LoadDiseaseAsync()
-        {
-            // Create an instance of Linq database
-            LinqDBDataContext data = new LinqDBDataContext();
-            // Return list of diseases
-            try
-            {
-                return await Task.Run(() =>
-                    (from d in data.Diseases
-                     select new HomeModels
-                     {
-                         DiseaseID = d.Disease_ID,
-                         DiseaseName = d.Disease_Name
-                     }).ToList());
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(ErrorMessage.SEM001);
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Handle well-formed What phrase
         /// </summary>
         /// <param name="whatPhrase">Well-formed What phrase</param>
         /// <param name="specialityList">Speciality List</param>
         /// <param name="diseaseList">Disease List</param>
         private void HandleWellFormedWhatPhrase(string whatPhrase,
-            List<HomeModels> specialityList, List<HomeModels> diseaseList)
+            List<SpecialityEntity> specialityList, List<DiseaseEntity> diseaseList)
         {
             // Check every word in speciality list to see in the input token is match
-            foreach (HomeModels model in specialityList)
+            foreach (SpecialityEntity speciality in specialityList)
             {
                 // Find matching result for speciality
-                if (!string.IsNullOrEmpty(model.SpecialityName) &&
-                    StringUtil.IsPatternMatched(whatPhrase, model.SpecialityName.ToLower()))
+                if (!string.IsNullOrEmpty(speciality.SpecialityName) &&
+                    StringUtil.IsPatternMatched(whatPhrase, speciality.SpecialityName.ToLower()))
                 {
-                    this.SpecialityID = model.SpecialityID;
-                    this.SpecialityName = model.SpecialityName;
+                    this.SpecialityID = speciality.SpecialityID;
+                    this.SpecialityName = speciality.SpecialityName;
                     break;
                 }
             }
 
             // Check every word in disease list to see in the input token is match
-            foreach (HomeModels model in diseaseList)
+            foreach (DiseaseEntity disease in diseaseList)
             {
                 // Find matching reuslt for disease
-                if (!string.IsNullOrEmpty(model.DiseaseName) &&
-                    StringUtil.IsPatternMatched(whatPhrase, model.DiseaseName.ToLower()))
+                if (!string.IsNullOrEmpty(disease.DiseaseName) &&
+                    StringUtil.IsPatternMatched(whatPhrase, disease.DiseaseName.ToLower()))
                 {
-                    this.DiseaseID = model.DiseaseID;
-                    this.DiseaseName = model.DiseaseName;
+                    this.DiseaseID = disease.DiseaseID;
+                    this.DiseaseName = disease.DiseaseName;
                     break;
                 }
             }
@@ -463,9 +411,9 @@ namespace HospitalF.Models
 
             // Handle What phrase
             // Load relation word dictionary
-            List<HomeModels> specialityList = await LoadSpecialityAsync();
+            List<SpecialityEntity> specialityList = await SpecialityUtil.LoadSpecialityAsync();
             // Load location dictionary
-            List<HomeModels> diseaseList = await LoadDiseaseAsync();
+            List<DiseaseEntity> diseaseList = await SpecialityUtil.LoadDiseaseAsync();
 
             // Check if the lists are load successfully
             if ((specialityList != null) && (diseaseList != null))

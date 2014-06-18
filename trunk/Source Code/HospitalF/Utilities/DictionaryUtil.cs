@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using HospitalF.Models;
-using HospitalF.Entities;
-using HospitalF.Constant;
 
 namespace HospitalF.Utilities
 {
@@ -20,20 +18,13 @@ namespace HospitalF.Utilities
         /// <returns>List[string] of words</returns>
         public static async Task<List<string>> LoadRelationWordAsync()
         {
-            // Create an instance of Linq database
-            LinqDBDataContext data = new LinqDBDataContext();
             // Return list of dictionary words
-            try
+            using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
                     (from w in data.WordDictionaries
                      where w.Priority == 1
                      select w.Word).ToList());
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(ErrorMessage.SEM001);
-                return null;
             }
         }
     }

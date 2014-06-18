@@ -230,6 +230,7 @@
     <Compile Include="Utilities\DictionaryUtil.cs" />
     <Compile Include="Utilities\ExcelUtil.cs" />
     <Compile Include="Utilities\LocationUtil.cs" />
+    <Compile Include="Utilities\SpecialityUtil.cs" />
     <Compile Include="Utilities\StringUtil.cs" />
   </ItemGroup>
   <ItemGroup>
