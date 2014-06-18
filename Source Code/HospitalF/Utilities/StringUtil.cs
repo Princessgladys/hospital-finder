@@ -47,7 +47,7 @@ namespace HospitalF.Utilities
         /// <param name="text">Input query text</param>
         /// <param name="pattern">Pattern that needed to find in a string</param>
         /// <returns>Boolean value indicating a pattern is matched with the given text</returns>
-        public static Boolean IsPatternMatched(string text, string pattern)
+        public static bool IsPatternMatched(string text, string pattern)
         {
             // Shifiting index
             int shift = 0;
