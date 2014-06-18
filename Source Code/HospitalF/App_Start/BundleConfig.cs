@@ -44,12 +44,15 @@ namespace HospitalF
                         "~/Content/css/smartadmin-production.css",
                         "~/Content/css/smartadmin-skins.css",
                         "~/Content/css/custom.css"));
-            // Bulde for Admin and Hospital User layout
+            // Bundle for Admin and Hospital User layout
             bundles.Add(new StyleBundle("~/Content/AdminLayout").Include(
                         "~/Content/css/bootstrap.m.css",
                         "~/Content/css/font-awesome.m.css",
                         "~/Content/css/smartadmin-production.css",
                         "~/Content/css/smartadmin-skins.css"));
+            // Bundle for Error page
+            bundles.Add(new StyleBundle("~/Content/Error").Include(
+                        "~/Content/css/error.css"));
         }
     }
 }
