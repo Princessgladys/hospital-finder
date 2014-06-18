@@ -23,8 +23,6 @@ namespace HospitalF
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
-
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
                         "~/Content/themes/base/jquery.ui.resizable.css",
@@ -39,10 +37,17 @@ namespace HospitalF
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
 
-            // Bundle for Home page
-            bundles.Add(new StyleBundle("~/Content/smartadmin").Include(
-                        "~/Content/css/bootstrap.min.css",
-                        "~/Content/css/font-awesome.min.css",
+            // Bundle for Home layout
+            bundles.Add(new StyleBundle("~/Content/HomeLayout").Include(
+                        "~/Content/css/bootstrap.m.css",
+                        "~/Content/css/font-awesome.m.css",
+                        "~/Content/css/smartadmin-production.css",
+                        "~/Content/css/smartadmin-skins.css",
+                        "~/Content/css/custom.css"));
+            // Bulde for Admin and Hospital User layout
+            bundles.Add(new StyleBundle("~/Content/AdminLayout").Include(
+                        "~/Content/css/bootstrap.m.css",
+                        "~/Content/css/font-awesome.m.css",
                         "~/Content/css/smartadmin-production.css",
                         "~/Content/css/smartadmin-skins.css"));
         }

@@ -22,10 +22,10 @@ namespace HospitalF.Controllers
         {
             try
             {
+
             }
             catch (Exception)
             {
-                Response.Write(ErrorMessage.SEM001);
                 return View();
             }
 
