@@ -420,7 +420,8 @@
     <Content Include="Views\Home\SearchResult.cshtml" />
     <Content Include="Views\AdminHome\Index.cshtml" />
     <Content Include="Views\HospitalUserHome\Index.cshtml" />
-    <Content Include="Views\Error\SystemFailure.cshtml" />
+    <Content Include="Views\Error\SystemFailureHome.cshtml" />
+    <Content Include="Views\Error\SystemFailureAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
