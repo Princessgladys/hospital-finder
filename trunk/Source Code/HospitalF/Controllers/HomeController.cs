@@ -8,6 +8,7 @@ using HospitalF.Constant;
 using HospitalF.Models;
 using HospitalF.Entities;
 using HospitalF.App_Start;
+using HospitalF.Utilities;
 
 namespace HospitalF.Controllers
 {
@@ -20,14 +21,17 @@ namespace HospitalF.Controllers
         [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> Index()
         {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-                return View();
-            }
+            //try
+            //{
+                // Load list of city
+                List<CityEntity> cityList = await LocationUtil.LoadCityAsync();
+                ViewBag.CityList = new SelectList(cityList, "CityID", "CityName");
+            //}
+            //catch (Exception)
+            //{
+            //    // Move to error page
+            //    return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+            //}
 
             return View();
         }

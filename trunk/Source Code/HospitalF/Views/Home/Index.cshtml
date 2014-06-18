@@ -41,7 +41,7 @@
             </ul>
 
             <div id="myTabContent1" class="tab-content padding-10">
-
+                @Html.ValidationSummary()
                 <div class="tab-pane fade in active" id="s1">
                     <form class="form-horizontal">
                         <fieldset>
@@ -49,6 +49,7 @@
                         </fieldset>
                         <div class="input-group">
                             @Html.TextBoxFor(m => m.SearchValue, new { @class = "form-control", @placeholder = "Nhập thông tin tìm kiếm...", @list = "list"})
+                            @Html.ValidationMessageFor(m => m.SearchValue)
                             <datalist id="list">
                                 <option value="Chợ Rẫy">Chợ Rẫy</option>
                                 <option value="Nhi Đồng">Nhi Đồng</option>
@@ -60,9 +61,6 @@
                                     <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
                                 </button>
                             </div>
-                            @Html.ValidationSummary()
-
-                            @Html.ValidationMessageFor(m => m.SearchValue)
                         </div>
                         <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
                     </form>
@@ -77,12 +75,9 @@
                                     <label class="control-label col-md-4" for="prepend">Tỉnh Thành</label>
                                     <div class="col-md-8">
                                         <div class="icon-addon addon-sm">
-                                            <select class="form-control">
-                                                <option>Chọn tỉnh thành</option>
-                                                <option>Hồ Chí Minh</option>
-                                                <option>Hà Nội</option>
-                                                <option>Cần Thơ</option>
-                                            </select>
+                                            @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
+                                                Constants.RequireCity, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(m => m.CityID)
                                             <label class="glyphicon glyphicon-globe" rel="tooltip" title="Tỉnh Thành"></label>
                                         </div>
                                     </div>
