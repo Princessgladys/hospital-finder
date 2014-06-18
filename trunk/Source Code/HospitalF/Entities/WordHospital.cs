@@ -12,12 +12,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Word_ID attribute
         /// <summary>
-        public int WordID;
+        public int WordID { get; set; }
 
         /// <summary>
         /// Property for Hospital_ID attribute
         /// <summary>
-        public int HospitalID;
+        public int HospitalID { get; set; }
 
         #endregion
     }

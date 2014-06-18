@@ -12,17 +12,17 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Hospital_ID attribute
         /// <summary>
-        public int HospitalID;
+        public int HospitalID { get; set; }
 
         /// <summary>
         /// Property for Service_ID attribute
         /// <summary>
-        public int ServiceID;
+        public int ServiceID { get; set; }
 
         /// <summary>
         /// Property for Is_Active attribute
         /// <summary>
-        public bool IsActive;
+        public bool IsActive { get; set; }
 
         #endregion
     }

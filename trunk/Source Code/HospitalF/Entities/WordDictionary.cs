@@ -12,17 +12,17 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Word_ID attribute
         /// <summary>
-        public int WordID;
+        public int WordID { get; set; }
 
         /// <summary>
         /// Property for Word attribute
         /// <summary>
-        public string Word;
+        public string Word { get; set; }
 
         /// <summary>
         /// Property for Priority attribute
         /// <summary>
-        public int Priority;
+        public int Priority { get; set; }
 
         #endregion
     }

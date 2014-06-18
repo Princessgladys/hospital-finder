@@ -12,27 +12,27 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for District_ID attribute
         /// <summary>
-        public int DistrictID;
+        public int DistrictID { get; set; }
 
         /// <summary>
         /// Property for District_Name attribute
         /// <summary>
-        public string DistrictName;
+        public string DistrictName { get; set; }
 
         /// <summary>
         /// Property for Type attribute
         /// <summary>
-        public string Type;
+        public string Type { get; set; }
 
         /// <summary>
         /// Property for Coordinate attribute
         /// <summary>
-        public string Coordinate;
+        public string Coordinate { get; set; }
 
         /// <summary>
         /// Property for City_ID attribute
         /// <summary>
-        public int CityID;
+        public int CityID { get; set; }
 
         #endregion
     }

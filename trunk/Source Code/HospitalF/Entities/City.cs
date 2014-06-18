@@ -12,17 +12,17 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for City_ID attribute
         /// <summary>
-        public int CityID;
+        public int CityID { get; set; }
 
         /// <summary>
         /// Property for City_Name attribute
         /// <summary>
-        public string CityName;
+        public string CityName { get; set; }
 
         /// <summary>
         /// Property for Type attribute
         /// <summary>
-        public string Type;
+        public string Type { get; set; }
 
         #endregion
     }
