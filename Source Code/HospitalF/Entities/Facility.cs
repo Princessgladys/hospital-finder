@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace HospitalF.Entities
 {
     /// <summary>
@@ -12,12 +11,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Facility_ID attribute
         /// <summary>
-        public int FacilityID;
+        public int FacilityID { get; set; }
 
         /// <summary>
         /// Property for Facility_Name attribute
         /// <summary>
-        public string FacilityName;
+        public string FacilityName { get; set; }
 
         #endregion
     }

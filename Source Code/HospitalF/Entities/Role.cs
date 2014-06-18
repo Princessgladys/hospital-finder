@@ -12,12 +12,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Role_ID attribute
         /// <summary>
-        public int RoleID;
+        public int RoleID { get; set; }
 
         /// <summary>
         /// Property for Role_Name attribute
         /// <summary>
-        public string RoleName;
+        public string RoleName { get; set; }
 
         #endregion
     }

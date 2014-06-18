@@ -12,17 +12,17 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Sentence_ID attribute
         /// <summary>
-        public int SentenceID;
+        public int SentenceID { get; set; }
 
         /// <summary>
         /// Property for Word_ID attribute
         /// <summary>
-        public int WordID;
+        public int WordID { get; set; }
 
         /// <summary>
         /// Property for Added_Date attribute
         /// <summary>
-        public DateTime AddedDate;
+        public DateTime AddedDate { get; set; }
 
         #endregion
     }

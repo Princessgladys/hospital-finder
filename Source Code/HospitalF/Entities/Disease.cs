@@ -12,12 +12,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Disease_ID attribute
         /// <summary>
-        public int DiseaseID;
+        public int DiseaseID { get; set; }
 
         /// <summary>
         /// Property for Disease_Name attribute
         /// <summary>
-        public string DiseaseName;
+        public string DiseaseName { get; set; }
 
         #endregion
     }
