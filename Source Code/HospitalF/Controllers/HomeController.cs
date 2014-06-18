@@ -58,6 +58,7 @@ namespace HospitalF.Controllers
             {
                 try
                 {
+                    // Analyze input search query using GIR algorithm and search
                     await model.GIRQueryAnalyzerAsync(model.SearchValue);
                     List<HospitalEntity> list = await model.SearchHospital();
                     TempData["list"] = list;

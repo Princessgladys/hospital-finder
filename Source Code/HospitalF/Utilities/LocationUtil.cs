@@ -9,6 +9,9 @@ using HospitalF.Constant;
 
 namespace HospitalF.Utilities
 {
+    /// <summary>
+    /// Class define methods to handle locations
+    /// </summary>
     public class LocationUtil
     {
         /// <summary>
