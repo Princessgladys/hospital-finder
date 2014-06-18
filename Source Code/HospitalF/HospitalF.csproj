@@ -260,6 +260,7 @@
     <Content Include="Content\img\flags\de.png" />
     <Content Include="Content\img\flags\es.png" />
     <Content Include="Content\img\flags\us.png" />
+    <Content Include="Content\img\hospital-icon.png" />
     <Content Include="Content\img\hue.png" />
     <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\logo-o.png" />
@@ -277,7 +278,6 @@
     <Content Include="Content\img\splash\touch-icon-ipad-retina.png" />
     <Content Include="Content\img\splash\touch-icon-ipad.png" />
     <Content Include="Content\img\splash\touch-icon-iphone-retina.png" />
-    <Content Include="Content\img\UIE-hospital-logo.png" />
     <Content Include="Content\js\app.js" />
     <Content Include="Content\js\bootstrap\bootstrap.min.js" />
     <Content Include="Content\js\custom.js" />
@@ -366,7 +366,6 @@
     <Content Include="Content\img\favicon\Thumbs.db" />
     <Content Include="Content\img\flags\Thumbs.db" />
     <Content Include="Content\img\splash\Thumbs.db" />
-    <Content Include="Content\img\Thumbs.db" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
