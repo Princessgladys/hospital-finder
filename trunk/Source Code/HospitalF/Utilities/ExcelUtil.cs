@@ -7,7 +7,7 @@ using System.Web;
 namespace HospitalF.Utilities
 {
     /// <summary>
-    /// Class define public methods that being used in project
+    /// Class define methods to handle Excel file
     /// </summary>
     public class ExcelUtil
     {

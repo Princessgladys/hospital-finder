@@ -106,102 +106,7 @@ namespace HospitalF.Models
 
         #endregion
 
-        #region Boyer Moore matching algorithm
-
-        /// <summary>
-        /// Prepare bad match table for Boyer Moore algorithm
-        /// </summary>
-        /// <param name="pattern">Pattern that needed to find in a string</param>
-        /// <returns>
-        /// Integer array that contains shifting index
-        /// for each character in the input pattern
-        /// </returns>
-        private int[] CreateBadMatchTable(string pattern)
-        {
-            int a = 0;
-            // Create an array of shifting index
-            int[] occurrence = new int[10000];
-            // Assign shifting index
-            for (int n = 0; n < pattern.Length; n++)
-            {
-                char b = pattern[n];
-                occurrence[pattern[n]] = n;
-                a = occurrence[pattern[n]];
-            }
-            // Return bad match table of a pattern
-            return occurrence;
-        }
-
-        /// <summary>
-        /// Implement Boyer Moore algorithm
-        /// </summary>
-        /// <param name="text">Input query text</param>
-        /// <param name="pattern">Pattern that needed to find in a string</param>
-        /// <returns>9999: Not match, #9999: matching position</returns>
-        private int IsPatternMatch(string text, string pattern)
-        {
-            // Shifiting index
-            int shift = 0;
-
-            // Take text length and pattern length
-            int textLength = text.Length;
-            int patternLength = pattern.Length;
-            // Create bad match table
-            int[] occurrence = CreateBadMatchTable(pattern);
-
-            // Compare the pattern int the text and using bad match table to
-            // shift the pattern to the right of the string for continuing comparation
-            for (int n = 0; n <= textLength - patternLength; n += shift)
-            {
-                shift = 0;
-                for (int i = patternLength - 1; i >= 0; i--)
-                {
-                    char a = pattern[i];
-                    char b = text[n + i];
-                    if (pattern[i] != text[n + i])
-                    {
-                        int bc = occurrence[text[n + i]];
-                        shift = Math.Max(1, i - occurrence[text[n + i]]);
-                        break;
-                    }
-                }
-
-                // Return true if pattern is match
-                if (shift == 0)
-                {
-                    return n;
-                }
-            }
-            // Return false as default
-            return Constants.DefaultMatchingValue;
-        }
-
-        #endregion
-
         #region GIR query analyzer
-
-        /// <summary>
-        /// Split words in a string to every token
-        /// </summary>
-        /// <param name="inputStr">Input String</param>
-        /// <returns>List[string] that contains list of tokens</returns>
-        private List<string> StringTokenizer(string inputStr)
-        {
-            // Create regular express to split white spaces between words
-            Regex regex = new Regex(Constants.FindWhiteSpaceRegex);
-            // Split words base on regular expression
-            MatchCollection matches = regex.Matches(inputStr.Trim());
-
-            // Add tokens to list
-            List<string> tokens = new List<string>();
-            foreach (Match match in matches)
-            {
-                tokens.Add(match.Value);
-            }
-
-            // Return list of tokens
-            return tokens;
-        }
 
         /// <summary>
         /// Concate tokens in a list
@@ -335,7 +240,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for cities
                 if (!string.IsNullOrEmpty(model.CityName) &&
-                    IsPatternMatch(inputStr, model.CityName.ToLower()) != Constants.DefaultMatchingValue)
+                    StringUtil.IsPatternMatched(inputStr, model.CityName.ToLower()))
                 {
                     this.CityID = model.CityID;
                     this.CityName = model.CityName;
@@ -349,7 +254,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for districts
                 if (!string.IsNullOrEmpty(model.DistrictName) &&
-                    IsPatternMatch(inputStr, model.DistrictName.ToLower()) != Constants.DefaultMatchingValue)
+                    StringUtil.IsPatternMatched(inputStr, model.DistrictName.ToLower()))
                 {
                     this.DistrictID = model.DistrictID;
                     this.DistrictName = model.DistrictName;
@@ -393,7 +298,8 @@ namespace HospitalF.Models
                 // Find matching result for cities
                 if (!string.IsNullOrEmpty(model.CityName))
                 {
-                    tempCityIndex = IsPatternMatch(queryStr, model.CityName.ToLower());
+                    tempCityIndex = StringUtil.TakeMatchedStringPosition(
+                        queryStr, model.CityName.ToLower());
                     if (tempCityIndex != Constants.DefaultMatchingValue)
                     {
                         cityPosition = tempCityIndex;
@@ -411,7 +317,8 @@ namespace HospitalF.Models
             {
                 if (!string.IsNullOrEmpty(model.DistrictName))
                 {
-                    tempDistrictIndex = IsPatternMatch(queryStr, model.DistrictName.ToLower());
+                    tempDistrictIndex = StringUtil.TakeMatchedStringPosition(
+                        queryStr, model.DistrictName.ToLower());
                     if (tempDistrictIndex != Constants.DefaultMatchingValue)
                     {
                         districtPosition = tempDistrictIndex;
@@ -509,7 +416,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for speciality
                 if (!string.IsNullOrEmpty(model.SpecialityName) &&
-                    IsPatternMatch(whatPhrase, model.SpecialityName.ToLower()) != Constants.DefaultMatchingValue)
+                    StringUtil.IsPatternMatched(whatPhrase, model.SpecialityName.ToLower()))
                 {
                     this.SpecialityID = model.SpecialityID;
                     this.SpecialityName = model.SpecialityName;
@@ -522,7 +429,7 @@ namespace HospitalF.Models
             {
                 // Find matching reuslt for disease
                 if (!string.IsNullOrEmpty(model.DiseaseName) &&
-                    IsPatternMatch(whatPhrase, model.DiseaseName.ToLower()) != Constants.DefaultMatchingValue)
+                    StringUtil.IsPatternMatched(whatPhrase, model.DiseaseName.ToLower()))
                 {
                     this.DiseaseID = model.DiseaseID;
                     this.DiseaseName = model.DiseaseName;
@@ -547,7 +454,7 @@ namespace HospitalF.Models
             bool isComplete = false;                // Indicate if the process is complete or not
 
             // Create a list of tokens
-            List<string> tokens = StringTokenizer(inputQuery);
+            List<string> tokens = StringUtil.StringTokenizer(inputQuery);
             int sizeOfTokens = tokens.Count();
 
             // Load relation word dictionary
