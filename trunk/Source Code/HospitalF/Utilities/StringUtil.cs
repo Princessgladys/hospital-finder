@@ -154,6 +154,22 @@ namespace HospitalF.Utilities
             return tokens;
         }
 
-
+        /// <summary>
+        /// Concate tokens in a list
+        /// </summary>
+        /// <param name="tokenList">Input token list</param>
+        /// <param name="begin">Begin index</param>
+        /// <param name="end">End index</param>
+        /// <returns>String of concatenated tokens</returns>
+        public static string ConcatTokens(List<string> tokenList, int beginIndex, int endIndex)
+        {
+            string result = string.Empty;
+            for (int n = beginIndex; n <= endIndex; n++)
+            {
+                result += " " + tokenList[n];
+            }
+            // Remove leading white space and return value
+            return result.Trim();
+        }
     }
 }
