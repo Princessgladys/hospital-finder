@@ -24,6 +24,11 @@ namespace HospitalF.Constant
         public const string HospitalUserLayout = "_HospitalUserLayout";
 
         /// <summary>
+        /// Name of Error page
+        /// </summary>
+        public const string ErrorPage = "Error";
+
+        /// <summary>
         /// Name of HomeController
         /// </summary>
         public const string HomeController = "Home";
@@ -32,6 +37,11 @@ namespace HospitalF.Constant
         /// Name of Index method
         /// </summary>
         public const string IndexMethod = "Index";
+
+        /// <summary>
+        /// Name of SearchResult methodd
+        /// </summary>
+        public const string SearchResultMethod = "SearchResult";
 
         #endregion
 
