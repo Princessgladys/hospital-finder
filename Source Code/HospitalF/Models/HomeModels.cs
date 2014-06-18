@@ -109,99 +109,6 @@ namespace HospitalF.Models
         #region GIR query analyzer
 
         /// <summary>
-        /// Concate tokens in a list
-        /// </summary>
-        /// <param name="tokenList">Input token list</param>
-        /// <param name="begin">Begin index</param>
-        /// <param name="end">End index</param>
-        /// <returns>String of concatenated tokens</returns>
-        private string ConcatTokens(List<string> tokenList, int beginIndex, int endIndex)
-        {
-            string result = string.Empty;
-            for (int n = beginIndex; n <= endIndex; n++)
-            {
-                result += " " + tokenList[n];
-            }
-            // Remove leading white space and return value
-            return result.Trim();
-        }
-
-        /// <summary>
-        /// Load word dictionary in database
-        /// </summary>
-        /// <returns>List[string] of words</returns>
-        private async Task<List<string>> LoadRelationWordDictionaryAsync()
-        {
-            // Create an instance of Linq database
-            LinqDBDataContext data = new LinqDBDataContext();
-            // Return list of dictionary words
-            try
-            {
-                return await Task.Run(() =>
-                    (from w in data.WordDictionaries
-                     where w.Priority == 1
-                     select w.Word).ToList());
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(ErrorMessage.SEM001);
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Load a list of citites in database
-        /// </summary>
-        /// <returns>List[HomeModels] that contains a list of cities</returns>
-        private async Task<List<HomeModels>> LoadCityAsync()
-        {
-            // Create an instance of Linq database
-            LinqDBDataContext data = new LinqDBDataContext();
-            // Return list of dictionary words
-            try
-            {
-                return await Task.Run(() =>
-                    (from c in data.Cities
-                     select new HomeModels
-                    {
-                        CityID = c.City_ID,
-                        CityName = c.City_Name,
-                    }).OrderBy(c => c.CityName).ToList());
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(ErrorMessage.SEM001);
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Load a list of districts in database
-        /// </summary>
-        /// <returns>List[HomeModels] that contains a list of districts</returns>
-        private async Task<List<HomeModels>> LoadDistrictAsync()
-        {
-            // Create an instance of Linq database
-            LinqDBDataContext data = new LinqDBDataContext();
-            // Return list of dictionary words
-            try
-            {
-                return await Task.Run(() =>
-                    (from d in data.Districts
-                     select new HomeModels
-                     {
-                         DistrictID = d.District_ID,
-                         DistrictName = d.Type + Constants.WhiteSpace + d.District_Name,
-                     }).OrderBy(d => d.DistrictName).ToList());
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(ErrorMessage.SEM001);
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Check if input token is a relation word
         /// </summary>
         /// <param name="inputToken">Input token</param>
@@ -230,34 +137,34 @@ namespace HospitalF.Models
         /// <param name="districtList">List of districts</param>
         /// <returns>Boolean indicating if a token is a location phrase</returns>
         private bool IsValidWherePhrase(string inputStr,
-            List<HomeModels> cityList, List<HomeModels> districtList)
+            List<CityEntity> cityList, List<DistrictEntity> districtList)
         {
             bool isCityFount = false;               // Indicate if city is found
             bool isDistrictFount = false;           // Indicate if district is found
 
             // Check every word in city list to see if the input token is match
-            foreach (HomeModels model in cityList)
+            foreach (CityEntity city in cityList)
             {
                 // Find matching result for cities
-                if (!string.IsNullOrEmpty(model.CityName) &&
-                    StringUtil.IsPatternMatched(inputStr, model.CityName.ToLower()))
+                if (!string.IsNullOrEmpty(city.CityName) &&
+                    StringUtil.IsPatternMatched(inputStr, city.CityName.ToLower()))
                 {
-                    this.CityID = model.CityID;
-                    this.CityName = model.CityName;
+                    this.CityID = city.CityID;
+                    this.CityName = city.CityName;
                     isCityFount = true;
                     break;
                 }
             }
 
             // Check every word in district list to see if the input token is match
-            foreach (HomeModels model in districtList)
+            foreach (DistrictEntity district in districtList)
             {
                 // Find matching result for districts
-                if (!string.IsNullOrEmpty(model.DistrictName) &&
-                    StringUtil.IsPatternMatched(inputStr, model.DistrictName.ToLower()))
+                if (!string.IsNullOrEmpty(district.DistrictName) &&
+                    StringUtil.IsPatternMatched(inputStr, district.DistrictName.ToLower()))
                 {
-                    this.DistrictID = model.DistrictID;
-                    this.DistrictName = model.DistrictName;
+                    this.DistrictID = district.DistrictID;
+                    this.DistrictName = district.DistrictName;
                     isDistrictFount = true;
                     break;
                 }
@@ -281,7 +188,7 @@ namespace HospitalF.Models
         /// <param name="districtList">List of districts</param>
         /// <returns>First location in Where phrase</returns>
         private string TakeFirstLocationInQueryString(string queryStr,
-            List<HomeModels> cityList, List<HomeModels> districtList)
+            List<CityEntity> cityList, List<DistrictEntity> districtList)
         {
             int cityPosition = 0;                   // City index in Where phrase
             int tempCityIndex = 0;                  // Temp city index
@@ -293,19 +200,19 @@ namespace HospitalF.Models
             string tempDistrict = string.Empty;     // Indicate temporary district value
 
             // Check every word in city list to see in the input token is match
-            foreach (HomeModels model in cityList)
+            foreach (CityEntity city in cityList)
             {
                 // Find matching result for cities
-                if (!string.IsNullOrEmpty(model.CityName))
+                if (!string.IsNullOrEmpty(city.CityName))
                 {
                     tempCityIndex = StringUtil.TakeMatchedStringPosition(
-                        queryStr, model.CityName.ToLower());
+                        queryStr, city.CityName.ToLower());
                     if (tempCityIndex != Constants.DefaultMatchingValue)
                     {
                         cityPosition = tempCityIndex;
-                        this.CityID = model.CityID;
-                        this.CityName = model.CityName;
-                        tempCity = model.CityName;
+                        this.CityID = city.CityID;
+                        this.CityName = city.CityName;
+                        tempCity = city.CityName;
                         isCityFound = true;
                         break;
                     }
@@ -313,18 +220,18 @@ namespace HospitalF.Models
             }
 
             // Check every word in district list to see in the input token is match
-            foreach (HomeModels model in districtList)
+            foreach (DistrictEntity district in districtList)
             {
-                if (!string.IsNullOrEmpty(model.DistrictName))
+                if (!string.IsNullOrEmpty(district.DistrictName))
                 {
                     tempDistrictIndex = StringUtil.TakeMatchedStringPosition(
-                        queryStr, model.DistrictName.ToLower());
+                        queryStr, district.DistrictName.ToLower());
                     if (tempDistrictIndex != Constants.DefaultMatchingValue)
                     {
                         districtPosition = tempDistrictIndex;
-                        this.DistrictID = model.DistrictID;
-                        this.DistrictName = model.DistrictName;
-                        tempDistrict = model.DistrictName;
+                        this.DistrictID = district.DistrictID;
+                        this.DistrictName = district.DistrictName;
+                        tempDistrict = district.DistrictName;
                         isDistrictFound = true;
                         break;
                     }
@@ -458,11 +365,11 @@ namespace HospitalF.Models
             int sizeOfTokens = tokens.Count();
 
             // Load relation word dictionary
-            List<string> wordDic = await LoadRelationWordDictionaryAsync();
+            List<string> wordDic = await DictionaryUtil.LoadRelationWordAsync();
             // Load list of cities
-            List<HomeModels> cityList = await LoadCityAsync();
+            List<CityEntity> cityList = await LocationUtil.LoadCityAsync();
             // Load list of districts
-            List<HomeModels> districtList = await LoadDistrictAsync();
+            List<DistrictEntity> districtList = await LocationUtil.LoadAllDistrictAsync();
 
             // Check if the lists are load successfully
             if ((wordDic == null) &&
@@ -472,7 +379,7 @@ namespace HospitalF.Models
                 return ErrorMessage.CEM001;
             }
 
-            what = ConcatTokens(tokens, 0, sizeOfTokens - 1);
+            what = StringUtil.ConcatTokens(tokens, 0, sizeOfTokens - 1);
 
             // Check every token in the list
             for (int n = 0; n < sizeOfTokens; n++)
@@ -483,7 +390,7 @@ namespace HospitalF.Models
                     // word is the first token, and this word is shift to left one index every n loop
                     // if relaton word is not found.
                     // New tokens is add to original token every i loop to check for valid relation word
-                    tempRelation = ConcatTokens(tokens, n, i);
+                    tempRelation = StringUtil.ConcatTokens(tokens, n, i);
 
                     // Check if token string is matched with relation word in database
                     if (IsValidRelationWord(tempRelation, wordDic))
@@ -494,7 +401,7 @@ namespace HospitalF.Models
 
                         // Assign Where phrase value with the value of trailing
                         // words after Relation word
-                        where = ConcatTokens(tokens, i + 1, sizeOfTokens - 1);
+                        where = StringUtil.ConcatTokens(tokens, i + 1, sizeOfTokens - 1);
 
                         // Check if Where phrase is matched with locaitons in database
                         // and handle Where phrase to locate exactly search locations

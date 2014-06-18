@@ -14,7 +14,8 @@ namespace HospitalF.Controllers
 {
     public class HomeController : Controller
     {
-        public static List<CityEntity> cityList = new List<CityEntity>();
+        // Public city list
+        public static List<CityEntity> cityList = null;
 
         /// <summary>
         /// GET: /Home/Index
