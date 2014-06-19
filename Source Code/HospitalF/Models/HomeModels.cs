@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using HospitalF.Entities;
 using HospitalF.Constant;
 using HospitalF.Models;
 using HospitalF.Utilities;
@@ -137,34 +136,34 @@ namespace HospitalF.Models
         /// <param name="districtList">List of districts</param>
         /// <returns>Boolean indicating if a token is a location phrase</returns>
         private bool IsValidWherePhrase(string inputStr,
-            List<CityEntity> cityList, List<DistrictEntity> districtList)
+            List<City> cityList, List<District> districtList)
         {
             bool isCityFount = false;               // Indicate if city is found
             bool isDistrictFount = false;           // Indicate if district is found
 
             // Check every word in city list to see if the input token is match
-            foreach (CityEntity city in cityList)
+            foreach (City city in cityList)
             {
                 // Find matching result for cities
-                if (!string.IsNullOrEmpty(city.CityName) &&
-                    StringUtil.IsPatternMatched(inputStr, city.CityName.ToLower()))
+                if (!string.IsNullOrEmpty(city.City_Name) &&
+                    StringUtil.IsPatternMatched(inputStr, city.City_Name.ToLower()))
                 {
-                    this.CityID = city.CityID;
-                    this.CityName = city.CityName;
+                    this.CityID = city.City_ID;
+                    this.CityName = city.City_Name;
                     isCityFount = true;
                     break;
                 }
             }
 
             // Check every word in district list to see if the input token is match
-            foreach (DistrictEntity district in districtList)
+            foreach (District district in districtList)
             {
                 // Find matching result for districts
-                if (!string.IsNullOrEmpty(district.DistrictName) &&
-                    StringUtil.IsPatternMatched(inputStr, district.DistrictName.ToLower()))
+                if (!string.IsNullOrEmpty(district.District_Name) &&
+                    StringUtil.IsPatternMatched(inputStr, district.District_Name.ToLower()))
                 {
-                    this.DistrictID = district.DistrictID;
-                    this.DistrictName = district.DistrictName;
+                    this.DistrictID = district.District_ID;
+                    this.DistrictName = district.District_Name;
                     isDistrictFount = true;
                     break;
                 }
@@ -188,7 +187,7 @@ namespace HospitalF.Models
         /// <param name="districtList">List of districts</param>
         /// <returns>First location in Where phrase</returns>
         private string TakeFirstLocationInQueryString(string queryStr,
-            List<CityEntity> cityList, List<DistrictEntity> districtList)
+            List<City> cityList, List<District> districtList)
         {
             int cityPosition = 0;                   // City index in Where phrase
             int tempCityIndex = 0;                  // Temp city index
@@ -200,19 +199,19 @@ namespace HospitalF.Models
             string tempDistrict = string.Empty;     // Indicate temporary district value
 
             // Check every word in city list to see in the input token is match
-            foreach (CityEntity city in cityList)
+            foreach (City city in cityList)
             {
                 // Find matching result for cities
-                if (!string.IsNullOrEmpty(city.CityName))
+                if (!string.IsNullOrEmpty(city.City_Name))
                 {
                     tempCityIndex = StringUtil.TakeMatchedStringPosition(
-                        queryStr, city.CityName.ToLower());
+                        queryStr, city.City_Name.ToLower());
                     if (tempCityIndex != Constants.DefaultMatchingValue)
                     {
                         cityPosition = tempCityIndex;
-                        this.CityID = city.CityID;
-                        this.CityName = city.CityName;
-                        tempCity = city.CityName;
+                        this.CityID = city.City_ID;
+                        this.CityName = city.City_Name;
+                        tempCity = city.City_Name;
                         isCityFound = true;
                         break;
                     }
@@ -220,18 +219,18 @@ namespace HospitalF.Models
             }
 
             // Check every word in district list to see in the input token is match
-            foreach (DistrictEntity district in districtList)
+            foreach (District district in districtList)
             {
-                if (!string.IsNullOrEmpty(district.DistrictName))
+                if (!string.IsNullOrEmpty(district.District_Name))
                 {
                     tempDistrictIndex = StringUtil.TakeMatchedStringPosition(
-                        queryStr, district.DistrictName.ToLower());
+                        queryStr, district.District_Name.ToLower());
                     if (tempDistrictIndex != Constants.DefaultMatchingValue)
                     {
                         districtPosition = tempDistrictIndex;
-                        this.DistrictID = district.DistrictID;
-                        this.DistrictName = district.DistrictName;
-                        tempDistrict = district.DistrictName;
+                        this.DistrictID = district.District_ID;
+                        this.DistrictName = district.District_Name;
+                        tempDistrict = district.District_Name;
                         isDistrictFound = true;
                         break;
                     }
@@ -264,30 +263,30 @@ namespace HospitalF.Models
         /// <param name="specialityList">Speciality List</param>
         /// <param name="diseaseList">Disease List</param>
         private void HandleWellFormedWhatPhrase(string whatPhrase,
-            List<SpecialityEntity> specialityList, List<DiseaseEntity> diseaseList)
+            List<Speciality> specialityList, List<Disease> diseaseList)
         {
             // Check every word in speciality list to see in the input token is match
-            foreach (SpecialityEntity speciality in specialityList)
+            foreach (Speciality speciality in specialityList)
             {
                 // Find matching result for speciality
-                if (!string.IsNullOrEmpty(speciality.SpecialityName) &&
-                    StringUtil.IsPatternMatched(whatPhrase, speciality.SpecialityName.ToLower()))
+                if (!string.IsNullOrEmpty(speciality.Speciality_Name) &&
+                    StringUtil.IsPatternMatched(whatPhrase, speciality.Speciality_Name.ToLower()))
                 {
-                    this.SpecialityID = speciality.SpecialityID;
-                    this.SpecialityName = speciality.SpecialityName;
+                    this.SpecialityID = speciality.Speciality_ID;
+                    this.SpecialityName = speciality.Speciality_Name;
                     break;
                 }
             }
 
             // Check every word in disease list to see in the input token is match
-            foreach (DiseaseEntity disease in diseaseList)
+            foreach (Disease disease in diseaseList)
             {
                 // Find matching reuslt for disease
-                if (!string.IsNullOrEmpty(disease.DiseaseName) &&
-                    StringUtil.IsPatternMatched(whatPhrase, disease.DiseaseName.ToLower()))
+                if (!string.IsNullOrEmpty(disease.Disease_Name) &&
+                    StringUtil.IsPatternMatched(whatPhrase, disease.Disease_Name.ToLower()))
                 {
-                    this.DiseaseID = disease.DiseaseID;
-                    this.DiseaseName = disease.DiseaseName;
+                    this.DiseaseID = disease.Disease_ID;
+                    this.DiseaseName = disease.Disease_Name;
                     break;
                 }
             }
@@ -315,9 +314,9 @@ namespace HospitalF.Models
             // Load relation word dictionary
             List<string> wordDic = await DictionaryUtil.LoadRelationWordAsync();
             // Load list of cities
-            List<CityEntity> cityList = await LocationUtil.LoadCityAsync();
+            List<City> cityList = await LocationUtil.LoadCityAsync();
             // Load list of districts
-            List<DistrictEntity> districtList = await LocationUtil.LoadAllDistrictAsync();
+            List<District> districtList = await LocationUtil.LoadAllDistrictAsync();
 
             // Check if the lists are load successfully
             if ((wordDic == null) &&
@@ -411,9 +410,9 @@ namespace HospitalF.Models
 
             // Handle What phrase
             // Load relation word dictionary
-            List<SpecialityEntity> specialityList = await SpecialityUtil.LoadSpecialityAsync();
+            List<Speciality> specialityList = await SpecialityUtil.LoadSpecialityAsync();
             // Load location dictionary
-            List<DiseaseEntity> diseaseList = await SpecialityUtil.LoadAllDiseaseAsync();
+            List<Disease> diseaseList = await SpecialityUtil.LoadAllDiseaseAsync();
 
             // Check if the lists are load successfully
             if ((specialityList != null) && (diseaseList != null))
@@ -448,7 +447,7 @@ namespace HospitalF.Models
         ///  Search hospitals in database
         /// </summary>
         /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
-        public async Task<List<HospitalEntity>> SearchHospital()
+        public async Task<List<Hospital>> SearchHospital()
         {
             // Take input values
             int cityId = this.CityID;
@@ -456,23 +455,20 @@ namespace HospitalF.Models
             int specialityId = this.SpecialityID;
             int diseaseId = this.DiseaseID;
 
-            List<SP_SEARCH_HOSPITALResult> result = null;
+            List<Hospital> hospitalList = null;
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                result = await Task.Run(() =>
-                data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId).ToList());
-            }
-
-            List<HospitalEntity> hospitalList = new List<HospitalEntity>();
-            HospitalEntity hospital = null;
-            // Assign values for each hospital
-            foreach (SP_SEARCH_HOSPITALResult re in result)
-            {
-                hospital = new HospitalEntity();
-                hospital.HospitalName = re.Hospital_Name;
-                hospital.Address = re.Address;
-                hospitalList.Add(hospital);
+                //result = await Task.Run(() =>
+                //data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId).ToList());
+                hospitalList = await Task.Run(() => (from h in data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId)
+                                                     select new Hospital()
+                                                     {
+                                                         Hospital_ID = h.Hospital_ID,
+                                                         Hospital_Name = h.Hospital_Name,
+                                                         Coordinate = h.Coordinate,
+                                                         Website = h.Website
+                                                     }).ToList());
             }
 
             // Return list of hospitals
