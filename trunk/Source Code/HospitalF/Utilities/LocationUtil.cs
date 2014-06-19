@@ -17,37 +17,31 @@ namespace HospitalF.Utilities
         /// Load a list of citites in database
         /// </summary>
         /// <returns>List[CityEntity] that contains a list of cities</returns>
-        public static async Task<List<CityEntity>> LoadCityAsync()
+        public static async Task<List<City>> LoadCityAsync()
         {
             // Return list of dictionary words
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
                     (from c in data.Cities
-                     select new CityEntity
-                     {
-                         CityID = c.City_ID,
-                         CityName = c.City_Name,
-                     }).OrderBy(c => c.CityName).ToList());
+                     select c).OrderBy(c => c.City_Name).ToList());
             }
         }
+
 
         /// <summary>
         /// Load a list of districts in database
         /// </summary>
         /// <returns>List[DistrictEntity] that contains a list of districts</returns>
-        public static async Task<List<DistrictEntity>> LoadAllDistrictAsync()
+        public static async Task<List<District>> LoadAllDistrictAsync()
         {
             // Return list of dictionary words
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
                     (from d in data.Districts
-                     select new DistrictEntity
-                     {
-                         DistrictID = d.District_ID,
-                         DistrictName = d.District_Name,
-                     }).OrderBy(d => d.DistrictName).ToList());
+                     select d
+                     ).OrderBy(d => d.District_Name).ToList());
             }
         }
 
@@ -56,7 +50,7 @@ namespace HospitalF.Utilities
         /// </summary>
         /// <param name="cityId">City ID</param>
         /// <returns>List[DistrictEntity] that contains a list of districts in a city</returns>
-        public static async Task<List<DistrictEntity>> LoadDistrictInCityAsync(int cityId)
+        public static async Task<List<District>> LoadDistrictInCityAsync(int cityId)
         {
             // Return list of dictionary words
             using (LinqDBDataContext data = new LinqDBDataContext())
@@ -64,11 +58,8 @@ namespace HospitalF.Utilities
                 return await Task.Run(() =>
                     (from d in data.Districts
                      where cityId.Equals(d.City_ID)
-                     select new DistrictEntity
-                     {
-                         DistrictID = d.District_ID,
-                         DistrictName = d.District_Name,
-                     }).OrderBy(d => d.DistrictName).ToList());
+                     select d
+                     ).OrderBy(d => d.District_Name).ToList());
             }
         }
     }

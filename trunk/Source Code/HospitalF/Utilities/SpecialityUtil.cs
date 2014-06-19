@@ -46,18 +46,14 @@ namespace HospitalF.Utilities
         /// Load all specialities in database
         /// </summary>
         /// <returns>List[SpecialityEntity] that contains a list of speciality</returns>
-        public static async Task<List<SpecialityEntity>> LoadSpecialityAsync()
+        public static async Task<List<Speciality>> LoadSpecialityAsync()
         {
             // Return list speacialities
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
                     (from s in data.Specialities
-                     select new SpecialityEntity
-                     {
-                         SpecialityID = s.Speciality_ID,
-                         SpecialityName = s.Speciality_Name
-                     }).ToList());
+                     select s).ToList());
             }
         }
 
@@ -65,18 +61,14 @@ namespace HospitalF.Utilities
         /// Load all diseases in database
         /// </summary>
         /// <returns>List[DiseaseEntity] that contains a list of Diseases</returns>
-        public static async Task<List<DiseaseEntity>> LoadAllDiseaseAsync()
+        public static async Task<List<Disease>> LoadAllDiseaseAsync()
         {
             // Return list of diseases
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
                     (from d in data.Diseases
-                     select new DiseaseEntity
-                     {
-                         DiseaseID = d.Disease_ID,
-                         DiseaseName = d.Disease_Name
-                     }).ToList());
+                     select d).ToList());
             }
         }
 
@@ -85,7 +77,7 @@ namespace HospitalF.Utilities
         /// </summary>
         /// <param name="specialityId">Speciality ID</param>
         /// <returns>List[DiseaseEntity] that contains a list of Diseases in a Speciality</returns>
-        public static async Task<List<DiseaseEntity>> LoadDiseaseInSpecialityAsync(int specialityId)
+        public static async Task<List<Disease>> LoadDiseaseInSpecialityAsync(int specialityId)
         {
             List<SP_LOAD_DISEASE_IN_SPECIALITYResult> result = null;
             // Take diseases in a specific speciality in database
@@ -107,7 +99,7 @@ namespace HospitalF.Utilities
             }
 
             // Return list of diseases
-            return diseaseList;
+            return null;
         }
     }
 }

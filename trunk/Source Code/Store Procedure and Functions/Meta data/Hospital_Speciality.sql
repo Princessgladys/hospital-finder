@@ -28,7 +28,7 @@ INSERT INTO Hospital_Speciality VALUES
 	(26, 36, 'False', 'True'),
 	(26, 40, 'False', 'True'),
 	(26, 43, 'False', 'True'),
-	(41, 40, 'False', 'True'),
+	(41, 40, 'False', 'True')
 	
 	-- HCM Family Medical Practice
 	

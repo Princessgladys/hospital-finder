@@ -15,10 +15,10 @@ namespace HospitalF.Controllers
     public class HomeController : Controller
     {
         // Declare public list items for Drop down lists
-        public static List<CityEntity> cityList = null;
-        public static List<DistrictEntity> districtList = null;
-        public static List<SpecialityEntity> specialityList = null;
-        public static List<DiseaseEntity> diseaseList = null;
+        public static List<City> cityList = null;
+        public static List<District> districtList = null;
+        public static List<Speciality> specialityList = null;
+        public static List<Disease> diseaseList = null;
 
         #region AJAX calling methods
 
@@ -41,8 +41,8 @@ namespace HospitalF.Controllers
                 else
                 {
                     // Return default value
-                    districtList = new List<DistrictEntity>() {
-                        new DistrictEntity{ DistrictName = Constants.RequireDistrict } };
+                    districtList = new List<District>() {
+                        new District{ District_Name = Constants.RequireDistrict } };
                     return Json(districtList, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -72,8 +72,8 @@ namespace HospitalF.Controllers
                 else
                 {
                     // Return default value
-                    diseaseList = new List<DiseaseEntity>() {
-                        new DiseaseEntity{ DiseaseName = Constants.RequireDisease } };
+                    diseaseList = new List<Disease>() {
+                        new Disease{ Disease_Name = Constants.RequireDisease } };
                     return Json(districtList, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -120,13 +120,13 @@ namespace HospitalF.Controllers
                 cityList = await LocationUtil.LoadCityAsync();
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
                 // Load list of districts
-                districtList = new List<DistrictEntity>();
+                districtList = new List<District>();
                 ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
                 // Load list of specialities
                 specialityList = await SpecialityUtil.LoadSpecialityAsync();
                 ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
                 // Load list of disease
-                diseaseList = new List<DiseaseEntity>();
+                diseaseList = new List<Disease>();
                 ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
             }
             catch (Exception)
@@ -148,12 +148,12 @@ namespace HospitalF.Controllers
         public async Task<ActionResult> SearchResult(HomeModels model)
         {
             // Add the values of drop down lists to view
-            ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-            ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-            ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
-            ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
+            //ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+            //ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+            //ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+            //ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
 
-            List<HospitalEntity> list = null;
+            List<Hospital> list = null;
             // Check if all validations are correct
             if (!ModelState.IsValid)
             {
