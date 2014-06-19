@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="HospitalF" Class="LinqDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=SONNXSE60727\SQLEXPRESS;Initial Catalog=HospitalF;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="HospitalFConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ANHDTH60434;Initial Catalog=HospitalF;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="HospitalFConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.WordDictionary" Member="WordDictionaries">
     <Type Name="WordDictionary">
       <Column Name="Word_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -323,6 +323,13 @@
     <ElementType Name="SP_LOAD_DISEASE_IN_SPECIALITYResult">
       <Column Name="Disease_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Disease_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SP_LOAD_SPECIALITY_BY_HOSPITALID" Method="SP_LOAD_SPECIALITY_BY_HOSPITALID">
+    <Parameter Name="Hospital_ID" Parameter="hospital_ID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="SP_LOAD_SPECIALITY_BY_HOSPITALIDResult">
+      <Column Name="Speciality_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Speciality_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
     </ElementType>
   </Function>
 </Database>
