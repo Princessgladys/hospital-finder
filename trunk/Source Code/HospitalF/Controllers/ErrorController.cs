@@ -31,5 +31,16 @@ namespace HospitalF.Controllers
             ViewBag.SEM001 = ErrorMessage.SEM001;
             return View();
         }
+
+        /// <summary>
+        /// GET: /Error/SystemFailureHospitalUser
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.HospitalUserLayout)]
+        public ActionResult SystemFailureHospitalUser()
+        {
+            ViewBag.SEM001 = ErrorMessage.SEM001;
+            return View();
+        }
     }
 }
