@@ -85,22 +85,6 @@ namespace HospitalF.Models
 
         #region Insert Appointment into database
 
-        /// <summary>
-        /// Insert appointment into database
-        /// </summary>
-        /// <param name="appointment"></param>
-        /// <returns>Task[int] with 0: insert fail, 1: insert successful</returns>
-        public async Task<int> InsertAppointment(AppointmentEntity appointment)
-        {
-            int result = 0;
-            using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                data.Appointments.InsertOnSubmit(appointment);
-                data.SubmitChanges();
-            }
-            return result;
-        }
-
         #endregion
     }
 }
