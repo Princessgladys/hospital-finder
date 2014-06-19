@@ -80,3 +80,18 @@ BEGIN
 	WHERE	@Hospital_ID=hs.Hospital_ID AND
 			hs.Speciality_ID=s.Speciality_ID
 END
+
+-- SCRIPT TO LOAD ALL DOCTOR OF SPECIALITY
+-- ANHDTH
+IF OBJECT_ID('[SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITY]') IS NOT NULL
+	DROP PROCEDURE [SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITY]
+GO
+CREATE PROCEDURE [dbo].[SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITY]
+	@SpecialityID int
+AS
+BEGIN
+	SELECT	D.Doctor_ID,D.First_Name+' '+D.Last_Name AS Doctor_Name
+	FROM	Doctor AS D, Doctor_Speciality AS DS
+	WHERE	@SpecialityID = DS.Speciality_ID AND
+			DS.Doctor_ID = D.Doctor_ID
+END
