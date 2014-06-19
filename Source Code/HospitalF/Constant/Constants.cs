@@ -202,12 +202,75 @@ namespace HospitalF.Constant
 
         #endregion
 
+        #region AppointmentModel
+
+        #region Vietnames Name
+
+        /// <summary>
+        /// Vietnamese name of property FullName
+        /// </summary>
+        public const string FullName = "Họ tên";
+
+        /// <summary>
+        /// Vietnames name of property Gender
+        /// </summary>
+        public const string Gender = "Giới tính";
+
+        /// <summary>
+        /// Vietnames name of property Birthday
+        /// </summary>
+        public const string Birthday = "Ngày sinh";
+
+        /// <summary>
+        /// Vietnames name of property Email
+        /// </summary>
+        public const string Email = "Địa chỉ email";
+
+        /// <summary>
+        /// Vietnames name of property PhoneNo
+        /// </summary>
+        public const string PhoneNo = "Số điện thoại";
+
+        /// <summary>
+        /// Vietnames name of property Doctor
+        /// </summary>
+        public const string Doctor = "Bác sĩ";
+
+        /// <summary>
+        /// Vietnames name of property Appointment Date
+        /// </summary>
+        public const string App_Date = "Ngày khám";
+
+        /// <summary>
+        /// Vietnames name of property StartTime
+        /// </summary>
+        public const string StartTime = "Giờ khám";
+
+        #endregion
+
+        #region English Name
+        public const string Speciality_ID = "SpecialityID";
+        public const string Speciality_Name = "SpecialityName";
+        public const string Doctor_ID = "DoctorID";
+        public const string Doctor_Name = "DoctorName";
+        #endregion
+        #endregion
+
         #region Regular express
 
         /// <summary>
         /// Regular expression to find white spaces
         /// </summary>
         public const string FindWhiteSpaceRegex = @"\w+";
+        /// <summary>
+        /// Regular expression to validate email
+        /// </summary>
+        public const string EmailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|
+                                        (([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)";
+        /// <summary>
+        /// Regular expression to validate Cell phone number
+        /// </summary>
+        public const string CellPhoneNoRegex = @"^\d{3,5}(-|\s)?\d{3}(-|\s)?\d{3,4}$";
 
         #endregion
 
