@@ -463,12 +463,13 @@ namespace HospitalF.Models
                 result = await Task.Run(() =>
                 data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId).ToList());
             }
-                
-            List<HospitalEntity> hospitalList = null;
+
+            List<HospitalEntity> hospitalList = new List<HospitalEntity>();
+            HospitalEntity hospital = null;
             // Assign values for each hospital
             foreach (SP_SEARCH_HOSPITALResult re in result)
             {
-                HospitalEntity hospital = new HospitalEntity();
+                hospital = new HospitalEntity();
                 hospital.HospitalName = re.Hospital_Name;
                 hospital.Address = re.Address;
                 hospitalList.Add(hospital);
