@@ -90,7 +90,7 @@ CREATE PROCEDURE [dbo].[SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITY]
 	@SpecialityID int
 AS
 BEGIN
-	SELECT	D.Doctor_ID,D.First_Name+' '+D.Last_Name AS Doctor_Name
+	SELECT	D.Doctor_ID,D.First_Name,D.Last_Name
 	FROM	Doctor AS D, Doctor_Speciality AS DS
 	WHERE	@SpecialityID = DS.Speciality_ID AND
 			DS.Doctor_ID = D.Doctor_ID
