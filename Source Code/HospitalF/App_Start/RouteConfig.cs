@@ -22,7 +22,14 @@ namespace HospitalF
             routes.MapRoute("GetDistrictByCity",
                             "home/getdistrictbycity/",
                             new { controller = "Home", action = "GetDistrictByCity" },
-                            new[] { "HospitalF.Controllers" });
+                            new[] { "HospitalF.Controllers" }
+            );
+
+            routes.MapRoute("GetDeseaseBySpeciality",
+                            "home/getdeseasebyspeciality/",
+                            new { controller = "Home", action = "GetDeseaseBySpeciality" },
+                            new[] { "HospitalF.Controllers" }
+            );
         }
     }
 }

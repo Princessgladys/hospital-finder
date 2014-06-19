@@ -365,6 +365,13 @@ namespace HospitalF.Models
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), cityID, districtID, specialityID, diseaseID);
 			return ((ISingleResult<SP_SEARCH_HOSPITALResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_LOAD_DISEASE_IN_SPECIALITY")]
+		public ISingleResult<SP_LOAD_DISEASE_IN_SPECIALITYResult> SP_LOAD_DISEASE_IN_SPECIALITY([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SpecialityID", DbType="Int")] System.Nullable<int> specialityID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), specialityID);
+			return ((ISingleResult<SP_LOAD_DISEASE_IN_SPECIALITYResult>)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Appointment")]
@@ -6982,6 +6989,50 @@ namespace HospitalF.Models
 				if ((this._Address != value))
 				{
 					this._Address = value;
+				}
+			}
+		}
+	}
+	
+	public partial class SP_LOAD_DISEASE_IN_SPECIALITYResult
+	{
+		
+		private int _Disease_ID;
+		
+		private string _Disease_Name;
+		
+		public SP_LOAD_DISEASE_IN_SPECIALITYResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Disease_ID", DbType="Int NOT NULL")]
+		public int Disease_ID
+		{
+			get
+			{
+				return this._Disease_ID;
+			}
+			set
+			{
+				if ((this._Disease_ID != value))
+				{
+					this._Disease_ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Disease_Name", DbType="NVarChar(64)")]
+		public string Disease_Name
+		{
+			get
+			{
+				return this._Disease_Name;
+			}
+			set
+			{
+				if ((this._Disease_Name != value))
+				{
+					this._Disease_Name = value;
 				}
 			}
 		}

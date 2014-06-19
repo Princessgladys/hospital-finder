@@ -413,7 +413,7 @@ namespace HospitalF.Models
             // Load relation word dictionary
             List<SpecialityEntity> specialityList = await SpecialityUtil.LoadSpecialityAsync();
             // Load location dictionary
-            List<DiseaseEntity> diseaseList = await SpecialityUtil.LoadDiseaseAsync();
+            List<DiseaseEntity> diseaseList = await SpecialityUtil.LoadAllDiseaseAsync();
 
             // Check if the lists are load successfully
             if ((specialityList != null) && (diseaseList != null))

@@ -20,6 +20,74 @@ namespace HospitalF.Controllers
         public static List<SpecialityEntity> specialityList = null;
         public static List<DiseaseEntity> diseaseList = null;
 
+        #region Load District and Disease drop down list
+
+        /// <summary>
+        /// POST: /Home/GetDistrictByCity
+        /// </summary>
+        /// <param name="cityId">City ID</param>
+        /// <returns>Task[ActionResult] with JSON contains list of Districts</returns>
+        public async Task<ActionResult> GetDistrictByCity(string cityId)
+        {
+            try
+            {
+                int tempCityId = 0;
+                // Check if city ID is null or not
+                if (!String.IsNullOrEmpty(cityId) && Int32.TryParse(cityId, out tempCityId))
+                {
+                    districtList = await LocationUtil.LoadDistrictInCityAsync(tempCityId);
+                    return Json(districtList, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    // Return default value
+                    districtList = new List<DistrictEntity>() {
+                        new DistrictEntity{ DistrictName = Constants.RequireDistrict } };
+                    return Json(districtList, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+                // Move to error page
+                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// POST: /Home/GetDeseaseBySpeciality
+        /// </summary>
+        /// <param name="specialityId">SpecialityId ID</param>
+        /// <returns>Task[ActionResult] with JSON contains list of Deseases</returns>
+        public async Task<ActionResult> GetDeseaseBySpeciality(string specialityId)
+        {
+            try
+            {
+                int tempSpecialityId = 0;
+                // Check if city ID is null or not
+                if (!String.IsNullOrEmpty(specialityId) && Int32.TryParse(specialityId, out tempSpecialityId))
+                {
+                    diseaseList = await SpecialityUtil.LoadDiseaseInSpecialityAsync(tempSpecialityId);
+                    return Json(diseaseList, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    // Return default value
+                    diseaseList = new List<DiseaseEntity>() {
+                        new DiseaseEntity{ DiseaseName = Constants.RequireDisease } };
+                    return Json(districtList, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+                // Move to error page
+                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+            }
+        }
+
+        #endregion
+
+        #region Search hospital
+
         /// <summary>
         /// GET: /Home/Index
         /// </summary>
@@ -52,33 +120,6 @@ namespace HospitalF.Controllers
         }
 
         /// <summary>
-        /// POST: /Home/GetDistrictByCity
-        /// </summary>
-        /// <param name="cityId">City ID</param>
-        /// <returns>Task[ActionResult] with JSON contains list of Districts</returns>
-        public async Task<ActionResult> GetDistrictByCity(string cityId)
-        {
-            try
-            {
-                // Check if city ID is null or not
-                if (!String.IsNullOrEmpty(cityId))
-                {
-                    districtList = await LocationUtil.LoadDistrictInCityAsync(Int16.Parse(cityId));
-                    return Json(districtList, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception)
-            {
-                // Move to error page
-                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
-            }
-
-            // Return default value
-            districtList = new List<DistrictEntity>() { new DistrictEntity { DistrictName = Constants.RequireDistrict}};
-            return Json(districtList, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
         /// POST: /Home/Index
         /// </summary>
         /// <param name="model">HomeModels</param>
@@ -107,7 +148,7 @@ namespace HospitalF.Controllers
                     List<HospitalEntity> list = await model.SearchHospital();
                     TempData["list"] = list;
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     Response.Write(ErrorMessage.SEM001);
                 }
@@ -116,6 +157,10 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SearchResultMethod, Constants.HomeController);
             }
         }
+
+        #endregion 
+
+        #region Display search results
 
         /// <summary>
         /// GET: /Home/Index
@@ -135,5 +180,7 @@ namespace HospitalF.Controllers
                 return View();
             }
         }
+
+        #endregion
     }
 }

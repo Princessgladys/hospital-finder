@@ -36,7 +36,7 @@ namespace HospitalF.Utilities
         /// Load all diseases in database
         /// </summary>
         /// <returns>List[DiseaseEntity] that contains a list of Diseases</returns>
-        public static async Task<List<DiseaseEntity>> LoadDiseaseAsync()
+        public static async Task<List<DiseaseEntity>> LoadAllDiseaseAsync()
         {
             // Return list of diseases
             using (LinqDBDataContext data = new LinqDBDataContext())
@@ -49,6 +49,35 @@ namespace HospitalF.Utilities
                          DiseaseName = d.Disease_Name
                      }).ToList());
             }
+        }
+
+        /// <summary>
+        /// Load list of diseases in a speciality
+        /// </summary>
+        /// <param name="specialityId">Speciality ID</param>
+        /// <returns>List[DiseaseEntity] that contains a list of Diseases in a Speciality</returns>
+        public static async Task<List<DiseaseEntity>> LoadDiseaseInSpecialityAsync(int specialityId)
+        {
+            List<SP_LOAD_DISEASE_IN_SPECIALITYResult> result = null;
+            // Take diseases in a specific speciality in database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() =>
+                data.SP_LOAD_DISEASE_IN_SPECIALITY(specialityId).ToList());
+            }
+
+            List<DiseaseEntity> diseaseList = null;
+            // Assign values for each hospital
+            foreach (SP_LOAD_DISEASE_IN_SPECIALITYResult re in result)
+            {
+                DiseaseEntity disease = new DiseaseEntity();
+                disease.DiseaseID = re.Disease_ID;
+                disease.DiseaseName = re.Disease_Name;
+                diseaseList.Add(disease);
+            }
+
+            // Return list of diseases
+            return diseaseList;
         }
     }
 }
