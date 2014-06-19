@@ -7,9 +7,8 @@
 @*AJAX for cascading District and Disease drop down list*@
 <script type="text/javascript">
     @*AJAX for auto completing Disease textbox*@
-    $(function () {
-        $("#SearchValue").change(function () {
-            var selectedItem = $(this).val();
+    $(document).ready(function () {
+        $("#sentece-tag").on('input',function () {
             var statesProgress = $("#states-loading-search-progress");
             var availableTags = new Array();
             statesProgress.show();
@@ -19,7 +18,7 @@
                 url: "@(Url.RouteUrl(Constants.LoadSuggestSentenceMethod))",
                 success: function (data) {
                     $.each(data, function (id, option) {
-                        availableTags.push(option.Sentence);
+                        availableTags.push(option);
                     });
                     statesProgress.hide();
                 },
@@ -38,7 +37,7 @@
     });
 
     @*AJAX for auto completing Disease textbox*@
-    $(function () {
+    $(document).ready(function () {
         $("#SpecialityID").change(function () {
             var selectedItem = $(this).val();
             var statesProgress = $("#states-loading-disease-progress");
@@ -73,7 +72,7 @@
     });
 
     @*AJAX for cascading District drop down list*@
-    $(function () {
+    $(document).ready(function () {
         $("#CityID").change(function () {
             var selectedItem = $(this).val();
             var ddlDistrict = $("#DistrictID");
