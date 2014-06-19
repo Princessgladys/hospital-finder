@@ -34,6 +34,11 @@ namespace HospitalF.Constant
         public const string AdminErrorPage = "SystemFailureAdmin";
 
         /// <summary>
+        /// Name of SystemFailureHospitalUser page
+        /// </summary>
+        public const string HospitalUserErrorPage = "SystemFailureHospitalUser";
+
+        /// <summary>
         /// Name of HomeController
         /// </summary>
         public const string HomeController = "Home";
@@ -158,22 +163,22 @@ namespace HospitalF.Constant
         /// <summary>
         /// Vietnamese message request for City
         /// </summary>
-        public const string RequireCity = "Xin chọn tỉnh / thành phố";
+        public const string RequireCity = "-- Xin chọn tỉnh / thành phố --";
 
         /// <summary>
         /// Vietnamese message request for District
         /// </summary>
-        public const string RequireDistrict = "Xin chọn quận / huyện";
+        public const string RequireDistrict = "-- Xin chọn quận / huyện --";
 
         /// <summary>
         /// Vietnamese message request for Speciality
         /// </summary>
-        public const string RequireSpeciality = "Xin chọn chuyên khoa";
+        public const string RequireSpeciality = "-- Xin chọn chuyên khoa --";
 
         /// <summary>
         /// Vietnamese message request for Disease
         /// </summary>
-        public const string RequireDisease = "Xin chọn triệu chứng";
+        public const string RequireDisease = "-- Xin chọn triệu chứng --";
 
         /// <summary>
         /// Default matching value

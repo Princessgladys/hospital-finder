@@ -3,7 +3,7 @@
 
 
 INSERT INTO Speciality VALUES
-	(N'General'),
+	(N'Bệnh thường gặp'),
 	(N'Bệnh tình dục'),
 	(N'Bệnh truyền nhiễm'),
 	(N'Cấp cứu'),
