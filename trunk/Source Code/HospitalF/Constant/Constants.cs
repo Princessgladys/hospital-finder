@@ -136,42 +136,42 @@ namespace HospitalF.Constant
         /// <summary>
         /// English name of property CityID
         /// </summary>
-        public const string CityID = "CityID";
+        public const string CityID = "City_ID";
 
         /// <summary>
         /// English name of property CityName
         /// </summary>
-        public const string CityName = "CityName";
+        public const string CityName = "City_Name";
 
         /// <summary>
         /// English name of property DistrictID
         /// </summary>
-        public const string DistrictID = "DistrictID";
+        public const string DistrictID = "District_ID";
 
         /// <summary>
         /// English name of property DistrictName
         /// </summary>
-        public const string DistrictName = "DistrictName";
+        public const string DistrictName = "District_Name";
 
         /// <summary>
         ///  English name of property SpecialityID
         /// </summary>
-        public const string SpecialityID = "SpecialityID";
+        public const string SpecialityID = "Speciality_ID";
 
         /// <summary>
         /// English name of property SpecialityName
         /// </summary>
-        public const string SpecialityName = "SpecialityName";
+        public const string SpecialityName = "Speciality_Name";
 
         /// <summary>
         /// English name of property DiseaseID
         /// </summary>
-        public const string DiseaseID = "DiseaseID";
+        public const string DiseaseID = "Disease_ID";
 
         /// <summary>
         /// English name of property DiseaseName
         /// </summary>
-        public const string DiseaseName = "DiseaseName";
+        public const string DiseaseName = "Disease_Name";
 
         #endregion
 
@@ -249,9 +249,10 @@ namespace HospitalF.Constant
         #endregion
 
         #region English Name
-        public const string DoctorID = "DoctorID";
-        public const string DoctorName = "DoctorName";
+        public const string DoctorID = "Doctor_ID";
+        public const string DoctorName = "Doctor_Name";
         #endregion
+
         #endregion
 
         #region Regular express

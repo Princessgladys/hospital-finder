@@ -461,14 +461,15 @@ namespace HospitalF.Models
             {
                 //result = await Task.Run(() =>
                 //data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId).ToList());
-                hospitalList = await Task.Run(() => (from h in data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId)
-                                                     select new Hospital()
-                                                     {
-                                                         Hospital_ID = h.Hospital_ID,
-                                                         Hospital_Name = h.Hospital_Name,
-                                                         Coordinate = h.Coordinate,
-                                                         Website = h.Website
-                                                     }).ToList());
+                hospitalList = await Task.Run(() =>
+                    (from h in data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId)
+                     select new Hospital()
+                     {
+                         Hospital_ID = h.Hospital_ID,
+                         Hospital_Name = h.Hospital_Name,
+                         Coordinate = h.Coordinate,
+                         Website = h.Website
+                     }).ToList());
             }
 
             // Return list of hospitals

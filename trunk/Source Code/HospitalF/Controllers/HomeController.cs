@@ -36,13 +36,18 @@ namespace HospitalF.Controllers
                 if (!String.IsNullOrEmpty(cityId) && Int32.TryParse(cityId, out tempCityId))
                 {
                     districtList = await LocationUtil.LoadDistrictInCityAsync(tempCityId);
-                    return Json(districtList, JsonRequestBehavior.AllowGet);
+                    var result = (from d in districtList
+                                  select new
+                                  {
+                                      id = d.District_ID,
+                                      name = d.District_Name
+                                  });
+                    return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     // Return default value
-                    districtList = new List<District>() {
-                        new District{ District_Name = Constants.RequireDistrict } };
+                    districtList = new List<District>();
                     return Json(districtList, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -67,13 +72,17 @@ namespace HospitalF.Controllers
                 if (!String.IsNullOrEmpty(specialityId) && Int32.TryParse(specialityId, out tempSpecialityId))
                 {
                     diseaseList = await SpecialityUtil.LoadDiseaseInSpecialityAsync(tempSpecialityId);
-                    return Json(diseaseList, JsonRequestBehavior.AllowGet);
+                    var result = (from d in diseaseList
+                                  select new
+                                  {
+                                      name = d.Disease_Name
+                                  });
+                    return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     // Return default value
-                    diseaseList = new List<Disease>() {
-                        new Disease{ Disease_Name = Constants.RequireDisease } };
+                    diseaseList = new List<Disease>();
                     return Json(districtList, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -148,10 +157,10 @@ namespace HospitalF.Controllers
         public async Task<ActionResult> SearchResult(HomeModels model)
         {
             // Add the values of drop down lists to view
-            //ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-            //ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-            //ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
-            //ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
+            ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+            ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+            ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+            ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
 
             List<Hospital> list = null;
             // Check if all validations are correct
