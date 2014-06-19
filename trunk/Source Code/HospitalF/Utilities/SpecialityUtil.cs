@@ -23,7 +23,7 @@ namespace HospitalF.Utilities
             // Take specalities in a specific hospital in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                result = await Task.Run(() =>
+                result = await Task.Run(()=>
                 data.SP_LOAD_SPECIALITY_BY_HOSPITALID(HospitalID).ToList());
             }
 

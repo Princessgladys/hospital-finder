@@ -379,6 +379,13 @@ namespace HospitalF.Models
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), hospital_ID);
 			return ((ISingleResult<SP_LOAD_SPECIALITY_BY_HOSPITALIDResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITY")]
+		public ISingleResult<SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITYResult> SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITY([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SpecialityID", DbType="Int")] System.Nullable<int> specialityID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), specialityID);
+			return ((ISingleResult<SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITYResult>)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WordDictionary")]
@@ -7059,6 +7066,68 @@ namespace HospitalF.Models
 				if ((this._Speciality_Name != value))
 				{
 					this._Speciality_Name = value;
+				}
+			}
+		}
+	}
+	
+	public partial class SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITYResult
+	{
+		
+		private int _Doctor_ID;
+		
+		private string _First_Name;
+		
+		private string _Last_Name;
+		
+		public SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITYResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Doctor_ID", DbType="Int NOT NULL")]
+		public int Doctor_ID
+		{
+			get
+			{
+				return this._Doctor_ID;
+			}
+			set
+			{
+				if ((this._Doctor_ID != value))
+				{
+					this._Doctor_ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_First_Name", DbType="NVarChar(32)")]
+		public string First_Name
+		{
+			get
+			{
+				return this._First_Name;
+			}
+			set
+			{
+				if ((this._First_Name != value))
+				{
+					this._First_Name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Last_Name", DbType="NVarChar(32)")]
+		public string Last_Name
+		{
+			get
+			{
+				return this._Last_Name;
+			}
+			set
+			{
+				if ((this._Last_Name != value))
+				{
+					this._Last_Name = value;
 				}
 			}
 		}

@@ -249,10 +249,8 @@ namespace HospitalF.Constant
         #endregion
 
         #region English Name
-        public const string Speciality_ID = "SpecialityID";
-        public const string Speciality_Name = "SpecialityName";
-        public const string Doctor_ID = "DoctorID";
-        public const string Doctor_Name = "DoctorName";
+        public const string DoctorID = "DoctorID";
+        public const string DoctorName = "DoctorName";
         #endregion
         #endregion
 
