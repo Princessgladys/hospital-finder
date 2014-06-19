@@ -318,4 +318,11 @@
       <Column Name="Address" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
     </ElementType>
   </Function>
+  <Function Name="dbo.SP_LOAD_DISEASE_IN_SPECIALITY" Method="SP_LOAD_DISEASE_IN_SPECIALITY">
+    <Parameter Name="SpecialityID" Parameter="specialityID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="SP_LOAD_DISEASE_IN_SPECIALITYResult">
+      <Column Name="Disease_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Disease_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>

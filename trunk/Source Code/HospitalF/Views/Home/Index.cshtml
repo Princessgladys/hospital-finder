@@ -5,29 +5,56 @@
 
 @*AJAX for cascading District and Disease drop down list*@
 <script type="text/javascript">
+    @*AJAX for cascading District drop down list*@
     $(function () {
         $("#CityID").change(function () {
             var selectedItem = $(this).val();
             var ddlDistrict = $("#DistrictID");
-            var statesProgress = $("#states-loading-progress");
+            var statesProgress = $("#states-loading-district-progress");
             statesProgress.show();
             $.ajax({
                 cache: false,
                 type: "GET",
                 url: "@(Url.RouteUrl("GetDistrictByCity"))",
                 data: { "cityId": selectedItem },
-            success: function (data) {                       
-                ddlDistrict.html('');
-                $.each(data, function (id, option) {
-                    ddlDistrict.append($('<option></option>').val(option.DistrictID).html(option.DistrictName));
-                });
-                statesProgress.hide();
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                statesProgress.hide();
-            }
+                success: function (data) {
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.DistrictID).html(option.DistrictName));
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
         });
     });
+
+    @*AJAX for cascading Disease drop down list*@
+    $(function () {
+        $("#SpecialityID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlDisease = $("#DiseaseID");
+            var statesProgress = $("#states-loading-disease-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("GetDeseaseBySpeciality"))",
+                data: { "specialityId": selectedItem },
+                success: function (data) {
+                    ddlDisease.html('');
+                    $.each(data, function (id, option) {
+                        ddlDisease.append($('<option></option>').val(option.DiseaseID).html(option.DiseaseName));
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
     });
 </script>
 
@@ -59,7 +86,7 @@
                             <legend>Nhập từ khóa về bệnh viện</legend>
                         </fieldset>
                         <div class="input-group">
-                            @Html.TextBoxFor(m => m.SearchValue, new { @class = "form-control", @placeholder = "Nhập thông tin tìm kiếm...", @list = "list"})
+                            @Html.TextBoxFor(m => m.SearchValue, new { @class = "form-control", @placeholder = "Nhập thông tin tìm kiếm...", @list = "list" })
                             <datalist id="list">
                                 <option value="Chợ Rẫy">Chợ Rẫy</option>
                                 <option value="Nhi Đồng">Nhi Đồng</option>
@@ -88,9 +115,9 @@
                                     <div class="col-md-8">
                                         <div class="icon-addon addon-sm">
                                             @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
-                                                Constants.RequireCity, new { @class = "form-control"})
+                                                Constants.RequireCity, new { @class = "form-control" })
                                             @Html.ValidationMessageFor(m => m.CityID)
-                                            <label class="glyphicon glyphicon-globe"  title="Tỉnh thành"></label>
+                                            <label class="glyphicon glyphicon-globe" title="Tỉnh thành"></label>
                                         </div>
                                     </div>
                                 </div>
@@ -133,6 +160,8 @@
                                                 <option value="Viêm Mũi Dị Ứng">Viêm Mũi Dị Ứng</option>
                                                 <option value="Viêm Xoang">Viêm Xoang</option>
                                             </datalist>
+                                            @Html.DropDownListFor(m => m.DiseaseID, (SelectList)ViewBag.DiseaseList,
+                                                    Constants.RequireDisease, new { @list = "list-condition" })
                                             <label class="glyphicon glyphicon-plus-sign" title="Triệu chứng"></label>
                                         </div>
                                     </div>
