@@ -27,5 +27,20 @@ namespace HospitalF.Utilities
                      select w.Word).ToList());
             }
         }
+
+        /// <summary>
+        /// Load setence dictionary in database
+        /// </summary>
+        /// <returns>List[string] of setences</returns>
+        public static async Task<List<string>> LoadSuggestSentenceAsync()
+        {
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from s in data.SentenceDictionaries
+                     select s.Sentence).ToList());
+            }
+        }
     }
 }

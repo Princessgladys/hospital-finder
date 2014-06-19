@@ -80,6 +80,21 @@ namespace HospitalF.Entities
         public string Coordinate { get; set; }
 
         /// <summary>
+        /// Property for Short_Description attribute
+        /// </summary>
+        public string ShortDescription { get; set; }
+
+        /// <summary>
+        /// Property for Full_Description attribute
+        /// </summary>
+        public string FullDescription { get; set; }
+
+        /// <summary>
+        /// Property for Is_Allow_Appointment attribute
+        /// </summary>
+        public bool IsAllowAppointment { get; set; }
+
+        /// <summary>
         /// Property for Created_Person attribute
         /// <summary>
         public int CreatedPerson { get; set; }

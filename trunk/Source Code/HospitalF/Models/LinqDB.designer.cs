@@ -30,12 +30,12 @@ namespace HospitalF.Models
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertAppointment(Appointment instance);
-    partial void UpdateAppointment(Appointment instance);
-    partial void DeleteAppointment(Appointment instance);
     partial void InsertWordDictionary(WordDictionary instance);
     partial void UpdateWordDictionary(WordDictionary instance);
     partial void DeleteWordDictionary(WordDictionary instance);
+    partial void InsertAppointment(Appointment instance);
+    partial void UpdateAppointment(Appointment instance);
+    partial void DeleteAppointment(Appointment instance);
     partial void InsertCity(City instance);
     partial void UpdateCity(City instance);
     partial void DeleteCity(City instance);
@@ -143,19 +143,19 @@ namespace HospitalF.Models
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Appointment> Appointments
-		{
-			get
-			{
-				return this.GetTable<Appointment>();
-			}
-		}
-		
 		public System.Data.Linq.Table<WordDictionary> WordDictionaries
 		{
 			get
 			{
 				return this.GetTable<WordDictionary>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Appointment> Appointments
+		{
+			get
+			{
+				return this.GetTable<Appointment>();
 			}
 		}
 		
@@ -374,6 +374,172 @@ namespace HospitalF.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WordDictionary")]
+	public partial class WordDictionary : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Word_ID;
+		
+		private string _Word;
+		
+		private System.Nullable<int> _Priority;
+		
+		private EntitySet<Sentence_Word> _Sentence_Words;
+		
+		private EntitySet<Word_Hospital> _Word_Hospitals;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnWord_IDChanging(int value);
+    partial void OnWord_IDChanged();
+    partial void OnWordChanging(string value);
+    partial void OnWordChanged();
+    partial void OnPriorityChanging(System.Nullable<int> value);
+    partial void OnPriorityChanged();
+    #endregion
+		
+		public WordDictionary()
+		{
+			this._Sentence_Words = new EntitySet<Sentence_Word>(new Action<Sentence_Word>(this.attach_Sentence_Words), new Action<Sentence_Word>(this.detach_Sentence_Words));
+			this._Word_Hospitals = new EntitySet<Word_Hospital>(new Action<Word_Hospital>(this.attach_Word_Hospitals), new Action<Word_Hospital>(this.detach_Word_Hospitals));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Word_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Word_ID
+		{
+			get
+			{
+				return this._Word_ID;
+			}
+			set
+			{
+				if ((this._Word_ID != value))
+				{
+					this.OnWord_IDChanging(value);
+					this.SendPropertyChanging();
+					this._Word_ID = value;
+					this.SendPropertyChanged("Word_ID");
+					this.OnWord_IDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Word", DbType="NVarChar(32)")]
+		public string Word
+		{
+			get
+			{
+				return this._Word;
+			}
+			set
+			{
+				if ((this._Word != value))
+				{
+					this.OnWordChanging(value);
+					this.SendPropertyChanging();
+					this._Word = value;
+					this.SendPropertyChanged("Word");
+					this.OnWordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Priority", DbType="Int")]
+		public System.Nullable<int> Priority
+		{
+			get
+			{
+				return this._Priority;
+			}
+			set
+			{
+				if ((this._Priority != value))
+				{
+					this.OnPriorityChanging(value);
+					this.SendPropertyChanging();
+					this._Priority = value;
+					this.SendPropertyChanged("Priority");
+					this.OnPriorityChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WordDictionary_Sentence_Word", Storage="_Sentence_Words", ThisKey="Word_ID", OtherKey="Word_ID")]
+		public EntitySet<Sentence_Word> Sentence_Words
+		{
+			get
+			{
+				return this._Sentence_Words;
+			}
+			set
+			{
+				this._Sentence_Words.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WordDictionary_Word_Hospital", Storage="_Word_Hospitals", ThisKey="Word_ID", OtherKey="Word_ID")]
+		public EntitySet<Word_Hospital> Word_Hospitals
+		{
+			get
+			{
+				return this._Word_Hospitals;
+			}
+			set
+			{
+				this._Word_Hospitals.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Sentence_Words(Sentence_Word entity)
+		{
+			this.SendPropertyChanging();
+			entity.WordDictionary = this;
+		}
+		
+		private void detach_Sentence_Words(Sentence_Word entity)
+		{
+			this.SendPropertyChanging();
+			entity.WordDictionary = null;
+		}
+		
+		private void attach_Word_Hospitals(Word_Hospital entity)
+		{
+			this.SendPropertyChanging();
+			entity.WordDictionary = this;
+		}
+		
+		private void detach_Word_Hospitals(Word_Hospital entity)
+		{
+			this.SendPropertyChanging();
+			entity.WordDictionary = null;
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Appointment")]
 	public partial class Appointment : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -382,9 +548,7 @@ namespace HospitalF.Models
 		
 		private int _Appointment_ID;
 		
-		private string _Patient_First_Name;
-		
-		private string _Patient_Last_Name;
+		private string _Patient_Full_Name;
 		
 		private System.Nullable<bool> _Patient_Gender;
 		
@@ -404,7 +568,7 @@ namespace HospitalF.Models
 		
 		private System.Nullable<int> _Curing_Hospital;
 		
-		private System.Nullable<int> _Created_Person;
+		private string _Confirm_Code;
 		
 		private System.Nullable<bool> _Is_Confirm;
 		
@@ -414,18 +578,14 @@ namespace HospitalF.Models
 		
 		private EntityRef<Hospital> _Hospital;
 		
-		private EntityRef<User> _User;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
     partial void OnAppointment_IDChanging(int value);
     partial void OnAppointment_IDChanged();
-    partial void OnPatient_First_NameChanging(string value);
-    partial void OnPatient_First_NameChanged();
-    partial void OnPatient_Last_NameChanging(string value);
-    partial void OnPatient_Last_NameChanged();
+    partial void OnPatient_Full_NameChanging(string value);
+    partial void OnPatient_Full_NameChanged();
     partial void OnPatient_GenderChanging(System.Nullable<bool> value);
     partial void OnPatient_GenderChanged();
     partial void OnPatient_BirthdayChanging(System.Nullable<System.DateTime> value);
@@ -444,8 +604,8 @@ namespace HospitalF.Models
     partial void OnIn_Charge_DoctorChanged();
     partial void OnCuring_HospitalChanging(System.Nullable<int> value);
     partial void OnCuring_HospitalChanged();
-    partial void OnCreated_PersonChanging(System.Nullable<int> value);
-    partial void OnCreated_PersonChanged();
+    partial void OnConfirm_CodeChanging(string value);
+    partial void OnConfirm_CodeChanged();
     partial void OnIs_ConfirmChanging(System.Nullable<bool> value);
     partial void OnIs_ConfirmChanged();
     partial void OnIs_ActiveChanging(System.Nullable<bool> value);
@@ -456,7 +616,6 @@ namespace HospitalF.Models
 		{
 			this._Doctor = default(EntityRef<Doctor>);
 			this._Hospital = default(EntityRef<Hospital>);
-			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
 		
@@ -480,42 +639,22 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Patient_First_Name", DbType="NVarChar(16)")]
-		public string Patient_First_Name
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Patient_Full_Name", DbType="NVarChar(32)")]
+		public string Patient_Full_Name
 		{
 			get
 			{
-				return this._Patient_First_Name;
+				return this._Patient_Full_Name;
 			}
 			set
 			{
-				if ((this._Patient_First_Name != value))
+				if ((this._Patient_Full_Name != value))
 				{
-					this.OnPatient_First_NameChanging(value);
+					this.OnPatient_Full_NameChanging(value);
 					this.SendPropertyChanging();
-					this._Patient_First_Name = value;
-					this.SendPropertyChanged("Patient_First_Name");
-					this.OnPatient_First_NameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Patient_Last_Name", DbType="NVarChar(16)")]
-		public string Patient_Last_Name
-		{
-			get
-			{
-				return this._Patient_Last_Name;
-			}
-			set
-			{
-				if ((this._Patient_Last_Name != value))
-				{
-					this.OnPatient_Last_NameChanging(value);
-					this.SendPropertyChanging();
-					this._Patient_Last_Name = value;
-					this.SendPropertyChanged("Patient_Last_Name");
-					this.OnPatient_Last_NameChanged();
+					this._Patient_Full_Name = value;
+					this.SendPropertyChanged("Patient_Full_Name");
+					this.OnPatient_Full_NameChanged();
 				}
 			}
 		}
@@ -708,26 +847,22 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Created_Person", DbType="Int")]
-		public System.Nullable<int> Created_Person
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Confirm_Code", DbType="VarChar(8)")]
+		public string Confirm_Code
 		{
 			get
 			{
-				return this._Created_Person;
+				return this._Confirm_Code;
 			}
 			set
 			{
-				if ((this._Created_Person != value))
+				if ((this._Confirm_Code != value))
 				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCreated_PersonChanging(value);
+					this.OnConfirm_CodeChanging(value);
 					this.SendPropertyChanging();
-					this._Created_Person = value;
-					this.SendPropertyChanged("Created_Person");
-					this.OnCreated_PersonChanged();
+					this._Confirm_Code = value;
+					this.SendPropertyChanged("Confirm_Code");
+					this.OnConfirm_CodeChanged();
 				}
 			}
 		}
@@ -840,40 +975,6 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Appointment", Storage="_User", ThisKey="Created_Person", OtherKey="User_ID", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.Appointments.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.Appointments.Add(this);
-						this._Created_Person = value.User_ID;
-					}
-					else
-					{
-						this._Created_Person = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -892,172 +993,6 @@ namespace HospitalF.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WordDictionary")]
-	public partial class WordDictionary : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Word_ID;
-		
-		private string _Word;
-		
-		private System.Nullable<int> _Priority;
-		
-		private EntitySet<Sentence_Word> _Sentence_Words;
-		
-		private EntitySet<Word_Hospital> _Word_Hospitals;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnWord_IDChanging(int value);
-    partial void OnWord_IDChanged();
-    partial void OnWordChanging(string value);
-    partial void OnWordChanged();
-    partial void OnPriorityChanging(System.Nullable<int> value);
-    partial void OnPriorityChanged();
-    #endregion
-		
-		public WordDictionary()
-		{
-			this._Sentence_Words = new EntitySet<Sentence_Word>(new Action<Sentence_Word>(this.attach_Sentence_Words), new Action<Sentence_Word>(this.detach_Sentence_Words));
-			this._Word_Hospitals = new EntitySet<Word_Hospital>(new Action<Word_Hospital>(this.attach_Word_Hospitals), new Action<Word_Hospital>(this.detach_Word_Hospitals));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Word_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int Word_ID
-		{
-			get
-			{
-				return this._Word_ID;
-			}
-			set
-			{
-				if ((this._Word_ID != value))
-				{
-					this.OnWord_IDChanging(value);
-					this.SendPropertyChanging();
-					this._Word_ID = value;
-					this.SendPropertyChanged("Word_ID");
-					this.OnWord_IDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Word", DbType="NVarChar(8)")]
-		public string Word
-		{
-			get
-			{
-				return this._Word;
-			}
-			set
-			{
-				if ((this._Word != value))
-				{
-					this.OnWordChanging(value);
-					this.SendPropertyChanging();
-					this._Word = value;
-					this.SendPropertyChanged("Word");
-					this.OnWordChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Priority", DbType="Int")]
-		public System.Nullable<int> Priority
-		{
-			get
-			{
-				return this._Priority;
-			}
-			set
-			{
-				if ((this._Priority != value))
-				{
-					this.OnPriorityChanging(value);
-					this.SendPropertyChanging();
-					this._Priority = value;
-					this.SendPropertyChanged("Priority");
-					this.OnPriorityChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WordDictionary_Sentence_Word", Storage="_Sentence_Words", ThisKey="Word_ID", OtherKey="Word_ID")]
-		public EntitySet<Sentence_Word> Sentence_Words
-		{
-			get
-			{
-				return this._Sentence_Words;
-			}
-			set
-			{
-				this._Sentence_Words.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="WordDictionary_Word_Hospital", Storage="_Word_Hospitals", ThisKey="Word_ID", OtherKey="Word_ID")]
-		public EntitySet<Word_Hospital> Word_Hospitals
-		{
-			get
-			{
-				return this._Word_Hospitals;
-			}
-			set
-			{
-				this._Word_Hospitals.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Sentence_Words(Sentence_Word entity)
-		{
-			this.SendPropertyChanging();
-			entity.WordDictionary = this;
-		}
-		
-		private void detach_Sentence_Words(Sentence_Word entity)
-		{
-			this.SendPropertyChanging();
-			entity.WordDictionary = null;
-		}
-		
-		private void attach_Word_Hospitals(Word_Hospital entity)
-		{
-			this.SendPropertyChanging();
-			entity.WordDictionary = this;
-		}
-		
-		private void detach_Word_Hospitals(Word_Hospital entity)
-		{
-			this.SendPropertyChanging();
-			entity.WordDictionary = null;
 		}
 	}
 	
@@ -1610,15 +1545,13 @@ namespace HospitalF.Models
 		
 		private System.Nullable<bool> _Gender;
 		
-		private System.Nullable<int> _Speciality;
-		
-		private System.Nullable<int> _Working_Hospital;
-		
 		private string _Degree;
 		
 		private string _Experience;
 		
 		private string _Working_Day;
+		
+		private System.Nullable<int> _Photo_ID;
 		
 		private System.Nullable<bool> _Is_Active;
 		
@@ -1627,6 +1560,8 @@ namespace HospitalF.Models
 		private EntitySet<Doctor_Hospital> _Doctor_Hospitals;
 		
 		private EntitySet<Doctor_Speciality> _Doctor_Specialities;
+		
+		private EntitySet<Photo> _Photos;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1640,16 +1575,14 @@ namespace HospitalF.Models
     partial void OnLast_NameChanged();
     partial void OnGenderChanging(System.Nullable<bool> value);
     partial void OnGenderChanged();
-    partial void OnSpecialityChanging(System.Nullable<int> value);
-    partial void OnSpecialityChanged();
-    partial void OnWorking_HospitalChanging(System.Nullable<int> value);
-    partial void OnWorking_HospitalChanged();
     partial void OnDegreeChanging(string value);
     partial void OnDegreeChanged();
     partial void OnExperienceChanging(string value);
     partial void OnExperienceChanged();
     partial void OnWorking_DayChanging(string value);
     partial void OnWorking_DayChanged();
+    partial void OnPhoto_IDChanging(System.Nullable<int> value);
+    partial void OnPhoto_IDChanged();
     partial void OnIs_ActiveChanging(System.Nullable<bool> value);
     partial void OnIs_ActiveChanged();
     #endregion
@@ -1659,6 +1592,7 @@ namespace HospitalF.Models
 			this._Appointments = new EntitySet<Appointment>(new Action<Appointment>(this.attach_Appointments), new Action<Appointment>(this.detach_Appointments));
 			this._Doctor_Hospitals = new EntitySet<Doctor_Hospital>(new Action<Doctor_Hospital>(this.attach_Doctor_Hospitals), new Action<Doctor_Hospital>(this.detach_Doctor_Hospitals));
 			this._Doctor_Specialities = new EntitySet<Doctor_Speciality>(new Action<Doctor_Speciality>(this.attach_Doctor_Specialities), new Action<Doctor_Speciality>(this.detach_Doctor_Specialities));
+			this._Photos = new EntitySet<Photo>(new Action<Photo>(this.attach_Photos), new Action<Photo>(this.detach_Photos));
 			OnCreated();
 		}
 		
@@ -1742,46 +1676,6 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Speciality", DbType="Int")]
-		public System.Nullable<int> Speciality
-		{
-			get
-			{
-				return this._Speciality;
-			}
-			set
-			{
-				if ((this._Speciality != value))
-				{
-					this.OnSpecialityChanging(value);
-					this.SendPropertyChanging();
-					this._Speciality = value;
-					this.SendPropertyChanged("Speciality");
-					this.OnSpecialityChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Working_Hospital", DbType="Int")]
-		public System.Nullable<int> Working_Hospital
-		{
-			get
-			{
-				return this._Working_Hospital;
-			}
-			set
-			{
-				if ((this._Working_Hospital != value))
-				{
-					this.OnWorking_HospitalChanging(value);
-					this.SendPropertyChanging();
-					this._Working_Hospital = value;
-					this.SendPropertyChanged("Working_Hospital");
-					this.OnWorking_HospitalChanged();
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Degree", DbType="NVarChar(256)")]
 		public string Degree
 		{
@@ -1838,6 +1732,26 @@ namespace HospitalF.Models
 					this._Working_Day = value;
 					this.SendPropertyChanged("Working_Day");
 					this.OnWorking_DayChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Photo_ID", DbType="Int")]
+		public System.Nullable<int> Photo_ID
+		{
+			get
+			{
+				return this._Photo_ID;
+			}
+			set
+			{
+				if ((this._Photo_ID != value))
+				{
+					this.OnPhoto_IDChanging(value);
+					this.SendPropertyChanging();
+					this._Photo_ID = value;
+					this.SendPropertyChanged("Photo_ID");
+					this.OnPhoto_IDChanged();
 				}
 			}
 		}
@@ -1901,6 +1815,19 @@ namespace HospitalF.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Doctor_Photo", Storage="_Photos", ThisKey="Doctor_ID", OtherKey="Target_ID")]
+		public EntitySet<Photo> Photos
+		{
+			get
+			{
+				return this._Photos;
+			}
+			set
+			{
+				this._Photos.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1952,6 +1879,18 @@ namespace HospitalF.Models
 		}
 		
 		private void detach_Doctor_Specialities(Doctor_Speciality entity)
+		{
+			this.SendPropertyChanging();
+			entity.Doctor = null;
+		}
+		
+		private void attach_Photos(Photo entity)
+		{
+			this.SendPropertyChanging();
+			entity.Doctor = this;
+		}
+		
+		private void detach_Photos(Photo entity)
 		{
 			this.SendPropertyChanging();
 			entity.Doctor = null;
@@ -2468,8 +2407,6 @@ namespace HospitalF.Models
 		
 		private string _Feedback_Content;
 		
-		private System.Nullable<int> _Created_Person;
-		
 		private System.Nullable<int> _Feedback_Type;
 		
 		private string _Email;
@@ -2482,8 +2419,6 @@ namespace HospitalF.Models
 		
 		private EntityRef<Hospital> _Hospital;
 		
-		private EntityRef<User> _User;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2494,8 +2429,6 @@ namespace HospitalF.Models
     partial void OnHeaderChanged();
     partial void OnFeedback_ContentChanging(string value);
     partial void OnFeedback_ContentChanged();
-    partial void OnCreated_PersonChanging(System.Nullable<int> value);
-    partial void OnCreated_PersonChanged();
     partial void OnFeedback_TypeChanging(System.Nullable<int> value);
     partial void OnFeedback_TypeChanged();
     partial void OnEmailChanging(string value);
@@ -2510,7 +2443,6 @@ namespace HospitalF.Models
 		{
 			this._FeedbackType = default(EntityRef<FeedbackType>);
 			this._Hospital = default(EntityRef<Hospital>);
-			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
 		
@@ -2570,30 +2502,6 @@ namespace HospitalF.Models
 					this._Feedback_Content = value;
 					this.SendPropertyChanged("Feedback_Content");
 					this.OnFeedback_ContentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Created_Person", DbType="Int")]
-		public System.Nullable<int> Created_Person
-		{
-			get
-			{
-				return this._Created_Person;
-			}
-			set
-			{
-				if ((this._Created_Person != value))
-				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCreated_PersonChanging(value);
-					this.SendPropertyChanging();
-					this._Created_Person = value;
-					this.SendPropertyChanged("Created_Person");
-					this.OnCreated_PersonChanged();
 				}
 			}
 		}
@@ -2750,40 +2658,6 @@ namespace HospitalF.Models
 						this._Hospital_ID = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Hospital");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Feedback", Storage="_User", ThisKey="Created_Person", OtherKey="User_ID", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.Feedbacks.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.Feedbacks.Add(this);
-						this._Created_Person = value.User_ID;
-					}
-					else
-					{
-						this._Created_Person = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("User");
 				}
 			}
 		}
@@ -2981,6 +2855,12 @@ namespace HospitalF.Models
 		
 		private string _Coordinate;
 		
+		private string _Short_Description;
+		
+		private string _Full_Description;
+		
+		private System.Nullable<bool> _Is_Allow_Appointment;
+		
 		private System.Nullable<int> _Created_Person;
 		
 		private System.Nullable<bool> _Is_Active;
@@ -3047,6 +2927,12 @@ namespace HospitalF.Models
     partial void OnEnd_TimeChanged();
     partial void OnCoordinateChanging(string value);
     partial void OnCoordinateChanged();
+    partial void OnShort_DescriptionChanging(string value);
+    partial void OnShort_DescriptionChanged();
+    partial void OnFull_DescriptionChanging(string value);
+    partial void OnFull_DescriptionChanged();
+    partial void OnIs_Allow_AppointmentChanging(System.Nullable<bool> value);
+    partial void OnIs_Allow_AppointmentChanged();
     partial void OnCreated_PersonChanging(System.Nullable<int> value);
     partial void OnCreated_PersonChanged();
     partial void OnIs_ActiveChanging(System.Nullable<bool> value);
@@ -3369,6 +3255,66 @@ namespace HospitalF.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Short_Description", DbType="NVarChar(64)")]
+		public string Short_Description
+		{
+			get
+			{
+				return this._Short_Description;
+			}
+			set
+			{
+				if ((this._Short_Description != value))
+				{
+					this.OnShort_DescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Short_Description = value;
+					this.SendPropertyChanged("Short_Description");
+					this.OnShort_DescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Full_Description", DbType="NVarChar(1024)")]
+		public string Full_Description
+		{
+			get
+			{
+				return this._Full_Description;
+			}
+			set
+			{
+				if ((this._Full_Description != value))
+				{
+					this.OnFull_DescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Full_Description = value;
+					this.SendPropertyChanged("Full_Description");
+					this.OnFull_DescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Is_Allow_Appointment", DbType="Bit")]
+		public System.Nullable<bool> Is_Allow_Appointment
+		{
+			get
+			{
+				return this._Is_Allow_Appointment;
+			}
+			set
+			{
+				if ((this._Is_Allow_Appointment != value))
+				{
+					this.OnIs_Allow_AppointmentChanging(value);
+					this.SendPropertyChanging();
+					this._Is_Allow_Appointment = value;
+					this.SendPropertyChanged("Is_Allow_Appointment");
+					this.OnIs_Allow_AppointmentChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Created_Person", DbType="Int")]
 		public System.Nullable<int> Created_Person
 		{
@@ -3491,7 +3437,7 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Hospital_Photo", Storage="_Photos", ThisKey="Hospital_ID", OtherKey="Hospital_ID")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Hospital_Photo", Storage="_Photos", ThisKey="Hospital_ID", OtherKey="Target_ID")]
 		public EntitySet<Photo> Photos
 		{
 			get
@@ -4582,11 +4528,15 @@ namespace HospitalF.Models
 		
 		private System.Nullable<System.DateTime> _Add_Date;
 		
-		private System.Nullable<int> _Hospital_ID;
+		private System.Nullable<int> _Target_Type;
+		
+		private System.Nullable<int> _Target_ID;
 		
 		private System.Nullable<int> _Uploaded_Person;
 		
 		private System.Nullable<bool> _Is_Active;
+		
+		private EntityRef<Doctor> _Doctor;
 		
 		private EntityRef<Hospital> _Hospital;
 		
@@ -4604,8 +4554,10 @@ namespace HospitalF.Models
     partial void OnCaptionChanged();
     partial void OnAdd_DateChanging(System.Nullable<System.DateTime> value);
     partial void OnAdd_DateChanged();
-    partial void OnHospital_IDChanging(System.Nullable<int> value);
-    partial void OnHospital_IDChanged();
+    partial void OnTarget_TypeChanging(System.Nullable<int> value);
+    partial void OnTarget_TypeChanged();
+    partial void OnTarget_IDChanging(System.Nullable<int> value);
+    partial void OnTarget_IDChanged();
     partial void OnUploaded_PersonChanging(System.Nullable<int> value);
     partial void OnUploaded_PersonChanged();
     partial void OnIs_ActiveChanging(System.Nullable<bool> value);
@@ -4614,6 +4566,7 @@ namespace HospitalF.Models
 		
 		public Photo()
 		{
+			this._Doctor = default(EntityRef<Doctor>);
 			this._Hospital = default(EntityRef<Hospital>);
 			this._User = default(EntityRef<User>);
 			OnCreated();
@@ -4699,26 +4652,46 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hospital_ID", DbType="Int")]
-		public System.Nullable<int> Hospital_ID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Target_Type", DbType="Int")]
+		public System.Nullable<int> Target_Type
 		{
 			get
 			{
-				return this._Hospital_ID;
+				return this._Target_Type;
 			}
 			set
 			{
-				if ((this._Hospital_ID != value))
+				if ((this._Target_Type != value))
 				{
-					if (this._Hospital.HasLoadedOrAssignedValue)
+					this.OnTarget_TypeChanging(value);
+					this.SendPropertyChanging();
+					this._Target_Type = value;
+					this.SendPropertyChanged("Target_Type");
+					this.OnTarget_TypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Target_ID", DbType="Int")]
+		public System.Nullable<int> Target_ID
+		{
+			get
+			{
+				return this._Target_ID;
+			}
+			set
+			{
+				if ((this._Target_ID != value))
+				{
+					if ((this._Doctor.HasLoadedOrAssignedValue || this._Hospital.HasLoadedOrAssignedValue))
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnHospital_IDChanging(value);
+					this.OnTarget_IDChanging(value);
 					this.SendPropertyChanging();
-					this._Hospital_ID = value;
-					this.SendPropertyChanged("Hospital_ID");
-					this.OnHospital_IDChanged();
+					this._Target_ID = value;
+					this.SendPropertyChanged("Target_ID");
+					this.OnTarget_IDChanged();
 				}
 			}
 		}
@@ -4767,7 +4740,41 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Hospital_Photo", Storage="_Hospital", ThisKey="Hospital_ID", OtherKey="Hospital_ID", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Doctor_Photo", Storage="_Doctor", ThisKey="Target_ID", OtherKey="Doctor_ID", IsForeignKey=true)]
+		public Doctor Doctor
+		{
+			get
+			{
+				return this._Doctor.Entity;
+			}
+			set
+			{
+				Doctor previousValue = this._Doctor.Entity;
+				if (((previousValue != value) 
+							|| (this._Doctor.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Doctor.Entity = null;
+						previousValue.Photos.Remove(this);
+					}
+					this._Doctor.Entity = value;
+					if ((value != null))
+					{
+						value.Photos.Add(this);
+						this._Target_ID = value.Doctor_ID;
+					}
+					else
+					{
+						this._Target_ID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Doctor");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Hospital_Photo", Storage="_Hospital", ThisKey="Target_ID", OtherKey="Hospital_ID", IsForeignKey=true)]
 		public Hospital Hospital
 		{
 			get
@@ -4790,11 +4797,11 @@ namespace HospitalF.Models
 					if ((value != null))
 					{
 						value.Photos.Add(this);
-						this._Hospital_ID = value.Hospital_ID;
+						this._Target_ID = value.Hospital_ID;
 					}
 					else
 					{
-						this._Hospital_ID = default(Nullable<int>);
+						this._Target_ID = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("Hospital");
 				}
@@ -5980,6 +5987,8 @@ namespace HospitalF.Models
 		
 		private string _Password;
 		
+		private string _Secondary_Email;
+		
 		private string _First_Name;
 		
 		private string _Last_Name;
@@ -5988,15 +5997,11 @@ namespace HospitalF.Models
 		
 		private System.Nullable<int> _Role_ID;
 		
-		private System.Nullable<int> _Created_Person;
+		private System.Nullable<int> _Confirmed_Person;
 		
 		private System.Nullable<int> _Hospital_ID;
 		
 		private System.Nullable<bool> _Is_Active;
-		
-		private EntitySet<Appointment> _Appointments;
-		
-		private EntitySet<Feedback> _Feedbacks;
 		
 		private EntitySet<Hospital> _Hospitals;
 		
@@ -6022,6 +6027,8 @@ namespace HospitalF.Models
     partial void OnEmailChanged();
     partial void OnPasswordChanging(string value);
     partial void OnPasswordChanged();
+    partial void OnSecondary_EmailChanging(string value);
+    partial void OnSecondary_EmailChanged();
     partial void OnFirst_NameChanging(string value);
     partial void OnFirst_NameChanged();
     partial void OnLast_NameChanging(string value);
@@ -6030,8 +6037,8 @@ namespace HospitalF.Models
     partial void OnPhone_NumberChanged();
     partial void OnRole_IDChanging(System.Nullable<int> value);
     partial void OnRole_IDChanged();
-    partial void OnCreated_PersonChanging(System.Nullable<int> value);
-    partial void OnCreated_PersonChanged();
+    partial void OnConfirmed_PersonChanging(System.Nullable<int> value);
+    partial void OnConfirmed_PersonChanged();
     partial void OnHospital_IDChanging(System.Nullable<int> value);
     partial void OnHospital_IDChanged();
     partial void OnIs_ActiveChanging(System.Nullable<bool> value);
@@ -6040,8 +6047,6 @@ namespace HospitalF.Models
 		
 		public User()
 		{
-			this._Appointments = new EntitySet<Appointment>(new Action<Appointment>(this.attach_Appointments), new Action<Appointment>(this.detach_Appointments));
-			this._Feedbacks = new EntitySet<Feedback>(new Action<Feedback>(this.attach_Feedbacks), new Action<Feedback>(this.detach_Feedbacks));
 			this._Hospitals = new EntitySet<Hospital>(new Action<Hospital>(this.attach_Hospitals), new Action<Hospital>(this.detach_Hospitals));
 			this._Photos = new EntitySet<Photo>(new Action<Photo>(this.attach_Photos), new Action<Photo>(this.detach_Photos));
 			this._Ratings = new EntitySet<Rating>(new Action<Rating>(this.attach_Ratings), new Action<Rating>(this.detach_Ratings));
@@ -6108,6 +6113,26 @@ namespace HospitalF.Models
 					this._Password = value;
 					this.SendPropertyChanged("Password");
 					this.OnPasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Secondary_Email", DbType="VarChar(64)")]
+		public string Secondary_Email
+		{
+			get
+			{
+				return this._Secondary_Email;
+			}
+			set
+			{
+				if ((this._Secondary_Email != value))
+				{
+					this.OnSecondary_EmailChanging(value);
+					this.SendPropertyChanging();
+					this._Secondary_Email = value;
+					this.SendPropertyChanged("Secondary_Email");
+					this.OnSecondary_EmailChanged();
 				}
 			}
 		}
@@ -6196,26 +6221,26 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Created_Person", DbType="Int")]
-		public System.Nullable<int> Created_Person
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Confirmed_Person", DbType="Int")]
+		public System.Nullable<int> Confirmed_Person
 		{
 			get
 			{
-				return this._Created_Person;
+				return this._Confirmed_Person;
 			}
 			set
 			{
-				if ((this._Created_Person != value))
+				if ((this._Confirmed_Person != value))
 				{
 					if (this._User1.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnCreated_PersonChanging(value);
+					this.OnConfirmed_PersonChanging(value);
 					this.SendPropertyChanging();
-					this._Created_Person = value;
-					this.SendPropertyChanged("Created_Person");
-					this.OnCreated_PersonChanged();
+					this._Confirmed_Person = value;
+					this.SendPropertyChanged("Confirmed_Person");
+					this.OnConfirmed_PersonChanged();
 				}
 			}
 		}
@@ -6264,32 +6289,6 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Appointment", Storage="_Appointments", ThisKey="User_ID", OtherKey="Created_Person")]
-		public EntitySet<Appointment> Appointments
-		{
-			get
-			{
-				return this._Appointments;
-			}
-			set
-			{
-				this._Appointments.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Feedback", Storage="_Feedbacks", ThisKey="User_ID", OtherKey="Created_Person")]
-		public EntitySet<Feedback> Feedbacks
-		{
-			get
-			{
-				return this._Feedbacks;
-			}
-			set
-			{
-				this._Feedbacks.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Hospital", Storage="_Hospitals", ThisKey="User_ID", OtherKey="Created_Person")]
 		public EntitySet<Hospital> Hospitals
 		{
@@ -6329,7 +6328,7 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_User", Storage="_Users", ThisKey="User_ID", OtherKey="Created_Person")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_User", Storage="_Users", ThisKey="User_ID", OtherKey="Confirmed_Person")]
 		public EntitySet<User> Users
 		{
 			get
@@ -6410,7 +6409,7 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_User", Storage="_User1", ThisKey="Created_Person", OtherKey="User_ID", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_User", Storage="_User1", ThisKey="Confirmed_Person", OtherKey="User_ID", IsForeignKey=true)]
 		public User User1
 		{
 			get
@@ -6433,11 +6432,11 @@ namespace HospitalF.Models
 					if ((value != null))
 					{
 						value.Users.Add(this);
-						this._Created_Person = value.User_ID;
+						this._Confirmed_Person = value.User_ID;
 					}
 					else
 					{
-						this._Created_Person = default(Nullable<int>);
+						this._Confirmed_Person = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("User1");
 				}
@@ -6462,30 +6461,6 @@ namespace HospitalF.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_Appointments(Appointment entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Appointments(Appointment entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
-		}
-		
-		private void attach_Feedbacks(Feedback entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Feedbacks(Feedback entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
 		}
 		
 		private void attach_Hospitals(Hospital entity)
