@@ -154,15 +154,9 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [HttpGet]
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> SearchResult(HomeModels model)
+        public async Task<ActionResult> SearchResult(HomeModels model, FormCollection form)
         {
-            // Add the values of drop down lists to view
-            ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-            ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-            ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
-            ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
-
-            List<Hospital> list = null;
+            List<Hospital> hospitalList = null;
             // Check if all validations are correct
             if (!ModelState.IsValid)
             {
@@ -172,9 +166,24 @@ namespace HospitalF.Controllers
             {
                 try
                 {
+                    // Load hospital types from database
+                    List<HospitalType> hospitalTypeList = null;
+                    using (LinqDBDataContext data = new LinqDBDataContext())
+                    {
+                        hospitalTypeList = await Task.Run(() => (from ht in data.HospitalTypes
+                                                                 select ht).ToList());
+                    }
+                    ViewBag.HospitalTypes = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
                     // Analyze input search query using GIR algorithm and search
-                    await model.GIRQueryAnalyzerAsync(model.SearchValue);
-                    list = await model.SearchHospital();
+                    if (!string.IsNullOrEmpty(model.SearchValue))
+                    {
+                        await model.GIRQueryAnalyzerAsync(model.SearchValue);
+                    }
+                    else
+                    {
+                        await model.GIRQueryAnalyzerAsync(form["SearchValue"]);
+                    }
+                    hospitalList = await model.SearchHospital();
                 }
                 catch (Exception)
                 {
@@ -182,8 +191,28 @@ namespace HospitalF.Controllers
                 }
 
                 // Move to result page
-                return View(list);
+                return View(hospitalList);
             }
+        }
+
+        /// <summary>
+        /// GET: /Home/Index
+        /// </summary>
+        /// <param name="model">HomeModels</param>
+        /// <returns>Task[ActionResult]</returns>
+        [HttpGet]
+        [LayoutInjecter(Constants.HomeLayout)]
+        public async Task<ActionResult> FilterResult(HomeModels model, FormCollection form)
+        {
+            try
+            {
+                
+            }
+            catch (Exception)
+            {
+                Response.Write(ErrorMessage.SEM001);
+            }
+            return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
         }
 
         #endregion
