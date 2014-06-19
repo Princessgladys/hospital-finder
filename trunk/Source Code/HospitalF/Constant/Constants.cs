@@ -6,7 +6,7 @@ namespace HospitalF.Constant
     /// </summary>
     public class Constants
     {
-        #region Controller and View name
+        #region Controller, View and Methods
 
         /// <summary>
         /// Name of _HomeLayout
@@ -54,9 +54,24 @@ namespace HospitalF.Constant
         public const string IndexMethod = "Index";
 
         /// <summary>
-        /// Name of SearchResult methodd
+        /// Name of SearchResult method
         /// </summary>
         public const string SearchResultMethod = "SearchResult";
+
+        /// <summary>
+        /// Name of GetDistrictByCityMethod method in HomeController
+        /// </summary>
+        public const string GetDistrictByCityMethod = "GetDistrictByCity";
+
+        /// <summary>
+        /// Name of GetDeseaseBySpeciality method in HomeController
+        /// </summary>
+        public const string GetDeseaseBySpecialityMethod = "GetDeseaseBySpeciality";
+
+        /// <summary>
+        /// Name of LoadSuggestSentenceMethod method in HomeController
+        /// </summary>
+        public const string LoadSuggestSentenceMethod = "LoadSuggestSentence";
 
         #endregion
 

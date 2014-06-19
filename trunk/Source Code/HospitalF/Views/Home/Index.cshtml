@@ -16,7 +16,7 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "@(Url.RouteUrl("LoadSuggestSentence"))",
+                url: "@(Url.RouteUrl(Constants.LoadSuggestSentenceMethod))",
                 success: function (data) {
                     $.each(data, function (id, option) {
                         availableTags.push(option.Sentence);
@@ -47,7 +47,7 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "@(Url.RouteUrl("GetDeseaseBySpeciality"))",
+                url: "@(Url.RouteUrl(Constants.GetDeseaseBySpecialityMethod))",
                 data: { "specialityId": selectedItem },
                 success: function (data) {
                     $.each(data, function (id, option) {
@@ -82,7 +82,7 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "@(Url.RouteUrl("GetDistrictByCity"))",
+                url: "@(Url.RouteUrl(Constants.GetDistrictByCityMethod))",
                 data: { "cityId": selectedItem },
                 success: function (data) {
                     ddlDistrict.html('');
