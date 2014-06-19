@@ -1,17 +1,6 @@
-﻿@*@using HospitalF.Constant
+﻿@using HospitalF.Constant
 @using HospitalF.Entities;
 @model List<HospitalEntity>
-
-@{
-    ViewBag.Title = "Result";
-}
-
-
-<h2>Result</h2>
-@foreach (HospitalEntity hospital in Model)
-{
-    <p>@(hospital.Address)</p>
-}*@
 
 <!-- MAIN CONTENT -->
 <div id="content-results" class="col-md-10 col-md-offset-1 well">
@@ -82,90 +71,36 @@
         <hr />
         <div id="hospital-list-results" class="col-md-4">
             <h1 class="font-md">Thông tin <span class="semi-bold">hospital</span><small class="text-danger"> &nbsp;&nbsp;(2,281 kết quả)</small></h1>
+            @foreach (HospitalEntity hospital in Model)
+            {
+                <div class="search-results clearfix smart-form">
 
-            <div class="search-results clearfix smart-form">
+                    <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.HospitalName)</a></h4>
 
-                <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">SmartAdmin - Responsive Dashboard Template</a></h4>
-
-                <div>
-                    <div class="rating display-inline">
-                        <input type="radio" name="stars-rating" id="stars-rating-5">
-                        <label for="stars-rating-5"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-4">
-                        <label for="stars-rating-4"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-3">
-                        <label for="stars-rating-3"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-2">
-                        <label for="stars-rating-2"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-1">
-                        <label for="stars-rating-1"><i class="fa fa-star"></i></label>
+                    <div>
+                        <div class="rating display-inline">
+                            <input type="radio" name="stars-rating" id="stars-rating-5">
+                            <label for="stars-rating-5"><i class="fa fa-star"></i></label>
+                            <input type="radio" name="stars-rating" id="stars-rating-4">
+                            <label for="stars-rating-4"><i class="fa fa-star"></i></label>
+                            <input type="radio" name="stars-rating" id="stars-rating-3">
+                            <label for="stars-rating-3"><i class="fa fa-star"></i></label>
+                            <input type="radio" name="stars-rating" id="stars-rating-2">
+                            <label for="stars-rating-2"><i class="fa fa-star"></i></label>
+                            <input type="radio" name="stars-rating" id="stars-rating-1">
+                            <label for="stars-rating-1"><i class="fa fa-star"></i></label>
+                        </div>
+                        <br>
+                        <div class="url text-success">
+                            www.timkiembenhvien.com <i class="fa fa-caret-down"></i>
+                        </div>
+                        <p class="description">
+                            Đây là cái bệnh viện.
+                        </p>
                     </div>
-                    <br>
-                    <div class="url text-success">
-                        http://www.wrapbootstrap.com <i class="fa fa-caret-down"></i>
-                    </div>
-                    <p class="description">
-                        Lorem Ipsum is simply dummy text of the p...
-                    </p>
+
                 </div>
-
-            </div>
-
-            <div class="search-results clearfix smart-form">
-
-                <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">SmartAdmin - Responsive Dashboard Template</a></h4>
-
-                <div>
-                    <div class="rating display-inline">
-                        <input type="radio" name="stars-rating" id="stars-rating-5">
-                        <label for="stars-rating-5"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-4">
-                        <label for="stars-rating-4"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-3">
-                        <label for="stars-rating-3"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-2">
-                        <label for="stars-rating-2"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-1">
-                        <label for="stars-rating-1"><i class="fa fa-star"></i></label>
-                    </div>
-                    <br>
-                    <div class="url text-success">
-                        http://www.wrapbootstrap.com <i class="fa fa-caret-down"></i>
-                    </div>
-                    <p class="description">
-                        Lorem Ipsum is simply dummy text of the p...
-                    </p>
-                </div>
-
-            </div>
-
-            <div class="search-results clearfix smart-form">
-
-                <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">SmartAdmin - Responsive Dashboard Template</a></h4>
-
-                <div>
-                    <div class="rating display-inline">
-                        <input type="radio" name="stars-rating" id="stars-rating-5">
-                        <label for="stars-rating-5"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-4">
-                        <label for="stars-rating-4"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-3">
-                        <label for="stars-rating-3"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-2">
-                        <label for="stars-rating-2"><i class="fa fa-star"></i></label>
-                        <input type="radio" name="stars-rating" id="stars-rating-1">
-                        <label for="stars-rating-1"><i class="fa fa-star"></i></label>
-                    </div>
-                    <br>
-                    <div class="url text-success">
-                        http://www.wrapbootstrap.com <i class="fa fa-caret-down"></i>
-                    </div>
-                    <p class="description">
-                        Lorem Ipsum is simply dummy text of the p...
-                    </p>
-                </div>
-
-            </div>
+            }
 
             <div class="text-center">
                 <hr>

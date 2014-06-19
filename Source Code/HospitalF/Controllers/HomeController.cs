@@ -124,9 +124,9 @@ namespace HospitalF.Controllers
         /// </summary>
         /// <param name="model">HomeModels</param>
         /// <returns>Task[ActionResult]</returns>
-        [HttpPost]
+        [HttpGet]
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> Index(HomeModels model)
+        public async Task<ActionResult> SearchResult(HomeModels model)
         {
             // Add the values of drop down lists to view
             ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
@@ -134,6 +134,7 @@ namespace HospitalF.Controllers
             ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
             ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
 
+            List<HospitalEntity> list = null;
             // Check if all validations are correct
             if (!ModelState.IsValid)
             {
@@ -145,8 +146,7 @@ namespace HospitalF.Controllers
                 {
                     // Analyze input search query using GIR algorithm and search
                     await model.GIRQueryAnalyzerAsync(model.SearchValue);
-                    List<HospitalEntity> list = await model.SearchHospital();
-                    TempData["list"] = list;
+                    list = await model.SearchHospital();
                 }
                 catch (Exception)
                 {
@@ -154,33 +154,12 @@ namespace HospitalF.Controllers
                 }
 
                 // Move to result page
-                return RedirectToAction(Constants.SearchResultMethod, Constants.HomeController);
+                // return RedirectToAction(Constants.SearchResultMethod, Constants.HomeController);
+                return View(list);
             }
         }
 
         #endregion 
 
-        #region Display search results
-
-        /// <summary>
-        /// GET: /Home/Index
-        /// </summary>
-        /// <returns>Task[ActionResult]</returns>
-        [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> SearchResult()
-        {
-            try
-            {
-                List<HospitalEntity> list = (List<HospitalEntity>)TempData["list"];
-                return View(list);
-            }
-            catch (Exception)
-            {
-                Response.Write(ErrorMessage.SEM001);
-                return View();
-            }
-        }
-
-        #endregion
     }
 }
