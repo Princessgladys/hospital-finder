@@ -186,6 +186,7 @@
     <Compile Include="Constant\Constants.cs" />
     <Compile Include="Constant\ErrorMessage.cs" />
     <Compile Include="Controllers\AdminHomeController.cs" />
+    <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HospitalUserHomeController.cs" />
@@ -426,6 +427,7 @@
     <Content Include="Views\Error\SystemFailureHome.cshtml" />
     <Content Include="Views\Error\SystemFailureAdmin.cshtml" />
     <Content Include="Views\Error\SystemFailureHospitalUser.cshtml" />
+    <Content Include="Views\Appointment\CreateAppointment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
