@@ -16,7 +16,7 @@ namespace HospitalF.Utilities
         /// <summary>
         /// Load a list of citites in database
         /// </summary>
-        /// <returns>List[CityEntity] that contains a list of cities</returns>
+        /// <returns>List[City] that contains a list of cities</returns>
         public static async Task<List<City>> LoadCityAsync()
         {
             // Return list of dictionary words
@@ -28,11 +28,10 @@ namespace HospitalF.Utilities
             }
         }
 
-
         /// <summary>
         /// Load a list of districts in database
         /// </summary>
-        /// <returns>List[DistrictEntity] that contains a list of districts</returns>
+        /// <returns>List[District] that contains a list of districts</returns>
         public static async Task<List<District>> LoadAllDistrictAsync()
         {
             // Return list of dictionary words
@@ -49,7 +48,7 @@ namespace HospitalF.Utilities
         /// Load a list of districts in a specific city
         /// </summary>
         /// <param name="cityId">City ID</param>
-        /// <returns>List[DistrictEntity] that contains a list of districts in a city</returns>
+        /// <returns>List[District] that contains a list of districts in a city</returns>
         public static async Task<List<District>> LoadDistrictInCityAsync(int cityId)
         {
             // Return list of dictionary words

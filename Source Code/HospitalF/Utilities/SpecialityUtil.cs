@@ -23,7 +23,7 @@ namespace HospitalF.Utilities
             // Take specalities in a specific hospital in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                result = await Task.Run(()=>
+                result = await Task.Run(() =>
                 data.SP_LOAD_SPECIALITY_BY_HOSPITALID(HospitalID).ToList());
             }
 
@@ -45,7 +45,7 @@ namespace HospitalF.Utilities
         /// <summary>
         /// Load all specialities in database
         /// </summary>
-        /// <returns>List[SpecialityEntity] that contains a list of speciality</returns>
+        /// <returns>List[Speciality] that contains a list of speciality</returns>
         public static async Task<List<Speciality>> LoadSpecialityAsync()
         {
             // Return list speacialities
@@ -60,7 +60,7 @@ namespace HospitalF.Utilities
         /// <summary>
         /// Load all diseases in database
         /// </summary>
-        /// <returns>List[DiseaseEntity] that contains a list of Diseases</returns>
+        /// <returns>List[Disease] that contains a list of Diseases</returns>
         public static async Task<List<Disease>> LoadAllDiseaseAsync()
         {
             // Return list of diseases
@@ -76,30 +76,20 @@ namespace HospitalF.Utilities
         /// Load list of diseases in a speciality
         /// </summary>
         /// <param name="specialityId">Speciality ID</param>
-        /// <returns>List[DiseaseEntity] that contains a list of Diseases in a Speciality</returns>
+        /// <returns>List[Disease] that contains a list of Diseases in a Speciality</returns>
         public static async Task<List<Disease>> LoadDiseaseInSpecialityAsync(int specialityId)
         {
-            List<SP_LOAD_DISEASE_IN_SPECIALITYResult> result = null;
-            // Take diseases in a specific speciality in database
+            // Return list of diseases
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                result = await Task.Run(() =>
-                data.SP_LOAD_DISEASE_IN_SPECIALITY(specialityId).ToList());
+                return await Task.Run(() =>
+                    (from d in data.SP_LOAD_DISEASE_IN_SPECIALITY(specialityId)
+                     select new Disease()
+                     {
+                         Disease_ID = d.Disease_ID,
+                         Disease_Name = d.Disease_Name
+                     }).ToList());
             }
-
-            List<DiseaseEntity> diseaseList = new List<DiseaseEntity>();
-            DiseaseEntity disease = null;
-            // Assign values for each hospital
-            foreach (SP_LOAD_DISEASE_IN_SPECIALITYResult re in result)
-            {
-                disease = new DiseaseEntity();
-                disease.DiseaseID = re.Disease_ID;
-                disease.DiseaseName = re.Disease_Name;
-                diseaseList.Add(disease);
-            }
-
-            // Return list of diseases
-            return null;
         }
     }
 }
