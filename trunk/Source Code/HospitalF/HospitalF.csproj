@@ -425,6 +425,7 @@
     <Content Include="Views\HospitalUserHome\Index.cshtml" />
     <Content Include="Views\Error\SystemFailureHome.cshtml" />
     <Content Include="Views\Error\SystemFailureAdmin.cshtml" />
+    <Content Include="Views\Error\SystemFailureHospitalUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

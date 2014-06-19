@@ -18,6 +18,11 @@ namespace HospitalF
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute("GetDistrictByCity",
+                            "home/getdistrictbycity/",
+                            new { controller = "Home", action = "GetDistrictByCity" },
+                            new[] { "HospitalF.Controllers" });
         }
     }
 }
