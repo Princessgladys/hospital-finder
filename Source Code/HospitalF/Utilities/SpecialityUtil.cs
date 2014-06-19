@@ -66,11 +66,12 @@ namespace HospitalF.Utilities
                 data.SP_LOAD_DISEASE_IN_SPECIALITY(specialityId).ToList());
             }
 
-            List<DiseaseEntity> diseaseList = null;
+            List<DiseaseEntity> diseaseList = new List<DiseaseEntity>();
+            DiseaseEntity disease = null;
             // Assign values for each hospital
             foreach (SP_LOAD_DISEASE_IN_SPECIALITYResult re in result)
             {
-                DiseaseEntity disease = new DiseaseEntity();
+                disease = new DiseaseEntity();
                 disease.DiseaseID = re.Disease_ID;
                 disease.DiseaseName = re.Disease_Name;
                 diseaseList.Add(disease);
