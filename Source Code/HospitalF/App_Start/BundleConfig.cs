@@ -53,6 +53,10 @@ namespace HospitalF
             // Bundle for Error page
             bundles.Add(new StyleBundle("~/Content/Error").Include(
                         "~/Content/css/error.css"));
+            // Bundle for smart admin jquery scrip
+            bundles.Add(new ScriptBundle("~/bundles/smartadminjquery").Include(
+                        "~/Content/js/libs/jquery-2.0.2.m.js",
+                        "~/Content/js/libs/jquery-ui-1.10.3.m.js"));
         }
     }
 }

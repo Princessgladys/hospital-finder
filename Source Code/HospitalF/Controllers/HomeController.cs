@@ -20,10 +20,10 @@ namespace HospitalF.Controllers
         public static List<SpecialityEntity> specialityList = null;
         public static List<DiseaseEntity> diseaseList = null;
 
-        #region Load District and Disease drop down list
+        #region AJAX calling methods
 
         /// <summary>
-        /// POST: /Home/GetDistrictByCity
+        /// GET: /Home/GetDistrictByCity
         /// </summary>
         /// <param name="cityId">City ID</param>
         /// <returns>Task[ActionResult] with JSON contains list of Districts</returns>
@@ -54,7 +54,7 @@ namespace HospitalF.Controllers
         }
 
         /// <summary>
-        /// POST: /Home/GetDeseaseBySpeciality
+        /// GET: /Home/GetDeseaseBySpeciality
         /// </summary>
         /// <param name="specialityId">SpecialityId ID</param>
         /// <returns>Task[ActionResult] with JSON contains list of Deseases</returns>
@@ -76,6 +76,25 @@ namespace HospitalF.Controllers
                         new DiseaseEntity{ DiseaseName = Constants.RequireDisease } };
                     return Json(districtList, JsonRequestBehavior.AllowGet);
                 }
+            }
+            catch (Exception)
+            {
+                // Move to error page
+                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// GET: /Home/GetDeseaseBySpeciality
+        /// </summary>
+        /// <returns>ask[ActionResult] with JSON contains list of Setences</returns>
+        public async Task<ActionResult> LoadSuggestSentence()
+        {
+            try
+            {
+                // Return list of sentences
+                List<string> sentenceDic = await DictionaryUtil.LoadSuggestSentenceAsync();
+                return Json(sentenceDic, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
             {
@@ -120,7 +139,7 @@ namespace HospitalF.Controllers
         }
 
         /// <summary>
-        /// POST: /Home/Index
+        /// GET: /Home/Index
         /// </summary>
         /// <param name="model">HomeModels</param>
         /// <returns>Task[ActionResult]</returns>
@@ -154,12 +173,10 @@ namespace HospitalF.Controllers
                 }
 
                 // Move to result page
-                // return RedirectToAction(Constants.SearchResultMethod, Constants.HomeController);
                 return View(list);
             }
         }
 
-        #endregion 
-
+        #endregion
     }
 }
