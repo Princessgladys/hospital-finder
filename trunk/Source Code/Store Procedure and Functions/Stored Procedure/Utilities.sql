@@ -65,3 +65,18 @@ BEGIN
 	SELECT Speciality_ID, Speciality_Name
 	FROM Speciality
 END
+
+-- SCRIPT TO LOAD ALL SPECIALITIES OF HOSPITAL
+-- ANHDTH
+IF OBJECT_ID('[SP_LOAD_SPECIALITY_BY_HOSPITALID]') IS NOT NULL
+	DROP PROCEDURE [SP_LOAD_SPECIALITY_BY_HOSPITALID]
+GO
+CREATE PROCEDURE [dbo].[SP_LOAD_SPECIALITY_BY_HOSPITALID]
+	@Hospital_ID INT
+AS
+BEGIN
+	SELECT	s.Speciality_ID,s.Speciality_Name
+	FROM	Hospital_Speciality AS hs, Speciality AS s
+	WHERE	@Hospital_ID=hs.Hospital_ID AND
+			hs.Speciality_ID=s.Speciality_ID
+END
