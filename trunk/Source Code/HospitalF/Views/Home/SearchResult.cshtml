@@ -5,10 +5,11 @@
 <!-- MAIN CONTENT -->
 <div id="content-results" class="col-md-10 col-md-offset-1 well">
     <div class="col-md-8">
-        <form class="form-horizontal">
+        @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
+        {
             <legend>Nhập từ khóa về bệnh viện</legend>
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="Nhập thông tin tìm kiếm..." list="list">
+                <input name="SearchValue" class="form-control" type="text" placeholder="Nhập thông tin tìm kiếm..." list="list">
                 <datalist id="list">
                     <option value="Chợ Rẫy">Chợ Rẫy</option>
                     <option value="Nhi Đồng">Nhi Đồng</option>
@@ -16,16 +17,17 @@
                     <option value="Bệnh Viện Mắt">Bệnh Viện Mắt</option>
                 </datalist>
                 <div class="input-group-btn">
-                    <button class="btn btn-default btn-primary" type="button">
+                    <button class="btn btn-default btn-primary" type="submit">
                         <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
                     </button>
                 </div>
             </div>
             <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
-        </form>
+        }
     </div>
     <div class="col-md-12">
-        <form class="form-horizontal">
+        @using (Html.BeginForm(Constants.FilterResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
+        {
             <fieldset>
                 <legend>Kết quả tìm kiếm với từ khóa "tai mũi họng"</legend>
                 <div class="row">
@@ -47,32 +49,30 @@
                         <label class="control-label col-md-4" for="prepend">Loại</label>
                         <div class="col-md-8">
                             <div class="icon-addon addon-sm">
-                                <select class="form-control">
-                                    <option>Tất Cả</option>
-                                    <option>Bệnh Viện Công</option>
-                                    <option>Phòng Khám Tư</option>
-                                </select>
+                                @Html.DropDownList("HospitalType", (SelectList)ViewBag.HospitalTypes, "Tất Cả", new { @class = "form-control" })
                                 <label class="glyphicon glyphicon-list-alt" rel="tooltip" title="Loại Bệnh Viện"></label>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-primary pull-right" type="button">
+                        <button class="btn btn-primary pull-right" type="submit">
                             <i class="fa fa-refresh"></i>&nbsp;
                             Cập Nhật
                         </button>
                     </div>
                 </div>
             </fieldset>
-        </form>
+        }
     </div>
 
     <div class="col-md-12">
         <hr />
         <div id="hospital-list-results" class="col-md-4">
-            <h1 class="font-md">Thông tin <span class="semi-bold">hospital</span><small class="text-danger"> &nbsp;&nbsp;(2,281 kết quả)</small></h1>
-            @foreach (Hospital hospital in Model)
+            <h1 class="font-md">Danh sách <span class="semi-bold">bệnh viện</span><small class="text-danger"> &nbsp;&nbsp;(@(Model != null ? Model.Count : 0) kết quả)</small></h1>
+            @if (Model != null)
             {
+                foreach (Hospital hospital in Model)
+                {
                 <div class="search-results clearfix smart-form">
 
                     <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h4>
@@ -100,8 +100,8 @@
                     </div>
 
                 </div>
+                }
             }
-
             <div class="text-center">
                 <hr>
                 <ul class="pagination no-margin">
@@ -199,20 +199,22 @@
     var map;
     // List markers on map
     var markers = [];
-    @foreach (Hospital hospital in Model)
+    @if (Model != null)
     {
+        foreach (Hospital hospital in Model)
+        {
         <text>
-            var hospital = [];
-            hospital.push('@(Html.Raw(hospital.Hospital_Name))');
-            var coordinate = '@(hospital.Coordinate)';
-            var longitude = (coordinate.split(',')[0]).trim();  
-            var latitude = (coordinate.split(',')[1]).trim();
-            hospital.push(longitude);
-            hospital.push(latitude);
-            markers.push(hospital);
+    var hospital = [];
+    hospital.push('@(Html.Raw(hospital.Hospital_Name))');
+    var coordinate = '@(hospital.Coordinate)';
+    var longitude = (coordinate.split(',')[0]).trim();
+    var latitude = (coordinate.split(',')[1]).trim();
+    hospital.push(longitude);
+    hospital.push(latitude);
+    markers.push(hospital);
         </text>
-    }   
-
+        }
+    }
     function initializeMap() {
         var latlng = new google.maps.LatLng(markers[0][1], markers[0][2]);
         var options = {

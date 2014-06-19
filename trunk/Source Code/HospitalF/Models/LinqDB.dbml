@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="HospitalF" Class="LinqDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=ANHDTH60434;Initial Catalog=HospitalF;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="HospitalFConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=localhost;Initial Catalog=HospitalF;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="HospitalFConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.WordDictionary" Member="WordDictionaries">
     <Type Name="WordDictionary">
       <Column Name="Word_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -307,17 +307,6 @@
       <Association Name="WordDictionary_Word_Hospital" Member="WordDictionary" ThisKey="Word_ID" OtherKey="Word_ID" Type="WordDictionary" IsForeignKey="true" />
     </Type>
   </Table>
-  <Function Name="dbo.SP_SEARCH_HOSPITAL" Method="SP_SEARCH_HOSPITAL">
-    <Parameter Name="CityID" Parameter="cityID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="DistrictID" Parameter="districtID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="SpecialityID" Parameter="specialityID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="DiseaseID" Parameter="diseaseID" Type="System.Int32" DbType="Int" />
-    <ElementType Name="SP_SEARCH_HOSPITALResult">
-      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Hospital_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Column Name="Address" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
-    </ElementType>
-  </Function>
   <Function Name="dbo.SP_LOAD_DISEASE_IN_SPECIALITY" Method="SP_LOAD_DISEASE_IN_SPECIALITY">
     <Parameter Name="SpecialityID" Parameter="specialityID" Type="System.Int32" DbType="Int" />
     <ElementType Name="SP_LOAD_DISEASE_IN_SPECIALITYResult">
@@ -338,6 +327,30 @@
       <Column Name="Doctor_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="First_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
       <Column Name="Last_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SP_SEARCH_HOSPITAL" Method="SP_SEARCH_HOSPITAL">
+    <Parameter Name="CityID" Parameter="cityID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DistrictID" Parameter="districtID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SpecialityID" Parameter="specialityID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DiseaseID" Parameter="diseaseID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="SP_SEARCH_HOSPITALResult">
+      <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Hospital_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Hospital_Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="Ward_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="District_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="City_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Phone_Number" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="Fax" Type="System.String" DbType="VarChar(16)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="Website" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="Start_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="End_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="Coordinate" Type="System.String" DbType="VarChar(26)" CanBeNull="true" />
+      <Column Name="Created_Person" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
     </ElementType>
   </Function>
 </Database>

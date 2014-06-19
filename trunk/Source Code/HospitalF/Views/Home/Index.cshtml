@@ -8,7 +8,7 @@
 <script type="text/javascript">
     @*AJAX for auto completing Disease textbox*@
     $(document).ready(function () {
-        $("#sentece-tag").on('input',function () {
+        $("#sentece-tag").on('input', function () {
             var statesProgress = $("#states-loading-search-progress");
             var availableTags = new Array();
             statesProgress.show();
@@ -107,13 +107,13 @@
         <div class="well">
             <ul id="myTab1" class="nav nav-tabs bordered">
                 <li class="active">
-                    <a href="#s1" data-toggle="tab"><i class="fa fa-fw fa-lg fa-search"></i>Tìm Kiếm Cơ Bản</a>
+                    <a href="#s1" data-toggle="tab"><i class="fa fa-fw fa-lg fa-search"></i>&nbsp;Tìm Kiếm Cơ Bản</a>
                 </li>
                 <li>
-                    <a href="#s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-plus-square"></i>Tìm Kiếm Nâng Cao</a>
+                    <a href="#s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-plus-square"></i>&nbsp;Tìm Kiếm Theo Vị Trí</a>
                 </li>
                 <li>
-                    <a href="#s3" data-toggle="tab"><i class="fa fa-fw fa-lg fa-crosshairs"></i>Tìm Kiếm Theo Vị Trí</a>
+                    <a href="#s3" data-toggle="tab"><i class="fa fa-fw fa-lg fa-crosshairs"></i>&nbsp;Tìm Kiếm Nâng Cao</a>
                 </li>
             </ul>
 
@@ -143,6 +143,54 @@
                 </div>
 
                 <div class="tab-pane fade" id="s2">
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <legend>Nhập thông tin vị trí</legend>
+                            <div class="row">
+
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-4" for="prepend">Tìm Theo</label>
+                                    <div class="col-md-8">
+                                        <div class="icon-addon addon-sm">
+                                            <select class="form-control">
+                                                <option>Vị trí hiện tại</option>
+                                                <option>Nhập vị trí</option>
+                                            </select>
+                                            <label class="glyphicon glyphicon-list" title="Tìm Theo"></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class="control-label col-md-4" for="prepend">Vị trí</label>
+                                    <div class="col-md-8">
+                                        <div class="icon-addon addon-sm">
+                                            <input class="form-control" type="text" placeholder="Vị trí cần tìm...">
+                                            <label class="glyphicon glyphicon-pushpin" title="Vị Trí Cần Tìm"></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row pull-right">
+                                <div class="col-md-12">
+                                    <button class="btn btn-default" type="reset">
+                                        <i class="fa fa-eraser"></i>&nbsp;
+                                        Nhập Lại
+                                    </button>
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-search"></i>&nbsp;
+                                        Tìm Kiếm
+                                    </button>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="s3">
                     <form class="form-horizontal">
                         <fieldset>
                             <legend>Nhập thông tin bệnh viện</legend>
@@ -220,53 +268,7 @@
                         </fieldset>
                     </form>
                 </div>
-                <div class="tab-pane fade" id="s3">
-                    <form class="form-horizontal">
-                        <fieldset>
-                            <legend>Nhập thông tin vị trí</legend>
-                            <div class="row">
 
-                                <div class="form-group col-md-6">
-                                    <label class="control-label col-md-4" for="prepend">Tìm Theo</label>
-                                    <div class="col-md-8">
-                                        <div class="icon-addon addon-sm">
-                                            <select class="form-control">
-                                                <option>Vị trí hiện tại</option>
-                                                <option>Nhập vị trí</option>
-                                            </select>
-                                            <label class="glyphicon glyphicon-list" title="Tìm Theo"></label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label class="control-label col-md-4" for="prepend">Vị trí</label>
-                                    <div class="col-md-8">
-                                        <div class="icon-addon addon-sm">
-                                            <input class="form-control" type="text" placeholder="Vị trí cần tìm...">
-                                            <label class="glyphicon glyphicon-pushpin" title="Vị Trí Cần Tìm"></label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row pull-right">
-                                <div class="col-md-12">
-                                    <button class="btn btn-default" type="reset">
-                                        <i class="fa fa-eraser"></i>&nbsp;
-                                        Nhập Lại
-                                    </button>
-                                    <button class="btn btn-primary" type="submit">
-                                        <i class="fa fa-search"></i>&nbsp;
-                                        Tìm Kiếm
-                                    </button>
-                                </div>
-                            </div>
-
-                        </fieldset>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
