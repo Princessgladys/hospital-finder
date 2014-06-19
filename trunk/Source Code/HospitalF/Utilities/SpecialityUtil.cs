@@ -14,6 +14,35 @@ namespace HospitalF.Utilities
     public class SpecialityUtil
     {
         /// <summary>
+        /// Load all speciality by hospital code
+        /// </summary>
+        /// <returns>List[SpecialityEntity] that contains a list of speciality</returns>
+        public static async Task<List<SpecialityEntity>> LoadSpecialityByHospitalIDAsync(int HospitalID)
+        {
+            List<SP_LOAD_SPECIALITY_BY_HOSPITALIDResult> result = null;
+            // Take specalities in a specific hospital in database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() =>
+                data.SP_LOAD_SPECIALITY_BY_HOSPITALID(HospitalID).ToList());
+            }
+
+            List<SpecialityEntity> specialityList = new List<SpecialityEntity>();
+            SpecialityEntity speciality = null;
+            // Assign values for each speciality
+            foreach (SP_LOAD_SPECIALITY_BY_HOSPITALIDResult re in result)
+            {
+                speciality = new SpecialityEntity();
+                speciality.SpecialityID = re.Speciality_ID;
+                speciality.SpecialityName = re.Speciality_Name;
+                specialityList.Add(speciality);
+            }
+
+            // Return list of speciality
+            return specialityList;
+        }
+
+        /// <summary>
         /// Load all specialities in database
         /// </summary>
         /// <returns>List[SpecialityEntity] that contains a list of speciality</returns>
