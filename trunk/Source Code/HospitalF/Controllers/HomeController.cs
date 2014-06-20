@@ -175,9 +175,9 @@ namespace HospitalF.Controllers
                     }
                     ViewBag.HospitalTypes = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
                     // Analyze input search query using GIR algorithm and search
-<<<<<<< .mine                    await model.GIRQueryAnalyzerAsync(model.SearchValue);
+                    await model.GIRQueryAnalyzerAsync(model.SearchValue);
                     //list = await model.SearchHospital();
-=======                    if (!string.IsNullOrEmpty(model.SearchValue))
+                    if (!string.IsNullOrEmpty(model.SearchValue))
                     {
                         await model.GIRQueryAnalyzerAsync(model.SearchValue);
                     }
@@ -186,7 +186,7 @@ namespace HospitalF.Controllers
                         await model.GIRQueryAnalyzerAsync(form["SearchValue"]);
                     }
                     hospitalList = await model.SearchHospital();
->>>>>>> .theirs                }
+                }
                 catch (Exception)
                 {
                     Response.Write(ErrorMessage.SEM001);
