@@ -17,8 +17,8 @@ namespace HospitalF.Models
         /// Get/set value for property FullName
         /// </summary>
         [Display(Name = Constants.FullName)]
-        [Required(ErrorMessage = ErrorMessage.CEM001)]
-        [StringLength(32, ErrorMessage = ErrorMessage.CEM003)]
+        //[Required(ErrorMessage = ErrorMessage.CEM001)]
+        //[StringLength(32, ErrorMessage = ErrorMessage.CEM003)]
         public string FullName { get; set; }
         
         /// <summary>
@@ -37,15 +37,15 @@ namespace HospitalF.Models
         /// Get/set value for property Email
         /// </summary>
         [Display(Name = Constants.Email)]
-        [RegularExpression(Constants.EmailRegex, ErrorMessage = ErrorMessage.CEM005)]
+        //[RegularExpression(Constants.EmailRegex, ErrorMessage = ErrorMessage.CEM005)]
         public string Email { get; set; }
 
         /// <summary>
         /// Get/set value for property PhoneNo
         /// </summary>
         [Display(Name=Constants.PhoneNo)]
-        [Required(ErrorMessage=ErrorMessage.CEM001)]
-        [RegularExpression(Constants.CellPhoneNoRegex,ErrorMessage=ErrorMessage.CEM005)]
+        //[Required(ErrorMessage=ErrorMessage.CEM001)]
+        //[RegularExpression(Constants.CellPhoneNoRegex,ErrorMessage=ErrorMessage.CEM005)]
         public string PhoneNo { get; set; }
         
         /// <summary>
@@ -115,14 +115,15 @@ namespace HospitalF.Models
         #endregion
 
         #region Insert into database
-        public static int InsertAppointment(Appointment app)
+            public static async Task<int> InsertAppointment(Appointment app)
         {
             int result = 0;
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
+                //result = data.SP_INSERT_APPOINTMENT(null, null, null, null, null, null, null, null, null, null,null);
                 result = data.SP_INSERT_APPOINTMENT(app.Patient_Full_Name, app.Patient_Gender,
                     app.Patient_Birthday, app.Patient_Phone_Number, app.Patient_Email,
-                    app.Appointment_Date, app.Start_Time, app.End_Time, app.Doctor.Doctor_ID,
+                    app.Appointment_Date.ToString(), app.Start_Time.ToString(), app.End_Time.ToString(), app.Doctor.Doctor_ID,
                     app.Hospital.Hospital_ID, app.Confirm_Code);
             }
             return result;

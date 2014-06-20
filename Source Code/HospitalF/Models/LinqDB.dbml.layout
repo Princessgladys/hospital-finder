@@ -164,77 +164,77 @@
         <elementListCompartment Id="81568ead-b44d-48f9-b80d-e2134b221277" absoluteBounds="11.765, 16.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(2.75 : 16.5681469726563); (3.5 : 16.5681469726563)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 16.5681469726563); (3.5 : 16.5681469726563)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/City/City_District" />
       <nodes>
         <classShapeMoniker Id="33df8e65-78db-4d4b-b646-5f8b0f1ebfc4" />
         <classShapeMoniker Id="66831dac-acd4-4fc2-ac46-6604b074556f" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 7.64505126953125); (11.75 : 7.64505126953125); (11.75 : 8.44399251302083); (13.8229166666667 : 8.44399251302083 : JumpStart); (13.9895833333333 : 8.44399251302083 : JumpEnd); (14.2916666666667 : 8.44399251302083 : JumpStart); (14.4583333333333 : 8.44399251302083 : JumpEnd); (18.75 : 8.44399251302083); (18.75 : 14.875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 7.64505126953125); (11.75 : 7.64505126953125); (11.75 : 8.44399251302083); (13.8229166666667 : 8.44399251302083 : JumpStart); (13.9895833333333 : 8.44399251302083 : JumpEnd); (14.2916666666667 : 8.44399251302083 : JumpStart); (14.4583333333333 : 8.44399251302083 : JumpEnd); (18.75 : 8.44399251302083); (18.75 : 14.875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Doctor/Doctor_Appointment" />
       <nodes>
         <classShapeMoniker Id="90e88e34-fdcf-4343-ac6f-df5ff11f7b38" />
         <classShapeMoniker Id="775d0e01-cedb-4534-b00a-fc9efe99809f" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 8.88125538521635); (11.375 : 9.25625538521635); (11.375 : 13.5681469726562); (11.4791666666667 : 13.5681469726562 : JumpStart); (11.7395833333333 : 13.5681469726562 : JumpEnd); (11.75 : 13.5681469726562)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 8.88125538521635); (11.375 : 9.25625538521635); (11.375 : 13.5681469726562); (11.75 : 13.5681469726562)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Doctor/Doctor_Doctor_Hospital" />
       <nodes>
         <classShapeMoniker Id="90e88e34-fdcf-4343-ac6f-df5ff11f7b38" />
         <classShapeMoniker Id="8dbddce2-0e07-4c2a-82c6-72f2a25f353e" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 6.65625); (12.9166666666667 : 6.65625 : JumpStart); (13.0833333333333 : 6.65625 : JumpEnd); (14.2916666666667 : 6.65625 : JumpStart); (14.4583333333333 : 6.65625 : JumpEnd); (17.75 : 6.65625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 6.65625); (17.75 : 6.65625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Doctor/Doctor_Doctor_Speciality" />
       <nodes>
         <classShapeMoniker Id="90e88e34-fdcf-4343-ac6f-df5ff11f7b38" />
         <classShapeMoniker Id="aaad5483-397f-4e03-92ee-2973a574f498" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 10.5681469726562); (11.2916666666667 : 10.5681469726562 : JumpStart); (11.5208333333333 : 10.5681469726562 : JumpEnd); (11.75 : 10.5681469726562)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 10.5681469726562); (11.2916666666667 : 10.5681469726562 : JumpStart); (11.5208333333333 : 10.5681469726562 : JumpEnd); (11.75 : 10.5681469726562)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/FeedbackType/FeedbackType_Feedback" />
       <nodes>
         <classShapeMoniker Id="b05312cd-5c57-44d1-a6c7-cc937f6e0c31" />
         <classShapeMoniker Id="b454ab6b-b468-49e6-a408-512e07a4bcb3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 17.8502018229167); (11.3541666666667 : 17.8502018229167 : JumpStart); (11.6770833333333 : 17.8502018229167 : JumpEnd); (13.8229166666667 : 17.8502018229167 : JumpStart); (13.9895833333333 : 17.8502018229167 : JumpEnd); (14.3541666666667 : 17.8502018229167 : JumpStart); (14.5208333333333 : 17.8502018229167 : JumpEnd); (17.0416666666667 : 17.8502018229167 : JumpStart); (17.2083333333333 : 17.8502018229167 : JumpEnd); (17.75 : 17.8502018229167)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 17.8502018229167); (11.3541666666667 : 17.8502018229167 : JumpStart); (11.6770833333333 : 17.8502018229167 : JumpEnd); (13.8229166666667 : 17.8502018229167 : JumpStart); (13.9895833333333 : 17.8502018229167 : JumpEnd); (17.0416666666667 : 17.8502018229167 : JumpStart); (17.2083333333333 : 17.8502018229167 : JumpEnd); (17.75 : 17.8502018229167)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Hospital/Hospital_Appointment" />
       <nodes>
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
         <classShapeMoniker Id="775d0e01-cedb-4534-b00a-fc9efe99809f" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(10 : 14.375); (10 : 13.9459729589844); (10.4005128205128 : 13.9459729589844 : JumpStart); (10.5671794871795 : 13.9459729589844 : JumpEnd); (11.2964629384515 : 13.9459729589844 : JumpStart); (11.5431286051182 : 13.9459729589844 : JumpEnd); (11.75 : 13.9459729589844)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(10 : 14.375); (10 : 13.9459729589844); (10.4005128205129 : 13.9459729589844 : JumpStart); (10.5671794871795 : 13.9459729589844 : JumpEnd); (11.2964629384515 : 13.9459729589844 : JumpStart); (11.5431286051181 : 13.9459729589844 : JumpEnd); (11.75 : 13.9459729589844)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Hospital/Hospital_Doctor_Hospital" />
       <nodes>
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
         <classShapeMoniker Id="8dbddce2-0e07-4c2a-82c6-72f2a25f353e" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(10.9507692307692 : 14.375); (11.3785744349011 : 13.9471947958681 : JumpStart); (11.4964255650989 : 13.8293436656704 : JumpEnd); (11.5625 : 13.7632692307692); (11.5625 : 11.1430753235677); (11.75 : 11.1430753235677)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(10.9507692307692 : 14.375); (11.3785744349011 : 13.9471947958681 : JumpStart); (11.4964255650989 : 13.8293436656703 : JumpEnd); (11.5625 : 13.7632692307692); (11.5625 : 11.1430753235677); (11.75 : 11.1430753235677)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Hospital/Hospital_Feedback" />
       <nodes>
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
         <classShapeMoniker Id="b454ab6b-b468-49e6-a408-512e07a4bcb3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(1.75 : 17.2612939453125); (1.75 : 18.2107568359375); (9 : 18.2107568359375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(1.75 : 17.2612939453125); (1.75 : 18.2107568359375); (9 : 18.2107568359375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/City/City_Hospital" />
       <nodes>
         <classShapeMoniker Id="33df8e65-78db-4d4b-b646-5f8b0f1ebfc4" />
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(4.5 : 17.5208968098958); (4.5 : 17.8345748229167); (9 : 17.8345748229167)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(4.5 : 17.5208968098958); (4.5 : 17.8345748229167); (9 : 17.8345748229167)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/District/District_Hospital" />
       <nodes>
         <classShapeMoniker Id="66831dac-acd4-4fc2-ac46-6604b074556f" />
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 23); (11.375 : 22.625); (11.375 : 19.5681469726563); (11.4479166666667 : 19.5681469726563 : JumpStart); (11.6145833333333 : 19.5681469726563 : JumpEnd); (11.75 : 19.5681469726563)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 23); (11.375 : 22.625); (11.375 : 19.5681469726563); (11.75 : 19.5681469726563)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Facility/Facility_Hospital_Facility" />
       <nodes>
         <classShapeMoniker Id="d180c5ad-bfa7-45ab-9518-29a54f247875" />
@@ -248,35 +248,35 @@
         <classShapeMoniker Id="35768109-b095-4692-89ed-7ae1bdcf8ab8" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 15.90625); (11.3541666666667 : 15.90625 : JumpStart); (11.5208333333333 : 15.90625 : JumpEnd); (14.3541666666667 : 15.90625 : JumpStart); (14.5208333333333 : 15.90625 : JumpEnd); (14.75 : 15.90625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 15.90625); (11.3541666666667 : 15.90625 : JumpStart); (11.5208333333333 : 15.90625 : JumpEnd); (14.3541666666667 : 15.90625 : JumpStart); (14.5208333333333 : 15.90625 : JumpEnd); (14.75 : 15.90625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Hospital/Hospital_Hospital_Service" />
       <nodes>
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
         <classShapeMoniker Id="0d07df07-1eb9-407d-ab5a-1ec4d07a72e3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 14.4242297692308); (11.25 : 14.1742297692308); (11.25 : 14.8285953776042); (11.3541666666667 : 14.8285953776042 : JumpStart); (11.5208333333333 : 14.8285953776042 : JumpEnd); (14.375 : 14.8285953776042); (14.3785744349011 : 14.825020942703 : JumpStart); (14.4964255650989 : 14.7071698125053 : JumpEnd); (14.75 : 14.4535953776042)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(11 : 14.4242297692308); (11.25 : 14.1742297692308); (11.25 : 14.8285953776042); (11.3541666666667 : 14.8285953776042 : JumpStart); (11.5208333333333 : 14.8285953776042 : JumpEnd); (14.375 : 14.8285953776042); (14.3785744349011 : 14.8250209427031 : JumpStart); (14.4964255650989 : 14.7071698125053 : JumpEnd); (14.75 : 14.4535953776042)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Hospital/Hospital_Hospital_Speciality" />
       <nodes>
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
         <classShapeMoniker Id="4f48991d-069b-41e2-bfb7-f3b41d5c81e2" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.25 : 13.4729864794922); (9.4687475 : 13.4729864794922); (9.4687475 : 14.375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(8.25 : 13.4729864794922); (9.4687475 : 13.4729864794922); (9.4687475 : 14.375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/HospitalType/HospitalType_Hospital" />
       <nodes>
         <classShapeMoniker Id="a8a74c37-2dde-4b64-9820-f1aa3cc49f2d" />
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 8.88587076983173); (11.4375 : 9.32337076983173); (11.4375 : 22.6739005533854); (11.75 : 22.6739005533854)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 8.88587076983173); (11.4375 : 9.32337076983173); (11.4375 : 22.6739005533854); (11.75 : 22.6739005533854)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Doctor/Doctor_Photo" />
       <nodes>
         <classShapeMoniker Id="90e88e34-fdcf-4343-ac6f-df5ff11f7b38" />
         <classShapeMoniker Id="6f5d2e06-7d67-47a3-ab07-a19eb5da6545" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(10.9507692307692 : 18.8381168619792); (11.3785744349011 : 19.2659220661111 : JumpStart); (11.4964255650989 : 19.3837731963088 : JumpEnd); (11.53125 : 19.4185976312099); (11.53125 : 22.0556982766927); (11.75 : 22.0556982766927)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(10.9507692307692 : 18.8381168619792); (11.3785744349011 : 19.265922066111 : JumpStart); (11.4964255650989 : 19.3837731963088 : JumpEnd); (11.53125 : 19.4185976312099); (11.53125 : 22.0556982766927); (11.75 : 22.0556982766927)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Hospital/Hospital_Photo" />
       <nodes>
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
@@ -290,63 +290,63 @@
         <classShapeMoniker Id="eef5cdc7-f645-4f58-bd0c-99292859c2ce" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 20.7925434453125); (11.2916666666667 : 20.7925434453125 : JumpStart); (11.6145833333333 : 20.7925434453125 : JumpEnd); (13.8229166666667 : 20.7925434453125 : JumpStart); (13.9895833333333 : 20.7925434453125 : JumpEnd); (14.5 : 20.7925434453125); (14.5 : 20.7035953776042); (15.75 : 20.7035953776042); (15.75 : 21.875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 20.7925434453125); (11.2916666666667 : 20.7925434453125 : JumpStart); (11.5208333333333 : 20.7925434453125 : JumpEnd); (13.8229166666667 : 20.7925434453125 : JumpStart); (13.9895833333333 : 20.7925434453125 : JumpEnd); (14.5 : 20.7925434453125); (14.5 : 20.7035953776042); (15.75 : 20.7035953776042); (15.75 : 21.875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/WordDictionary/WordDictionary_Sentence_Word" />
       <nodes>
         <classShapeMoniker Id="7cf6f818-9abe-498f-aaa9-aaece4c730ef" />
         <classShapeMoniker Id="9ba4e921-fd37-482b-8c26-a5b50b3c01fa" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(14 : 28.5681469726563); (15.75 : 28.5681469726563); (15.75 : 23.2612939453125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(14 : 28.5681469726563); (15.75 : 28.5681469726563); (15.75 : 23.2612939453125)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/SentenceDictionary/SentenceDictionary_Sentence_Word" />
       <nodes>
         <classShapeMoniker Id="3d0a3f86-8371-4b2f-b150-6e1d8a048b11" />
         <classShapeMoniker Id="9ba4e921-fd37-482b-8c26-a5b50b3c01fa" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(13.90625 : 25); (13.90625 : 15.921875); (14.3541666666667 : 15.921875 : JumpStart); (14.5208333333333 : 15.921875 : JumpEnd); (14.75 : 15.921875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(13.90625 : 25); (13.90625 : 15.921875); (14.75 : 15.921875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Service/Service_Hospital_Service" />
       <nodes>
         <classShapeMoniker Id="3f9f144b-2344-423f-8c5e-505115453d03" />
         <classShapeMoniker Id="0d07df07-1eb9-407d-ab5a-1ec4d07a72e3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(13 : 6.19399251302083); (13 : 6.875); (14.25 : 6.875); (14.25 : 7.17752397265625); (14.2916666666667 : 7.17752397265625 : JumpStart); (14.4583333333333 : 7.17752397265625 : JumpEnd); (17.75 : 7.17752397265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(13 : 6.19399251302083); (13 : 6.875); (14.25 : 6.875); (14.25 : 7.17752397265625); (14.2916666666667 : 7.17752397265625 : JumpStart); (14.4583333333333 : 7.17752397265625 : JumpEnd); (17.75 : 7.17752397265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Speciality/Speciality_Doctor_Speciality" />
       <nodes>
         <classShapeMoniker Id="dfbedba7-6f5d-4d9a-af07-7c0b0cdac93b" />
         <classShapeMoniker Id="aaad5483-397f-4e03-92ee-2973a574f498" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(14 : 6.19399251302083); (14.375 : 6.56899251302083); (14.375 : 13.6330456888021); (14.75 : 13.6330456888021)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(14 : 6.19399251302083); (14.375 : 6.56899251302083); (14.375 : 13.6330456888021); (14.75 : 13.6330456888021)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Speciality/Speciality_Hospital_Speciality" />
       <nodes>
         <classShapeMoniker Id="dfbedba7-6f5d-4d9a-af07-7c0b0cdac93b" />
         <classShapeMoniker Id="4f48991d-069b-41e2-bfb7-f3b41d5c81e2" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(14 : 3.59699625651042); (15.75 : 3.59699625651042); (15.75 : 5)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(14 : 3.59699625651042); (15.75 : 3.59699625651042); (15.75 : 5)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Disease/Disease_Speciality_Disease" />
       <nodes>
         <classShapeMoniker Id="68d0b23b-5793-44cc-94ef-403531fec0ef" />
         <classShapeMoniker Id="16a4f807-a9f4-447a-b774-8530b80ab741" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(14 : 5.56574375651042); (14.75 : 5.56574375651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(14 : 5.56574375651042); (14.75 : 5.56574375651042)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Speciality/Speciality_Speciality_Disease" />
       <nodes>
         <classShapeMoniker Id="dfbedba7-6f5d-4d9a-af07-7c0b0cdac93b" />
         <classShapeMoniker Id="16a4f807-a9f4-447a-b774-8530b80ab741" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(14.75 : 12.0004746344151); (14.3257692307692 : 12.4247054036458); (11.6458333333333 : 12.4247054036458 : JumpStart); (11.2916666666667 : 12.4247054036458 : JumpEnd); (10.4838461538462 : 12.4247054036458); (10.4838461538462 : 14.375)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(14.75 : 12.0004746344151); (14.3257692307692 : 12.4247054036458); (11.6458333333333 : 12.4247054036458 : JumpStart); (11.2916666666667 : 12.4247054036458 : JumpEnd); (10.4838461538462 : 12.4247054036458); (10.4838461538462 : 14.375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/User/User_Hospital" />
       <nodes>
         <classShapeMoniker Id="d9eb9895-9f00-4c61-b3da-65526dc21d14" />
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(14.7992297692308 : 12.0497054036458); (14.4375 : 12.4114351728766); (14.4375 : 22.6739005533854); (13.9895833333333 : 22.6739005533854 : JumpStart); (13.8229166666667 : 22.6739005533854 : JumpEnd); (13.75 : 22.6739005533854)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(14.7992297692308 : 12.0497054036458); (14.4375 : 12.4114351728766); (14.4375 : 22.6739005533854); (13.9895833333333 : 22.6739005533854 : JumpStart); (13.8229166666667 : 22.6739005533854 : JumpEnd); (13.75 : 22.6739005533854)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/User/User_Photo" />
       <nodes>
         <classShapeMoniker Id="d9eb9895-9f00-4c61-b3da-65526dc21d14" />
@@ -360,14 +360,14 @@
         <classShapeMoniker Id="eef5cdc7-f645-4f58-bd0c-99292859c2ce" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 14.4057682307692); (11.3785744349011 : 14.0271937958681 : JumpStart); (11.4964255650989 : 13.9093426656704 : JumpEnd); (11.65625 : 13.7495182307692); (11.65625 : 12.5497054036458); (14.25 : 12.5497054036458); (14.3160744349011 : 12.4836309687447 : JumpStart); (14.4339255650989 : 12.365779838547 : JumpEnd); (14.75 : 12.0497054036458)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(11 : 14.4057682307692); (11.3785744349011 : 14.0271937958681 : JumpStart); (11.4964255650989 : 13.9093426656703 : JumpEnd); (11.65625 : 13.7495182307692); (11.65625 : 12.5497054036458); (14.25 : 12.5497054036458); (14.3160744349011 : 12.4836309687447 : JumpStart); (14.4339255650989 : 12.3657798385469 : JumpEnd); (14.75 : 12.0497054036458)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Hospital/Hospital_User" />
       <nodes>
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
         <classShapeMoniker Id="d9eb9895-9f00-4c61-b3da-65526dc21d14" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(13.90625 : 8.19399251302083); (13.90625 : 9.28125); (14.2916666666667 : 9.28125 : JumpStart); (14.4583333333333 : 9.28125 : JumpEnd); (14.75 : 9.28125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(13.90625 : 8.19399251302083); (13.90625 : 9.28125); (14.2916666666667 : 9.28125 : JumpStart); (14.4583333333333 : 9.28125 : JumpEnd); (14.75 : 9.28125)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Role/Role_User" />
       <nodes>
         <classShapeMoniker Id="95143671-6a4b-4794-8176-81f347ae315a" />
@@ -381,28 +381,28 @@
         <classShapeMoniker Id="d9eb9895-9f00-4c61-b3da-65526dc21d14" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.25 : 16.6354484049479); (9 : 16.6354484049479)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(8.25 : 16.6354484049479); (9 : 16.6354484049479)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Ward/Ward_Hospital" />
       <nodes>
         <classShapeMoniker Id="6c44ed68-cd0d-4111-b2f6-93fed6f97dff" />
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 16.6354484049479); (6.25 : 16.6354484049479)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 16.6354484049479); (6.25 : 16.6354484049479)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/District/District_Ward" />
       <nodes>
         <classShapeMoniker Id="66831dac-acd4-4fc2-ac46-6604b074556f" />
         <classShapeMoniker Id="6c44ed68-cd0d-4111-b2f6-93fed6f97dff" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 16.5969962565104); (11.3541666666667 : 16.5969962565104 : JumpStart); (11.5208333333333 : 16.5969962565104 : JumpEnd); (11.75 : 16.5969962565104)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 16.5969962565104); (11.3541666666667 : 16.5969962565104 : JumpStart); (11.5208333333333 : 16.5969962565104 : JumpEnd); (11.75 : 16.5969962565104)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/Hospital/Hospital_Word_Hospital" />
       <nodes>
         <classShapeMoniker Id="918fed32-8b31-460e-9f54-725533be468d" />
         <classShapeMoniker Id="1ae1ea09-a9d4-463c-a317-326068546fc9" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 19.90592401878); (11.3785744349011 : 19.5273495838789 : JumpStart); (11.4964255650989 : 19.4094984536812 : JumpEnd); (11.59375 : 19.31217401878); (11.59375 : 16.9267463847656); (11.75 : 16.9267463847656)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 19.90592401878); (11.3785744349011 : 19.5273495838789 : JumpStart); (11.4964255650989 : 19.4094984536811 : JumpEnd); (11.59375 : 19.31217401878); (11.59375 : 16.9267463847656); (11.75 : 16.9267463847656)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqDBDataContext/WordDictionary/WordDictionary_Word_Hospital" />
       <nodes>
         <classShapeMoniker Id="7cf6f818-9abe-498f-aaa9-aaece4c730ef" />

@@ -15,15 +15,16 @@ namespace HospitalF.Controllers
     {
         public static List<Speciality> specialityList = null;
         public static List<Doctor> doctorList = null;
-        public static int hospitalID = 64;
+        public static int hospitalID = 23;
         //
         // GET: /Appointment/
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> CreateAppointment()
         {
             try
             {
                 //load list of speciality
+                
                 specialityList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
                 ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
 
@@ -42,12 +43,15 @@ namespace HospitalF.Controllers
         /// </summary>
         /// <param name="model">AppointmentModels</param>
         /// <returns>Task[ActionResult]</returns>
-        [HttpGet]
+        [HttpPost]
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> CreateAppointment(AppointmentModels model)
+        public async Task<ActionResult> CreateAppointment_Create(AppointmentModels model)
         {
+            ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+            ViewBag.DoctorList = new SelectList(doctorList, Constants.DoctorID, Constants.DoctorName);
             if (!ModelState.IsValid)
             {
+
                 return View();
             }
             else
@@ -58,7 +62,7 @@ namespace HospitalF.Controllers
                     EndTime = TimeSpan.Parse(model.StartTime).Add(new TimeSpan(0,20,0));
                     Appointment app = new Appointment();
                     app.Patient_Full_Name = model.FullName;
-                    app.Patient_Gender = model.Gender == 1 ? true : false;
+                    app.Patient_Gender = model.Gender == 0 ? true : false;
                     app.Patient_Phone_Number = model.PhoneNo;
                     app.Patient_Email = model.Email;
                     app.Patient_Birthday = model.Birthday;
@@ -69,8 +73,8 @@ namespace HospitalF.Controllers
                     app.Start_Time = TimeSpan.Parse(model.StartTime);
                     app.End_Time = EndTime;
                     app.Appointment_Date = model.AppDate;
-                    app.Hospital.Hospital_ID=hospitalID;
-                    int result = AppointmentModels.InsertAppointment(app);
+                    app.Curing_Hospital = hospitalID;
+                    int result =await AppointmentModels.InsertAppointment(app);
                     if (result != 1)
                     {
                         return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
@@ -122,7 +126,11 @@ namespace HospitalF.Controllers
             }
         }
 
-        public async Task<ActionResult> Confirm()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Confirm()
         {
             return View();
         }
