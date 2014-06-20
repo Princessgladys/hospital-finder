@@ -95,3 +95,52 @@ BEGIN
 	WHERE	@SpecialityID = DS.Speciality_ID AND
 			DS.Doctor_ID = D.Doctor_ID
 END
+
+-- SCRIPT TO INSERT APPOINTMENT
+-- ANHDTH
+IF OBJECT_ID('[SP_INSERT_APPOINTMENT]') IS NOT NULL
+	DROP PROCEDURE [SP_INSERT_APPOINTMENT]
+GO
+CREATE PROCEDURE [dbo].[SP_INSERT_APPOINTMENT]
+	@FullName nvarchar(32),
+	@Gender bit,
+	@Birthday date,
+	@PhoneNo varchar(13),
+	@Email varchar(64),
+	@Date date,
+	@Start_time time,
+	@End_time time,
+	@Doctor_ID int,
+	@Hospital_ID int,
+	@Confirm_Code varchar(8)
+AS
+BEGIN
+	INSERT INTO Appointment
+		([Patient_Full_Name]
+		,[Patient_Gender]
+		,[Patient_Birthday]
+		,[Patient_Phone_Number]
+		,[Patient_Email]
+		,[Appointment_Date]
+		,[Start_Time]
+		,[End_Time]
+		,[In_Charge_Doctor]
+		,[Curing_Hospital]
+		,[Confirm_Code])
+	VALUES
+		(@FullName
+		,@Gender
+		,@Birthday
+		,@PhoneNo
+		,@Email
+		,@Date
+		,@Start_time
+		,@End_time
+		,@Doctor_ID
+		,@Hospital_ID
+		,@Confirm_Code)
+	IF @@ROWCOUNT >0
+		RETURN 1
+	ELSE
+		RETURN 0
+END
