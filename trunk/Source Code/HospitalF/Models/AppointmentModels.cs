@@ -120,10 +120,10 @@ namespace HospitalF.Models
             int result = 0;
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                result = data.SP_INSERT_APPOINTMENT(app.Patient_Full_Name, app.Patient_Gender,
-                    app.Patient_Birthday, app.Patient_Phone_Number, app.Patient_Email,
-                    app.Appointment_Date, app.Start_Time, app.End_Time, app.Doctor.Doctor_ID,
-                    app.Hospital.Hospital_ID, app.Confirm_Code);
+                //result = data.SP_INSERT_APPOINTMENT(app.Patient_Full_Name, app.Patient_Gender,
+                //    app.Patient_Birthday, app.Patient_Phone_Number, app.Patient_Email,
+                //    app.Appointment_Date, app.Start_Time, app.End_Time, app.Doctor.Doctor_ID,
+                //    app.Hospital.Hospital_ID, app.Confirm_Code);
             }
             return result;
         }
