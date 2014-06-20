@@ -7,68 +7,70 @@ CREATE PROCEDURE SP_SEARCH_HOSPITAL
 	@CityID INT,
 	@DistrictID INT,
 	@SpecialityID INT,
-	@DiseaseID INT
+	@DiseaseName NVARCHAR(64)
 AS
 BEGIN
+	-- SET DEFAULT VALUE FOR INPUT PARAMETERS
 	IF (@CityID = 0)
 		SET @CityID = NULL
+
 	iF (@DistrictID = 0)
 		SET @DistrictID = NULL
+
 	IF (@SpecialityID = 0)
 		SET @SpecialityID = NULL
-	iF (@DiseaseID = 0)
-		SET @DiseaseID = NULL
 
-	-- CHECK IF ALL PARAMETERS ARE NULL
-	if (@CityID IS NULL AND @DistrictID IS NULL AND
-		@SpecialityID IS NULL AND @DiseaseID IS NULL)
+	iF (@DiseaseName IS NOT NULL)
 	BEGIN
-		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address]
-		FROM Hospital h
-		ORDER BY Hospital_Name
+		IF ([dbo].[FU_REMOVE_WHITE_SPACE](@DiseaseName) = '')
+			SET @DiseaseName = NULL
 	END
 
-	-- IN CASE SPECIALITY AND DISEASE ARE BOTH NULL
-	IF ((@SpecialityID IS NULL AND @DiseaseID IS NULL) AND
-		(@DistrictID IS NOT NULL OR @CityID IS NOT NULL))
+	-- CHECK IF BOTH SPECIALITY AND DISEASE ARE NULL
+	IF (((@SpecialityID IS NULL) AND (@DiseaseName IS NULL)) AND
+		((@CityID IS NOT NULL) OR (@DistrictID IS NOT NULL)))
 	BEGIN
-		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address]
-		FROM Hospital h
-		WHERE (@CityID IS NULL OR h.City_ID = @CityID) AND
-			  (@DistrictID IS NULL OR h.District_ID = @DistrictID)
-		ORDER BY Hospital_Name
-	END
-
-	-- IN CASE CITY AND DISTRICT ARE BOTH NULL
-	IF ((@CityID IS NULL AND @DistrictID IS NULL) AND
-		(@SpecialityID IS NOT NULL OR @DiseaseID IS NOT NULL))
-	BEGIN
-		IF (@SpecialityID IS NOT NULL AND @DiseaseID IS NULL)
+		-- CASE CITY_ID AND DISTRICT_ID ARE NOT NULL
+		IF ((@CityID IS NOT NULL) AND (@DistrictID IS NOT NULL))
 		BEGIN
-			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address]
-			FROM Hospital h, Hospital_Speciality s
-			WHERE s.Speciality_ID = @SpecialityID AND
-				  h.Hospital_ID = s.Hospital_ID
+			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+				   h.Is_Allow_Appointment, h.Is_Active
+			FROM Hospital h
+			WHERE h.City_ID = @CityID AND
+				  h.District_ID = @DistrictID
+			RETURN;
 		END
 
-		IF (@DiseaseID IS NOT NULL AND @SpecialityID IS NULL)
+		-- CASE CITY_ID IS NOT NULL BUT DISTRICT_ID IS NULL
+		IF ((@CityID IS NOT NULL) AND (@DistrictID IS NULL))
 		BEGIN
-			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address]
-			FROM Hospital h, Speciality_Disease d, Hospital_Speciality s
-			WHERE d.Disease_ID = @DiseaseID AND
-				  d.Speciality_ID = s.Speciality_ID AND
-				  s.Hospital_ID = h.Hospital_ID
+			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+				   h.Is_Allow_Appointment, h.Is_Active
+			FROM Hospital h
+			WHERE h.City_ID = @CityID
+			RETURN;
 		END
 
-		IF (@SpecialityID IS NOT NULL AND @DiseaseID IS NOT NULL)
+		-- CASE CITY_ID IS NULL BUT DISTRICT_ID IS NOT NULL
+		IF ((@CityID IS NOT NULL) AND (@DistrictID IS NOT NULL))
 		BEGIN
-			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address]
-			FROM Hospital h, Speciality_Disease d, Hospital_Speciality s
-			WHERE d.Disease_ID = @DiseaseID AND
-				  d.Speciality_ID = @SpecialityID AND
-				  s.Hospital_ID = h.Hospital_ID
+			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+				   h.Is_Allow_Appointment, h.Is_Active
+			FROM Hospital h
+			WHERE h.District_ID = @DistrictID
+			RETURN;
 		END
 	END
 END
 
-EXEC SP_SEARCH_HOSPITAL NULL, NULL, NULL, NULL
+SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+	   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+	   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+	   h.Is_Allow_Appointment, h.Is_Active
+FROM Hospital h
