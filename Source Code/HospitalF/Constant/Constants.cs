@@ -49,6 +49,12 @@ namespace HospitalF.Constant
         public const string ErrorController = "Error";
 
         /// <summary>
+        /// Name of AppointmentController
+        /// </summary>
+        public const string AppointmentController = "Appointment";
+
+        public const string CreateAppointmentMethod = "CreateAppointment";
+        /// <summary>
         /// Name of Index method
         /// </summary>
         public const string IndexMethod = "Index";

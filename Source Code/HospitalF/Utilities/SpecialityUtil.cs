@@ -17,7 +17,7 @@ namespace HospitalF.Utilities
         /// Load all speciality by hospital code
         /// </summary>
         /// <returns>List[SpecialityEntity] that contains a list of speciality</returns>
-        public static async Task<List<SpecialityEntity>> LoadSpecialityByHospitalIDAsync(int HospitalID)
+        public static async Task<List<Speciality>> LoadSpecialityByHospitalIDAsync(int HospitalID)
         {
             List<SP_LOAD_SPECIALITY_BY_HOSPITALIDResult> result = null;
             // Take specalities in a specific hospital in database
@@ -27,14 +27,14 @@ namespace HospitalF.Utilities
                 data.SP_LOAD_SPECIALITY_BY_HOSPITALID(HospitalID).ToList());
             }
 
-            List<SpecialityEntity> specialityList = new List<SpecialityEntity>();
-            SpecialityEntity speciality = null;
+            List<Speciality> specialityList = new List<Speciality>();
+            Speciality speciality = null;
             // Assign values for each speciality
             foreach (SP_LOAD_SPECIALITY_BY_HOSPITALIDResult re in result)
             {
-                speciality = new SpecialityEntity();
-                speciality.SpecialityID = re.Speciality_ID;
-                speciality.SpecialityName = re.Speciality_Name;
+                speciality = new Speciality();
+                speciality.Speciality_ID = re.Speciality_ID;
+                speciality.Speciality_Name = re.Speciality_Name;
                 specialityList.Add(speciality);
             }
 
