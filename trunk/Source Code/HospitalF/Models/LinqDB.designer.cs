@@ -359,13 +359,6 @@ namespace HospitalF.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_SEARCH_HOSPITAL")]
-		public ISingleResult<SP_SEARCH_HOSPITALResult> SP_SEARCH_HOSPITAL([global::System.Data.Linq.Mapping.ParameterAttribute(Name="CityID", DbType="Int")] System.Nullable<int> cityID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DistrictID", DbType="Int")] System.Nullable<int> districtID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SpecialityID", DbType="Int")] System.Nullable<int> specialityID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DiseaseID", DbType="Int")] System.Nullable<int> diseaseID)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), cityID, districtID, specialityID, diseaseID);
-			return ((ISingleResult<SP_SEARCH_HOSPITALResult>)(result.ReturnValue));
-		}
-		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_LOAD_DISEASE_IN_SPECIALITY")]
 		public ISingleResult<SP_LOAD_DISEASE_IN_SPECIALITYResult> SP_LOAD_DISEASE_IN_SPECIALITY([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SpecialityID", DbType="Int")] System.Nullable<int> specialityID)
 		{
@@ -388,10 +381,17 @@ namespace HospitalF.Models
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_INSERT_APPOINTMENT")]
-		public int SP_INSERT_APPOINTMENT([global::System.Data.Linq.Mapping.ParameterAttribute(Name="FullName", DbType="NVarChar(32)")] string fullName, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Gender", DbType="Bit")] System.Nullable<bool> gender, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Birthday", DbType="Date")] System.Nullable<System.DateTime> birthday, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PhoneNo", DbType="VarChar(13)")] string phoneNo, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Email", DbType="VarChar(64)")] string email, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Date", DbType="Date")] System.Nullable<System.DateTime> date, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Start_time", DbType="Time")] System.Nullable<System.TimeSpan> start_time, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="End_time", DbType="Time")] System.Nullable<System.TimeSpan> end_time, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Doctor_ID", DbType="Int")] System.Nullable<int> doctor_ID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Hospital_ID", DbType="Int")] System.Nullable<int> hospital_ID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Confirm_Code", DbType="VarChar(8)")] string confirm_Code)
+		public int SP_INSERT_APPOINTMENT([global::System.Data.Linq.Mapping.ParameterAttribute(Name="FullName", DbType="NVarChar(32)")] string fullName, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Gender", DbType="Bit")] System.Nullable<bool> gender, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Birthday", DbType="Date")] System.Nullable<System.DateTime> birthday, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PhoneNo", DbType="VarChar(13)")] string phoneNo, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Email", DbType="VarChar(64)")] string email, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Date", DbType="VarChar(64)")] string date, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Start_time", DbType="VarChar(64)")] string start_time, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="End_time", DbType="VarChar(64)")] string end_time, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Doctor_ID", DbType="Int")] System.Nullable<int> doctor_ID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Hospital_ID", DbType="Int")] System.Nullable<int> hospital_ID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Confirm_Code", DbType="VarChar(8)")] string confirm_Code)
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), fullName, gender, birthday, phoneNo, email, date, start_time, end_time, doctor_ID, hospital_ID, confirm_Code);
 			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.SP_SEARCH_HOSPITAL")]
+		public ISingleResult<SP_SEARCH_HOSPITALResult> SP_SEARCH_HOSPITAL([global::System.Data.Linq.Mapping.ParameterAttribute(Name="CityID", DbType="Int")] System.Nullable<int> cityID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DistrictID", DbType="Int")] System.Nullable<int> districtID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="SpecialityID", DbType="Int")] System.Nullable<int> specialityID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="DiseaseID", DbType="Int")] System.Nullable<int> diseaseID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), cityID, districtID, specialityID, diseaseID);
+			return ((ISingleResult<SP_SEARCH_HOSPITALResult>)(result.ReturnValue));
 		}
 	}
 	
@@ -6928,104 +6928,6 @@ namespace HospitalF.Models
 		}
 	}
 	
-	public partial class SP_SEARCH_HOSPITALResult
-	{
-		
-		private int _Hospital_ID;
-		
-		private string _Hospital_Name;
-		
-		private string _Address;
-		
-		private string _Coordinate;
-		
-		private string _Website;
-		
-		public SP_SEARCH_HOSPITALResult()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hospital_ID", DbType="Int NOT NULL")]
-		public int Hospital_ID
-		{
-			get
-			{
-				return this._Hospital_ID;
-			}
-			set
-			{
-				if ((this._Hospital_ID != value))
-				{
-					this._Hospital_ID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hospital_Name", DbType="NVarChar(64)")]
-		public string Hospital_Name
-		{
-			get
-			{
-				return this._Hospital_Name;
-			}
-			set
-			{
-				if ((this._Hospital_Name != value))
-				{
-					this._Hospital_Name = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(128)")]
-		public string Address
-		{
-			get
-			{
-				return this._Address;
-			}
-			set
-			{
-				if ((this._Address != value))
-				{
-					this._Address = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Coordinate", DbType="VarChar(26)")]
-		public string Coordinate
-		{
-			get
-			{
-				return this._Coordinate;
-			}
-			set
-			{
-				if ((this._Coordinate != value))
-				{
-					this._Coordinate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Website", DbType="VarChar(64)")]
-		public string Website
-		{
-			get
-			{
-				return this._Website;
-			}
-			set
-			{
-				if ((this._Website != value))
-				{
-					this._Website = value;
-				}
-			}
-		}
-	}
-	
 	public partial class SP_LOAD_DISEASE_IN_SPECIALITYResult
 	{
 		
@@ -7171,6 +7073,356 @@ namespace HospitalF.Models
 				if ((this._Speciality_Name != value))
 				{
 					this._Speciality_Name = value;
+				}
+			}
+		}
+	}
+	
+	public partial class SP_SEARCH_HOSPITALResult
+	{
+		
+		private int _Hospital_ID;
+		
+		private string _Hospital_Name;
+		
+		private System.Nullable<int> _Hospital_Type;
+		
+		private string _Address;
+		
+		private System.Nullable<int> _Ward_ID;
+		
+		private System.Nullable<int> _District_ID;
+		
+		private System.Nullable<int> _City_ID;
+		
+		private string _Phone_Number;
+		
+		private string _Fax;
+		
+		private string _Email;
+		
+		private string _Website;
+		
+		private System.Nullable<System.TimeSpan> _Start_Time;
+		
+		private System.Nullable<System.TimeSpan> _End_Time;
+		
+		private string _Coordinate;
+		
+		private string _Short_Description;
+		
+		private string _Full_Description;
+		
+		private System.Nullable<bool> _Is_Allow_Appointment;
+		
+		private System.Nullable<int> _Created_Person;
+		
+		private System.Nullable<bool> _Is_Active;
+		
+		public SP_SEARCH_HOSPITALResult()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hospital_ID", DbType="Int NOT NULL")]
+		public int Hospital_ID
+		{
+			get
+			{
+				return this._Hospital_ID;
+			}
+			set
+			{
+				if ((this._Hospital_ID != value))
+				{
+					this._Hospital_ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hospital_Name", DbType="NVarChar(64)")]
+		public string Hospital_Name
+		{
+			get
+			{
+				return this._Hospital_Name;
+			}
+			set
+			{
+				if ((this._Hospital_Name != value))
+				{
+					this._Hospital_Name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hospital_Type", DbType="Int")]
+		public System.Nullable<int> Hospital_Type
+		{
+			get
+			{
+				return this._Hospital_Type;
+			}
+			set
+			{
+				if ((this._Hospital_Type != value))
+				{
+					this._Hospital_Type = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Address", DbType="NVarChar(128)")]
+		public string Address
+		{
+			get
+			{
+				return this._Address;
+			}
+			set
+			{
+				if ((this._Address != value))
+				{
+					this._Address = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Ward_ID", DbType="Int")]
+		public System.Nullable<int> Ward_ID
+		{
+			get
+			{
+				return this._Ward_ID;
+			}
+			set
+			{
+				if ((this._Ward_ID != value))
+				{
+					this._Ward_ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_District_ID", DbType="Int")]
+		public System.Nullable<int> District_ID
+		{
+			get
+			{
+				return this._District_ID;
+			}
+			set
+			{
+				if ((this._District_ID != value))
+				{
+					this._District_ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_City_ID", DbType="Int")]
+		public System.Nullable<int> City_ID
+		{
+			get
+			{
+				return this._City_ID;
+			}
+			set
+			{
+				if ((this._City_ID != value))
+				{
+					this._City_ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Phone_Number", DbType="VarChar(32)")]
+		public string Phone_Number
+		{
+			get
+			{
+				return this._Phone_Number;
+			}
+			set
+			{
+				if ((this._Phone_Number != value))
+				{
+					this._Phone_Number = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Fax", DbType="VarChar(16)")]
+		public string Fax
+		{
+			get
+			{
+				return this._Fax;
+			}
+			set
+			{
+				if ((this._Fax != value))
+				{
+					this._Fax = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="VarChar(64)")]
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				if ((this._Email != value))
+				{
+					this._Email = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Website", DbType="VarChar(64)")]
+		public string Website
+		{
+			get
+			{
+				return this._Website;
+			}
+			set
+			{
+				if ((this._Website != value))
+				{
+					this._Website = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Start_Time", DbType="Time")]
+		public System.Nullable<System.TimeSpan> Start_Time
+		{
+			get
+			{
+				return this._Start_Time;
+			}
+			set
+			{
+				if ((this._Start_Time != value))
+				{
+					this._Start_Time = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_End_Time", DbType="Time")]
+		public System.Nullable<System.TimeSpan> End_Time
+		{
+			get
+			{
+				return this._End_Time;
+			}
+			set
+			{
+				if ((this._End_Time != value))
+				{
+					this._End_Time = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Coordinate", DbType="VarChar(26)")]
+		public string Coordinate
+		{
+			get
+			{
+				return this._Coordinate;
+			}
+			set
+			{
+				if ((this._Coordinate != value))
+				{
+					this._Coordinate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Short_Description", DbType="NVarChar(64)")]
+		public string Short_Description
+		{
+			get
+			{
+				return this._Short_Description;
+			}
+			set
+			{
+				if ((this._Short_Description != value))
+				{
+					this._Short_Description = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Full_Description", DbType="NVarChar(1024)")]
+		public string Full_Description
+		{
+			get
+			{
+				return this._Full_Description;
+			}
+			set
+			{
+				if ((this._Full_Description != value))
+				{
+					this._Full_Description = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Is_Allow_Appointment", DbType="Bit")]
+		public System.Nullable<bool> Is_Allow_Appointment
+		{
+			get
+			{
+				return this._Is_Allow_Appointment;
+			}
+			set
+			{
+				if ((this._Is_Allow_Appointment != value))
+				{
+					this._Is_Allow_Appointment = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Created_Person", DbType="Int")]
+		public System.Nullable<int> Created_Person
+		{
+			get
+			{
+				return this._Created_Person;
+			}
+			set
+			{
+				if ((this._Created_Person != value))
+				{
+					this._Created_Person = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Is_Active", DbType="Bit")]
+		public System.Nullable<bool> Is_Active
+		{
+			get
+			{
+				return this._Is_Active;
+			}
+			set
+			{
+				if ((this._Is_Active != value))
+				{
+					this._Is_Active = value;
 				}
 			}
 		}

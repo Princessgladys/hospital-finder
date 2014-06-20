@@ -56,7 +56,7 @@ namespace HospitalF.Constant
         /// <summary>
         /// Name of CreateAppoinment method
         /// </summary>
-        public const string CreateAppointmentMethod = "CreateAppointment";
+        public const string CreateAppointmentMethod = "CreateAppointment_Create";
 
         /// <summary>
         /// Name of load doctor list method
