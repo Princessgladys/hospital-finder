@@ -429,6 +429,7 @@
     <Content Include="Views\Error\SystemFailureAdmin.cshtml" />
     <Content Include="Views\Error\SystemFailureHospitalUser.cshtml" />
     <Content Include="Views\Appointment\CreateAppointment.cshtml" />
+    <Content Include="Views\Appointment\Confirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
