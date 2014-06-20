@@ -1,9 +1,33 @@
 ﻿@using HospitalF.Constant
 @model HospitalF.Models.AppointmentModels
 
-@{
-    ViewBag.Title = "CreateAppointment";
-}
+<script type="text/javascript">
+    @*AJAX for cascading Doctor drop down list*@
+    $(document).ready(function () {
+        $("#SpecialityID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlDoctor = $("#DoctorID");
+            var statesProgress = $("#states-loading-doctor-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetDoctorBySpecialiyMethod))",
+                data: { "specialityID": selectedItem },
+                success: function (data) {
+                    ddlDoctor.html('');
+                    $.each(data, function (id, option) {
+                        ddlDoctor.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
+    });
+</script>
 <h2>CreateAppointment</h2>
 <article class="col-sm-12 col-md-12 col-lg-7" style="margin-left: 20%;">
 
@@ -104,7 +128,7 @@
                                                 Constants.RequireCity, new { @class = "form-control" })
                                             @Html.ValidationMessageFor(m => m.CityID)*@
                                 @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
-                                                Constants.RequireSpeciality, new {@class=""})
+                                                Constants.RequireSpeciality)
                                             @Html.ValidationMessageFor(m=>m.SpecialityID)
                                 <i></i>
                             </label>
@@ -117,8 +141,7 @@
                                     <option value="0" selected="" disabled="">Bác sĩ</option>
                                     <option value="1">Nguyễn Văn A</option>
                                 </select>*@
-                                @Html.DropDownListFor(m => m.DoctorID, (SelectList)ViewBag.DoctorList,
-                                                new { @class="" })
+                                @Html.DropDownListFor(m => m.DoctorID, (SelectList)ViewBag.DoctorList)
                                             @Html.ValidationMessageFor(m=>m.DoctorID)
                                 <i></i>
                             </label>

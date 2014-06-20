@@ -36,6 +36,12 @@ namespace HospitalF
                             new { controller = "Home", action = "LoadSuggestSentence" },
                             new[] { "HospitalF.Controllers" }
             );
+
+            routes.MapRoute("GetDoctorBySpeciality",
+                            "Appointment/GetDoctorBySpeciality/",
+                            new { controller = "Appointment", action = "GetDoctorBySpeciality" },
+                            new[] { "HospitalF.Controllers" }
+            );
         }
     }
 }

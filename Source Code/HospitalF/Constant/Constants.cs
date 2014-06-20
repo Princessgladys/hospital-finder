@@ -7,7 +7,7 @@ namespace HospitalF.Constant
     public class Constants
     {
         #region Controller, View and Methods
-
+        
         /// <summary>
         /// Name of _HomeLayout
         /// </summary>
@@ -52,8 +52,17 @@ namespace HospitalF.Constant
         /// Name of AppointmentController
         /// </summary>
         public const string AppointmentController = "Appointment";
-
+        
+        /// <summary>
+        /// Name of CreateAppoinment method
+        /// </summary>
         public const string CreateAppointmentMethod = "CreateAppointment";
+
+        /// <summary>
+        /// Name of load doctor list method
+        /// </summary>
+        public const string GetDoctorBySpecialiyMethod = "GetDoctorBySpeciality";
+
         /// <summary>
         /// Name of Index method
         /// </summary>
