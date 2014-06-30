@@ -15,11 +15,12 @@ namespace HospitalF.Controllers
     {
         public static List<Speciality> specialityList = null;
         public static List<Doctor> doctorList = null;
-        public static int hospitalID = 23;
+        public static int[] workingDay = null;
+        public static int hospitalID = 25; //Hoan My hospital
         //
         // GET: /Appointment/
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> CreateAppointment()
+        public async Task<ActionResult> Index()
         {
             try
             {
@@ -45,10 +46,10 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [HttpPost]
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> CreateAppointment_Create(AppointmentModels model)
+        public async Task<ActionResult> CreateAppointment(AppointmentModels model)
         {
-            ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-            ViewBag.DoctorList = new SelectList(doctorList, Constants.DoctorID, Constants.DoctorName);
+            //ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+            //ViewBag.DoctorList = new SelectList(doctorList, Constants.DoctorID, Constants.DoctorName);
             if (!ModelState.IsValid)
             {
 
@@ -108,7 +109,8 @@ namespace HospitalF.Controllers
                     var result = (from d in doctorList
                                   select new
                                   {
-                                      name = d.First_Name + " " + d.Last_Name
+                                      id=d.Doctor_ID,
+                                      name = d.Last_Name + " " + d.First_Name
                                   });
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -117,6 +119,37 @@ namespace HospitalF.Controllers
                     // Return default value
                     doctorList = new List<Doctor>();
                     return Json(doctorList, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+                // Move to error page
+                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// GET: /Appointment/
+        /// </summary>
+        /// <param name="specialityId">SpecialityID ID</param>
+        /// <returns>Task[ActionResult] with JSON contains list of Doctor</returns>
+        public async Task<ActionResult> GetWorkingDay(string doctorID)
+        {
+            try
+            {
+                
+                int tempDoctorID = 0;
+                // Check if city ID is null or not
+                if (!String.IsNullOrEmpty(doctorID) && doctorID!="0" && Int32.TryParse(doctorID, out tempDoctorID))
+                {
+                    workingDay = await AppointmentModels.LoadDoctorInDoctorListAsyn(tempDoctorID);
+                    return Json(workingDay, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    // Return default value
+                    workingDay = null;
+                    return Json(workingDay, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception)

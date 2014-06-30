@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
 using HospitalF.Constant;
-using HospitalF.Entities;
+using System.Text.RegularExpressions;
 
 namespace HospitalF.Models
 {
@@ -93,15 +93,15 @@ namespace HospitalF.Models
         {
             List<Doctor> doctorList = new List<Doctor>();
             Doctor doctor = null;
-            List<SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITYResult> result = null;
+            List<SP_LOAD_DOCTOR_BY_SPECIALITYIDResult> result = null;
             // Take doctor in specific speciality in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 result = await Task.Run(() =>
-                data.SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITY(SpecialityID).ToList());
+                data.SP_LOAD_DOCTOR_BY_SPECIALITYID(SpecialityID).ToList());
             }
             // Assign value for each doctor
-            foreach (SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITYResult r in result)
+            foreach (SP_LOAD_DOCTOR_BY_SPECIALITYIDResult r in result)
             {
                 doctor = new Doctor();
                 doctor.Doctor_ID = r.Doctor_ID;
@@ -113,18 +113,44 @@ namespace HospitalF.Models
             return doctorList;
         }
         #endregion
+        
+        #region
+        public static async Task<int[]> LoadDoctorInDoctorListAsyn(int DoctorID)
+        {
+            int[] workingdays = null ;
+            string[] wd;
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                string workingday=(string) await Task.Run(() =>
+                    (from d in data.Doctors
+                     where d.Doctor_ID==DoctorID
+                     select d.Working_Day).FirstOrDefault());
+                wd=workingday.Trim().Split(',');
+                workingdays = new int[wd.Length];
+                for (int i = 0; i < wd.Length; i++)
+                {
+                    workingdays[i] =Int32.Parse(wd[i]);
+                }
+            }
+            return workingdays;
+        }
+        #endregion
+
 
         #region Insert into database
-            public static async Task<int> InsertAppointment(Appointment app)
+        public static async Task<int> InsertAppointment(Appointment app)
         {
             int result = 0;
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 //result = data.SP_INSERT_APPOINTMENT(null, null, null, null, null, null, null, null, null, null,null);
-                result = data.SP_INSERT_APPOINTMENT(app.Patient_Full_Name, app.Patient_Gender,
+                result = await Task.Run(() => data.SP_INSERT_APPOINTMENT(app.Patient_Full_Name, app.Patient_Gender,
                     app.Patient_Birthday, app.Patient_Phone_Number, app.Patient_Email,
-                    app.Appointment_Date.ToString(), app.Start_Time.ToString(), app.End_Time.ToString(), app.Doctor.Doctor_ID,
-                    app.Hospital.Hospital_ID, app.Confirm_Code);
+                    app.Appointment_Date, app.Start_Time, app.End_Time, app.In_Charge_Doctor,
+                    app.Curing_Hospital, app.Confirm_Code));
+                //result = await Task.Run(() => data.SP_INSERT_APPOINTMENT("Nguyen Thi A", true, DateTime.Parse("1991-01-03"), "0908616730", "a@a.com.vn",
+                //     DateTime.Parse("2014-07-03"), null, null, 1, 25, "AABBCCDD"));
             }
             return result;
         }
