@@ -185,7 +185,7 @@ namespace HospitalF.Controllers
                     {
                         await model.GIRQueryAnalyzerAsync(form["SearchValue"]);
                     }
-                    hospitalList = await model.SearchHospital();
+                    //hospitalList = await model.SearchHospital();
                 }
                 catch (Exception)
                 {

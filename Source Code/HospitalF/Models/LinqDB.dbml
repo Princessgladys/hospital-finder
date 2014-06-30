@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="HospitalF" Class="LinqDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=SONNXSE60727\SQLEXPRESS;Initial Catalog=HospitalF;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="HospitalFConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ANHDTH60434;Initial Catalog=HospitalF;Persist Security Info=True;User ID=sa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="HospitalFConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Appointment" Member="Appointments">
     <Type Name="Appointment">
       <Column Name="Appointment_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -136,11 +136,11 @@
       <Column Name="Start_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
       <Column Name="End_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
       <Column Name="Coordinate" Type="System.String" DbType="VarChar(26)" CanBeNull="true" />
-      <Column Name="Short_Description" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Column Name="Full_Description" Type="System.String" DbType="NVarChar(1024)" CanBeNull="true" />
-      <Column Name="Is_Allow_Appointment" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="Created_Person" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Short_Description" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Full_Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Is_Allow_Appointment" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="Hospital_Appointment" Member="Appointments" ThisKey="Hospital_ID" OtherKey="Curing_Hospital" Type="Appointment" />
       <Association Name="Hospital_Doctor_Hospital" Member="Doctor_Hospitals" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Doctor_Hospital" />
       <Association Name="Hospital_Feedback" Member="Feedbacks" ThisKey="Hospital_ID" OtherKey="Hospital_ID" Type="Feedback" />
@@ -307,19 +307,25 @@
       <Association Name="WordDictionary_Word_Hospital" Member="WordDictionary" ThisKey="Word_ID" OtherKey="Word_ID" Type="WordDictionary" IsForeignKey="true" />
     </Type>
   </Table>
+  <Function Name="dbo.SP_INSERT_APPOINTMENT" Method="SP_INSERT_APPOINTMENT">
+    <Parameter Name="FullName" Parameter="fullName" Type="System.String" DbType="NVarChar(32)" />
+    <Parameter Name="Gender" Parameter="gender" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Birthday" Parameter="birthday" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="PhoneNo" Parameter="phoneNo" Type="System.String" DbType="VarChar(13)" />
+    <Parameter Name="Email" Parameter="email" Type="System.String" DbType="VarChar(64)" />
+    <Parameter Name="Date" Parameter="date" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="Start_time" Parameter="start_time" Type="System.TimeSpan" DbType="Time" />
+    <Parameter Name="End_time" Parameter="end_time" Type="System.TimeSpan" DbType="Time" />
+    <Parameter Name="Doctor_ID" Parameter="doctor_ID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Hospital_ID" Parameter="hospital_ID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Confirm_Code" Parameter="confirm_Code" Type="System.String" DbType="VarChar(8)" />
+    <Return Type="System.Int32" />
+  </Function>
   <Function Name="dbo.SP_LOAD_DISEASE_IN_SPECIALITY" Method="SP_LOAD_DISEASE_IN_SPECIALITY">
     <Parameter Name="SpecialityID" Parameter="specialityID" Type="System.Int32" DbType="Int" />
     <ElementType Name="SP_LOAD_DISEASE_IN_SPECIALITYResult">
       <Column Name="Disease_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Disease_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITY" Method="SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITY">
-    <Parameter Name="SpecialityID" Parameter="specialityID" Type="System.Int32" DbType="Int" />
-    <ElementType Name="SP_LOAD_DOCTOR_IN_DOCTOR_SPECIALITYResult">
-      <Column Name="Doctor_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="First_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
-      <Column Name="Last_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
     </ElementType>
   </Function>
   <Function Name="dbo.SP_LOAD_SPECIALITY_BY_HOSPITALID" Method="SP_LOAD_SPECIALITY_BY_HOSPITALID">
@@ -329,29 +335,20 @@
       <Column Name="Speciality_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
     </ElementType>
   </Function>
-  <Function Name="dbo.SP_INSERT_APPOINTMENT" Method="SP_INSERT_APPOINTMENT">
-    <Parameter Name="FullName" Parameter="fullName" Type="System.String" DbType="NVarChar(32)" />
-    <Parameter Name="Gender" Parameter="gender" Type="System.Boolean" DbType="Bit" />
-    <Parameter Name="Birthday" Parameter="birthday" Type="System.DateTime" DbType="Date" />
-    <Parameter Name="PhoneNo" Parameter="phoneNo" Type="System.String" DbType="VarChar(13)" />
-    <Parameter Name="Email" Parameter="email" Type="System.String" DbType="VarChar(64)" />
-    <Parameter Name="Date" Parameter="date" Type="System.String" DbType="VarChar(64)" />
-    <Parameter Name="Start_time" Parameter="start_time" Type="System.String" DbType="VarChar(64)" />
-    <Parameter Name="End_time" Parameter="end_time" Type="System.String" DbType="VarChar(64)" />
-    <Parameter Name="Doctor_ID" Parameter="doctor_ID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Hospital_ID" Parameter="hospital_ID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="Confirm_Code" Parameter="confirm_Code" Type="System.String" DbType="VarChar(8)" />
-    <Return Type="System.Int32" />
+  <Function Name="dbo.SP_LOAD_SPECIALITY_LIST" Method="SP_LOAD_SPECIALITY_LIST">
+    <ElementType Name="SP_LOAD_SPECIALITY_LISTResult">
+      <Column Name="Speciality_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Speciality_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+    </ElementType>
   </Function>
   <Function Name="dbo.SP_SEARCH_HOSPITAL" Method="SP_SEARCH_HOSPITAL">
     <Parameter Name="CityID" Parameter="cityID" Type="System.Int32" DbType="Int" />
     <Parameter Name="DistrictID" Parameter="districtID" Type="System.Int32" DbType="Int" />
     <Parameter Name="SpecialityID" Parameter="specialityID" Type="System.Int32" DbType="Int" />
-    <Parameter Name="DiseaseID" Parameter="diseaseID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DiseaseName" Parameter="diseaseName" Type="System.String" DbType="NVarChar(64)" />
     <ElementType Name="SP_SEARCH_HOSPITALResult">
       <Column Name="Hospital_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Hospital_Name" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Column Name="Hospital_Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Address" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
       <Column Name="Ward_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="District_ID" Type="System.Int32" DbType="Int" CanBeNull="true" />
@@ -363,11 +360,18 @@
       <Column Name="Start_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
       <Column Name="End_Time" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
       <Column Name="Coordinate" Type="System.String" DbType="VarChar(26)" CanBeNull="true" />
-      <Column Name="Short_Description" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Column Name="Full_Description" Type="System.String" DbType="NVarChar(1024)" CanBeNull="true" />
+      <Column Name="Short_Description" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Full_Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="Is_Allow_Appointment" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="Created_Person" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Is_Active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SP_LOAD_DOCTOR_BY_SPECIALITYID" Method="SP_LOAD_DOCTOR_BY_SPECIALITYID">
+    <Parameter Name="SpecialityID" Parameter="specialityID" Type="System.Int32" DbType="Int" />
+    <ElementType Name="SP_LOAD_DOCTOR_BY_SPECIALITYIDResult">
+      <Column Name="Doctor_ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="First_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="Last_Name" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
     </ElementType>
   </Function>
 </Database>

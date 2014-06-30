@@ -447,34 +447,34 @@ namespace HospitalF.Models
         ///  Search hospitals in database
         /// </summary>
         /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
-        public async Task<List<Hospital>> SearchHospital()
-        {
-            // Take input values
-            int cityId = this.CityID;
-            int districtId = this.DistrictID;
-            int specialityId = this.SpecialityID;
-            int diseaseId = this.DiseaseID;
+        //public async Task<List<Hospital>> SearchHospital()
+        //{
+        //    // Take input values
+        //    int cityId = this.CityID;
+        //    int districtId = this.DistrictID;
+        //    int specialityId = this.SpecialityID;
+        //    int diseaseId = this.DiseaseID;
 
-            List<Hospital> hospitalList = null;
-            // Search for suitable hospitals in database
-            using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                //result = await Task.Run(() =>
-                //data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId).ToList());
-                hospitalList = await Task.Run(() =>
-                    (from h in data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId)
-                     select new Hospital()
-                     {
-                         Hospital_ID = h.Hospital_ID,
-                         Hospital_Name = h.Hospital_Name,
-                         Coordinate = h.Coordinate,
-                         Website = h.Website
-                     }).ToList());
-            }
+        //    List<Hospital> hospitalList = null;
+        //    // Search for suitable hospitals in database
+        //    using (LinqDBDataContext data = new LinqDBDataContext())
+        //    {
+        //        //result = await Task.Run(() =>
+        //        //data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId).ToList());
+        //        hospitalList = await Task.Run(() =>
+        //            (from h in data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId)
+        //             select new Hospital()
+        //             {
+        //                 Hospital_ID = h.Hospital_ID,
+        //                 Hospital_Name = h.Hospital_Name,
+        //                 Coordinate = h.Coordinate,
+        //                 Website = h.Website
+        //             }).ToList());
+        //    }
 
-            // Return list of hospitals
-            return hospitalList;
-        }
+        //    // Return list of hospitals
+        //    return hospitalList;
+        //}
 
         #endregion
 

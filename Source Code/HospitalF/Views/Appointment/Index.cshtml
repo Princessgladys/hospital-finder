@@ -1,9 +1,11 @@
 ﻿@using HospitalF.Constant
 @model HospitalF.Models.AppointmentModels
-
+@Scripts.Render("~/bundles/smartadminjquery")
+<script src="~/Content/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-    @*AJAX for cascading Doctor drop down list*@
+
     $(document).ready(function () {
+        @*AJAX for cascading Doctor drop down list*@
         $("#SpecialityID").change(function () {
             var selectedItem = $(this).val();
             var ddlDoctor = $("#DoctorID");
@@ -16,16 +18,72 @@
                 data: { "specialityID": selectedItem },
                 success: function (data) {
                     ddlDoctor.html('');
+                    ddlDoctor.append($('<option></option>').val(0).html("-- Xin chọn bác sĩ --"));
                     $.each(data, function (id, option) {
                         ddlDoctor.append($('<option></option>').val(option.id).html(option.name));
                     });
                     statesProgress.hide();
+                    disableDays = AllDays;
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     statesProgress.hide();
                 }
             });
         });
+
+        // AJAX for cascading Doctor's working days datepicker
+        var AllDays = [8, 2, 3, 4, 5, 6, 7];
+        var disableDays;
+        var date = new Date();
+        var currentMonth = date.getMonth();
+        var currentDate = null;
+        var currentYear = date.getFullYear();
+        if (date.getHours() >= 22) {
+            currentDate = date.getDate() + 1;
+        } else {
+            currentDate = date.getDate();
+        }
+        $("#DoctorID").change(function () {
+            var selectedItem = $(this).val();
+            var txtDate = $("#txtDate");
+            var statesProgress = $("#states-loading-doctor-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetDoctorWorkingDayMethod))",
+                data: { "doctorID": selectedItem },
+                success: function (data) {
+                        disableDays = data;
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    disableDays = AllDays;
+                    statesProgress.hide();
+                }
+            });
+        });
+        // Ngay kham datepicker
+        $("#txtDate").datepicker({
+            dateFormat: "dd/mm/yy",
+            minDate: new Date(currentYear, currentMonth, currentDate),
+            //defaultDate: new Date(currentYear, currentMonth, currentDate),
+            beforeShowDay: function ShowDisableDates(date) {
+                var ymd = date.getFullYear() + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + ("0" + date.getDate()).slice(-2);
+                day = new Date(ymd).getDay();
+                if ($.inArray(AllDays[day], disableDays) < 0) {
+                    return [false, "disabled"];
+                } else {
+                    return [true, "enable"];
+                }
+            }
+        });
+        // birthday datepicker
+        $(".datepicker").datepicker({
+            dateFormat: "dd/mm/yy",
+            maxDate: new Date(currentYear, currentMonth, currentDate - 1)
+        });
+        //
+        $("#timepicker").timepicker();
     });
 </script>
 <h2>CreateAppointment</h2>
@@ -35,22 +93,10 @@
     <!-- Widget ID (each widget will need unique ID)-->
     <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
         @*<form action="#" id="checkout-form" class="smart-form" novalidate="novalidate">*@
-            @using (Html.BeginForm(Constants.CreateAppointmentMethod, Constants.AppointmentController, 
-                FormMethod.Post, new {@class="smart-form"}))
-            {
+        @using (Html.BeginForm(Constants.CreateAppointmentMethod, Constants.AppointmentController,
+                FormMethod.Post, new { @class = "smart-form" }))
+        {
             <div style="float: left; width: 50%;">
-                @*					<!-- widget edit box -->
-					<div class="jarviswidget-editbox">
-						<!-- this area used as dropdown edit box -->
-						
-					</div>
-					<!-- end widget edit box -->
-					
-					<!-- widget content -->
-					<div class="widget-body no-padding">
-						
-					*@
-
                 <fieldset>
                     <h3>Thông tin bệnh nhân</h3>
 
@@ -71,41 +117,38 @@
                         <section class="col col-6">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                @*<input type="text" name="birthday" placeholder="Ngày sinh" class="datepicker" data-dateformat='dd/mm/yy'>*@
-                            @Html.TextBoxFor(m => m.Birthday, new 
+                                @Html.TextBoxFor(m => m.Birthday, new
                        {
-                           @class="datepicker",
-                           @placeholder="Ngày sinh"
+                           @class = "datepicker",
+                           @placeholder = "Ngày sinh"
                        })
                             </label>
                         </section>
                         <section class="col col-9">
                             <label class="input">
                                 <i class="icon-prepend fa fa-user"></i>
-                                @*<input type="text" name="FullName" placeholder="Họ tên">*@
-                            @Html.TextBoxFor(m => m.FullName, new
+                                @Html.TextBoxFor(m => m.FullName, new
                        {
-                           @placeholder="Họ tên"
+                           @placeholder = "Họ tên"
                        })
                             </label>
                         </section>
                         <section class="col col-9">
                             <label class="input">
                                 <i class="icon-prepend fa fa-envelope-o"></i>
-                                @*<input type="email" name="email" placeholder="E-mail">*@
-                                @Html.TextBoxFor(m=>m.Email,new
+                                @Html.TextBoxFor(m => m.Email, new
                            {
-                               @placeholder="E-mail"
+                               @placeholder = "E-mail"
                            })
                             </label>
                         </section>
                         <section class="col col-9">
                             <label class="input">
                                 <i class="icon-prepend fa fa-phone"></i>
-                                @*<input type="tel" name="phone" placeholder="Số điện thoại" data-mask="9999-999-9999">*@
-                                @Html.TextBoxFor(m=>m.PhoneNo,new
+                                @Html.TextBoxFor(m => m.PhoneNo, new
                            {
-                               @placeholder="Số điện thoại",
+                               @id = "phoneNo",
+                               @placeholder = "Số điện thoại",
                            })
                             </label>
                         </section>
@@ -121,16 +164,9 @@
                     <div class="row">
                         <section class="col col-9">
                             <label class="select">
-                                @*<select name="Speciality">
-                                    <option value="0" selected="" disabled="">Chuyên khoa</option>
-                                    <option value="1">Tai mũi họng</option>
-                                </select>*@
-                                @* @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
-                                                Constants.RequireCity, new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(m => m.CityID)*@
                                 @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
                                                 Constants.RequireSpeciality)
-                                            @Html.ValidationMessageFor(m=>m.SpecialityID)
+                                @Html.ValidationMessageFor(m => m.SpecialityID)
                                 <i></i>
                             </label>
                         </section>
@@ -138,12 +174,9 @@
                     <div class="row">
                         <section class="col col-9">
                             <label class="select">
-                                @*<select name="Doctor">
-                                    <option value="0" selected="" disabled="">Bác sĩ</option>
-                                    <option value="1">Nguyễn Văn A</option>
-                                </select>*@
-                                @Html.DropDownListFor(m => m.DoctorID, (SelectList)ViewBag.DoctorList)
-                                            @*@Html.ValidationMessageFor(m=>m.DoctorID)*@
+                                @Html.DropDownListFor(m => m.DoctorID, (SelectList)ViewBag.DoctorList,
+                                                Constants.RequireDoctor)
+                                @Html.ValidationMessageFor(m => m.DoctorID)
                                 <i></i>
                             </label>
                         </section>
@@ -151,22 +184,19 @@
                         <section class="col col-6">
                             <label class="input">
                                 <i class="icon-append fa fa-calendar"></i>
-                                @*<input type="text" name="birthday" placeholder="Thời gian khám" class="datepicker hasDatepicker" data-dateformat='dd/mm/yy'>*@
-                            @Html.TextBoxFor(m => m.AppDate, new 
+                                @Html.TextBoxFor(m => m.AppDate, new
                                         {
-                                            @class="datepicker",
-                                            @placeholder="Ngày khám"
+                                            @id = "txtDate",
+                                            @placeholder = "Ngày khám"
                                         })
                             </label>
                         </section>
-                        <section class="col col-3">
+                        <section class="col col-5">
                             <label class="input">
-                                <i class="icon-append fa fa-calendar"></i>
-                                @*<input type="text" name="birthday" placeholder="" class="datepicker hasDatepicker" data-dateformat='dd/mm/yy'>*@
-                            
-                            @Html.TextBoxFor(m => m.StartTime, new
+                                <i class="icon-append fa fa-clock-o"></i>
+                                @Html.TextBoxFor(m => m.StartTime, new
                                         {
-                                            @class = "datepicker",
+                                            @class = "form-control",
                                             @placeholder = "Thời gian khám"
                                         })</label>
                         </section>
@@ -186,6 +216,6 @@
                     Đặt lịch khám
                 </button>
             </footer>
-            }
+        }
     </div>
 </article>

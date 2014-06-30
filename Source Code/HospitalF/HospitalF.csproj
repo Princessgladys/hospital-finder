@@ -294,6 +294,7 @@
     <Content Include="Content\js\libs\jquery-ui-1.10.3.m.js" />
     <Content Include="Content\js\notification\SmartNotification.min.js" />
     <Content Include="Content\js\plugin\bootstrap-slider\bootstrap-slider.min.js" />
+    <Content Include="Content\js\plugin\bootstrap-timepicker\bootstrap-timepicker.min.js" />
     <Content Include="Content\js\plugin\easy-pie-chart\jquery.easy-pie-chart.min.js" />
     <Content Include="Content\js\plugin\fastclick\fastclick.js" />
     <Content Include="Content\js\plugin\jquery-validate\jquery.validate.min.js" />
@@ -428,8 +429,7 @@
     <Content Include="Views\Error\SystemFailureHome.cshtml" />
     <Content Include="Views\Error\SystemFailureAdmin.cshtml" />
     <Content Include="Views\Error\SystemFailureHospitalUser.cshtml" />
-    <Content Include="Views\Appointment\CreateAppointment.cshtml" />
-    <Content Include="Views\Appointment\Confirm.cshtml" />
+    <Content Include="Views\Appointment\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

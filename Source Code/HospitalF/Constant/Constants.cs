@@ -56,12 +56,17 @@ namespace HospitalF.Constant
         /// <summary>
         /// Name of CreateAppoinment method
         /// </summary>
-        public const string CreateAppointmentMethod = "CreateAppointment_Create";
+        public const string CreateAppointmentMethod = "CreateAppointment";
 
         /// <summary>
         /// Name of load doctor list method
         /// </summary>
         public const string GetDoctorBySpecialiyMethod = "GetDoctorBySpeciality";
+
+        /// <summary>
+        /// Name of load doctor's working day method
+        /// </summary>
+        public const string GetDoctorWorkingDayMethod = "GetWorkingDay";
 
         /// <summary>
         /// Name of Index method
@@ -282,6 +287,11 @@ namespace HospitalF.Constant
         public const string DoctorID = "Doctor_ID";
         public const string DoctorName = "Doctor_Name";
         #endregion
+        
+        /// <summary>
+        /// Vietnamese message request for Doctor
+        /// </summary>
+        public const string RequireDoctor = "-- Xin chọn bác sĩ --";
 
         #endregion
 
