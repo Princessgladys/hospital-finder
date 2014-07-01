@@ -13,5 +13,17 @@ namespace HospitalF.Models
     /// </summary>
     public class LoginModel
     {
+        [Required]
+        [Display(Name = "Your Email")]
+        //[RegularExpression(Constants.EmailRegex, ErrorMessage = ErrorMessage.CEM005)]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [Display(Name = "Remember me?")]
+        public bool RememberMe { get; set; }
     }
 }
