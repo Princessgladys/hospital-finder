@@ -113,7 +113,8 @@ BEGIN
 	SELECT TOP 10 h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, 
 		   h.District_ID, h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website,
 		   h.Start_Time, h.End_Time, h.Coordinate, h.Short_Description,
-		   h.Full_Description, h.Is_Allow_Appointment
+		   h.Full_Description, h.Is_Allow_Appointment,
+		   [dbo].[FU_CALCULATE_AVERAGE_RATING](h.Hospital_ID) AS AverageScore
 	FROM Hospital h
 	WHERE Is_Active = 'True'
 	ORDER BY (SELECT CONVERT(FLOAT, (CONVERT(FLOAT, SUM(Score)) / COUNT(Rating_ID))) AS AverageScore
