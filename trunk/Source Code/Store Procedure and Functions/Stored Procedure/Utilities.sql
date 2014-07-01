@@ -1,44 +1,5 @@
--- SCRIPT TO LOAD A SPECIFIC DISTRICT BASE ON CITI_ID
--- SONNX
-IF OBJECT_ID('[SP_LOAD_CITY_LIST]', 'P') IS NOT NULL
-	DROP PROCEDURE [SP_LOAD_CITY_LIST]
-GO
-CREATE PROCEDURE [dbo].[SP_LOAD_CITY_LIST]
-AS
-BEGIN
-	SELECT City_ID, City_Name
-	FROM City
-END
-
--- SCRIPT TO LOAD ALL DISTRICTS BASE ON CITY
--- SONNX
-IF OBJECT_ID('[SP_LOAD_DISTRICT_LIST]', 'P') IS NOT NULL
-	DROP PROCEDURE [SP_LOAD_DISTRICT_LIST]
-GO
-CREATE PROCEDURE [dbo].[SP_LOAD_DISTRICT_LIST]
-	@CityID INT
-AS
-BEGIN
-	SELECT District_ID, District_Name
-	FROM District
-	WHERE City_ID = @CityID
-END
-
--- SCRIPT TO LOAD ALL DISEASES BASE ON SPECILITY
--- SONNX
-IF OBJECT_ID('SP_LOAD_DISEASE_LIST', 'P') IS NOT NULL
-	DROP PROCEDURE SP_LOAD_DISEASE_LIST
-GO
-CREATE PROCEDURE [dbo].[SP_LOAD_DISEASE_LIST]
-	@SpecialityID INT
-AS
-BEGIN
-	SELECT do.Disease_ID, do.Disease_Name
-	FROM Disease do, Speciality_Disease sd
-	WHERE sd.Speciality_ID = @SpecialityID AND
-		  do.Disease_ID = sd.Disease_ID	  
-END
-
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 -- SCRIPT TO LOAD DISEASES IN A SPECIFIC SPECIALITY
 -- SONNX
 IF OBJECT_ID('[SP_LOAD_DISEASE_IN_SPECIALITY]', 'P') IS NOT NULL
@@ -54,18 +15,8 @@ BEGIN
 		  s.Disease_ID = d.Disease_ID
 END
 
--- SCRIPT TO LOAD ALL SPECIALITIES
--- SONNX
-IF OBJECT_ID('[SP_LOAD_SPECIALITY_LIST]', 'P') IS NOT NULL
-	DROP PROCEDURE [SP_LOAD_SPECIALITY_LIST]
-GO
-CREATE PROCEDURE [dbo].[SP_LOAD_SPECIALITY_LIST]
-AS
-BEGIN
-	SELECT Speciality_ID, Speciality_Name
-	FROM Speciality
-END
-
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 -- SCRIPT TO LOAD ALL SPECIALITIES OF HOSPITAL
 -- ANHDTH
 IF OBJECT_ID('[SP_LOAD_SPECIALITY_BY_HOSPITALID]') IS NOT NULL
@@ -81,6 +32,8 @@ BEGIN
 			hs.Speciality_ID=s.Speciality_ID
 END
 
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 -- SCRIPT TO LOAD ALL DOCTOR OF SPECIALITY
 -- ANHDTH
 IF OBJECT_ID('[SP_LOAD_DOCTOR_BY_SPECIALITYID]') IS NOT NULL
@@ -96,6 +49,8 @@ BEGIN
 			DS.Doctor_ID = D.Doctor_ID
 END
 
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
 -- SCRIPT TO INSERT APPOINTMENT
 -- ANHDTH
 IF OBJECT_ID('[SP_INSERT_APPOINTMENT]') IS NOT NULL
@@ -143,4 +98,25 @@ BEGIN
 		RETURN 1
 	ELSE
 		RETURN 0
+END
+
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+-- SCRIP TO LOAD TOP 10 RATED HOSPITALS
+-- SONNX
+IF OBJECT_ID('[SP_TAKE_TOP_10_RATED_HOSPITAL]', 'P') IS NOT NULL
+	DROP PROCEDURE [SP_TAKE_TOP_10_RATED_HOSPITAL]
+GO
+CREATE PROCEDURE SP_TAKE_TOP_10_RATED_HOSPITAL
+AS
+BEGIN
+	SELECT TOP 10 h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, 
+		   h.District_ID, h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website,
+		   h.Start_Time, h.End_Time, h.Coordinate, h.Short_Description,
+		   h.Full_Description, h.Is_Allow_Appointment
+	FROM Hospital h
+	WHERE Is_Active = 'True'
+	ORDER BY (SELECT CONVERT(FLOAT, (CONVERT(FLOAT, SUM(Score)) / COUNT(Rating_ID))) AS AverageScore
+			  FROM Rating
+			  WHERE Hospital_ID = h.Hospital_ID) DESC
 END
