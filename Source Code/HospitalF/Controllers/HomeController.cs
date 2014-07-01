@@ -160,6 +160,10 @@ namespace HospitalF.Controllers
             // Check if all validations are correct
             if (!ModelState.IsValid)
             {
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+                ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+                ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
                 return View(model);
             }
             else
