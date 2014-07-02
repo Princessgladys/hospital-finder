@@ -1,0 +1,38 @@
+﻿@using HospitalF.Constant
+@model HospitalF.Models.AppointmentModels
+@Scripts.Render("~/bundles/smartadminjquery")
+
+<h2>Confirm</h2>
+@Html.ValidationSummary()
+<article class="col-sm-12 col-md-12 col-lg-7" style="margin-left: 20%;">
+
+    <!-- Widget ID (each widget will need unique ID)-->
+    <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+        <form class="smart-form">
+            <div>
+                <img style="width:100%;" src="~/Content/img/Appointment_Banner.jpg"/>
+            </div>
+            <h3>Xác nhận cuộc hẹn</h3>
+            <div>
+                <fieldset>
+                    <div class="row" style="margin-left: 20%; margin-right: 10%;">
+                        <section class="col col-9">
+                            <label class="input">
+                                <input type="text" placeholder="Mã xác nhận" />
+                            </label>
+                        </section>
+                        </div>
+                </fieldset>
+                @*</div>*@
+                <!-- end widget content -->
+
+            </div>
+            
+            <footer>
+                <button type="submit" class="btn btn-primary">
+                    Xác nhận
+                </button>
+            </footer>
+        </form>
+    </div>
+</article>
