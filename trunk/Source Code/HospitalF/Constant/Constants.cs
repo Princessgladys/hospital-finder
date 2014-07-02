@@ -295,7 +295,7 @@ namespace HospitalF.Constant
 
         #endregion
 
-        #region Regular express
+        #region Regular Expression
 
         /// <summary>
         /// Regular expression to find white spaces
@@ -311,6 +311,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string CellPhoneNoRegex = @"^\d{3,5}(-|\s)?\d{3}(-|\s)?\d{3,4}$";
 
+        /// <summary>
+        /// Constant to format day with 2 numbers
+        /// </summary>
+        public const string DayMonthWith2Number = "00";
+
         #endregion
 
         #region Constant value in database
@@ -325,6 +330,40 @@ namespace HospitalF.Constant
         /// Constant for character " "
         /// </summary>
         public const string WhiteSpace = " ";
+
+        /// <summary>
+        /// Constant for character "\\"
+        /// </summary>
+        public const string DoubleReverseSlash = "\\";
+
+        /// <summary>
+        /// Constant for character "-"
+        /// </summary>
+        public const string Minus = "-";
+
+        #endregion
+
+        #region Utilities
+
+        /// <summary>
+        /// Constant for LoggingPartition key in appSettings section of Web.config
+        /// </summary>
+        public const string LoggingPartition = "LoggingPartition";
+
+        /// <summary>
+        /// Constant for txt extension
+        /// </summary>
+        public const string TxtFile = ".txt";
+
+        /// <summary>
+        /// Constant for opening statement of logging file
+        /// </summary>
+        public const string OpenLogFileStatement = "File ghi tình trạng lỗi hệ thống ngày {0}\r\n=================================================================\r\n";
+
+        /// <summary>
+        /// Constant for writing log file format
+        /// </summary>
+        public const string LogFileFormat = "{0}\r\nThư mục: {1}\r\nNội dung: {2}\r\n";
 
         #endregion
     }

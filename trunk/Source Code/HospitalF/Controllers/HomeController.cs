@@ -51,9 +51,9 @@ namespace HospitalF.Controllers
                     return Json(districtList, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                // Move to error page
+                LoggingUtil.LogException(exception);
                 return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
             }
         }
@@ -86,9 +86,9 @@ namespace HospitalF.Controllers
                     return Json(districtList, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                // Move to error page
+                LoggingUtil.LogException(exception);
                 return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
             }
         }
@@ -105,9 +105,9 @@ namespace HospitalF.Controllers
                 List<string> sentenceDic = await DictionaryUtil.LoadSuggestSentenceAsync();
                 return Json(sentenceDic, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                // Move to error page
+                LoggingUtil.LogException(exception);
                 return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
             }
         }
@@ -125,6 +125,9 @@ namespace HospitalF.Controllers
         {
             try
             {
+                string a = null;
+                a.ToLower();
+
                 // Load list of cities
                 cityList = await LocationUtil.LoadCityAsync();
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
@@ -138,9 +141,9 @@ namespace HospitalF.Controllers
                 diseaseList = new List<Disease>();
                 ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                // Move to error page
+                LoggingUtil.LogException(exception);
                 return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
             }
 
@@ -191,8 +194,9 @@ namespace HospitalF.Controllers
                     }
                     //hospitalList = await model.SearchHospital();
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    LoggingUtil.LogException(exception);
                     Response.Write(ErrorMessage.SEM001);
                 }
 
