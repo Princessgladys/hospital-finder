@@ -117,7 +117,5 @@ BEGIN
 		   [dbo].[FU_CALCULATE_AVERAGE_RATING](h.Hospital_ID) AS AverageScore
 	FROM Hospital h
 	WHERE Is_Active = 'True'
-	ORDER BY (SELECT CONVERT(FLOAT, (CONVERT(FLOAT, SUM(Score)) / COUNT(Rating_ID))) AS AverageScore
-			  FROM Rating
-			  WHERE Hospital_ID = h.Hospital_ID) DESC
+	ORDER BY ([dbo].[FU_CALCULATE_AVERAGE_RATING](h.Hospital_ID)) DESC
 END
