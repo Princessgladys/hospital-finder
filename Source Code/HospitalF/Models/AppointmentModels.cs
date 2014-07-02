@@ -17,8 +17,8 @@ namespace HospitalF.Models
         /// Get/set value for property FullName
         /// </summary>
         [Display(Name = Constants.FullName)]
-        //[Required(ErrorMessage = ErrorMessage.CEM001)]
-        //[StringLength(32, ErrorMessage = ErrorMessage.CEM003)]
+        [Required(ErrorMessage = ErrorMessage.CEM001)]
+        [StringLength(32, ErrorMessage = ErrorMessage.CEM003)]
         public string FullName { get; set; }
         
         /// <summary>
@@ -37,15 +37,15 @@ namespace HospitalF.Models
         /// Get/set value for property Email
         /// </summary>
         [Display(Name = Constants.Email)]
-        //[RegularExpression(Constants.EmailRegex, ErrorMessage = ErrorMessage.CEM005)]
+        [RegularExpression(Constants.EmailRegex, ErrorMessage = ErrorMessage.CEM005)]
         public string Email { get; set; }
 
         /// <summary>
         /// Get/set value for property PhoneNo
         /// </summary>
         [Display(Name=Constants.PhoneNo)]
-        //[Required(ErrorMessage=ErrorMessage.CEM001)]
-        //[RegularExpression(Constants.CellPhoneNoRegex,ErrorMessage=ErrorMessage.CEM005)]
+        [Required(ErrorMessage = ErrorMessage.CEM001)]
+        [RegularExpression(Constants.CellPhoneNoRegex, ErrorMessage = ErrorMessage.CEM005)]
         public string PhoneNo { get; set; }
         
         /// <summary>

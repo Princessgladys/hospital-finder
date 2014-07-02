@@ -32,6 +32,9 @@ namespace HospitalF.Controllers
                 //load list of doctor
                 doctorList = new List<Doctor>();
                 ViewBag.DoctorList = new SelectList(doctorList, Constants.DoctorID, Constants.DoctorName);
+
+                List<string> timeList = new List<string>();
+                
             }
             catch (Exception)
             {
@@ -46,13 +49,12 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [HttpPost]
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> CreateAppointment(AppointmentModels model)
+        public async Task<ActionResult> Index(AppointmentModels model)
         {
-            //ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-            //ViewBag.DoctorList = new SelectList(doctorList, Constants.DoctorID, Constants.DoctorName);
+            ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+            ViewBag.DoctorList = new SelectList(doctorList, Constants.DoctorID, Constants.DoctorName);
             if (!ModelState.IsValid)
             {
-
                 return View();
             }
             else
@@ -60,7 +62,7 @@ namespace HospitalF.Controllers
                 TimeSpan EndTime;
                 try
                 {
-                    EndTime = TimeSpan.Parse(model.StartTime).Add(new TimeSpan(0,20,0));
+                    EndTime = TimeSpan.Parse(model.StartTime).Add(new TimeSpan(0,15,0));
                     Appointment app = new Appointment();
                     app.Patient_Full_Name = model.FullName;
                     app.Patient_Gender = model.Gender == 0 ? true : false;
