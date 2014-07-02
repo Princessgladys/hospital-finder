@@ -477,6 +477,5 @@ namespace HospitalF.Models
         //}
 
         #endregion
-
     }
 }
