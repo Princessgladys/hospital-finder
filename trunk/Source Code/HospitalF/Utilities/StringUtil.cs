@@ -24,7 +24,7 @@ namespace HospitalF.Utilities
         /// Integer array that contains shifting index
         /// for each character in the input pattern
         /// </returns>
-        public static int[] CreateBadMatchTable(string pattern)
+        private static int[] CreateBadMatchTable(string pattern)
         {
             int a = 0;
             // Create an array of shifting index
