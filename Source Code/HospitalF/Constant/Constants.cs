@@ -158,6 +158,11 @@ namespace HospitalF.Constant
 
         #region Property English Name
 
+        // <summary>
+        /// English name of property HospitalTypeID
+        /// </summary>
+        public const string HospitalTypeID = "Type_ID";
+
         /// <summary>
         /// English name of property CityID
         /// </summary>
@@ -197,11 +202,6 @@ namespace HospitalF.Constant
         /// English name of property DiseaseName
         /// </summary>
         public const string DiseaseName = "Disease_Name";
-
-        // <summary>
-        /// English name of property HospitalTypeID
-        /// </summary>
-        public const string HospitalTypeID = "Type_ID";
 
         // <summary>
         /// English name of property HospitalTypeName

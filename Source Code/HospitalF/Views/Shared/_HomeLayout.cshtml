@@ -66,7 +66,10 @@
         <div id="project-context" class="pull-right">
 
             <span><a href="/"><i class="fa fa-user"></i></a></span>
-            <span id="project-selector" data-toggle="dropdown">Nguyễn Xuân Sơn <i class="fa fa-angle-down"></i></span>
+            @if (!string.IsNullOrEmpty(User.Identity.Name))
+            {
+                <span id="project-selector" data-toggle="dropdown">@(User.Identity.Name.Split(';')[1]) <i class="fa fa-angle-down"></i></span>
+            }
 
             <!-- Suggestion: populate this list with fetch and push technique -->
             <ul class="dropdown-menu">

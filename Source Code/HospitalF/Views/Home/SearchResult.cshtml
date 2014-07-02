@@ -1,6 +1,10 @@
 ﻿@using HospitalF.Constant
 @using HospitalF.Models;
-@model List<Hospital>
+@model HospitalF.Models.HomeModels
+
+@{
+    List<Hospital> hospitalList = (List<Hospital>)ViewBag.HospitalList;
+}
 
 <!-- MAIN CONTENT -->
 <div id="content-results" class="col-md-10 col-md-offset-1 well">
@@ -68,10 +72,10 @@
     <div class="col-md-12">
         <hr />
         <div id="hospital-list-results" class="col-md-4">
-            <h1 class="font-md">Danh sách <span class="semi-bold">bệnh viện</span><small class="text-danger"> &nbsp;&nbsp;(@(Model != null ? Model.Count : 0) kết quả)</small></h1>
-            @if (Model != null)
+            <h1 class="font-md">Danh sách <span class="semi-bold">bệnh viện</span><small class="text-danger"> &nbsp;&nbsp;(@(hospitalList != null ? hospitalList.Count : 0) kết quả)</small></h1>
+            @if (hospitalList != null)
             {
-                foreach (Hospital hospital in Model)
+                foreach (Hospital hospital in hospitalList)
                 {
                 <div class="search-results clearfix smart-form">
 
@@ -199,9 +203,9 @@
     var map;
     // List markers on map
     var markers = [];
-    @if (Model != null)
+    @if (hospitalList != null)
     {
-        foreach (Hospital hospital in Model)
+        foreach (Hospital hospital in hospitalList)
         {
         <text>
     var hospital = [];
