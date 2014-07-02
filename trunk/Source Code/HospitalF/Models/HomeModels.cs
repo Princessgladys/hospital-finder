@@ -44,6 +44,16 @@ namespace HospitalF.Models
         public int DistrictID { get; set; }
 
         /// <summary>
+        /// Get/Set value for property HospitalTypeID
+        /// </summary>
+        public int HospitalTypeID { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property HospitalTypeName
+        /// </summary>
+        public string HospitalTypeName { get; set; }
+
+        /// <summary>
         /// Get/Set value for property DistrictName
         /// </summary>
         public string DistrictName { get; set; }

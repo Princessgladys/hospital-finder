@@ -11,7 +11,7 @@ using HospitalF.Utilities;
 
 namespace HospitalF.Controllers
 {
-    public class AppointmentController : Controller
+    public class AppointmentController : SecurityBaseController
     {
         public static List<Speciality> specialityList = null;
         public static List<Doctor> doctorList = null;

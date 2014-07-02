@@ -11,7 +11,7 @@ using HospitalF.App_Start;
 
 namespace HospitalF.Controllers
 {
-    public class HospitalUserHomeController : Controller
+    public class HospitalUserHomeController : SecurityBaseController
     {
         /// <summary>
         /// GET: /HospitalUserHome/Index

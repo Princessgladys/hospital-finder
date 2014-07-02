@@ -185,11 +185,13 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constant\Constants.cs" />
     <Compile Include="Constant\ErrorMessage.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminHomeController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HospitalUserHomeController.cs" />
+    <Compile Include="Controllers\SecurityBaseController.cs" />
     <Compile Include="Entities\Appointment.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Disease.cs" />
@@ -227,7 +229,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LinqDB.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\AccountModel.cs" />
+    <Compile Include="Models\SecurityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\DictionaryUtil.cs" />
     <Compile Include="Utilities\ExcelUtil.cs" />
@@ -431,6 +434,7 @@
     <Content Include="Views\Error\SystemFailureAdmin.cshtml" />
     <Content Include="Views\Error\SystemFailureHospitalUser.cshtml" />
     <Content Include="Views\Appointment\Index.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

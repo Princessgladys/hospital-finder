@@ -8,7 +8,7 @@ using HospitalF.Constant;
 
 namespace HospitalF.Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : SecurityBaseController
     {
         /// <summary>
         /// GET: /Error/SystemFailureHome
