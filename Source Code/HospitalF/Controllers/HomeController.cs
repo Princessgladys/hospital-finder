@@ -126,9 +126,6 @@ namespace HospitalF.Controllers
         {
             try
             {
-                string a = null;
-                a.ToLower();
-
                 // Load list of cities
                 cityList = await LocationUtil.LoadCityAsync();
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
