@@ -316,6 +316,21 @@ namespace HospitalF.Constant
         /// </summary>
         public const string DayMonthWith2Number = "00";
 
+        /// <summary>
+        /// Regular expression to check diacritical marks
+        /// </summary>
+        public const string CheckDiacriticalMark = @"\\p{IsCombiningDiacriticalMarks}+";
+
+        /// <summary>
+        /// Constant for unicode code of letter đ
+        /// </summary>
+        public const char LatinSmallLetterDWithStroke = '\u0111';
+
+        /// <summary>
+        /// Constant for unicode code of letter Đ
+        /// </summary>
+        public const char LatinCapitalLetterDWithStroke = '\u0110';
+
         #endregion
 
         #region Constant value in database
@@ -369,6 +384,26 @@ namespace HospitalF.Constant
         /// Constant for default logging partition
         /// </summary>
         public const string DefaultLoggingPartition = @"C:\Hospital Finder Logging";
+
+        /// <summary>
+        /// Constant for TRUE boolean
+        /// </summary>
+        public const string True = "true";
+
+        /// <summary>
+        /// Constant for FALSE boolean
+        /// </summary>
+        public const string False = "false";
+
+        /// <summary>
+        /// Constant for ViVnAffUrl key in appSettings section of Web.config
+        /// </summary>
+        public const string ViVnAffUrl = "ViVnAffUrl";
+
+        /// <summary>
+        /// Constant for ViVnDicUrl key in appSettings section of Web.config
+        /// </summary>
+        public const string ViVnDicUrl = "ViVnDicUrl";
 
         #endregion
     }
