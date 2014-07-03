@@ -34,9 +34,9 @@
     <link rel="apple-touch-startup-image" href="../Content/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
 
     <script>
-    if (!window.jQuery) {
-        document.write('<script src="../Content/js/libs/jquery-2.0.2.m.js"><\/script>');
-    }
+        if (!window.jQuery) {
+            document.write('<script src="../Content/js/libs/jquery-2.0.2.m.js"><\/script>');
+        }
     </script>
 
     <script>
@@ -100,40 +100,47 @@
                 <span><a href="javascript:void(0);" onclick="launchFullscreen(document.documentElement);" title="Full Screen"><i class="fa fa-fullscreen"></i></a></span>
             </div>
             <!-- end fullscreen button -->
-
-            <!-- logout button -->
-            <div id="#" class="btn-header transparent pull-right">
-                <span><a href="/"><i class="fa fa-sign-out"></i></a></span>
-            </div>
+            <div id="fb-root" style="display: inline; margin-left: 20px;"></div>
+            @if (Request.IsAuthenticated)
+            {
+                <!-- logout button -->
+                <div class="btn-header transparent pull-right">
+                    <span><a id="logout-all" href="/Account/Logout"><i class="fa fa-sign-out"></i></a></span>
+                </div>
+                <ul class="header-dropdown-list">
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user"></i>
+                            <span>@(User.Identity.Name.Split(';')[1])</span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <a href="javascript:void(0);">Thông tin cá nhân</a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);">Đổi mật khẩu</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="javascript:void(0);">Đăng xuất</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>                         
+            }
+            else
+            {              
+                <div class="btn-header transparent pull-right">
+                    <span>Đăng nhập qua <a href="#" id="fb-login" style="color: #296191 !important;"><i class="fa fa-facebook"></i></a></span>
+                </div>
+            }
             <!-- end logout button -->
         </div>
         <!-- end pulled right: nav area -->
 
         <!-- projects dropdown -->
-        <div id="project-context" class="pull-right">
 
-            <span><a href="/"><i class="fa fa-user"></i></a></span>
-            @if (!string.IsNullOrEmpty(User.Identity.Name))
-            {
-                <span id="project-selector" data-toggle="dropdown">@(User.Identity.Name.Split(';')[1]) <i class="fa fa-angle-down"></i></span>
-            }
-
-            <!-- Suggestion: populate this list with fetch and push technique -->
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="javascript:void(0);">Thông tin cá nhân</a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);">Đổi mật khẩu</a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                    <a href="javascript:void(0);">Đăng xuất</a>
-                </li>
-            </ul>
-            <!-- end dropdown-menu-->
-
-        </div>
         <!-- end projects dropdown -->
     </header>
     <!-- END HEADER -->
@@ -141,6 +148,101 @@
     <!-- MAIN CONTENT -->
     @RenderBody()
     <!-- END MAIN CONTENT -->
+
+    <!-- FACEBOOK LOGIN -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (document.getElementById('fb-root') != undefined) {
+                var e = document.createElement('script');
+                e.type = 'text/javascript';
+                e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+                e.async = true;
+                document.getElementById('fb-root').appendChild(e);
+            }
+        });
+
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '1403418919945133',
+                status: true,
+                cookie: false,
+                xfbml: true,
+                version: 'v2.0'
+            });
+        };
+
+        $('#fb-login').click(function () {
+            facebookLogin();
+        });
+
+        $('#logout-all').click(function (event) {
+            // Remember the link href
+            var href = this.href;
+
+            // Don't follow the link
+            event.preventDefault();
+
+            // Clear facebook's session before system's session
+            facebookLogout(href);        
+        });
+
+        $('#fb-check').click(function () {
+            checkUserState();
+        });
+
+        function facebookLogin() {
+            FB.login(function (response) {
+                if (response.authResponse) {
+                    /*
+                    console.log('Welcome!  Fetching your information.... ');
+                    FB.api('/me', function (response) {
+                        console.log('Good to see you, ' + response.name + '.');
+                    });
+                    */
+                    checkUserState();
+                } else {
+                    console.log('User cancelled login or did not fully authorize.');
+                }
+            }, {
+                scope: 'publish_actions,email,user_friends,user_birthday,user_photos',
+                return_scopes: true
+            });
+
+        }
+
+        function facebookLogout(href) {
+            FB.logout(function (response) {
+                console.log('User has logged out...');
+
+                // Clear system's session
+                window.location = href;
+            });
+        }
+
+        function checkUserState() {
+            FB.getLoginStatus(function (response) {
+                if (response.status === 'connected') {
+                    // the user is logged in and has authenticated your
+                    // app, and response.authResponse supplies
+                    // the user's ID, a valid access token, a signed
+                    // request, and the time the access token 
+                    // and signed request each expire
+                    var uid = response.authResponse.userID;
+                    var accessToken = response.authResponse.accessToken;
+                    console.log(uid + ' - ' + accessToken);
+                    window.location = '/Account/FacebookLogin?token=' + accessToken;
+                } else if (response.status === 'not_authorized') {
+                    // the user is logged in to Facebook, 
+                    // but has not authenticated your app
+                    console.log('not_authorized');
+                } else {
+                    // the user isn't logged in to Facebook.
+                    console.log('not_logged');
+                }
+            });
+        };
+
+    </script>
 
     <!-- Your GOOGLE ANALYTICS CODE Below -->
     <script type="text/javascript">
