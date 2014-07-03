@@ -12,7 +12,7 @@ using HospitalF.Utilities;
 
 namespace HospitalF.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : SecurityBaseController
     {
         // Declare public list items for Drop down lists
         public static List<City> cityList = null;
@@ -120,6 +120,7 @@ namespace HospitalF.Controllers
         /// GET: /Home/Index
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
+        //[Authorize(Roles = "Administrator, User")]
         [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> Index()
         {
