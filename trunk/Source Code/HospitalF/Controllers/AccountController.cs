@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using HospitalF.App_Start;
 using HospitalF.Constant;
 using HospitalF.Models;
+using Newtonsoft.Json.Linq;
 
 namespace HospitalF.Controllers
 {
@@ -38,6 +40,26 @@ namespace HospitalF.Controllers
         }
 
         [HttpGet]
+        public ActionResult FacebookLogin(string token)
+        {
+            WebClient client = new WebClient();
+            string jsonResult = client.DownloadString(string.Concat("https://graph.facebook.com/me?access_token=", token));
+            // Json.Net is really helpful if you have to deal
+            // with Json from .Net http://json.codeplex.com/
+            JObject jsonUserInfo = JObject.Parse(jsonResult);
+            // you can get more user's info here. Please refer to:
+            //     http://developers.facebook.com/docs/reference/api/user/
+            string name = jsonUserInfo.Value<string>("name");
+            string email = jsonUserInfo.Value<string>("email");
+
+            // store user's information here...
+            SimpleSessionPersister.Username = email + ";" + name;
+            SimpleSessionPersister.Role = "User";
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
         public ActionResult Logout()
         {
             try
@@ -54,7 +76,7 @@ namespace HospitalF.Controllers
                 HttpCookie cookie2 = new HttpCookie("ASP.NET_SessionId", "");
                 cookie2.Expires = DateTime.Now.AddYears(-1);
                 Response.Cookies.Add(cookie2);
-                return RedirectToAction("SystemFailureHome", "Error");
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception)
             {
