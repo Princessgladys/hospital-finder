@@ -33,8 +33,8 @@ namespace HospitalF.Utilities
 
             // Handle name of today logging file
             string todayDate = string.Format("{0}{1}{2}{3}{4}",
-                DateTime.Now.Month.ToString(Constants.DayMonthWith2Number),
-                Constants.Minus, DateTime.Now.Day.ToString(Constants.DayMonthWith2Number),
+                DateTime.Now.Day.ToString(Constants.DayMonthWith2Number),
+                Constants.Minus, DateTime.Now.Month.ToString(Constants.DayMonthWith2Number),
                 Constants.Minus, DateTime.Now.Year.ToString());
             string todayLogFile = string.Format("{0}{1}{2}{3}", partitionPath,
                 Constants.DoubleReverseSlash, todayDate, Constants.TxtFile);
