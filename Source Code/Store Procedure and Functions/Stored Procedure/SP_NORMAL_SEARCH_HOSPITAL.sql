@@ -15,6 +15,19 @@ BEGIN
 	IF (@HospitalID = 0)
 		SET @HospitalID = NULL
 
+	-- CHECK IF HOSPITAL ID IS NOT NULL
+	IF (@HospitalID IS NOT NULL)
+	BEGIN
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
+		WHERE h.Hospital_ID = @HospitalID
+		ORDER BY h.Hospital_Name
+		RETURN;
+	END
+
 	IF (@CityID = 0)
 		SET @CityID = NULL
 
@@ -55,12 +68,6 @@ BEGIN
 		WHERE h.Is_Active = 'True'
 		ORDER BY Hospital_Name
 		RETURN;
-	END
-
-	-- CHECK IF HOSPITAL ID IS NOT NULL
-	IF (@HospitalID IS NOT NULL)
-	BEGIN
-		
 	END
 
 	-- CHECK IF BOTH CITY AND DISTRICT ARE NULL
