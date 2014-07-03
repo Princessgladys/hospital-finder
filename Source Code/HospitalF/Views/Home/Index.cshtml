@@ -12,37 +12,41 @@
                 <a href="#s1" data-toggle="tab"><i class="fa fa-fw fa-lg fa-search"></i>&nbsp;Tìm Kiếm Cơ Bản</a>
             </li>
             <li>
-                <a href="#s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-plus-square"></i>&nbsp;Tìm Kiếm Theo Vị Trí</a>
+                <a href="#s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-location-arrow"></i>&nbsp;Tìm Kiếm Theo Vị Trí</a>
             </li>
             <li>
-                <a href="#s3" data-toggle="tab"><i class="fa fa-fw fa-lg fa-crosshairs"></i>&nbsp;Tìm Kiếm Nâng Cao</a>
+                <a href="#s3" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i>&nbsp;Tìm Kiếm Nâng Cao</a>
             </li>
         </ul>
 
         <div id="myTabContent1" class="tab-content padding-10">
             <div class="tab-pane fade in active" id="s1">
-                @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal", @id = "normal-search-form" }))
+                @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "normal-search-form" }))
                 {
 
                     <fieldset>
                         <legend>Nhập từ khóa về bệnh viện</legend>
-                    </fieldset>
-                    <div class="input-group">
-                        @Html.TextBoxFor(m => m.SearchValue, new
-                       {
-                           @class = "form-control",
-                           @placeholder = "Nhập thông tin tìm kiếm...",
-                           @list = "list",
-                           @id = "sentece-tag"
-                       })
-
-                        <div class="input-group-btn">
-                            <button class="btn btn-default btn-primary" type="submit">
-                                <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
-                            </button>
+                        <div class="row">
+                            <section class="col col-md-12">
+                                <label class="input">
+                                    @Html.TextBoxFor(m => m.SearchValue, new
+                             {
+                                 @placeholder = "Nhập thông tin tìm kiếm...",
+                                 @list = "list",
+                                 @id = "sentece-tag"
+                             })
+                                    <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
+                                </label>
+                            </section>
                         </div>
-                    </div>
-                    <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
+                    </fieldset>
+                    <footer>
+                        <button class="btn btn-default btn-primary" type="submit">
+                            <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
+                        </button>
+                    </footer>
+                    
+                    
                 }
             </div>
 
