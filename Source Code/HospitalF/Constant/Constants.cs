@@ -365,6 +365,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string LogFileFormat = "{0}\r\nThư mục: {1}\r\nNội dung: {2}\r\n";
 
+        /// <summary>
+        /// Constant for default logging partition
+        /// </summary>
+        public const string DefaultLoggingPartition = @"C:\Hospital Finder Logging";
+
         #endregion
     }
 }

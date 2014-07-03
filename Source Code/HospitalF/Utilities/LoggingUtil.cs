@@ -17,7 +17,13 @@ namespace HospitalF.Utilities
         {
             // Read configutation detail from Web.config
             string partitionPath = WebConfigurationManager.
-                AppSettings[Constants.LoggingPartition].ToString();
+                AppSettings[Constants.LoggingPartition];
+
+            // Assign default path if partitionPath is null
+            if (partitionPath == null)
+            {
+                partitionPath = Constants.DefaultLoggingPartition;
+            }
 
             // Check if logging folder is existed or not
             if (!Directory.Exists(partitionPath))
