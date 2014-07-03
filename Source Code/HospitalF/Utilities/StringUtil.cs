@@ -6,6 +6,9 @@ using System.Web;
 using HospitalF.Models;
 using HospitalF.Constant;
 using System.Text.RegularExpressions;
+using System.Web.Configuration;
+using NHunspell;
+using System.Text;
 
 namespace HospitalF.Utilities
 {
@@ -219,6 +222,118 @@ namespace HospitalF.Utilities
 
         #endregion
 
+        #region Vietnamese vocabulary checking
+
+        /// <summary>
+        /// Check every word in an input string if they are all correct
+        /// according to Vietnamese vocabularies
+        /// </summary>
+        /// <param name="inputStr">Input sentence</param>
+        /// <returns>
+        /// string[] contains at least 1 and maximum 2 records
+        /// Record 1: True / False that indicates input value is correct or not
+        /// Record 2 (if any): Suggest a correct string value base on input value
+        /// </returns>
+        public static string[] CheckVocabulary(string inputStr)
+        {
+            // Declare list of tokens and list of returned results
+            string[] resultList = new  string[2];
+            List<string> tokenList = new List<string>();
+
+            // Normalize input string
+            inputStr = inputStr.Trim().ToLower();
+            // Tokenizer input string
+            tokenList = StringTokenizer(inputStr);
+
+            // Read configutation detail from Web.config
+            string viVnAffUrl = WebConfigurationManager.
+                AppSettings[Constants.ViVnAffUrl];
+            string viVnDicUrl = WebConfigurationManager.
+                AppSettings[Constants.ViVnDicUrl];
+            // Return null if configuration detail is not correct
+            if (viVnAffUrl == null || viVnDicUrl == null)
+            {
+                return null;
+            }
+
+            // Read from diacritic Vietnamese words dictionary
+            byte[] affFile = System.IO.File.ReadAllBytes(viVnAffUrl);
+            // Read from single Vietnamese words dictionary
+            byte[] dicFile = System.IO.File.ReadAllBytes(viVnDicUrl);
+
+            // Check if input string is correct
+            Hunspell hunspell = new Hunspell();
+            hunspell.Load(affFile, dicFile);
+
+            using (hunspell)
+            {
+                // Set default value for suggest string
+                string result = string.Empty;
+                // Set default status indicating the sentence is correct
+                resultList[0] = Constants.True;
+
+                // Check every word in the list of tokens
+                foreach (string token in tokenList)
+                {
+                    string word = token;
+                    // Check if the word a correct according to Vietnamese single words dictionary 
+                    if (hunspell.Spell(word))
+                    {
+                        result += (word + Constants.WhiteSpace);
+                    }
+                    else
+                    {
+                        // Change status if the sentence is not correct
+                        resultList[0] = Constants.False;
+
+                        // Load list of suggestion words in dictionary
+                        List<string> suggestions = hunspell.Suggest(word);
+                        int max = -1;
+                        string bestSuggestion = string.Empty;
+
+                        // Find best value for each suggesion word
+                        foreach (string suggestion in suggestions)
+                        {
+                            // Case of finding best suggestion in first time
+                            if (word.Contains(suggestion) || (suggestion.Contains(word)))
+                            {
+                                bestSuggestion = suggestion;
+                                break;
+                            }
+
+                            // Process best suggestion word
+                            int shorterLength = (suggestion.Length < word.Length ? suggestion.Length : word.Length);
+                            int temp = 0;
+                            for (int i = 0; i < shorterLength; i++)
+                            {
+                                if (word[i] == suggestion[i])
+                                {
+                                    temp += i;
+                                }
+                            }
+
+                            // Assign best suggestion word
+                            if (temp > max)
+                            {
+                                bestSuggestion = suggestion;
+                                max = temp;
+                            }
+                        }
+
+                        // Concate result string
+                        result += (bestSuggestion + Constants.WhiteSpace);
+                    }
+                }
+
+                // Add suggest string to result list
+                resultList[1] = result;
+                // Return result
+                return resultList;
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// Split words in a string to every token
         /// </summary>
@@ -259,5 +374,19 @@ namespace HospitalF.Utilities
             // Remove leading white space and return value
             return result.Trim();
         }
+
+        /// <summary>
+        /// Remove Vietnamese diacritic marks
+        /// </summary>
+        /// <param name="inputStr">Input Vietnamse sentence with diacritics marks</param>
+        /// <returns>Non-diacritic string</returns>
+        public string RemoveDiacriticMarks(string inputStr)
+        {
+            Regex v_reg_regex = new Regex(Constants.CheckDiacriticalMark);
+            string v_str_FormD = inputStr.Normalize(NormalizationForm.FormD);
+            return v_reg_regex.Replace(v_str_FormD, String.Empty).
+                Replace(Constants.LatinSmallLetterDWithStroke, 'd').
+                Replace(Constants.LatinCapitalLetterDWithStroke, 'D');
+        } 
     }
 }
