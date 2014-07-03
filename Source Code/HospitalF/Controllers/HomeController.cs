@@ -12,7 +12,7 @@ using HospitalF.Utilities;
 
 namespace HospitalF.Controllers
 {
-    public class HomeController : SecurityBaseController
+    public class HomeController : Controller
     {
         // Declare public list items for Drop down lists
         public static List<City> cityList = null;
