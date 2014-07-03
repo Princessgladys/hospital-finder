@@ -17,6 +17,7 @@ namespace HospitalF.Controllers
         public static List<Doctor> doctorList = null;
         public static int[] workingDay = null;
         public static int hospitalID = 25; //Hoan My hospital
+        public static List<string> timeList = null;
         //
         // GET: /Appointment/
         [LayoutInjecter(Constants.HomeLayout)]
@@ -33,8 +34,9 @@ namespace HospitalF.Controllers
                 doctorList = new List<Doctor>();
                 ViewBag.DoctorList = new SelectList(doctorList, Constants.DoctorID, Constants.DoctorName);
 
-                List<string> timeList = new List<string>();
-                
+                //load time to check health of hospital
+                timeList = await AppointmentModels.LoadTimeCheckHealth(hospitalID);
+                ViewBag.TimeList = new SelectList(timeList);
             }
             catch (Exception)
             {
@@ -139,12 +141,20 @@ namespace HospitalF.Controllers
         {
             try
             {
-                
+                Doctor doctor = null;
                 int tempDoctorID = 0;
+                string[] strWorkingDays = null;
                 // Check if city ID is null or not
                 if (!String.IsNullOrEmpty(doctorID) && doctorID!="0" && Int32.TryParse(doctorID, out tempDoctorID))
                 {
-                    workingDay = await AppointmentModels.LoadDoctorInDoctorListAsyn(tempDoctorID);
+                    doctor = await AppointmentModels.LoadDoctorInDoctorListAsyn(tempDoctorID);
+                    strWorkingDays = doctor.Working_Day.Trim().Split(',');
+                    workingDay = new int[strWorkingDays.Length];
+                    for (int i = 0; i < strWorkingDays.Length; i++)
+                    {
+                        workingDay[i] = Convert.ToInt16(strWorkingDays[i].Trim());
+                    }
+
                     return Json(workingDay, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -159,6 +169,12 @@ namespace HospitalF.Controllers
                 // Move to error page
                 return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
             }
+        }
+
+        public async Task<ActionResult> GetWorkingHour()
+        {
+            
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

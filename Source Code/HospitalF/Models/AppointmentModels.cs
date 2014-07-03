@@ -20,7 +20,7 @@ namespace HospitalF.Models
         [Required(ErrorMessage = ErrorMessage.CEM001)]
         [StringLength(32, ErrorMessage = ErrorMessage.CEM003)]
         public string FullName { get; set; }
-        
+
         /// <summary>
         /// Get/set value for property Gender
         /// </summary>
@@ -43,15 +43,15 @@ namespace HospitalF.Models
         /// <summary>
         /// Get/set value for property PhoneNo
         /// </summary>
-        [Display(Name=Constants.PhoneNo)]
+        [Display(Name = Constants.PhoneNo)]
         [Required(ErrorMessage = ErrorMessage.CEM001)]
         [RegularExpression(Constants.CellPhoneNoRegex, ErrorMessage = ErrorMessage.CEM005)]
         public string PhoneNo { get; set; }
-        
+
         /// <summary>
         /// Get/set value for property Speciality_ID
         /// </summary>
-        [Display(Name=Constants.Speciality)]
+        [Display(Name = Constants.Speciality)]
         public int SpecialityID { get; set; }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace HospitalF.Models
         /// <summary>
         /// Get/set value for property Doctor_ID
         /// </summary>
-        [Display(Name=Constants.Doctor)]
+        [Display(Name = Constants.Doctor)]
         public int DoctorID { get; set; }
 
         /// <summary>
@@ -72,13 +72,13 @@ namespace HospitalF.Models
         /// <summary>
         /// Get/set value for property App_Date
         /// </summary>
-        [Display(Name=Constants.App_Date)]
+        [Display(Name = Constants.App_Date)]
         public DateTime AppDate { get; set; }
 
         /// <summary>
         /// Get/set value for property StartTime
         /// </summary>
-        [Display(Name=Constants.StartTime)]
+        [Display(Name = Constants.StartTime)]
         public string StartTime { get; set; }
 
         #endregion
@@ -113,30 +113,61 @@ namespace HospitalF.Models
             return doctorList;
         }
         #endregion
-        
+
         #region
-        public static async Task<int[]> LoadDoctorInDoctorListAsyn(int DoctorID)
+        public static async Task<Doctor> LoadDoctorInDoctorListAsyn(int DoctorID)
         {
-            int[] workingdays = null ;
-            string[] wd;
             // Return list of dictionary words
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                string workingday=(string) await Task.Run(() =>
+                return await Task.Run(() =>
                     (from d in data.Doctors
-                     where d.Doctor_ID==DoctorID
-                     select d.Working_Day).FirstOrDefault());
-                wd=workingday.Trim().Split(',');
-                workingdays = new int[wd.Length];
-                for (int i = 0; i < wd.Length; i++)
-                {
-                    workingdays[i] =Int32.Parse(wd[i]);
-                }
+                     where d.Doctor_ID == DoctorID
+                     select d).FirstOrDefault());
             }
-            return workingdays;
         }
         #endregion
 
+        #region Load hospital by hospital ID
+        public static async Task<Hospital> LoadHospitalByHospitalID(int hospitalID)
+        {
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from h in data.Hospitals
+                     where h.Hospital_ID == hospitalID
+                     select h).FirstOrDefault());
+            }
+        }
+        #endregion
+
+        #region Create time to check health
+        public static async Task<List<string>> LoadTimeCheckHealth(int hospitalID)
+        {
+            List<string> listTime = new List<string>();
+            Hospital hospital = await LoadHospitalByHospitalID(hospitalID);
+            TimeSpan start = (TimeSpan)hospital.Start_Time;
+            TimeSpan end = (TimeSpan)hospital.End_Time;
+            int timeCheck = (int)hospital.Time;
+            DateTime dt = DateTime.Today.Add(start);
+            listTime.Add(dt.ToString("HH:mm"));
+            string t1 = dt.ToString("hh:mm tt");
+            string t2 = dt.ToString("HH:mm tt");
+            for (TimeSpan time = start; time >= start && time < end; time = time.Add(new TimeSpan(1, 0, 0)))
+            {
+                for (int i = 0; i <= 60; i += timeCheck)
+                {
+                    dt=DateTime.Today.Add(time.Add(new TimeSpan(0,i,0)));
+                    if (!listTime[listTime.Count-1].Equals(dt.ToString("HH:mm")) &&
+                        dt!=DateTime.Today.Add( end))
+                    {
+                        listTime.Add(dt.ToString("HH:mm"));
+                    }
+                }
+            }
+            return listTime;
+        }
+        #endregion
 
         #region Insert into database
         public static async Task<int> InsertAppointment(Appointment app)

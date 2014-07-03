@@ -10,12 +10,8 @@
         $(".datepicker").mask("99/99/9999");
         $("#txtDate").mask("99/99/9999");
         //$("#phoneNo").mask("9999-999-9999");
-        $("#starttime").mask('99:99');
     });
     $(document).ready(function () {
-
-        
-
         @*AJAX for cascading Doctor drop down list*@
         $("#SpecialityID").change(function () {
             var selectedItem = $(this).val();
@@ -160,7 +156,6 @@
                            @class = "datepicker",
                            @placeholder = "Ngày sinh"
                        })
-                                 @Html.ValidationMessageFor(m=>m.Birthday)
                             </label>
                         </section>
                         <section class="col col-9">
@@ -179,7 +174,6 @@
                            {
                                @placeholder = "E-mail"
                            })
-                                 @Html.ValidationMessageFor(m=>m.Email)
                             </label>
                         </section>
                         <section class="col col-9">
@@ -190,7 +184,6 @@
                                @id = "phoneNo",
                                @placeholder = "Số điện thoại"
                            })
-                                 @Html.ValidationMessageFor(m=>m.PhoneNo)
                             </label>
                         </section>
                     </div>
@@ -214,7 +207,6 @@
                             <label class="select">
                                 @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
                                                 Constants.RequireSpeciality)
-                                @Html.ValidationMessageFor(m => m.SpecialityID)
                                 <i></i>
                             </label>
                         </section>
@@ -224,7 +216,6 @@
                             <label class="select">
                                 @Html.DropDownListFor(m => m.DoctorID, (SelectList)ViewBag.DoctorList,
                                                 Constants.RequireDoctor)
-                                @Html.ValidationMessageFor(m => m.DoctorID)
                                 <i></i>
                             </label>
                         </section>
@@ -237,22 +228,18 @@
                                             @id = "txtDate",
                                             @placeholder = "Ngày khám"
                                         })
-                                
-                                @Html.ValidationMessageFor(m => m.AppDate)
                             </label>
                         </section></div>
                     <div class="row">
                         <section class="col col-6">
                             <label class="input">
-                                <i class="icon-append fa fa-clock-o"></i>
-                                @Html.TextBoxFor(m => m.StartTime, new
-                                        {
-                                            @class = "form-control",
-                                            @id="starttime",
-                                            @placeholder = "Thời gian khám"
-                                        })
-                                
-                                @Html.ValidationMessageFor(m => m.StartTime)
+                                <i class="icon-append fa fa-timer"></i>
+                                @Html.DropDownListFor(m => m.StartTime, (SelectList)ViewBag.TimeList, new
+                           {
+                               @class = "form-control",
+                               @id="startTime",
+                               @placeholder = "Thời gian khám"
+                           })
                             </label>
                         </section>
                         @*<section class="col col-9">
