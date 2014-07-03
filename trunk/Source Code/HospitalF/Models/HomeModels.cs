@@ -21,7 +21,6 @@ namespace HospitalF.Models
         /// Get/Set value for property SearchValue
         /// </summary>
         [Display(Name = Constants.SearchValue)]
-        [StringLength(100, ErrorMessage = ErrorMessage.CEM003)]
         public string SearchValue { get; set; }
 
         /// <summary>

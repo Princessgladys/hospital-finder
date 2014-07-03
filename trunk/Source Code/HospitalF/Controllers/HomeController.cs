@@ -120,7 +120,6 @@ namespace HospitalF.Controllers
         /// GET: /Home/Index
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
-        [Authorize(Roles = "Administrator, User")]
         [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> Index()
         {
