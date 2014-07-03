@@ -24,6 +24,11 @@ namespace HospitalF.Models
         public string SearchValue { get; set; }
 
         /// <summary>
+        ///  Get/Set value for property HospitalID
+        /// </summary>
+        public int HospitalID { get; set; }
+
+        /// <summary>
         /// Get/Set value for property CityID
         /// </summary>
         [Display(Name = Constants.City)]
@@ -155,7 +160,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for cities
                 if (!string.IsNullOrEmpty(city.City_Name) &&
-                    StringUtil.IsPatternMatched(inputStr, city.City_Name.ToLower()))
+                    StringUtil.IsPatternMatched(inputStr, city.City_Name.Trim().ToLower()))
                 {
                     this.CityID = city.City_ID;
                     this.CityName = city.City_Name;
@@ -169,7 +174,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for districts
                 if (!string.IsNullOrEmpty(district.District_Name) &&
-                    StringUtil.IsPatternMatched(inputStr, district.District_Name.ToLower()))
+                    StringUtil.IsPatternMatched(inputStr, district.District_Name.Trim().ToLower()))
                 {
                     this.DistrictID = district.District_ID;
                     this.DistrictName = district.District_Name;
@@ -266,20 +271,50 @@ namespace HospitalF.Models
         }
 
         /// <summary>
+        /// Load all hospitals in database
+        /// </summary>
+        /// <returns>List[Hospital]</returns>
+        private async Task<List<Hospital>> LoadHospitalList()
+        {
+            // Return list of hospital
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from h in data.Hospitals
+                     select h).ToList());
+            }
+        }
+
+        /// <summary>
         /// Handle well-formed What phrase
         /// </summary>
         /// <param name="whatPhrase">Well-formed What phrase</param>
         /// <param name="specialityList">Speciality List</param>
         /// <param name="diseaseList">Disease List</param>
+        /// <param name="hospitalList">Hospital List</param>
         private void HandleWellFormedWhatPhrase(string whatPhrase,
-            List<Speciality> specialityList, List<Disease> diseaseList)
+            List<Speciality> specialityList, List<Disease> diseaseList,
+            List<Hospital> hospitalList)
         {
-            // Check every word in speciality list to see in the input token is match
+            // Check every hospital name in hospital list to see if the input token is match
+            foreach (Hospital hospital in hospitalList)
+            {
+                // Find matching result for hospital
+                if (!string.IsNullOrEmpty(hospital.Hospital_Name) &&
+                    StringUtil.IsPatternMatched(whatPhrase, hospital.Hospital_Name.Trim().ToLower()))
+                {
+                    this.HospitalID = hospital.Hospital_ID;
+                    this.HospitalName = hospital.Hospital_Name;
+                    break;
+                }
+            }
+
+            // Check every speciality name in speciality list to see if the input token is match
             foreach (Speciality speciality in specialityList)
             {
                 // Find matching result for speciality
                 if (!string.IsNullOrEmpty(speciality.Speciality_Name) &&
-                    StringUtil.IsPatternMatched(whatPhrase, speciality.Speciality_Name.ToLower()))
+                    StringUtil.IsPatternMatched(whatPhrase, speciality.Speciality_Name.Trim().ToLower()))
                 {
                     this.SpecialityID = speciality.Speciality_ID;
                     this.SpecialityName = speciality.Speciality_Name;
@@ -287,12 +322,12 @@ namespace HospitalF.Models
                 }
             }
 
-            // Check every word in disease list to see in the input token is match
+            // Check every disease name in disease list to see if the input token is match
             foreach (Disease disease in diseaseList)
             {
                 // Find matching reuslt for disease
                 if (!string.IsNullOrEmpty(disease.Disease_Name) &&
-                    StringUtil.IsPatternMatched(whatPhrase, disease.Disease_Name.ToLower()))
+                    StringUtil.IsPatternMatched(whatPhrase, disease.Disease_Name.Trim().ToLower()))
                 {
                     this.DiseaseID = disease.Disease_ID;
                     this.DiseaseName = disease.Disease_Name;
@@ -306,7 +341,7 @@ namespace HospitalF.Models
         /// Analyze input query to 3 different phases of What - Relation - Where
         /// </summary>
         /// <param name="inputQuery">inputQuery</param>
-        public async Task<string> GIRQueryAnalyzerAsync(string inputQuery)
+        public async Task GIRQueryAnalyzerAsync(string inputQuery)
         {
             string what = string.Empty;             // What phrase
             string tempWhat = string.Empty;         // Temporary value for What phrase
@@ -326,13 +361,15 @@ namespace HospitalF.Models
             List<City> cityList = await LocationUtil.LoadCityAsync();
             // Load list of districts
             List<District> districtList = await LocationUtil.LoadAllDistrictAsync();
+            // Load list of hospitals
+            List<Hospital> hospitalList = await LoadHospitalList();
 
             // Check if the lists are load successfully
             if ((wordDic == null) &&
                 (cityList == null) &&
                 (districtList == null))
             {
-                return ErrorMessage.CEM001;
+                return;
             }
 
             what = StringUtil.ConcatTokens(tokens, 0, sizeOfTokens - 1);
@@ -357,7 +394,7 @@ namespace HospitalF.Models
 
                         // Assign Where phrase value with the value of trailing
                         // words after Relation word
-                        where = StringUtil.ConcatTokens(tokens, i + 1, sizeOfTokens - 1);
+                        where = StringUtil.ConcatTokens(tokens, i + 1, sizeOfTokens - 1).Trim().ToLower();
 
                         // Check if Where phrase is matched with locaitons in database
                         // and handle Where phrase to locate exactly search locations
@@ -398,7 +435,7 @@ namespace HospitalF.Models
                     {
                         i = inputQuery.IndexOf(firstLocation.ToLower());
                         tempWhat = inputQuery.Substring(0, i);
-                        where = inputQuery.Substring(i);
+                        where = inputQuery.Substring(i).Trim().ToLower();
                     }
                     else
                     {
@@ -414,7 +451,7 @@ namespace HospitalF.Models
             // assign What phrase with the input query
             if (!string.IsNullOrEmpty(tempWhat))
             {
-                what = tempWhat;
+                what = tempWhat.Trim().ToLower();
             }
 
             // Handle What phrase
@@ -427,14 +464,12 @@ namespace HospitalF.Models
             if ((specialityList != null) && (diseaseList != null))
             {
                 // Handle well-formed What phrase
-                HandleWellFormedWhatPhrase(what, specialityList, diseaseList);
-            }
-            else
-            {
-                return ErrorMessage.CEM001;
+                HandleWellFormedWhatPhrase(what, specialityList, diseaseList, hospitalList);
             }
 
             string a = string.Format("[{0}][{1}][{2}]", what, relation, where);
+            int hospitalId = this.HospitalID;
+            string hospitalName = this.HospitalName;
             int cityId = this.CityID;
             string cityName = this.CityName;
             int districtId = this.DistrictID;
@@ -443,9 +478,6 @@ namespace HospitalF.Models
             string speacialityName = this.SpecialityName;
             int diseaseId = this.DiseaseID;
             string diseaseName = this.DiseaseName;
-
-            // Return value of What - Relation - Where
-            return string.Format("{0}-{1}-{2}-{3}", cityId, districtId, specialityId, diseaseId);
         }
 
         #endregion
@@ -456,34 +488,45 @@ namespace HospitalF.Models
         ///  Search hospitals in database
         /// </summary>
         /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
-        //public async Task<List<Hospital>> SearchHospital()
-        //{
-        //    // Take input values
-        //    int cityId = this.CityID;
-        //    int districtId = this.DistrictID;
-        //    int specialityId = this.SpecialityID;
-        //    int diseaseId = this.DiseaseID;
+        public async Task<List<Hospital>> SearchHospital()
+        {
+            // Take input values
+            int cityId = this.CityID;
+            int districtId = this.DistrictID;
+            int specialityId = this.SpecialityID;
+            string diseaseName = this.DiseaseName;
+            int hospitalId = this.HospitalID;
 
-        //    List<Hospital> hospitalList = null;
-        //    // Search for suitable hospitals in database
-        //    using (LinqDBDataContext data = new LinqDBDataContext())
-        //    {
-        //        //result = await Task.Run(() =>
-        //        //data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId).ToList());
-        //        hospitalList = await Task.Run(() =>
-        //            (from h in data.SP_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseId)
-        //             select new Hospital()
-        //             {
-        //                 Hospital_ID = h.Hospital_ID,
-        //                 Hospital_Name = h.Hospital_Name,
-        //                 Coordinate = h.Coordinate,
-        //                 Website = h.Website
-        //             }).ToList());
-        //    }
+            List<Hospital> hospitalList = null;
+            // Search for suitable hospitals in database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                hospitalList = await Task.Run(() =>
+                    (from h in data.SP_SEARCH_HOSPITAL(hospitalId, cityId, districtId, specialityId, diseaseName)
+                     select new Hospital()
+                     {
+                         Hospital_ID = h.Hospital_ID,
+                         Hospital_Name = h.Hospital_Name,
+                         Address = h.Address,
+                         Ward_ID = h.Ward_ID,
+                         District_ID = h.District_ID,
+                         City_ID = h.City_ID,
+                         Phone_Number = h.Phone_Number,
+                         Fax = h.Fax,
+                         Email = h.Email,
+                         Website = h.Website,
+                         Start_Time = h.Start_Time,
+                         End_Time = h.End_Time,
+                         Coordinate = h.Coordinate,
+                         Short_Description = h.Short_Description,
+                         Full_Description = h.Full_Description,
+                         Is_Allow_Appointment = h.Is_Allow_Appointment,
+                     }).ToList());
+            }
 
-        //    // Return list of hospitals
-        //    return hospitalList;
-        //}
+            // Return list of hospitals
+            return hospitalList;
+        }
 
         #endregion
     }
