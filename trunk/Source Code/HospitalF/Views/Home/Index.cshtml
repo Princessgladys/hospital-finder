@@ -35,8 +35,8 @@
                                  @list = "list",
                                  @id = "sentece-tag"
                              })
-                                    <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
                                 </label>
+                                <p class="note"><strong>Ví dụ:</strong> Tên bệnh viện, bệnh lý, địa điểm...</p>
                             </section>
                         </div>
                     </fieldset>
@@ -51,7 +51,7 @@
             </div>
 
             <div class="tab-pane fade" id="s2">
-                @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "advanced-search-form" }))
+                @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "location-search-form" }))
                 {
                     <fieldset>
                         <legend>Nhập thông tin vị trí</legend>
@@ -59,19 +59,37 @@
                             <label class="label col col-2">Tìm Theo</label>
                             <section class="col col-4">
                                 <label class="select">
-                                    <select name="month">
-                                        <option>Vị trí hiện tại</option>
-                                        <option>Nhập vị trí</option>
+                                    <select class="form-control" id="LocationType" name="LocationType">
+                                        <option value="2" selected>Nhập vị trí</option>
+                                        <option value="1">Vị trí hiện tại</option>
                                     </select>
                                     <i></i>
                                 </label>
                             </section>
-                            <label class="label col col-2">Vị trí</label>
-                            <section class="col col-4">
+                            <label class="label col col-2" id="CurrentLocationLabel">Địa chỉ hiện tại</label>
+                            <section class="col col-4" id="CurrentLocationSection">
                                 <label class="input">
                                     <i class="icon-append fa fa-location-arrow"></i>
-                                    <input name="position" type="text" placeholder="Vị trí cần tìm...">
+                                    @Html.TextBoxFor(m => m.DiseaseName, new
+                                       {
+                                           @class = "form-control",
+                                           @placeholder = "Vị trí cần tìm...",
+                                       })
                                     <b class="tooltip tooltip-top-right">Nhập vị trí cần tìm</b>
+                                </label>
+                            </section>
+                            <label class="label col col-2">Bán kính</label>
+                            <section class="col col-4">
+                                <label class="select">
+                                    <select class="form-control" id="Radius" name="Radius">
+                                        <option value="0.3">300 m</option>
+                                        <option value="0.5">500 m</option>
+                                        <option value="1">1 km</option>
+                                        <option value="2">2 km</option>
+                                        <option value="5">5 km</option>
+                                        <option value="10">10 km</option>
+                                    </select>
+                                    <i></i>
                                 </label>
                             </section>
                         </div>
@@ -86,7 +104,8 @@
             </div>
 
             <div class="tab-pane fade" id="s3">
-                <form class="smart-form">
+                @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "avanced-search-form" }))
+                {
                     <fieldset>
                         <legend>Nhập thông tin bệnh viện</legend>
                         <div class="row">
@@ -137,7 +156,7 @@
                             Tìm Kiếm
                         </button>
                     </footer>
-                </form>
+                }
             </div>
 
         </div>
@@ -234,24 +253,64 @@
             });
         });
     });
-</script>
 
-<script type="text/javascript">
-    $(function () {
-        $('#advanced-search-form').validate({
+     @*Location type text changed*@
+    $(document).ready(function () {
+        $("#LocationType").change(function () {
+            var selectedItem = $(this).val();
+            if (selectedItem == 1) {
+                $("#CurrentLocationSection").hide();
+                $("#CurrentLocationLabel").hide();
+            } else {
+                $("#CurrentLocationSection").show();
+                $("#CurrentLocationLabel").show();
+            }
+        });
+    });
+
+    @*Data validation*@
+    $(document).ready(function () {
+        $('#normal-search-form').validate({
             // Rules for form validation
             rules: {
-                position: {
+                SearchValue: {
                     required: true,
-                    minlength: 5
+                    maxlength: 100
                 }
             },
 
             // Messages for form validation
             messages: {
-                position: {
-                    required: 'Không nhập sao biết đường tìm',
-                    minlength: 'Ngắn quá trời'
+                SearchValue: {
+                    required: '',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.SearchValue, 100)'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+
+        $('#avanced-search-form').validate({
+            // Rules for form validation
+            rules: {
+                CityID: {
+                    required: true
+                },
+                DistrictID: {
+                    required: true
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                CityID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.City)'
+                },
+                DistrictID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.District)'
                 }
             },
 
