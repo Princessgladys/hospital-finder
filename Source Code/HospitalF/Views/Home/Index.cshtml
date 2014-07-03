@@ -1,9 +1,6 @@
 ﻿@using HospitalF.Constant
 @model HospitalF.Models.HomeModels
 
-
-@Scripts.Render("~/bundles/smartadminjquery")
-
 @*AJAX for cascading District and Disease drop down list*@
 <script type="text/javascript">
     @*AJAX for auto completing Disease textbox*@
@@ -119,7 +116,7 @@
 
             <div id="myTabContent1" class="tab-content padding-10">
                 <div class="tab-pane fade in active" id="s1">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" id="normal-search-form">
                         <fieldset>
                             <legend>Nhập từ khóa về bệnh viện</legend>
                         </fieldset>
@@ -137,7 +134,6 @@
                                 </button>
                             </div>
                         </div>
-                        @Html.ValidationMessageFor(m => m.SearchValue)
                         <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
                     </form>
                 </div>
@@ -273,3 +269,30 @@
         </div>
     </div>
 }
+
+<script type="text/javascript">
+    $(function () {
+        $('#normal-search-form').validate({
+            // Rules for form validation
+            rules: {
+                SearchValue: {
+                    required: true,
+                    maxlength: 100
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                SearchValue: {
+                    required: 'cha mày',
+                    maxlength: 'Please enter your last name'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
+</script>
