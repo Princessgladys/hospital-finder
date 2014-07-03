@@ -10,7 +10,7 @@ CREATE PROCEDURE SP_SEARCH_HOSPITAL
 	@DiseaseName NVARCHAR(64)
 AS
 BEGIN
-	-- SET DEFAULT VALUE FOR INPUT PARAMETERS
+
 	IF (@CityID = 0)
 		SET @CityID = NULL
 
@@ -48,6 +48,7 @@ BEGIN
 			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active
 		FROM Hospital h
+		WHERE h.Is_Active = 'True'
 		ORDER BY Hospital_Name
 		RETURN;
 	END
@@ -73,7 +74,8 @@ BEGIN
 				FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
 				WHERE d.Disease_ID = @DiseaseID AND
 					  d.Speciality_ID = @SpecialityID AND
-					  s.Hospital_ID = h.Hospital_ID
+					  s.Hospital_ID = h.Hospital_ID AND
+					  h.Is_Active = 'True'
 				ORDER BY h.Hospital_Name
 				RETURN;
 			END
@@ -85,7 +87,8 @@ BEGIN
 					   h.Is_Allow_Appointment, h.Is_Active
 				FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
 				WHERE d.Speciality_ID = @SpecialityID AND
-					  s.Hospital_ID = h.Hospital_ID
+					  s.Hospital_ID = h.Hospital_ID AND
+					  h.Is_Active = 'True'
 				ORDER BY h.Hospital_Name
 				RETURN;
 			END
@@ -100,7 +103,8 @@ BEGIN
 				   h.Is_Allow_Appointment, h.Is_Active
 			FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
 			WHERE d.Speciality_ID = @SpecialityID AND
-				  s.Hospital_ID = h.Hospital_ID
+				  s.Hospital_ID = h.Hospital_ID AND
+				  h.Is_Active = 'True'
 			ORDER BY h.Hospital_Name
 			RETURN;
 		END
@@ -121,7 +125,8 @@ BEGIN
 					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active
 				FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
-				WHERE d.Disease_ID = @DiseaseID2
+				WHERE d.Disease_ID = @DiseaseID2 AND
+					  h.Is_Active = 'True'
 				ORDER BY h.Hospital_Name
 				RETURN;
 			END
@@ -132,6 +137,7 @@ BEGIN
 					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active
 				FROM Hospital h
+				WHERE h.Is_Active = 'True'
 				ORDER BY Hospital_Name
 				RETURN;
 			END
@@ -150,7 +156,8 @@ BEGIN
 				   h.Is_Allow_Appointment, h.Is_Active
 			FROM Hospital h
 			WHERE h.City_ID = @CityID AND
-				  h.District_ID = @DistrictID
+				  h.District_ID = @DistrictID AND
+				  h.Is_Active = 'True'
 			ORDER BY h.Hospital_Name
 			RETURN;
 		END
@@ -163,7 +170,8 @@ BEGIN
 				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 				   h.Is_Allow_Appointment, h.Is_Active
 			FROM Hospital h
-			WHERE h.City_ID = @CityID
+			WHERE h.City_ID = @CityID AND
+				  h.Is_Active = 'True'
 			ORDER BY h.Hospital_Name
 			RETURN;
 		END
@@ -176,7 +184,8 @@ BEGIN
 				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 				   h.Is_Allow_Appointment, h.Is_Active
 			FROM Hospital h
-			WHERE h.District_ID = @DistrictID
+			WHERE h.District_ID = @DistrictID AND
+				  h.Is_Active = 'True'
 			ORDER BY h.Hospital_Name
 			RETURN;
 		END
@@ -209,7 +218,8 @@ BEGIN
 					  d.Speciality_ID = @SpecialityID AND
 					  s.Hospital_ID = h.Hospital_ID AND
 					  h.City_ID = @CityID AND
-					  h.District_ID = @DistrictID
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
 				ORDER BY h.Hospital_Name
 				RETURN;
 			END
@@ -223,7 +233,8 @@ BEGIN
 				WHERE d.Speciality_ID = @SpecialityID AND
 					  s.Hospital_ID = h.Hospital_ID AND
 					  h.City_ID = @CityID AND
-					  h.District_ID = @DistrictID
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
 				ORDER BY h.Hospital_Name
 				RETURN;
 			END
