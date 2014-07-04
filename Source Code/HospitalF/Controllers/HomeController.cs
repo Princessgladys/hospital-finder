@@ -178,9 +178,8 @@ namespace HospitalF.Controllers
                                                                  select ht).ToList());
                     }
                     ViewBag.HospitalTypes = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
-                    // Analyze input search query using GIR algorithm and search
-                    await model.GIRQueryAnalyzerAsync(model.SearchValue);
 
+                    // Check if input search query is null or empty
                     if (!string.IsNullOrEmpty(model.SearchValue))
                     {
                         // Check if input search value is understandable

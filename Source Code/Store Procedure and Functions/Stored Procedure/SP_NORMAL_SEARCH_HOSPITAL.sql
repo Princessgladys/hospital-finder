@@ -5,27 +5,23 @@ IF OBJECT_ID('[SP_NORMAL_SEARCH_HOSPITAL]', 'P') IS NOT NULL
 	DROP PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
 GO
 CREATE PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
-	@HospitalID INT,
+	@HospitalName NVARCHAR(128),
 	@CityID INT,
 	@DistrictID INT,
 	@SpecialityID INT,
 	@DiseaseName NVARCHAR(64)
 AS
 BEGIN
-	-- SET DEFAULT VALUE FOR INPUT PARAMETERS
-	IF (@HospitalID = 0)
-		SET @HospitalID = NULL
-
 	-- CHECK IF HOSPITAL ID IS NOT NULL
-	IF (@HospitalID IS NOT NULL)
+	IF (@HospitalName IS NOT NULL)
 	BEGIN
 		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active
 		FROM Hospital h
-		WHERE h.Hospital_ID = @HospitalID
-		ORDER BY h.Hospital_Name
+		WHERE h.Hospital_Name LIKE N'%' + @HospitalName + N'%'
+		ORDER BY h.Hospital_ID
 		RETURN;
 	END
 
@@ -61,13 +57,6 @@ BEGIN
 	-- CHECK IF ALL PARAMETERS ARE NULL
 	IF ((@WhatPhrase = 0) AND (@WherePhrase = 0))
 	BEGIN
-		SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
-			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
-			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
-			   h.Is_Allow_Appointment, h.Is_Active
-		FROM Hospital h
-		WHERE h.Is_Active = 'True'
-		ORDER BY Hospital_Name
 		RETURN;
 	END
 

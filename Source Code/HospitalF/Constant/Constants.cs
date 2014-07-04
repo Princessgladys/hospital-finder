@@ -405,6 +405,16 @@ namespace HospitalF.Constant
         /// </summary>
         public const string ViVnDicUrl = "ViVnDicUrl";
 
+        /// <summary>
+        /// Constant for Hospital noun in Vietnamese
+        /// </summary>
+        public const string BệnhViện = "bệnh viện";
+
+        /// <summary>
+        /// Constant for Hospital noun in short Vietnamese
+        /// </summary>
+        public const string Bv = "bv";
+
         #endregion
     }
 }
