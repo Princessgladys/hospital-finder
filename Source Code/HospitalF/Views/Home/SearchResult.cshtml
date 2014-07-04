@@ -10,7 +10,7 @@
 <!-- MAIN CONTENT -->
 <div id="content-results" class="col-md-10 col-md-offset-1 well">
     <div class="col-md-8">
-        @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
         {
             <legend>Nhập từ khóa về bệnh viện</legend>
             <div class="input-group">
@@ -31,7 +31,7 @@
         }
     </div>
     <div class="col-md-12">
-        @using (Html.BeginForm(Constants.FilterResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm(Constants.FilterResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
         {
             <fieldset> 
                 @{
@@ -39,7 +39,7 @@
                     {
                         suggestionSentence = suggestionSentence.Trim();
                         <legend>Có phải bạn muốn tìm "@Html.ActionLink(suggestionSentence,
-                            Constants.SearchResultMethod, Constants.HomeController,
+                            Constants.SearchResultAction, Constants.HomeController,
                             new { SearchValue = suggestionSentence }, null)"</legend>
                     }
                     else
