@@ -4,6 +4,7 @@
 
 @{
     List<Hospital> hospitalList = (List<Hospital>)ViewBag.HospitalList;
+    string suggestionSentence = (string)@ViewBag.SuggestionSentence;
 }
 
 <!-- MAIN CONTENT -->
@@ -32,8 +33,21 @@
     <div class="col-md-12">
         @using (Html.BeginForm(Constants.FilterResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
         {
-            <fieldset>
-                <legend>Kết quả tìm kiếm với từ khóa "tai mũi họng"</legend>
+            <fieldset> 
+                @{
+                    if (suggestionSentence != null)
+                    {
+                        suggestionSentence = suggestionSentence.Trim();
+                        <legend>Có phải bạn muốn tìm "@Html.ActionLink(suggestionSentence,
+                            Constants.SearchResultMethod, Constants.HomeController,
+                            new { SearchValue = suggestionSentence }, null)"</legend>
+                    }
+                    else
+                    {
+                        <legend>Kết quả tìm kiếm với từ khóa "<font color="red">@ViewBag.SearchValue</font>"</legend>
+                    }
+                }
+
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="control-label col-md-4" for="prepend">Đánh Giá</label>
@@ -43,7 +57,7 @@
                                     <option>Cao Nhất</option>
                                     <option>Thấp Nhât</option>
                                 </select>
-                                <label class="glyphicon glyphicon-sort" rel="tooltip" title="Đánh Giá"></label>
+                                <label class="glyphicon glyphicon-sort" title="Đánh Giá"></label>
                             </div>
                         </div>
                     </div>
@@ -54,7 +68,7 @@
                         <div class="col-md-8">
                             <div class="icon-addon addon-sm">
                                 @Html.DropDownList("HospitalType", (SelectList)ViewBag.HospitalTypes, "Tất Cả", new { @class = "form-control" })
-                                <label class="glyphicon glyphicon-list-alt" rel="tooltip" title="Loại Bệnh Viện"></label>
+                                <label class="glyphicon glyphicon-list-alt" title="Loại Bệnh Viện"></label>
                             </div>
                         </div>
                     </div>
