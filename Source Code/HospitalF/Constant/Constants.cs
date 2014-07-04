@@ -249,6 +249,21 @@ namespace HospitalF.Constant
         /// </summary>
         public const int DefaultMatchingValue = 9999;
 
+        /// <summary>
+        /// Constant for Tìm kiếm cơ bản form
+        /// </summary>
+        public const string NormalSearchForm = "normal-search-form";
+
+        /// <summary>
+        /// Constant for Tìm kiếm theo vị trí form
+        /// </summary>
+        public const string LocationSearchForm = "location-search-form";
+
+        /// <summary>
+        /// Constant for Tìm kiếm nâng cao form
+        /// </summary>
+        public const string AdvancedSearchForm = "advanced-search-form";
+
         #endregion
 
         #region AppointmentModel
@@ -355,6 +370,25 @@ namespace HospitalF.Constant
         public const int AdministratorRoleId = 1;
 
         /// <summary>
+        /// Take diacritic Vietnamese letters according to input letter
+        /// </summary>
+        /// <param name="letter">Input letter (ă â ê ô ơ ư)</param>
+        /// <returns>String that contains diacritic Vietnamese letters</returns>
+        public string GetDiacriticWords(string letter)
+        {
+            switch (letter)
+            {
+                case "ă": return "ằẳẵặắ";
+                case "â": return "ầẩẫậấ";
+                case "ê": return "ềểễệế";
+                case "ô": return "ồổỗộố";
+                case "ơ": return "ờởỡợớ";
+                case "ư": return "ừửữựứ";
+                default: return null;
+            }
+        }
+
+        /// <summary>
         /// Value of UserRoleId
         /// </summary>
         public const int UserRoleId = 2;
@@ -458,6 +492,11 @@ namespace HospitalF.Constant
         /// Constant for Hospital noun in short Vietnamese
         /// </summary>
         public const string Bv = "bv";
+
+        /// <summary>
+        /// Constant for every button's name
+        /// </summary>
+        public const string Button = "button";
 
         #endregion
     }

@@ -480,42 +480,90 @@ namespace HospitalF.Models
         /// <summary>
         ///  Search hospitals in database
         /// </summary>
+        /// <param name="searchType">
+        /// Indicate search type
+        /// [0]: Normal search form
+        /// [1]: Advanced search form
+        /// </param>
+        /// <param name="cityId">City ID</param>
+        /// <param name="districtId">District ID</param>
+        /// <param name="specialityId">Speciality ID</param>
+        /// <param name="diseaseName">Disease name</param>
         /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
-        public async Task<List<Hospital>> SearchHospital()
+        public async Task<List<Hospital>> SearchHospital(int searchType, int cityId,
+            int districtId, int specialityId, string diseaseName)
         {
-            // Take input values
-            int cityId = this.CityID;
-            int districtId = this.DistrictID;
-            int specialityId = this.SpecialityID;
-            string diseaseName = this.DiseaseName;
-            string hospitalName = this.HospitalName;
-
+            // Declare variable
             List<Hospital> hospitalList = null;
-            // Search for suitable hospitals in database
-            using (LinqDBDataContext data = new LinqDBDataContext())
+            string hospitalName = string.Empty;
+            
+            // Normal search form
+            if (searchType == 0)
             {
-                hospitalList = await Task.Run(() =>
-                    (from h in data.SP_NORMAL_SEARCH_HOSPITAL(hospitalName, cityId, districtId, specialityId, diseaseName)
-                     select new Hospital()
-                     {
-                         Hospital_ID = h.Hospital_ID,
-                         Hospital_Name = h.Hospital_Name,
-                         Address = h.Address,
-                         Ward_ID = h.Ward_ID,
-                         District_ID = h.District_ID,
-                         City_ID = h.City_ID,
-                         Phone_Number = h.Phone_Number,
-                         Fax = h.Fax,
-                         Email = h.Email,
-                         Website = h.Website,
-                         Start_Time = h.Start_Time,
-                         End_Time = h.End_Time,
-                         Coordinate = h.Coordinate,
-                         Short_Description = h.Short_Description,
-                         Full_Description = h.Full_Description,
-                         Is_Allow_Appointment = h.Is_Allow_Appointment,
-                         Is_Active = h.Is_Active
-                     }).ToList());
+                // Take input values
+                cityId = this.CityID;
+                districtId = this.DistrictID;
+                specialityId = this.SpecialityID;
+                diseaseName = this.DiseaseName;
+                hospitalName = this.HospitalName;
+
+                // Search for suitable hospitals in database
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    hospitalList = await Task.Run(() =>
+                        (from h in data.SP_NORMAL_SEARCH_HOSPITAL(hospitalName, cityId, districtId, specialityId, diseaseName)
+                         select new Hospital()
+                         {
+                             Hospital_ID = h.Hospital_ID,
+                             Hospital_Name = h.Hospital_Name,
+                             Address = h.Address,
+                             Ward_ID = h.Ward_ID,
+                             District_ID = h.District_ID,
+                             City_ID = h.City_ID,
+                             Phone_Number = h.Phone_Number,
+                             Fax = h.Fax,
+                             Email = h.Email,
+                             Website = h.Website,
+                             Start_Time = h.Start_Time,
+                             End_Time = h.End_Time,
+                             Coordinate = h.Coordinate,
+                             Short_Description = h.Short_Description,
+                             Full_Description = h.Full_Description,
+                             Is_Allow_Appointment = h.Is_Allow_Appointment,
+                             Is_Active = h.Is_Active
+                         }).ToList());
+                }
+            }
+
+            // Advanced search form
+            if (searchType == 1)
+            {
+                // Search for suitable hospitals in database
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    hospitalList = await Task.Run(() =>
+                        (from h in data.SP_NORMAL_SEARCH_HOSPITAL(null, cityId, districtId, specialityId, diseaseName)
+                         select new Hospital()
+                         {
+                             Hospital_ID = h.Hospital_ID,
+                             Hospital_Name = h.Hospital_Name,
+                             Address = h.Address,
+                             Ward_ID = h.Ward_ID,
+                             District_ID = h.District_ID,
+                             City_ID = h.City_ID,
+                             Phone_Number = h.Phone_Number,
+                             Fax = h.Fax,
+                             Email = h.Email,
+                             Website = h.Website,
+                             Start_Time = h.Start_Time,
+                             End_Time = h.End_Time,
+                             Coordinate = h.Coordinate,
+                             Short_Description = h.Short_Description,
+                             Full_Description = h.Full_Description,
+                             Is_Allow_Appointment = h.Is_Allow_Appointment,
+                             Is_Active = h.Is_Active
+                         }).ToList());
+                }
             }
 
             // Return list of hospitals

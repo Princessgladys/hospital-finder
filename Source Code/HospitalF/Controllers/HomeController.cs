@@ -179,26 +179,49 @@ namespace HospitalF.Controllers
                     }
                     ViewBag.HospitalTypes = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
 
-                    // Check if input search query is null or empty
-                    if (!string.IsNullOrEmpty(model.SearchValue))
+                    // Indicate which button is clicked
+                    var button = Request[Constants.Button];
+
+                    // Normal search form
+                    if (Constants.NormalSearchForm.Equals(button))
                     {
-                        // Check if input search value is understandable
-                        string[] checkCorrectVocabulary = StringUtil.CheckVocabulary(model.SearchValue);
-                        if (Constants.False.Equals(checkCorrectVocabulary[0]))
+                        // Check if input search query is null or empty
+                        if (!string.IsNullOrEmpty(model.SearchValue))
                         {
-                            ViewBag.SuggestionSentence = checkCorrectVocabulary[1];
+                            // Check if input search value is understandable
+                            string[] checkCorrectVocabulary = StringUtil.CheckVocabulary(model.SearchValue);
+                            if (Constants.False.Equals(checkCorrectVocabulary[0]))
+                            {
+                                ViewBag.SuggestionSentence = checkCorrectVocabulary[1];
+                            }
+                            // Analyze to GIR query
+                            await model.GIRQueryAnalyzerAsync(model.SearchValue);
+                            ViewBag.SearchValue = model.SearchValue;
                         }
-                        // Analyze to GIR query
-                        await model.GIRQueryAnalyzerAsync(model.SearchValue);
-                        ViewBag.SearchValue = model.SearchValue;
-                    }
-                    else
-                    {
-                        await model.GIRQueryAnalyzerAsync(form["SearchValue"]);
+                        else
+                        {
+                            await model.GIRQueryAnalyzerAsync(form["SearchValue"]);
+                        }
+
+                        // Search hospitals
+                        hospitalList = await model.SearchHospital(0, 0, 0, 0, null);
                     }
 
-                    // Search hospitals
-                    hospitalList = await model.SearchHospital();
+                    // Advanced search form
+                    if (Constants.AdvancedSearchForm.Equals(button))
+                    {
+                        // Search hospitals
+                        hospitalList = await model.SearchHospital(1, model.CityID, model.DistrictID,
+                            model.SpecialityID, model.DiseaseName);
+                    }
+
+                    // Location search form
+                    if (Constants.LocationSearchForm.Equals(button))
+                    {
+
+                    }
+
+                    // Transfer list of hospitals to Search Result page
                     ViewBag.HospitalList = hospitalList;
                 }
                 catch (Exception exception)
