@@ -286,16 +286,19 @@ namespace HospitalF.Models
             List<Speciality> specialityList, List<Disease> diseaseList,
             List<Hospital> hospitalList)
         {
+            // Remove 'bệnh viện' or 'bv' out of what phrase
+            whatPhrase = whatPhrase.Replace(Constants.BệnhViện, string.Empty).
+                Replace(Constants.Bv, string.Empty).Trim();
+
             // Check every hospital name in hospital list to see if the input token is match
             foreach (Hospital hospital in hospitalList)
             {
                 // Find matching result for hospital
                 if (!string.IsNullOrEmpty(hospital.Hospital_Name) &&
-                    StringUtil.IsPatternMatched(whatPhrase, hospital.Hospital_Name.Trim().ToLower()))
+                    StringUtil.IsPatternMatched(hospital.Hospital_Name.Trim().ToLower(), whatPhrase))
                 {
-                    this.HospitalID = hospital.Hospital_ID;
-                    this.HospitalName = hospital.Hospital_Name;
-                    break;
+                    this.HospitalName = whatPhrase;
+                    return;
                 }
             }
 
@@ -485,14 +488,14 @@ namespace HospitalF.Models
             int districtId = this.DistrictID;
             int specialityId = this.SpecialityID;
             string diseaseName = this.DiseaseName;
-            int hospitalId = this.HospitalID;
+            string hospitalName = this.HospitalName;
 
             List<Hospital> hospitalList = null;
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 hospitalList = await Task.Run(() =>
-                    (from h in data.SP_NORMAL_SEARCH_HOSPITAL(hospitalId, cityId, districtId, specialityId, diseaseName)
+                    (from h in data.SP_NORMAL_SEARCH_HOSPITAL(hospitalName, cityId, districtId, specialityId, diseaseName)
                      select new Hospital()
                      {
                          Hospital_ID = h.Hospital_ID,
