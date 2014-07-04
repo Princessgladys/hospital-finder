@@ -1,9 +1,10 @@
 -- SCRIPT TO SEARCH HOSPITALS
+-- USING NORMAL OPTION
 -- SONNX
-IF OBJECT_ID('[SP_SEARCH_HOSPITAL]', 'P') IS NOT NULL
-	DROP PROCEDURE SP_SEARCH_HOSPITAL
+IF OBJECT_ID('[SP_NORMAL_SEARCH_HOSPITAL]', 'P') IS NOT NULL
+	DROP PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
 GO
-CREATE PROCEDURE SP_SEARCH_HOSPITAL
+CREATE PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
 	@HospitalID INT,
 	@CityID INT,
 	@DistrictID INT,
@@ -22,7 +23,7 @@ BEGIN
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active
-		FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
+		FROM Hospital h
 		WHERE h.Hospital_ID = @HospitalID
 		ORDER BY h.Hospital_Name
 		RETURN;
@@ -60,7 +61,7 @@ BEGIN
 	-- CHECK IF ALL PARAMETERS ARE NULL
 	IF ((@WhatPhrase = 0) AND (@WherePhrase = 0))
 	BEGIN
-		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+		SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active
@@ -84,7 +85,7 @@ BEGIN
 			-- CHECK IF @DiseaseID IS NOT NULL
 			IF (@DiseaseID IS NOT NULL)
 			BEGIN
-				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active
@@ -98,7 +99,7 @@ BEGIN
 			END
 			ELSE
 			BEGIN
-				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active
@@ -114,7 +115,7 @@ BEGIN
 		-- CASE SPECIALITY_ID IS NOT NULL BUT DISEASE_NAME IS NULL
 		IF ((@SpecialityID IS NOT NULL) AND (@DiseaseName IS NULL))
 		BEGIN
-			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 				   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 				   h.Is_Allow_Appointment, h.Is_Active
@@ -137,7 +138,7 @@ BEGIN
 			-- CHECK IF @DiseaseID2 IS NOT NULL
 			IF (@DiseaseID2 IS NOT NULL)
 			BEGIN
-				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active
@@ -149,7 +150,7 @@ BEGIN
 			END
 			ELSE
 			BEGIN
-				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active
@@ -167,7 +168,7 @@ BEGIN
 		-- CASE CITY_ID AND DISTRICT_ID ARE NOT NULL
 		IF ((@CityID IS NOT NULL) AND (@DistrictID IS NOT NULL))
 		BEGIN
-			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 				   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 				   h.Is_Allow_Appointment, h.Is_Active
@@ -182,7 +183,7 @@ BEGIN
 		-- CASE CITY_ID IS NOT NULL BUT DISTRICT_ID IS NULL
 		IF ((@CityID IS NOT NULL) AND (@DistrictID IS NULL))
 		BEGIN
-			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 				   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 				   h.Is_Allow_Appointment, h.Is_Active
@@ -196,7 +197,7 @@ BEGIN
 		-- CASE CITY_ID IS NULL BUT DISTRICT_ID IS NOT NULL
 		IF ((@CityID IS NULL) AND (@DistrictID IS NOT NULL))
 		BEGIN
-			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 				   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 				   h.Is_Allow_Appointment, h.Is_Active
@@ -226,7 +227,7 @@ BEGIN
 			-- CHECK IF @DiseaseID IS NOT NULL
 			IF (@DiseaseID3 IS NOT NULL)
 			BEGIN
-				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active
@@ -242,7 +243,7 @@ BEGIN
 			END
 			ELSE
 			BEGIN
-				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active
