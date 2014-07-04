@@ -41,12 +41,13 @@
                         </div>
                     </fieldset>
                     <footer>
-                        <button class="btn btn-default btn-primary" type="submit">
+                        <button class="btn btn-default btn-primary" type="submit"
+                                value="@Constants.NormalSearchForm" name="@Constants.Button">
                             <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
                         </button>
                     </footer>
                 }
-            </div>
+</div>
 
             <div class="tab-pane fade" id="s2">
                 @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "location-search-form" }))
@@ -93,7 +94,8 @@
                         </div>
                     </fieldset>
                     <footer>
-                        <button class="btn btn-primary" type="submit">
+                        <button class="btn btn-primary" type="submit"
+                                value="@Constants.LocationSearchForm" name="@Constants.Button">
                             <i class="fa fa-search"></i>&nbsp;
                             Tìm Kiếm
                         </button>
@@ -149,7 +151,8 @@
                         </div>
                     </fieldset>
                     <footer>
-                        <button class="btn btn-primary" type="submit">
+                        <button class="btn btn-primary" type="submit"
+                                value="@Constants.AdvancedSearchForm" name="@Constants.Button">
                             <i class="fa fa-search"></i>&nbsp;
                             Tìm Kiếm
                         </button>
@@ -290,7 +293,7 @@
             }
         });
 
-        $('#avanced-search-form').validate({
+        $('#advanced-search-form').validate({
             // Rules for form validation
             rules: {
                 CityID: {
