@@ -120,7 +120,6 @@ namespace HospitalF.Controllers
         /// GET: /Home/Index
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
-        //[Authorize(Roles = "Administrator, User")]
         [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> Index()
         {
@@ -184,7 +183,15 @@ namespace HospitalF.Controllers
 
                     if (!string.IsNullOrEmpty(model.SearchValue))
                     {
+                        // Check if input search value is understandable
+                        string[] checkCorrectVocabulary = StringUtil.CheckVocabulary(model.SearchValue);
+                        if (Constants.False.Equals(checkCorrectVocabulary[0]))
+                        {
+                            ViewBag.SuggestionSentence = checkCorrectVocabulary[1];
+                        }
+                        // Analyze to GIR query
                         await model.GIRQueryAnalyzerAsync(model.SearchValue);
+                        ViewBag.SearchValue = model.SearchValue;
                     }
                     else
                     {

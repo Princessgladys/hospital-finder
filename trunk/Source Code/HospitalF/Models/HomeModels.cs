@@ -492,7 +492,7 @@ namespace HospitalF.Models
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 hospitalList = await Task.Run(() =>
-                    (from h in data.SP_SEARCH_HOSPITAL(hospitalId, cityId, districtId, specialityId, diseaseName)
+                    (from h in data.SP_NORMAL_SEARCH_HOSPITAL(hospitalId, cityId, districtId, specialityId, diseaseName)
                      select new Hospital()
                      {
                          Hospital_ID = h.Hospital_ID,
@@ -511,6 +511,7 @@ namespace HospitalF.Models
                          Short_Description = h.Short_Description,
                          Full_Description = h.Full_Description,
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
+                         Is_Active = h.Is_Active
                      }).ToList());
             }
 
