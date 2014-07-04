@@ -20,7 +20,7 @@ BEGIN
 			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active
 		FROM Hospital h
-		WHERE h.Hospital_Name LIKE N'%' + @HospitalName + N'%'
+		WHERE h.Hospital_Name LIKE (N'%' + @HospitalName + N'%')
 		ORDER BY h.Hospital_ID
 		RETURN;
 	END
@@ -69,7 +69,7 @@ BEGIN
 			DECLARE @DiseaseID INT
 			SET @DiseaseID = (SELECT Disease_ID
 							  FROM Disease
-							  WHERE Disease_Name LIKE N'%@DiseaseName%')
+							  WHERE Disease_Name LIKE (N'%' + @DiseaseName + N'%'))
 			
 			-- CHECK IF @DiseaseID IS NOT NULL
 			IF (@DiseaseID IS NOT NULL)
@@ -122,7 +122,7 @@ BEGIN
 			DECLARE @DiseaseID2 INT
 			SET @DiseaseID2 = (SELECT Disease_ID
 							   FROM Disease
-							   WHERE Disease_Name LIKE N'%@DiseaseName%')
+							   WHERE Disease_Name LIKE (N'%' + @DiseaseName + N'%'))
 							  
 			-- CHECK IF @DiseaseID2 IS NOT NULL
 			IF (@DiseaseID2 IS NOT NULL)
@@ -201,7 +201,6 @@ BEGIN
 	-- CASE THAT WHAT PHRASE AND WHERE PHRASE HAVE VALUE
 	IF ((@WhatPhrase = 1) AND (@WherePhrase = 1))
 	BEGIN
-
 		-- CASE THAT ALL PARAMETERS ARE NOT NULL
 		IF ((@CityID IS NOT NULL) AND
 			(@DistrictID IS NOT NULL) AND
@@ -211,7 +210,7 @@ BEGIN
 			DECLARE @DiseaseID3 INT
 				SET @DiseaseID3 = (SELECT Disease_ID
 								   FROM Disease
-								   WHERE Disease_Name LIKE N'%@DiseaseName%')
+								   WHERE Disease_Name LIKE (N'%' + @DiseaseName + N'%'))
 		
 			-- CHECK IF @DiseaseID IS NOT NULL
 			IF (@DiseaseID3 IS NOT NULL)
@@ -247,5 +246,149 @@ BEGIN
 			END
 		END
 
+		-- CASE THAT ONLY CITY IS NULL
+		IF ((@CityID IS NULL) AND ((@DistrictID IS NOT NULL) AND
+			(@SpecialityID IS NOT NULL) AND
+			(@DiseaseName IS NOT NULL)))
+		BEGIN
+			DECLARE @DiseaseID4 INT
+				SET @DiseaseID4 = (SELECT Disease_ID
+								   FROM Disease
+								   WHERE Disease_Name LIKE (N'%' + @DiseaseName + N'%'))
+		
+			-- CHECK IF @DiseaseID IS NOT NULL
+			IF (@DiseaseID4 IS NOT NULL)
+			BEGIN
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Is_Allow_Appointment, h.Is_Active
+				FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
+				WHERE d.Disease_ID = @DiseaseID4 AND
+					  d.Speciality_ID = @SpecialityID AND
+					  s.Hospital_ID = h.Hospital_ID AND
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
+				ORDER BY h.Hospital_Name
+				RETURN;
+			END
+			ELSE
+			BEGIN
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Is_Allow_Appointment, h.Is_Active
+				FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
+				WHERE d.Speciality_ID = @SpecialityID AND
+					  s.Hospital_ID = h.Hospital_ID AND
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
+				ORDER BY h.Hospital_Name
+				RETURN;
+			END
+		END
+
+		-- CASE THAT ONLY DISTRICT IS NULL
+		IF ((@DistrictID IS NULL) AND ((@CityID IS NOT NULL) AND
+			(@SpecialityID IS NOT NULL) AND
+			(@DiseaseName IS NOT NULL)))
+		BEGIN
+			DECLARE @DiseaseID5 INT
+				SET @DiseaseID5 = (SELECT Disease_ID
+								   FROM Disease
+								   WHERE Disease_Name LIKE (N'%' + @DiseaseName + N'%'))
+		
+			-- CHECK IF @DiseaseID IS NOT NULL
+			IF (@DiseaseID5 IS NOT NULL)
+			BEGIN
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Is_Allow_Appointment, h.Is_Active
+				FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
+				WHERE d.Disease_ID = @DiseaseID5 AND
+					  d.Speciality_ID = @SpecialityID AND
+					  s.Hospital_ID = h.Hospital_ID AND
+					  h.City_ID = @CityID AND
+					  h.Is_Active = 'True'
+				ORDER BY h.Hospital_Name
+				RETURN;
+			END
+			ELSE
+			BEGIN
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Is_Allow_Appointment, h.Is_Active
+				FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
+				WHERE d.Speciality_ID = @SpecialityID AND
+					  s.Hospital_ID = h.Hospital_ID AND
+					  h.City_ID = @CityID AND
+					  h.Is_Active = 'True'
+				ORDER BY h.Hospital_Name
+				RETURN;
+			END
+		END
+
+		-- CASE THAT ONLY SPECIALITY IS NULL
+		IF ((@SpecialityID IS NULL) AND ((@CityID IS NOT NULL) AND
+			(@DistrictID IS NOT NULL) AND
+			(@DiseaseName IS NOT NULL)))
+		BEGIN
+			DECLARE @DiseaseID6 INT
+				SET @DiseaseID6 = (SELECT Disease_ID
+								   FROM Disease
+								   WHERE Disease_Name LIKE (N'%' + @DiseaseName + N'%'))
+		
+			-- CHECK IF @DiseaseID IS NOT NULL
+			IF (@DiseaseID6 IS NOT NULL)
+			BEGIN
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Is_Allow_Appointment, h.Is_Active
+				FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
+				WHERE d.Disease_ID = @DiseaseID6 AND
+					  s.Hospital_ID = h.Hospital_ID AND
+					  h.City_ID = @CityID AND
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
+				ORDER BY h.Hospital_Name
+				RETURN;
+			END
+			ELSE
+			BEGIN
+				SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+					   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Is_Allow_Appointment, h.Is_Active
+				FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
+				WHERE s.Hospital_ID = h.Hospital_ID AND
+					  h.City_ID = @CityID AND
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
+				ORDER BY h.Hospital_Name
+				RETURN;
+			END
+		END
+
+		-- CASE THAT ONLY DISEASE IS NULL
+		IF ((@DiseaseName IS NULL) AND ((@CityID IS NOT NULL) AND
+			(@DistrictID IS NOT NULL) AND
+			(@SpecialityID IS NOT NULL)))
+		BEGIN
+			SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+					h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+					h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					h.Is_Allow_Appointment, h.Is_Active
+			FROM Hospital h, Hospital_Speciality s, Speciality_Disease d
+			WHERE d.Speciality_ID = @SpecialityID AND
+				  s.Hospital_ID = h.Hospital_ID AND
+				  h.City_ID = @CityID AND
+				  h.District_ID = @DistrictID AND
+				  h.Is_Active = 'True'
+			ORDER BY h.Hospital_Name
+			RETURN;
+		END
 	END
 END
