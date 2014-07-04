@@ -24,19 +24,19 @@ namespace HospitalF.Constant
         public const string HospitalUserLayout = "_HospitalUserLayout";
 
         /// <summary>
-        /// Name of SystemFailureHome page
+        /// Name of SystemFailureHomeAction
         /// </summary>
-        public const string HomeErrorPage = "SystemFailureHome";
+        public const string SystemFailureHomeAction = "SystemFailureHome";
 
         /// <summary>
-        /// Name of SystemFailureAdmin page
+        /// Name of SystemFailureAdminAction
         /// </summary>
-        public const string AdminErrorPage = "SystemFailureAdmin";
+        public const string SystemFailureAdminAction = "SystemFailureAdmin";
 
         /// <summary>
-        /// Name of SystemFailureHospitalUser page
+        /// Name of SystemFailureHospitalUserAction
         /// </summary>
-        public const string HospitalUserErrorPage = "SystemFailureHospitalUser";
+        public const string SystemFailureHospitalUserAction = "SystemFailureHospitalUser";
 
         /// <summary>
         /// Name of HomeController
@@ -52,51 +52,65 @@ namespace HospitalF.Constant
         /// Name of AppointmentController
         /// </summary>
         public const string AppointmentController = "Appointment";
+
+        /// <summary>
+        /// Name of AccountController
+        /// </summary>
+        public const string AccountController = "AccountController";
         
         /// <summary>
-        /// Name of CreateAppoinment method
+        /// Name of CreateAppointmentAction
         /// </summary>
-        public const string CreateAppointmentMethod = "CreateAppointment";
+        public const string CreateAppointmentAction = "CreateAppointment";
 
         /// <summary>
-        /// Name of load doctor list method
+        /// Name of GetDoctorBySpecialityAction
         /// </summary>
-        public const string GetDoctorBySpecialiyMethod = "GetDoctorBySpeciality";
+        public const string GetDoctorBySpecialityAction = "GetDoctorBySpeciality";
 
         /// <summary>
-        /// Name of load doctor's working day method
+        /// Name of GetWorkingDayAction
         /// </summary>
-        public const string GetDoctorWorkingDayMethod = "GetWorkingDay";
+        public const string GetWorkingDayAction = "GetWorkingDay";
 
         /// <summary>
-        /// Name of Index method
+        /// Name of IndexAction
         /// </summary>
-        public const string IndexMethod = "Index";
+        public const string IndexAction = "Index";
 
         /// <summary>
-        /// Name of SearchResult method
+        /// Name of SearchResultAction
         /// </summary>
-        public const string SearchResultMethod = "SearchResult";
+        public const string SearchResultAction = "SearchResult";
 
         /// <summary>
-        /// Name of SearchResult method
+        /// Name of FilterResultAction
         /// </summary>
-        public const string FilterResultMethod = "FilterResult";
+        public const string FilterResultAction = "FilterResult";
 
         /// <summary>
-        /// Name of GetDistrictByCityMethod method in HomeController
+        /// Name of LoginAction
         /// </summary>
-        public const string GetDistrictByCityMethod = "GetDistrictByCity";
+        public const string LoginAction = "Login";
 
         /// <summary>
-        /// Name of GetDeseaseBySpeciality method in HomeController
+        /// Name of GetDistrictByCityAction method in HomeController
         /// </summary>
-        public const string GetDeseaseBySpecialityMethod = "GetDeseaseBySpeciality";
+        public const string GetDistrictByCityAction = "GetDistrictByCity";
 
         /// <summary>
-        /// Name of LoadSuggestSentenceMethod method in HomeController
+        /// Name of GetDeseaseBySpecialityAction in HomeController
         /// </summary>
-        public const string LoadSuggestSentenceMethod = "LoadSuggestSentence";
+        public const string GetDeseaseBySpecialityAction = "GetDeseaseBySpeciality";
+
+        /// <summary>
+        /// Name of LoadSuggestSentenceAction method in HomeController
+        /// </summary>
+        public const string LoadSuggestSentenceAction = "LoadSuggestSentence";
+
+        #endregion
+
+        #region AccountModel
 
         #endregion
 
@@ -334,6 +348,36 @@ namespace HospitalF.Constant
         #endregion
 
         #region Constant value in database
+
+        /// <summary>
+        /// Value of AdministratorRoleId
+        /// </summary>
+        public const int AdministratorRoleId = 1;
+
+        /// <summary>
+        /// Value of UserRoleId
+        /// </summary>
+        public const int UserRoleId = 2;
+
+        /// <summary>
+        /// Value of HospitalUserRoleId
+        /// </summary>
+        public const int HospitalUserRoleId = 3;
+
+        /// <summary>
+        /// Value of AdministratorRoleName
+        /// </summary>
+        public const string AdministratorRoleName = "Administrator";
+
+        /// <summary>
+        /// Value of UserRoleName
+        /// </summary>
+        public const string UserRoleName = "User";
+
+        /// <summary>
+        /// Value of HospitalUserRoleName
+        /// </summary>
+        public const string HospitalUserRoleName = "Hospital User";
 
 
 

@@ -29,12 +29,12 @@ namespace HospitalF.Controllers
             bool checkLogin = AccountModel.CheckLogin(email, password);
             if (checkLogin)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(Constants.IndexAction, Constants.AccountController);
             }
             else
             {
                 TempData["ErrorMesage"] = "Sai thông tin đăng nhập";
-                return RedirectToAction("Index", "Account");
+                return RedirectToAction(Constants.IndexAction, Constants.AccountController);
             }
 
         }
@@ -47,16 +47,10 @@ namespace HospitalF.Controllers
             // Json.Net is really helpful if you have to deal
             // with Json from .Net http://json.codeplex.com/
             JObject jsonUserInfo = JObject.Parse(jsonResult);
-            // you can get more user's info here. Please refer to:
-            //     http://developers.facebook.com/docs/reference/api/user/
-            string name = jsonUserInfo.Value<string>("name");
-            string email = jsonUserInfo.Value<string>("email");
 
-            // store user's information here...
-            SimpleSessionPersister.Username = email + ";" + name;
-            SimpleSessionPersister.Role = "User";
+            bool checkFacebookLogin = AccountModel.CheckFacebookLogin(jsonUserInfo);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(Constants.IndexAction, Constants.HomeController);
         }
 
         [HttpGet]
@@ -76,11 +70,11 @@ namespace HospitalF.Controllers
                 HttpCookie cookie2 = new HttpCookie("ASP.NET_SessionId", "");
                 cookie2.Expires = DateTime.Now.AddYears(-1);
                 Response.Cookies.Add(cookie2);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(Constants.IndexAction, Constants.HomeController);
             }
             catch (Exception)
             {
-                return RedirectToAction("SystemFailureHome", "Error");
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
 

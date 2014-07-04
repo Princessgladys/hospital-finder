@@ -21,7 +21,7 @@
 
         <div id="myTabContent1" class="tab-content padding-10">
             <div class="tab-pane fade in active" id="s1">
-                @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "normal-search-form" }))
+                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "normal-search-form" }))
                 {
 
                     <fieldset>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="tab-pane fade" id="s2">
-                @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "location-search-form" }))
+                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "location-search-form" }))
                 {
                     <fieldset>
                         <legend>Nhập thông tin vị trí</legend>
@@ -102,7 +102,7 @@
             </div>
 
             <div class="tab-pane fade" id="s3">
-                @using (Html.BeginForm(Constants.SearchResultMethod, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "avanced-search-form" }))
+                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "avanced-search-form" }))
                 {
                     <fieldset>
                         <legend>Nhập thông tin bệnh viện</legend>
@@ -171,7 +171,7 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "@(Url.RouteUrl(Constants.LoadSuggestSentenceMethod))",
+                url: "@(Url.RouteUrl(Constants.LoadSuggestSentenceAction))",
                 success: function (data) {
                     $.each(data, function (id, option) {
                         availableTags.push(option);
@@ -201,7 +201,7 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "@(Url.RouteUrl(Constants.GetDeseaseBySpecialityMethod))",
+                url: "@(Url.RouteUrl(Constants.GetDeseaseBySpecialityAction))",
                 data: { "specialityId": selectedItem },
                 success: function (data) {
                     $.each(data, function (id, option) {
@@ -235,7 +235,7 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "@(Url.RouteUrl(Constants.GetDistrictByCityMethod))",
+                url: "@(Url.RouteUrl(Constants.GetDistrictByCityAction))",
                 data: { "cityId": selectedItem },
                 success: function (data) {
                     ddlDistrict.html('');

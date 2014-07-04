@@ -40,7 +40,7 @@ namespace HospitalF.Controllers
             }
             catch (Exception)
             {
-                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
             return View();
         }
@@ -82,7 +82,7 @@ namespace HospitalF.Controllers
                     int result =await AppointmentModels.InsertAppointment(app);
                     if (result != 1)
                     {
-                        return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+                        return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
                     }
                     else
                     {
@@ -91,7 +91,7 @@ namespace HospitalF.Controllers
                 }
                 catch (Exception)
                 {
-                    return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+                    return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace HospitalF.Controllers
             catch (Exception)
             {
                 // Move to error page
-                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
 
@@ -167,7 +167,7 @@ namespace HospitalF.Controllers
             catch (Exception)
             {
                 // Move to error page
-                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
 
