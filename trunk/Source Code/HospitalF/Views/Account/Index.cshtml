@@ -1,6 +1,8 @@
 ﻿@{
     Layout = null;   
 }
+@using HospitalF.Constant
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,7 +94,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
                     <div class="well no-padding">
-                        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "login-form", @class = "smart-form client-form" }))
+                        @using (Html.BeginForm(Constants.LoginAction, Constants.AccountController, FormMethod.Post, new { @id = "login-form", @class = "smart-form client-form" }))
                         {
     
                             <header>

@@ -145,26 +145,26 @@ namespace HospitalF.Models
         public static async Task<List<string>> LoadTimeCheckHealth(int hospitalID)
         {
             List<string> listTime = new List<string>();
-            Hospital hospital = await LoadHospitalByHospitalID(hospitalID);
-            TimeSpan start = (TimeSpan)hospital.Start_Time;
-            TimeSpan end = (TimeSpan)hospital.End_Time;
-            int timeCheck = (int)hospital.Time;
-            DateTime dt = DateTime.Today.Add(start);
-            listTime.Add(dt.ToString("HH:mm"));
-            string t1 = dt.ToString("hh:mm tt");
-            string t2 = dt.ToString("HH:mm tt");
-            for (TimeSpan time = start; time >= start && time < end; time = time.Add(new TimeSpan(1, 0, 0)))
-            {
-                for (int i = 0; i <= 60; i += timeCheck)
-                {
-                    dt=DateTime.Today.Add(time.Add(new TimeSpan(0,i,0)));
-                    if (!listTime[listTime.Count-1].Equals(dt.ToString("HH:mm")) &&
-                        dt!=DateTime.Today.Add( end))
-                    {
-                        listTime.Add(dt.ToString("HH:mm"));
-                    }
-                }
-            }
+            //Hospital hospital = await LoadHospitalByHospitalID(hospitalID);
+            //TimeSpan start = (TimeSpan)hospital.Start_Time;
+            //TimeSpan end = (TimeSpan)hospital.End_Time;
+            //int timeCheck = (int)hospital.Time;
+            //DateTime dt = DateTime.Today.Add(start);
+            //listTime.Add(dt.ToString("HH:mm"));
+            //string t1 = dt.ToString("hh:mm tt");
+            //string t2 = dt.ToString("HH:mm tt");
+            //for (TimeSpan time = start; time >= start && time < end; time = time.Add(new TimeSpan(1, 0, 0)))
+            //{
+            //    for (int i = 0; i <= 60; i += timeCheck)
+            //    {
+            //        dt=DateTime.Today.Add(time.Add(new TimeSpan(0,i,0)));
+            //        if (!listTime[listTime.Count-1].Equals(dt.ToString("HH:mm")) &&
+            //            dt!=DateTime.Today.Add( end))
+            //        {
+            //            listTime.Add(dt.ToString("HH:mm"));
+            //        }
+            //    }
+            //}
             return listTime;
         }
         #endregion

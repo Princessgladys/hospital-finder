@@ -54,7 +54,7 @@ namespace HospitalF.Controllers
             catch (Exception exception)
             {
                 LoggingUtil.LogException(exception);
-                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
 
@@ -89,7 +89,7 @@ namespace HospitalF.Controllers
             catch (Exception exception)
             {
                 LoggingUtil.LogException(exception);
-                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
 
@@ -108,7 +108,7 @@ namespace HospitalF.Controllers
             catch (Exception exception)
             {
                 LoggingUtil.LogException(exception);
-                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
 
@@ -141,7 +141,7 @@ namespace HospitalF.Controllers
             catch (Exception exception)
             {
                 LoggingUtil.LogException(exception);
-                return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
 
             return View();
@@ -229,7 +229,7 @@ namespace HospitalF.Controllers
             {
                 Response.Write(ErrorMessage.SEM001);
             }
-            return RedirectToAction(Constants.HomeErrorPage, Constants.ErrorController);
+            return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
         }
 
         #endregion
