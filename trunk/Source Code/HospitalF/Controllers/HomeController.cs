@@ -200,6 +200,7 @@ namespace HospitalF.Controllers
 
                     // Search hospitals
                     hospitalList = await model.SearchHospital();
+                    ViewBag.HospitalList = hospitalList;
                 }
                 catch (Exception exception)
                 {
