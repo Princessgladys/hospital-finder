@@ -38,8 +38,9 @@ namespace HospitalF.Controllers
                 timeList = await AppointmentModels.LoadTimeCheckHealth(hospitalID);
                 ViewBag.TimeList = new SelectList(timeList);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                LoggingUtil.LogException(exception);
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
             return View();
@@ -89,8 +90,9 @@ namespace HospitalF.Controllers
                         return View("Confirm");
                     }
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    LoggingUtil.LogException(exception);
                     return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
                 }
             }
@@ -125,8 +127,9 @@ namespace HospitalF.Controllers
                     return Json(doctorList, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                LoggingUtil.LogException(exception);
                 // Move to error page
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
@@ -164,8 +167,9 @@ namespace HospitalF.Controllers
                     return Json(workingDay, JsonRequestBehavior.AllowGet);
                 }
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                LoggingUtil.LogException(exception);
                 // Move to error page
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
