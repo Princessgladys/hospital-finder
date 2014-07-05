@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using HospitalF.Constant;
 using Newtonsoft.Json.Linq;
+using HospitalF.Utilities;
 
 namespace HospitalF.Models
 {
@@ -32,8 +33,9 @@ namespace HospitalF.Models
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
+                LoggingUtil.LogException(exception);
                 return false;
             }
         }
@@ -56,8 +58,9 @@ namespace HospitalF.Models
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
+                LoggingUtil.LogException(exception);
                 return false;
             }
         }
@@ -96,8 +99,9 @@ namespace HospitalF.Models
                 SimpleSessionPersister.Role = Constants.UserRoleName;
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
+                LoggingUtil.LogException(exception);
                 return false;
             }
         }
