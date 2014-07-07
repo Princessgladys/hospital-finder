@@ -227,7 +227,7 @@ namespace HospitalF.Controllers
                 catch (Exception exception)
                 {
                     LoggingUtil.LogException(exception);
-                    Response.Write(ErrorMessage.SEM001);
+                    return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
                 }
 
                 // Move to result page

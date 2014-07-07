@@ -9,21 +9,17 @@
 
 <!-- MAIN CONTENT -->
 <div id="content-results" class="col-md-10 col-md-offset-1 well">
+    <legend>Nhập từ khóa về bệnh viện</legend>
     <div class="col-md-8">
-        @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal", @id = Constants.NormalSearchForm }))
         {
-            <legend>Nhập từ khóa về bệnh viện</legend>
+
             <div class="input-group">
-                <input name="SearchValue" class="form-control" type="text" placeholder="Nhập thông tin tìm kiếm..." list="list">
-                <datalist id="list">
-                    <option value="Chợ Rẫy">Chợ Rẫy</option>
-                    <option value="Nhi Đồng">Nhi Đồng</option>
-                    <option value="Chấn Thương Chỉnh Hình">Chấn Thương Chỉnh Hình</option>
-                    <option value="Bệnh Viện Mắt">Bệnh Viện Mắt</option>
-                </datalist>
+                @Html.TextBox("SearchValue", null, new { @class = "form-control", placeholder = "Nhập thông tin tìm kiếm..." })
                 <div class="input-group-btn">
                     <button class="btn btn-default btn-primary" type="submit"
-                            value="@Constants.NormalSearchForm" name="@Constants.Button">
+                            value="@Constants.NormalSearchForm" name="@Constants.Button"
+                            id="normal-search-button">
                         <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
                     </button>
                 </div>
@@ -34,19 +30,20 @@
     <div class="col-md-12">
         @using (Html.BeginForm(Constants.FilterResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
         {
-            <fieldset> 
+            <fieldset>
                 @{
-                    if (suggestionSentence != null)
-                    {
-                        suggestionSentence = suggestionSentence.Trim();
-                        <legend>Có phải bạn muốn tìm "@Html.ActionLink(suggestionSentence,
+            if (suggestionSentence != null)
+            {
+                suggestionSentence = suggestionSentence.Trim();
+                <legend>
+                    Có phải bạn muốn tìm <i>
+                        @Html.ActionLink(suggestionSentence,
                             Constants.SearchResultAction, Constants.HomeController,
-                            new { SearchValue = suggestionSentence }, null)"</legend>
-                    }
-                    else
-                    {
-                        <legend>Kết quả tìm kiếm với từ khóa "<font color="red">@ViewBag.SearchValue</font>"</legend>
-                    }
+                            new { SearchValue = suggestionSentence }, null)
+                </i>
+            </legend>
+            }
+
                 }
 
                 <div class="row">
@@ -92,33 +89,33 @@
             {
                 foreach (Hospital hospital in hospitalList)
                 {
-                <div class="search-results clearfix smart-form">
+                    <div class="search-results clearfix smart-form">
 
-                    <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h4>
+                        <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h4>
 
-                    <div>
-                        <div class="rating display-inline">
-                            <input type="radio" name="stars-rating" id="stars-rating-5">
-                            <label for="stars-rating-5"><i class="fa fa-star"></i></label>
-                            <input type="radio" name="stars-rating" id="stars-rating-4">
-                            <label for="stars-rating-4"><i class="fa fa-star"></i></label>
-                            <input type="radio" name="stars-rating" id="stars-rating-3">
-                            <label for="stars-rating-3"><i class="fa fa-star"></i></label>
-                            <input type="radio" name="stars-rating" id="stars-rating-2">
-                            <label for="stars-rating-2"><i class="fa fa-star"></i></label>
-                            <input type="radio" name="stars-rating" id="stars-rating-1">
-                            <label for="stars-rating-1"><i class="fa fa-star"></i></label>
+                        <div>
+                            <div class="rating display-inline">
+                                <input type="radio" name="stars-rating" id="stars-rating-5">
+                                <label for="stars-rating-5"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="stars-rating" id="stars-rating-4">
+                                <label for="stars-rating-4"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="stars-rating" id="stars-rating-3">
+                                <label for="stars-rating-3"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="stars-rating" id="stars-rating-2">
+                                <label for="stars-rating-2"><i class="fa fa-star"></i></label>
+                                <input type="radio" name="stars-rating" id="stars-rating-1">
+                                <label for="stars-rating-1"><i class="fa fa-star"></i></label>
+                            </div>
+                            <br>
+                            <div class="url text-success">
+                                www.timkiembenhvien.com <i class="fa fa-caret-down"></i>
+                            </div>
+                            <p class="description">
+                                Đây là cái bệnh viện.
+                            </p>
                         </div>
-                        <br>
-                        <div class="url text-success">
-                            www.timkiembenhvien.com <i class="fa fa-caret-down"></i>
-                        </div>
-                        <p class="description">
-                            Đây là cái bệnh viện.
-                        </p>
+
                     </div>
-
-                </div>
                 }
             }
             <div class="text-center">
@@ -157,11 +154,52 @@
     </div>
 </div>
 <!-- END MAIN CONTENT -->
-
 <!-- GOOGLE API -->
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi"></script>
 
 <script type="text/javascript">
+    @*AJAX for auto completing basic search value textbox*@
+    $(document).ready(function () {
+        $("#SearchValue").on('input', function () {
+            var statesProgress = $("#states-loading-search-progress");
+            var availableTags = new Array();
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.LoadSuggestSentenceAction))",
+                success: function (data) {
+                    $.each(data, function (id, option) {
+                        availableTags.push(option);
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+            $("#SearchValue").autocomplete({
+                source: function (request, response) {
+                    var results = $.ui.autocomplete.filter(availableTags, request.term);
+                    response(results.slice(0, 5));
+                }
+            });
+        });
+    });
+
+    @*Data validation*@
+    $(document).ready(function () {
+        $("#normal-search-button").click(function () {
+            var searchValue = $('#SearchValue').val().trim();
+            if (searchValue != "") {
+                $('#normal-search-form').submit();
+            }
+            else {
+                return false;
+            }
+        });
+    });
+
     // Google Map API - Geolocation
     /*
     var map;
@@ -231,7 +269,7 @@
     hospital.push(longitude);
     hospital.push(latitude);
     markers.push(hospital);
-        </text>
+    </text>
         }
     }
     function initializeMap() {
