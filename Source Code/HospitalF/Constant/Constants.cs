@@ -456,7 +456,7 @@ namespace HospitalF.Constant
         /// <summary>
         /// Constant for writing log file format
         /// </summary>
-        public const string LogFileFormat = "{0}\r\nThư mục: {1}\r\nNội dung: {2}\r\n";
+        public const string LogFileFormat = "{0}\r\nMethod: {1}\r\nError Reason: {2}\r\n";
 
         /// <summary>
         /// Constant for default logging partition
