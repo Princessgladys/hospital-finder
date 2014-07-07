@@ -21,7 +21,7 @@
 
         <div id="myTabContent1" class="tab-content padding-10">
             <div class="tab-pane fade in active" id="s1">
-                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "normal-search-form" }))
+                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = Constants.NormalSearchForm }))
                 {
 
                     <fieldset>
@@ -42,15 +42,16 @@
                     </fieldset>
                     <footer>
                         <button class="btn btn-default btn-primary" type="submit"
-                                value="@Constants.NormalSearchForm" name="@Constants.Button">
+                                value="@Constants.NormalSearchForm" name="@Constants.Button"
+                                id ="normal-search-button">
                             <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
                         </button>
                     </footer>
                 }
-</div>
+            </div>
 
             <div class="tab-pane fade" id="s2">
-                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "location-search-form" }))
+                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = @Constants.LocationSearchForm }))
                 {
                     <fieldset>
                         <legend>Nhập thông tin vị trí</legend>
@@ -104,7 +105,7 @@
             </div>
 
             <div class="tab-pane fade" id="s3">
-                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = "avanced-search-form" }))
+                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = Constants.AdvancedSearchForm }))
                 {
                     <fieldset>
                         <legend>Nhập thông tin bệnh viện</legend>
@@ -165,7 +166,7 @@
 </div>
 
 <script type="text/javascript">
-    @*AJAX for auto completing Disease textbox*@
+    @*AJAX for auto completing basic search value textbox*@
     $(document).ready(function () {
         $("#sentece-tag").on('input', function () {
             var statesProgress = $("#states-loading-search-progress");
@@ -254,7 +255,7 @@
         });
     });
 
-     @*Location type text changed*@
+    @*Location type text changed*@
     $(document).ready(function () {
         $("#LocationType").change(function () {
             var selectedItem = $(this).val();
@@ -270,11 +271,22 @@
 
     @*Data validation*@
     $(document).ready(function () {
+        $('#normal-search-button').click(function () {
+            var searchValue = $('#sentece-tag').val().trim();
+            if (searchValue != "")
+            {
+                $('#normal-search-form').submit();
+            }
+            else
+            {
+                return false;
+            }
+        });
+
         $('#normal-search-form').validate({
             // Rules for form validation
             rules: {
                 SearchValue: {
-                    required: true,
                     maxlength: 100
                 }
             },
@@ -282,7 +294,6 @@
             // Messages for form validation
             messages: {
                 SearchValue: {
-                    required: '',
                     maxlength: '@string.Format(ErrorMessage.CEM003, Constants.SearchValue, 100)'
                 }
             },
