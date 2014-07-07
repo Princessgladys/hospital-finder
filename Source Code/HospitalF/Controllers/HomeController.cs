@@ -183,7 +183,7 @@ namespace HospitalF.Controllers
                     var button = Request[Constants.Button];
 
                     // Normal search form
-                    if ((button == null) || (Constants.NormalSearchForm.Equals(button)))
+                    if (Constants.NormalSearchForm.Equals(button))
                     {
                         // Check if input search query is null or empty
                         if (!string.IsNullOrEmpty(model.SearchValue))
