@@ -250,6 +250,7 @@
     <Content Include="Content\css\error.css" />
     <Content Include="Content\css\font-awesome.m.css" />
     <Content Include="Content\css\lockscreen.css" />
+    <Content Include="Content\css\admin-layout.css" />
     <Content Include="Content\css\smartadmin-production.css" />
     <Content Include="Content\css\smartadmin-skins.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />

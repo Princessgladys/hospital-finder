@@ -53,6 +53,7 @@ namespace HospitalF
                         "~/Content/css/font-awesome.m.css",
                         "~/Content/css/smartadmin-production.css",
                         "~/Content/css/smartadmin-skins.css",
+                        "~/Content/css/admin-layout.css",
                         "~/Content/css/custom-font.css"));
 
             // Bundle for Error page
