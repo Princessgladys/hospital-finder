@@ -227,12 +227,12 @@
     </Compile>
     <Compile Include="Models\AppointmentModels.cs" />
     <Compile Include="Models\HomeModels.cs" />
-    <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\LinqDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LinqDB.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\SecurityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\DictionaryUtil.cs" />
@@ -244,7 +244,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\bootstrap.m.css" />
-    <Content Include="Content\css\custom.css" />
+    <Content Include="Content\css\custom-home.css" />
+    <Content Include="Content\css\custom-search-result.css" />
     <Content Include="Content\css\demo.css" />
     <Content Include="Content\css\error.css" />
     <Content Include="Content\css\font-awesome.m.css" />
@@ -265,7 +266,6 @@
     <Content Include="Content\img\06c_home_page_background_optimized.jpg" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\alpha.png" />
-    <Content Include="Content\img\Appointment_Banner.jpg" />
     <Content Include="Content\img\avatars\sunny-big.png" />
     <Content Include="Content\img\avatars\sunny.png" />
     <Content Include="Content\img\background_1.jpg" />
@@ -296,6 +296,7 @@
     <Content Include="Content\img\splash\touch-icon-iphone-retina.png" />
     <Content Include="Content\js\app.js" />
     <Content Include="Content\js\bootstrap\bootstrap.min.js" />
+    <Content Include="Content\css\custom-font.css" />
     <Content Include="Content\js\custom.js" />
     <Content Include="Content\js\demo.js" />
     <Content Include="Content\js\libs\jquery-2.0.2.m.js" />
@@ -383,8 +384,6 @@
       <LastGenOutput>LinqDB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_Data\vi_VN.aff" />
-    <Content Include="App_Data\vi_VN.dic" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
@@ -400,6 +399,23 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\smartadmin\app.js" />
+    <Content Include="Scripts\smartadmin\bootstrap\bootstrap.min.js" />
+    <Content Include="Scripts\smartadmin\custom.js" />
+    <Content Include="Scripts\smartadmin\demo.js" />
+    <Content Include="Scripts\smartadmin\libs\jquery-2.0.2.min.js" />
+    <Content Include="Scripts\smartadmin\libs\jquery-ui-1.10.3.min.js" />
+    <Content Include="Scripts\smartadmin\notification\SmartNotification.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\bootstrap-slider\bootstrap-slider.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\easy-pie-chart\jquery.easy-pie-chart.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\fastclick\fastclick.js" />
+    <Content Include="Scripts\smartadmin\plugin\jquery-validate\jquery.validate.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\masked-input\jquery.maskedinput.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\msie-fix\jquery.mb.browser.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\pace\pace.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\select2\select2.min.js" />
+    <Content Include="Scripts\smartadmin\plugin\sparkline\jquery.sparkline.min.js" />
+    <Content Include="Scripts\smartadmin\smartwidgets\jarvis.widget.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -424,9 +440,12 @@
     <Content Include="Views\Error\SystemFailureHospitalUser.cshtml" />
     <Content Include="Views\Appointment\Index.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\Appointment\Confirm.cshtml" />
+    <Content Include="Views\Appointment\Confirm.cshtml">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
