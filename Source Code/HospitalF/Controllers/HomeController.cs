@@ -196,11 +196,7 @@ namespace HospitalF.Controllers
                             }
                             // Analyze to GIR query
                             await model.GIRQueryAnalyzerAsync(model.SearchValue);
-                        }
-                        else
-                        {
-                            await model.GIRQueryAnalyzerAsync(form["SearchValue"]);
-                        }
+                        }                       
 
                         // Search hospitals
                         hospitalList = await model.SearchHospital(0, 0, 0, 0, null);

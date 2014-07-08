@@ -566,5 +566,9 @@ namespace HospitalF.Models
         }
 
         #endregion
+
+        #region Search Hospital Following Position
+
+        #endregion
     }
 }

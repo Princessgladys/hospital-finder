@@ -21,7 +21,7 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "@(Url.RouteUrl(Constants.GetDoctorBySpecialiyMethod))",
+                url: "@(Url.RouteUrl(Constants.GetDoctorBySpecialityAction))",
                 data: { "specialityID": selectedItem },
                 success: function (data) {
                     ddlDoctor.html('');
@@ -58,7 +58,7 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "@(Url.RouteUrl(Constants.GetDoctorWorkingDayMethod))",
+                url: "@(Url.RouteUrl(Constants.GetWorkingDayAction))",
                 data: { "doctorID": selectedItem },
                 success: function (data) {
                         disableDays = data;
@@ -123,7 +123,7 @@
 
     <!-- Widget ID (each widget will need unique ID)-->
     <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
-        @using (Html.BeginForm(Constants.IndexMethod, Constants.AppointmentController,
+        @using (Html.BeginForm(Constants.IndexAction, Constants.AppointmentController,
                 FormMethod.Post, new { @class = "smart-form" }))
         {
             <div>
