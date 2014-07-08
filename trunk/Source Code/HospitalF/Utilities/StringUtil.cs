@@ -225,6 +225,86 @@ namespace HospitalF.Utilities
         #region Vietnamese vocabulary checking
 
         /// <summary>
+        /// Load list of string from bytes
+        /// </summary>
+        /// <param name="byteList">Byte array</param>
+        /// <returns>String array</returns>
+        private static string[] TakeStringFromByte(byte[] byteList)
+        {
+            string dicFileString = System.Text.Encoding.UTF8.GetString(byteList);
+            return dicFileString.Split(Constants.Enter);
+        }
+
+        /// <summary>
+        /// Take reletive Vietnamese diacritic characters
+        /// </summary>
+        /// <param name="word">Input word</param>
+        /// <returns>Relative Vietnamese diacritic characters</returns>
+        private static List<char> TakeRelativeDiacriticChars(string word)
+        {
+            int matchedPosition = -1;
+            char[] basicDiacriticChars = Constants.BasicDiacriticVietnameseCharacters.ToCharArray();
+            List<char> relativeDiacraticChars = new List<char>();
+            char[] tempCharArray = null;
+
+            for (int n = 0; n < word.Length; n++)
+            {
+                matchedPosition = TakeMatchedStringPosition(Constants.DiacriticVietnameseCharacters,
+                    word[n].ToString());
+                // Check if matched position is valid
+                if (!Constants.DefaultMatchingValue.Equals(matchedPosition))
+                {
+                    tempCharArray = Constants.GetDiacriticWords(basicDiacriticChars[matchedPosition]);
+                    foreach (char c in tempCharArray)
+                    {
+                        relativeDiacraticChars.Add(c);
+                    }
+                }
+            }
+
+            // Return list of relative Vietnamese diacritic characters
+            return relativeDiacraticChars;
+        }
+
+        /// <summary>
+        /// Find best suggestion words according to suggestion list in dictionary
+        /// </summary>
+        /// <param name="suggestionsListInDictionary">
+        /// List[string] that contains suggestion words in dictionary
+        /// </param>
+        /// <param name="relativeDiacraticChars">
+        /// List[char] that contains relative Vietnamese diacritic characters
+        /// </param>
+        /// <returns>List of best suggestion words</returns>
+        private static List<string> FindBestSuggestionWords(
+            List<string> suggestionsListInDictionary, List<char> relativeDiacraticChars)
+        {
+            List<string> bestSuggestionList = new List<string>();
+
+            // Check if according diacratic list is not empty
+            if (relativeDiacraticChars.Count != 0)
+            {
+                // Compare every relative diacritic characters with every word in suggestion list
+                for (int n = 0; n < relativeDiacraticChars.Count(); n++)
+                {
+                    // Find best value for each suggesion word
+                    foreach (string suggestion in suggestionsListInDictionary)
+                    {
+                        // Check if suggestion word contain relative diacritive character
+                        if (IsPatternMatched(suggestion, relativeDiacraticChars[n].ToString()) &&
+                            !bestSuggestionList.Contains(suggestion))
+                        {
+                            bestSuggestionList.Add(suggestion);
+                        }
+                    }
+                }
+            }
+            
+            // Return list of best suggestion words
+            return bestSuggestionList;
+        }
+
+        /// <summary>
         /// Check every word in an input string if they are all correct
         /// according to Vietnamese vocabularies
         /// </summary>
@@ -234,10 +314,10 @@ namespace HospitalF.Utilities
         /// Record 1: True / False that indicates input value is correct or not
         /// Record 2 (if any): Suggest a correct string value base on input value
         /// </returns>
-        public static string[] CheckVocabulary(string inputStr)
+        public static List<string> CheckVocabulary(string inputStr)
         {
             // Declare list of tokens and list of returned results
-            string[] resultList = new  string[2];
+            List<string> resultList = new List<string>();
             List<string> tokenList = new List<string>();
 
             // Normalize input string
@@ -269,8 +349,6 @@ namespace HospitalF.Utilities
             {
                 // Set default value for suggest string
                 string result = string.Empty;
-                // Set default status indicating the sentence is correct
-                resultList[0] = Constants.True;
 
                 // Check every word in the list of tokens
                 foreach (string token in tokenList)
@@ -283,17 +361,31 @@ namespace HospitalF.Utilities
                     }
                     else
                     {
-                        // Change status if the sentence is not correct
-                        resultList[0] = Constants.False;
+                        // Find relative Vietnamese diacritic characters
+                        List<char> relativeDiacraticChars = TakeRelativeDiacriticChars(word);
 
                         // Load list of suggestion words in dictionary
-                        List<string> suggestions = hunspell.Suggest(word);
-                        int max = -1;
-                        string bestSuggestion = string.Empty;
+                        List<string> suggestionsListInDictionary = hunspell.Suggest(word);
+                        
+                        // Find best suggestion words
+                        List<string> bestSuggestionList =
+                            FindBestSuggestionWords(suggestionsListInDictionary, relativeDiacraticChars);
+
+                        if ((bestSuggestionList.Count == 0) ||
+                            (suggestionsListInDictionary.Count == bestSuggestionList.Count))
+                        {
+                            bestSuggestionList = suggestionsListInDictionary;
+                        }
 
                         // Find best value for each suggesion word
-                        foreach (string suggestion in suggestions)
+                        string bestSuggestion = string.Empty;
+                        int max = -1;
+                        foreach (string suggestion in bestSuggestionList)
                         {
+
+
+
+
                             // Case of finding best suggestion in first time
                             if (word.Contains(suggestion) || (suggestion.Contains(word)))
                             {
@@ -302,8 +394,8 @@ namespace HospitalF.Utilities
                             }
 
                             // Process best suggestion word
-                            int shorterLength = (suggestion.Length < word.Length ? suggestion.Length : word.Length);
                             int temp = 0;
+                            int shorterLength = (suggestion.Length < word.Length ? suggestion.Length : word.Length);
                             for (int i = 0; i < shorterLength; i++)
                             {
                                 if (word[i] == suggestion[i])

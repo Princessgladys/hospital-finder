@@ -7,7 +7,7 @@ namespace HospitalF.Constant
     public class Constants
     {
         #region Controller, View and Methods
-        
+
         /// <summary>
         /// Name of _HomeLayout
         /// </summary>
@@ -57,7 +57,7 @@ namespace HospitalF.Constant
         /// Name of AccountController
         /// </summary>
         public const string AccountController = "AccountController";
-        
+
         /// <summary>
         /// Name of CreateAppointmentAction
         /// </summary>
@@ -316,7 +316,7 @@ namespace HospitalF.Constant
         public const string DoctorID = "Doctor_ID";
         public const string DoctorName = "Doctor_Name";
         #endregion
-        
+
         /// <summary>
         /// Vietnamese message request for Doctor
         /// </summary>
@@ -370,25 +370,6 @@ namespace HospitalF.Constant
         public const int AdministratorRoleId = 1;
 
         /// <summary>
-        /// Take diacritic Vietnamese letters according to input letter
-        /// </summary>
-        /// <param name="letter">Input letter (ă â ê ô ơ ư)</param>
-        /// <returns>String that contains diacritic Vietnamese letters</returns>
-        public string GetDiacriticWords(string letter)
-        {
-            switch (letter)
-            {
-                case "ă": return "ằẳẵặắ";
-                case "â": return "ầẩẫậấ";
-                case "ê": return "ềểễệế";
-                case "ô": return "ồổỗộố";
-                case "ơ": return "ờởỡợớ";
-                case "ư": return "ừửữựứ";
-                default: return null;
-            }
-        }
-
-        /// <summary>
         /// Value of UserRoleId
         /// </summary>
         public const int UserRoleId = 2;
@@ -413,8 +394,6 @@ namespace HospitalF.Constant
         /// </summary>
         public const string HospitalUserRoleName = "Hospital User";
 
-
-
         #endregion
 
         #region Characters
@@ -433,6 +412,11 @@ namespace HospitalF.Constant
         /// Constant for character "-"
         /// </summary>
         public const string Minus = "-";
+
+        /// <summary>
+        /// Constant for Enter character
+        /// </summary>
+        public const char Enter = '\n';
 
         #endregion
 
@@ -497,6 +481,46 @@ namespace HospitalF.Constant
         /// Constant for every button's name
         /// </summary>
         public const string Button = "button";
+
+        /// <summary>
+        /// Constant for diaritic Vietnamese character
+        /// </summary>
+        public const string DiacriticVietnameseCharacters = @"ăâđêôơưàảãạáằẳẵặắầẩẫậấèẻẽẹéềểễệếìỉĩịíòỏõọóồổỗộốờởỡợớùủũụúừửữựứỳỷỹỵý";
+
+        /// <summary>
+        /// Constant for basic diacritic Vietnamsese character
+        /// </summary>
+        public const string BasicDiacriticVietnameseCharacters = @"ăâđêôơưaaaaaăăăăăâââââeeeeeêêêêêiiiiioooooôôôôôơơơơơuuuuuưưưưưyyyyy";
+
+        /// <summary>
+        /// Constant for non-diacrtic Vietnamese characteres
+        /// </summary>
+        public const string NonDiacriticVietnameseCharacters = "aadeoouaaaaaaaaaaaaaaaeeeeeeeeeeiiiiiooooooooooooooouuuuuuuuuuyyyyy";
+
+        /// <summary>
+        /// Take diacritic Vietnamese letters according to input letter
+        /// </summary>
+        /// <param name="letter">Input letter (ă â ê ô ơ ư)</param>
+        /// <returns>String that contains diacritic Vietnamese letters</returns>
+        public static char[] GetDiacriticWords(char letter)
+        {
+            switch (letter)
+            {
+                case 'a': return new char[] { 'a', 'á', 'à', 'ả', 'ã', 'ạ' };
+                case 'ă': return new char[] { 'ă', 'ắ', 'ằ', 'ẳ', 'ẵ', 'ặ' };
+                case 'â': return new char[] { 'â', 'ấ', 'ầ', 'ẩ', 'ẫ', 'ậ' };
+                case 'e': return new char[] { 'e', 'é', 'è', 'ẻ', 'ẽ', 'ẹ' };
+                case 'ê': return new char[] { 'ê', 'ế', 'ề', 'ể', 'ễ', 'ệ' };
+                case 'o': return new char[] { 'o', 'ó', 'ò', 'ỏ', 'õ', 'ọ' };
+                case 'ô': return new char[] { 'ô', 'ố', 'ồ', 'ổ', 'ỗ', 'ộ' };
+                case 'ơ': return new char[] { 'ơ', 'ớ', 'ờ', 'ở', 'ỡ', 'ợ' };
+                case 'u': return new char[] { 'u', 'ú', 'ù', 'ủ', 'ũ', 'ụ' };
+                case 'ư': return new char[] { 'ư', 'ứ', 'ừ', 'ử', 'ữ', 'ự' };
+                case 'i': return new char[] { 'i', 'í', 'ì', 'ỉ', 'ĩ', 'ị' };
+                case 'y': return new char[] { 'y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ' };
+                default: return null;
+            }
+        }
 
         #endregion
     }
