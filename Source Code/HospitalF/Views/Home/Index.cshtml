@@ -70,11 +70,8 @@
                             <section class="col col-4" id="CurrentLocationSection">
                                 <label class="input">
                                     <i class="icon-append fa fa-location-arrow"></i>
-                                    @Html.TextBoxFor(m => m.Position, new
-                                       {
-                                           @class = "form-control",
-                                           @placeholder = "Vị trí cần tìm...",
-                                       })
+                                    @Html.TextBoxFor(m => m.Position, new { @class = "form-control", @placeholder = "Vị trí cần tìm...", })
+                                    @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
                                     <b class="tooltip tooltip-top-right">Nhập vị trí cần tìm</b>
                                 </label>
                             </section>
@@ -166,7 +163,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript">            
     @*AJAX for auto completing basic search value textbox*@
     $(document).ready(function () {
         $("#sentece-tag").on('input', function () {
@@ -263,6 +260,19 @@
             if (selectedItem == 1) {
                 $("#CurrentLocationSection").hide();
                 $("#CurrentLocationLabel").hide();
+                // Try HTML5 geolocation
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var currentLat = position.coords.latitude;
+                        var currentLng = position.coords.longitude;
+                        $("#Coordinate").val(currentLat + ", " + currentLng);
+                    }, function () {
+            
+                    });
+                } else {
+                    // Browser doesn't support Geolocation
+           
+                }
             } else {
                 $("#CurrentLocationSection").show();
                 $("#CurrentLocationLabel").show();
@@ -319,7 +329,7 @@
                 },
                 DistrictID: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.District)'
-                        }
+                }
             },
 
             // Do not change code below

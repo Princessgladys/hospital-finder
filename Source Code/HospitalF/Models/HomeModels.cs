@@ -100,7 +100,7 @@ namespace HospitalF.Models
         /// <summary>
         /// Get/Set value for property Radius
         /// </summary>
-        public float Radius { get; set; }
+        public int Radius { get; set; }
 
         #endregion
 
@@ -511,6 +511,7 @@ namespace HospitalF.Models
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
+                /*
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_ADVANCED_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseName)
                      select new Hospital()
@@ -533,6 +534,8 @@ namespace HospitalF.Models
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
                          Is_Active = h.Is_Active
                      }).ToList());
+                 * */
+                hospitalList = new List<Hospital>();
             }
 
             // Return list of hospitals
@@ -555,6 +558,7 @@ namespace HospitalF.Models
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
+                /*
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_ADVANCED_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseName)
                      select new Hospital()
@@ -577,6 +581,8 @@ namespace HospitalF.Models
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
                          Is_Active = h.Is_Active
                      }).ToList());
+                 * */
+                hospitalList = new List<Hospital>();
             }
 
             // Return list of hospitals
@@ -590,7 +596,7 @@ namespace HospitalF.Models
         /// <param name="longitude">Longitude</param>
         /// <param name="distance">Distance between 2 locations</param>
         /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
-        public async Task<List<Hospital>> LocationSearchHospital(float latitude, float longitude, int distance)
+        public async Task<List<Hospital>> LocationSearchHospital(double latitude, double longitude, int distance)
         {
             List<Hospital> hospitalList = new List<Hospital>();
 
@@ -598,7 +604,7 @@ namespace HospitalF.Models
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 hospitalList = await Task.Run(() =>
-                    (from h in data.SP_LOCATION_SEARCH_HOSPITAL(distance, latitude, longitude)
+                    (from h in data.SP_LOCATION_SEARCH_HOSPITAL(latitude, longitude, distance)
                      select new Hospital()
                      {
                          Hospital_ID = h.Hospital_ID,

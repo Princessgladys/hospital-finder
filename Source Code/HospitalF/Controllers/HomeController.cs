@@ -158,81 +158,76 @@ namespace HospitalF.Controllers
         {
             List<Hospital> hospitalList = new List<Hospital>();
             // Check if all validations are correct
-            if (!ModelState.IsValid)
+
+            try
             {
-                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-                ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
-                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-                ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
-                return View(model);
-            }
-            else
-            {
-                try
+                // Load hospital types from database
+                List<HospitalType> hospitalTypeList = null;
+                using (LinqDBDataContext data = new LinqDBDataContext())
                 {
-                    // Load hospital types from database
-                    List<HospitalType> hospitalTypeList = null;
-                    using (LinqDBDataContext data = new LinqDBDataContext())
-                    {
-                        hospitalTypeList = await Task.Run(() => (from ht in data.HospitalTypes
-                                                                 select ht).ToList());
-                    }
-                    ViewBag.HospitalTypes = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                    hospitalTypeList = await Task.Run(() => (from ht in data.HospitalTypes
+                                                             select ht).ToList());
+                }
+                ViewBag.HospitalTypes = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
 
-                    // Indicate which button is clicked
-                    var button = Request[Constants.Button];
+                // Indicate which button is clicked
+                var button = Request[Constants.Button];
 
-                    // Normal search form
-                    if ((button == null) || Constants.NormalSearchForm.Equals(button))
+                // Normal search form
+                if ((button == null) || Constants.NormalSearchForm.Equals(button))
+                {
+                    // Check if input search query is null or empty
+                    if (!string.IsNullOrEmpty(model.SearchValue))
                     {
-                        // Check if input search query is null or empty
-                        if (!string.IsNullOrEmpty(model.SearchValue))
+                        // Check if input search value is understandable
+                        string[] suggestSentence = StringUtil.CheckVocabulary(model.SearchValue);
+                        if (Constants.False.Equals(suggestSentence[0]))
                         {
-                            // Check if input search value is understandable
-                            string[] suggestSentence = StringUtil.CheckVocabulary(model.SearchValue);
-                            if (Constants.False.Equals(suggestSentence[0]))
-                            {
-                                ViewBag.SuggestionSentence = suggestSentence[1];
-                            }
-                            // Analyze to GIR query
-                            await model.GIRQueryAnalyzerAsync(model.SearchValue);
+                            ViewBag.SuggestionSentence = suggestSentence[1];
                         }
-
-                        // Search hospitals
-                        hospitalList = await model.NormalSearchHospital();
+                        // Analyze to GIR query
+                        await model.GIRQueryAnalyzerAsync(model.SearchValue);
                     }
 
-                    // Advanced search form
-                    if (Constants.AdvancedSearchForm.Equals(button))
-                    {
-                        // Search hospitals
-                        hospitalList = await model.AdvancedSearchHospital(model.CityID, model.DistrictID,
-                            model.SpecialityID, model.DiseaseName);
-                    }
-
-                    // Location search form
-                    if (Constants.LocationSearchForm.Equals(button))
-                    {
-                        // Search hospitals
-                        hospitalList = await model.LocationSearchHospital(1.0f, 1.0f, 1000);
-                    }
-
-                    // Transfer list of hospitals to Search Result page
-                    ViewBag.HospitalList = hospitalList;
-                    if (hospitalList.Count == 0)
-                    {
-                        ViewBag.SearchValue = model.SearchValue;
-                    }
+                    // Search hospitals
+                    hospitalList = await model.NormalSearchHospital();
                 }
-                catch (Exception exception)
+
+                // Advanced search form
+                if (Constants.AdvancedSearchForm.Equals(button))
                 {
-                    LoggingUtil.LogException(exception);
-                    return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+                    // Search hospitals
+                    hospitalList = await model.AdvancedSearchHospital(model.CityID, model.DistrictID,
+                        model.SpecialityID, model.DiseaseName);
                 }
 
-                // Move to result page
-                return View(hospitalList);
+                // Location search form
+                if (Constants.LocationSearchForm.Equals(button))
+                {
+                    // Search hospitals
+                    double lat = 0;
+                    double lng = 0;
+                    double.TryParse(model.Coordinate.Split(',')[0], out lat);
+                    double.TryParse(model.Coordinate.Split(',')[1], out lng);
+                    hospitalList = await model.LocationSearchHospital(lat, lng, model.Radius * 1000);
+                }
+
+                // Transfer list of hospitals to Search Result page
+                ViewBag.HospitalList = hospitalList;
+                if (hospitalList.Count == 0)
+                {
+                    ViewBag.SearchValue = model.SearchValue;
+                }
             }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+
+            // Move to result page
+            return View(hospitalList);
+
         }
 
         /// <summary>
