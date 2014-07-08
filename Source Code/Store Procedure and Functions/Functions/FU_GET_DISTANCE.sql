@@ -22,7 +22,7 @@ BEGIN
 	SET @LatitudeDistance = [dbo].[FU_GET_RADIUS] (@Latitude2 - @Latitude1)
 
 	DECLARE @LongitudeDistance FLOAT
-	SET @LongitudeDistance = [dbo].[FU_GET_RADIUS] (@Longitude2 - @Latitude2)
+	SET @LongitudeDistance = [dbo].[FU_GET_RADIUS] (@Longitude2 - @Longitude2)
 
 	DECLARE @A FLOAT
 	SET @A = SIN(@LatitudeDistance / 2) * SIN(@LatitudeDistance / 2) +
