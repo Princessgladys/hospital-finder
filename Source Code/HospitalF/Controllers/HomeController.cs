@@ -189,10 +189,10 @@ namespace HospitalF.Controllers
                         if (!string.IsNullOrEmpty(model.SearchValue))
                         {
                             // Check if input search value is understandable
-                            List<string> suggestVocabulary = StringUtil.CheckVocabulary(model.SearchValue);
-                            if (suggestVocabulary.Count > 0)
+                            string[] suggestSentence = StringUtil.CheckVocabulary(model.SearchValue);
+                            if (Constants.False.Equals(suggestSentence[0]))
                             {
-                                ViewBag.SuggestionSentence = suggestVocabulary;
+                                ViewBag.SuggestionSentence = suggestSentence[1];
                             }
                             // Analyze to GIR query
                             await model.GIRQueryAnalyzerAsync(model.SearchValue);
@@ -222,6 +222,10 @@ namespace HospitalF.Controllers
 
                     // Transfer list of hospitals to Search Result page
                     ViewBag.HospitalList = hospitalList;
+                    if (hospitalList.Count == 0)
+                    {
+                        ViewBag.SearchValue = model.SearchValue;
+                    }
                 }
                 catch (Exception exception)
                 {

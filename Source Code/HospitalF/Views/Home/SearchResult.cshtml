@@ -32,21 +32,26 @@
         {
             <fieldset>
                 @{
-            if (suggestionSentence != null)
+            if (!string.IsNullOrEmpty(suggestionSentence))
             {
                 suggestionSentence = suggestionSentence.Trim();
-                <legend>
+                <p>
                     Có phải bạn muốn tìm <i>
                         @Html.ActionLink(suggestionSentence,
-                            Constants.SearchResultAction, Constants.HomeController,
-                            new { SearchValue = suggestionSentence }, null)
-                </i>
-            </legend>
+                                Constants.SearchResultAction, Constants.HomeController,
+                                new { SearchValue = suggestionSentence }, null)
+                    </i>
+                </p>
             }
 
+            if (hospitalList.Count == 0)
+            {
+                <p>Không có kết quả tìm kiếm với từ khóa <i><font color="blue">@ViewBag.SearchValue</font></i></p>
+                    <input id="result-count" type="hidden" value="@hospitalList.Count" />
+            }
                 }
 
-                <div class="row">
+                <div class="row" id="filter-bar">
                     <div class="form-group col-md-4">
                         <label class="control-label col-md-4" for="prepend">Đánh Giá</label>
                         <div class="col-md-8">
@@ -185,6 +190,17 @@
                 }
             });
         });
+    });
+
+    @*Display fitler bar*@
+    $(document).ready(function () {
+        var resultCount = $('#result-count').val();
+        if (resultCount == 0) {
+            $("#filter-bar").hide();
+        }
+        else {
+            $("#filter-bar").show();
+        }
     });
 
     @*Data validation*@
