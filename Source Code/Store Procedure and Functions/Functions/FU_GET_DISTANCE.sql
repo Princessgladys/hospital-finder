@@ -1,16 +1,16 @@
 -- FUNCTION TO GET DISTANCE BETWEEN 2 LOCATIONS
--- SONNX
+-- VIETLP
 IF OBJECT_ID('FU_GET_DISTANCE', 'F') IS NOT NULL
 	DROP FUNCTION FU_GET_DISTANCE
 GO
-CREATE FUNCTION [dbo].[FU_GET_DISTANCE]
+ALTER FUNCTION [dbo].[FU_GET_DISTANCE]
 (
 	@Latitude1 FLOAT,
 	@Longitude1 FLOAT,
 	@Latitude2 FLOAT,
 	@Longitude2 FLOAT
 )
-RETURNS FLOAT
+RETURNS INT
 AS
 BEGIN
 	DECLARE @Result FLOAT
@@ -22,7 +22,7 @@ BEGIN
 	SET @LatitudeDistance = [dbo].[FU_GET_RADIUS] (@Latitude2 - @Latitude1)
 
 	DECLARE @LongitudeDistance FLOAT
-	SET @LongitudeDistance = [dbo].[FU_GET_RADIUS] (@Longitude2 - @Longitude2)
+	SET @LongitudeDistance = [dbo].[FU_GET_RADIUS] (@Longitude2 - @Longitude1)
 
 	DECLARE @A FLOAT
 	SET @A = SIN(@LatitudeDistance / 2) * SIN(@LatitudeDistance / 2) +
@@ -33,5 +33,10 @@ BEGIN
 	SEt @C = 2 * ATN2(SQRT(@A), SQRT(1 - @A))
 
 	SET @Result = @R * @C
-	RETURN @Result
+	RETURN CONVERT(INT, @Result)
 END
+
+<-- TEST -->
+DECLARE	@return_value float
+EXEC	@return_value = [dbo].[FU_GET_DISTANCE] 10.784075, 106.689859, 10.781278, 106.698689
+SELECT	'Return Value' = @return_value
