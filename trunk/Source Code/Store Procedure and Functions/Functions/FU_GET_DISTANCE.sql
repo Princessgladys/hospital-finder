@@ -19,14 +19,14 @@ BEGIN
 	SET @R = 6371000
 
 	DECLARE @LatitudeDistance FLOAT
-	SET @LatitudeDistance = [dbo].[FU_GET_RADIUS](@Latitude2 - @Latitude1)
+	SET @LatitudeDistance = [dbo].[FU_GET_RADIUS] (@Latitude2 - @Latitude1)
 
 	DECLARE @LongitudeDistance FLOAT
-	SET @LongitudeDistance = [dbo].[FU_GET_RADIUS](@Longitude2 - @Latitude2)
+	SET @LongitudeDistance = [dbo].[FU_GET_RADIUS] (@Longitude2 - @Latitude2)
 
 	DECLARE @A FLOAT
 	SET @A = SIN(@LatitudeDistance / 2) * SIN(@LatitudeDistance / 2) +
-			 COS([dbo].[FU_GET_RADIUS](@Latitude1)) * COS([dbo].[FU_GET_RADIUS](@Latitude1)) *
+			 COS([dbo].[FU_GET_RADIUS] (@Latitude1)) * COS([dbo].[FU_GET_RADIUS] (@Latitude1)) *
 			 SIN(@LongitudeDistance / 2) * SIN(@LongitudeDistance / 2)
 
 	DECLARE @C FLOAT
