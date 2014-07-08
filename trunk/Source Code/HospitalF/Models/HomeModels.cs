@@ -472,6 +472,27 @@ namespace HospitalF.Models
 
         #region Search Hospital
 
+        #region Location Search Functions
+        private double GetRadius(double x)
+        {
+            return (x * Math.PI / 180);
+        }
+
+        private double GetDistance(double lat1, double lng1, double lat2, double lng2)
+        {
+            double R = 6371000;
+            var dLat = GetRadius(lat2 - lat1);
+            var dLong = GetRadius(lng2 - lng1);
+
+            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+              Math.Cos(GetRadius(lat1)) * Math.Cos(GetRadius(lat1)) *
+              Math.Sin(dLong / 2) * Math.Sin(dLong / 2);
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            var d = R * c;
+            return d; // returns the distance in meter
+        }
+        #endregion
+
         /// <summary>
         ///  Search hospitals in database
         /// </summary>
@@ -491,7 +512,7 @@ namespace HospitalF.Models
             // Declare variable
             List<Hospital> hospitalList = null;
             string hospitalName = string.Empty;
-            
+
             // Normal search form
             if (searchType == 0)
             {
@@ -561,14 +582,35 @@ namespace HospitalF.Models
                 }
             }
 
+            // Location search form
+            if (searchType == 2)
+            {
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    double x = 10.784075, y = 106.689859;
+                    //string s = "10.784075, 106.689859";
+                    //string f = s.Split(',')[0];
+                    //string g = s.Split(',')[1];
+                    var temp = (from h in data.Hospitals
+                                                         where (GetDistance(double.Parse(h.Coordinate.ToString().Split(',')[0]),
+                                                                            double.Parse(h.Coordinate.ToString().Split(',')[1]),
+                                                                            x, y) > 1000)
+                                                         //where (h.Coordinate.Split(',')[0].Equals("10.784075"))
+                                                         select h).ToList<Hospital>();
+                    hospitalList = await Task.Run(() => (from h in data.Hospitals
+                                                         where (GetDistance(double.Parse(h.Coordinate.ToString().Split(',')[0]),
+                                                                            double.Parse(h.Coordinate.ToString().Split(',')[1]),
+                                                                            x, y) > 1000)
+                                                         //where (h.Coordinate.Split(',')[0].Equals("10.784075"))
+                                                         select h).ToList<Hospital>());
+                }
+            }
+
             // Return list of hospitals
             return hospitalList;
         }
 
         #endregion
 
-        #region Search Hospital Following Position
-
-        #endregion
     }
 }
