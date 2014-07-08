@@ -43,20 +43,22 @@ namespace HospitalF
                         "~/Content/css/font-awesome.m.css",
                         "~/Content/css/smartadmin-production.css",
                         "~/Content/css/smartadmin-skins.css",
-                        "~/Content/css/custom.css"));
+                        "~/Content/css/custom-home.css",
+                        "~/Content/css/custom-font.css",
+                        "~/Content/css/custom-search-result.css"));
+
             // Bundle for Admin and Hospital User layout
             bundles.Add(new StyleBundle("~/Content/AdminLayout").Include(
                         "~/Content/css/bootstrap.m.css",
                         "~/Content/css/font-awesome.m.css",
                         "~/Content/css/smartadmin-production.css",
-                        "~/Content/css/smartadmin-skins.css"));
+                        "~/Content/css/smartadmin-skins.css",
+                        "~/Content/css/custom-font.css"));
+
             // Bundle for Error page
             bundles.Add(new StyleBundle("~/Content/Error").Include(
                         "~/Content/css/error.css"));
-            // Bundle for smart admin jquery scrip
-            bundles.Add(new ScriptBundle("~/bundles/smartadminjquery").Include(
-                        "~/Content/js/libs/jquery-2.0.2.m.js",
-                        "~/Content/js/libs/jquery-ui-1.10.3.m.js"));
+
         }
     }
 }
