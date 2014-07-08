@@ -1,30 +1,16 @@
 -- SCRIPT TO SEARCH HOSPITALS
 -- USING NORMAL OPTION
 -- SONNX
-IF OBJECT_ID('[SP_NORMAL_SEARCH_HOSPITAL]', 'P') IS NOT NULL
-	DROP PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
+IF OBJECT_ID('[SP_ADVANCED_SEARCH_HOSPITAL]', 'P') IS NOT NULL
+	DROP PROCEDURE SP_ADVANCED_SEARCH_HOSPITAL
 GO
-CREATE PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
-	@HospitalName NVARCHAR(128),
+CREATE PROCEDURE SP_ADVANCED_SEARCH_HOSPITAL
 	@CityID INT,
 	@DistrictID INT,
 	@SpecialityID INT,
 	@DiseaseName NVARCHAR(64)
 AS
 BEGIN
-	-- CHECK IF HOSPITAL ID IS NOT NULL
-	IF (@HospitalName IS NOT NULL)
-	BEGIN
-		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
-			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
-			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
-			   h.Is_Allow_Appointment, h.Is_Active
-		FROM Hospital h
-		WHERE h.Hospital_Name LIKE (N'%' + @HospitalName + N'%')
-		ORDER BY h.Hospital_ID
-		RETURN;
-	END
-
 	IF (@CityID = 0)
 		SET @CityID = NULL
 
