@@ -199,14 +199,14 @@ namespace HospitalF.Controllers
                         }
 
                         // Search hospitals
-                        hospitalList = await model.SearchHospital(0, 0, 0, 0, null);
+                        hospitalList = await model.NormalSearchHospital();
                     }
 
                     // Advanced search form
                     if (Constants.AdvancedSearchForm.Equals(button))
                     {
                         // Search hospitals
-                        hospitalList = await model.SearchHospital(1, model.CityID, model.DistrictID,
+                        hospitalList = await model.AdvancedSearchHospital(model.CityID, model.DistrictID,
                             model.SpecialityID, model.DiseaseName);
                     }
 
@@ -214,8 +214,7 @@ namespace HospitalF.Controllers
                     if (Constants.LocationSearchForm.Equals(button))
                     {
                         // Search hospitals
-                        hospitalList = await model.SearchHospital(2, 0, 0,
-                            0, null);
+                        hospitalList = await model.LocationSearchHospital(1.0f, 1.0f, 1000);
                     }
 
                     // Transfer list of hospitals to Search Result page
