@@ -78,11 +78,6 @@ namespace HospitalF.Models
         public string DiseaseName { get; set; }
 
         /// <summary>
-        /// Get/Set value for property CurrentLocation
-        /// </summary>
-        public string CurrentLocation { get; set; }
-
-        /// <summary>
         /// Get/Set value for property AppointedLocation
         /// </summary>
         public string AppointedAddress { get; set; }
@@ -100,7 +95,7 @@ namespace HospitalF.Models
         /// <summary>
         /// Get/Set value for property HospitalAddres
         /// </summary>
-        public string HospitalAddress { get; set; }
+        public string Position { get; set; }
 
         /// <summary>
         /// Get/Set value for property Radius

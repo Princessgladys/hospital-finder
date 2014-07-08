@@ -217,7 +217,7 @@ namespace HospitalF.Controllers
                     // Location search form
                     if (Constants.LocationSearchForm.Equals(button))
                     {
-
+                        
                     }
 
                     // Transfer list of hospitals to Search Result page
