@@ -156,7 +156,7 @@ namespace HospitalF.Controllers
         [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> SearchResult(HomeModels model, FormCollection form)
         {
-            List<Hospital> hospitalList = null;
+            List<Hospital> hospitalList = new List<Hospital>();
             // Check if all validations are correct
             if (!ModelState.IsValid)
             {
@@ -196,7 +196,7 @@ namespace HospitalF.Controllers
                             }
                             // Analyze to GIR query
                             await model.GIRQueryAnalyzerAsync(model.SearchValue);
-                        }                       
+                        }
 
                         // Search hospitals
                         hospitalList = await model.SearchHospital(0, 0, 0, 0, null);
@@ -213,7 +213,9 @@ namespace HospitalF.Controllers
                     // Location search form
                     if (Constants.LocationSearchForm.Equals(button))
                     {
-                        
+                        // Search hospitals
+                        hospitalList = await model.SearchHospital(2, 0, 0,
+                            0, null);
                     }
 
                     // Transfer list of hospitals to Search Result page
@@ -245,7 +247,7 @@ namespace HospitalF.Controllers
         {
             try
             {
-                
+
             }
             catch (Exception)
             {

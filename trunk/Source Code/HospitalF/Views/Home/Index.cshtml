@@ -266,6 +266,7 @@
             } else {
                 $("#CurrentLocationSection").show();
                 $("#CurrentLocationLabel").show();
+
             }
         });
     });
@@ -295,6 +296,30 @@
                 SearchValue: {
                     maxlength: '@string.Format(ErrorMessage.CEM003, Constants.SearchValue, 100)'
                 }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+
+        $('#location-search-form').validate({
+            // Rules for form validation
+            rules: {
+                Position: {
+                    required: true
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                Position: {
+                    required: '@string.Format(ErrorMessage.CEM001, "vị trí")'
+                },
+                DistrictID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.District)'
+                        }
             },
 
             // Do not change code below
