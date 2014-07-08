@@ -57,7 +57,7 @@ namespace HospitalF.Constant
         /// <summary>
         /// Name of AccountController
         /// </summary>
-        public const string AccountController = "AccountController";
+        public const string AccountController = "Account";
 
         /// <summary>
         /// Name of CreateAppointmentAction
