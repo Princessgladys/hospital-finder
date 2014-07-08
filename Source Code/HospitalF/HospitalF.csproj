@@ -243,6 +243,8 @@
     <Compile Include="Utilities\StringUtil.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\vi_VN.aff" />
+    <Content Include="App_Data\vi_VN.dic" />
     <Content Include="Content\css\bootstrap.m.css" />
     <Content Include="Content\css\custom-home.css" />
     <Content Include="Content\css\custom-search-result.css" />
@@ -250,7 +252,6 @@
     <Content Include="Content\css\error.css" />
     <Content Include="Content\css\font-awesome.m.css" />
     <Content Include="Content\css\lockscreen.css" />
-    <Content Include="Content\css\admin-layout.css" />
     <Content Include="Content\css\smartadmin-production.css" />
     <Content Include="Content\css\smartadmin-skins.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
