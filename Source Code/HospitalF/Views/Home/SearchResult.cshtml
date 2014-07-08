@@ -9,7 +9,6 @@
 
 <!-- MAIN CONTENT -->
 <div id="content-results" class="col-md-10 col-md-offset-1 well">
-    <legend>Nhập từ khóa về bệnh viện</legend>
     <div class="col-md-8">
         @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal", @id = Constants.NormalSearchForm }))
         {
@@ -43,7 +42,6 @@
                     </i>
                 </p>
             }
-
             if (hospitalList.Count == 0)
             {
                 <p>Không có kết quả tìm kiếm với từ khóa <i><font color="blue">@ViewBag.SearchValue</font></i></p>
