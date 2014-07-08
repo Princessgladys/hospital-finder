@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 namespace HospitalF.Constant
 {
     /// <summary>
@@ -498,10 +499,10 @@ namespace HospitalF.Constant
         public const string NonDiacriticVietnameseCharacters = "aadeoouaaaaaaaaaaaaaaaeeeeeeeeeeiiiiiooooooooooooooouuuuuuuuuuyyyyy";
 
         /// <summary>
-        /// Take diacritic Vietnamese letters according to input letter
+        /// Take relative diacritic Vietnamese characters according to input letter
         /// </summary>
-        /// <param name="letter">Input letter (ă â ê ô ơ ư)</param>
-        /// <returns>String that contains diacritic Vietnamese letters</returns>
+        /// <param name="letter">Input letter (a ă â e ê o ô ơ u ư i y đ)</param>
+        /// <returns>char[] that contains relative diacritic Vietnamese characters</returns>
         public static char[] GetDiacriticWords(char letter)
         {
             switch (letter)
@@ -518,6 +519,7 @@ namespace HospitalF.Constant
                 case 'ư': return new char[] { 'ư', 'ứ', 'ừ', 'ử', 'ữ', 'ự' };
                 case 'i': return new char[] { 'i', 'í', 'ì', 'ỉ', 'ĩ', 'ị' };
                 case 'y': return new char[] { 'y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ' };
+                case 'đ': return new char[] { 'đ' };
                 default: return null;
             }
         }
