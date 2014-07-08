@@ -314,10 +314,11 @@ namespace HospitalF.Utilities
         /// Record 1: True / False that indicates input value is correct or not
         /// Record 2 (if any): Suggest a correct string value base on input value
         /// </returns>
-        public static List<string> CheckVocabulary(string inputStr)
+        public static string[] CheckVocabulary(string inputStr)
         {
             // Declare list of tokens and list of returned results
-            List<string> resultList = new List<string>();
+            string[] resultList = new string[2];
+            resultList[0] = Constants.True;
             List<string> tokenList = new List<string>();
 
             // Normalize input string
@@ -361,33 +362,39 @@ namespace HospitalF.Utilities
                     }
                     else
                     {
+                        resultList[0] = Constants.False;
+
                         // Find relative Vietnamese diacritic characters
                         List<char> relativeDiacraticChars = TakeRelativeDiacriticChars(word);
 
                         // Load list of suggestion words in dictionary
                         List<string> suggestionsListInDictionary = hunspell.Suggest(word);
-                        
-                        // Find best suggestion words
-                        List<string> bestSuggestionList =
-                            FindBestSuggestionWords(suggestionsListInDictionary, relativeDiacraticChars);
 
-                        if ((bestSuggestionList.Count == 0) ||
-                            (suggestionsListInDictionary.Count == bestSuggestionList.Count))
+                        // Create list of best suggestion words
+                        List<string> bestSuggestionList = new List<string>();
+
+                        if (suggestionsListInDictionary.Count > 1)
+                        {
+                            bestSuggestionList =
+                                FindBestSuggestionWords(suggestionsListInDictionary, relativeDiacraticChars);
+                        }
+
+                        if ((bestSuggestionList.Count == 0))
                         {
                             bestSuggestionList = suggestionsListInDictionary;
                         }
 
-                        // Find best value for each suggesion word
+                        // Find best value for each best suggesion word
                         string bestSuggestion = string.Empty;
                         int max = -1;
-                        foreach (string suggestion in bestSuggestionList)
+                        var sortedBestSuggestionList = from element in bestSuggestionList
+                                                       orderby element.Length
+                                                       select element;
+
+                        foreach (string suggestion in sortedBestSuggestionList)
                         {
-
-
-
-
-                            // Case of finding best suggestion in first time
-                            if (word.Contains(suggestion) || (suggestion.Contains(word)))
+                            // Case of best suggestion contains in the input word
+                            if (IsPatternMatched(suggestion, word) || IsPatternMatched(word, suggestion))
                             {
                                 bestSuggestion = suggestion;
                                 break;
@@ -418,7 +425,7 @@ namespace HospitalF.Utilities
                 }
 
                 // Add suggest string to result list
-                resultList[1] = result;
+                resultList[1] = result.Trim();
                 // Return result
                 return resultList;
             }
