@@ -1,13 +1,13 @@
 -- SCRIPT TO SEARCH HOSPITALS
 -- USING LOCATION OPTION
--- SONNX
+-- VIETLP
 IF OBJECT_ID('[SP_LOCATION_SEARCH_HOSPITAL]', 'P') IS NOT NULL
 	DROP PROCEDURE SP_LOCATION_SEARCH_HOSPITAL
 GO
 CREATE PROCEDURE SP_LOCATION_SEARCH_HOSPITAL
-	@Distance INT,
 	@Latitude FLOAT,
-	@Longitude FLOAT
+	@Longitude FLOAT,
+	@Distance INT	
 AS
 BEGIN
 	SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
@@ -16,8 +16,11 @@ BEGIN
 		   h.Is_Allow_Appointment, h.Is_Active, h.Coordinate
 	FROM Hospital h
 	WHERE h.Is_Active = 'True' AND
-		  [dbo].[FU_GET_DISTANCE]
-			(CONVERT(FLOAT, PARSENAME(REPLACE(h.Coordinate, ',', '.'), 2)),
-			 CONVERT(FLOAT, PARSENAME(REPLACE(h.Coordinate, ',', '.'), 1)),
-			 @Latitude, @Longitude) > @Distance
+		  [dbo].[FU_GET_DISTANCE] 
+			(CONVERT(FLOAT, SUBSTRING(h.Coordinate, 1, CHARINDEX(',', h.Coordinate) - 1)),
+			 CONVERT(FLOAT, SUBSTRING(h.Coordinate, CHARINDEX(',', h.Coordinate) + 1, LEN(h.Coordinate))),
+			 @Latitude, @Longitude) <= @Distance
 END
+
+<-- EXEC -->
+EXEC SP_LOCATION_SEARCH_HOSPITAL 10.784075, 106.689859, 700
