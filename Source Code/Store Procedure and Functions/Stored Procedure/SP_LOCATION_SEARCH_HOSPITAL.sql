@@ -10,8 +10,6 @@ CREATE PROCEDURE SP_LOCATION_SEARCH_HOSPITAL
 	@Longitude FLOAT
 AS
 BEGIN
-	
-
 	SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 		   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
 		   h.End_Time, h.Short_Description, h.Full_Description,
