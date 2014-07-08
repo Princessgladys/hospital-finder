@@ -189,14 +189,13 @@ namespace HospitalF.Controllers
                         if (!string.IsNullOrEmpty(model.SearchValue))
                         {
                             // Check if input search value is understandable
-                            string[] checkCorrectVocabulary = StringUtil.CheckVocabulary(model.SearchValue);
-                            if (Constants.False.Equals(checkCorrectVocabulary[0]))
+                            List<string> suggestVocabulary = StringUtil.CheckVocabulary(model.SearchValue);
+                            if (suggestVocabulary.Count > 0)
                             {
-                                ViewBag.SuggestionSentence = checkCorrectVocabulary[1];
+                                ViewBag.SuggestionSentence = suggestVocabulary;
                             }
                             // Analyze to GIR query
                             await model.GIRQueryAnalyzerAsync(model.SearchValue);
-                            ViewBag.SearchValue = model.SearchValue;
                         }
                         else
                         {
