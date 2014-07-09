@@ -511,7 +511,6 @@ namespace HospitalF.Models
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                /*
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_ADVANCED_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseName)
                      select new Hospital()
@@ -534,8 +533,6 @@ namespace HospitalF.Models
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
                          Is_Active = h.Is_Active
                      }).ToList());
-                 * */
-                hospitalList = new List<Hospital>();
             }
 
             // Return list of hospitals
@@ -558,7 +555,6 @@ namespace HospitalF.Models
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                /*
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_ADVANCED_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseName)
                      select new Hospital()
@@ -581,8 +577,6 @@ namespace HospitalF.Models
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
                          Is_Active = h.Is_Active
                      }).ToList());
-                 * */
-                hospitalList = new List<Hospital>();
             }
 
             // Return list of hospitals
