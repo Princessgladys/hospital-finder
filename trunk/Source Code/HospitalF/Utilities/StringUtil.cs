@@ -34,6 +34,7 @@ namespace HospitalF.Utilities
             // Assign shifting index
             for (int n = 0; n < pattern.Length; n++)
             {
+                char a = pattern[n];
                 occurrence[pattern[n]] = n;
             }
             // Return bad match table of a pattern
@@ -64,6 +65,8 @@ namespace HospitalF.Utilities
                 shift = 0;
                 for (int i = patternLength - 1; i >= 0; i--)
                 {
+                    char a = text[n + i]; 
+                    char b = pattern[i];
                     if (pattern[i] != text[n + i])
                     {
                         shift = Math.Max(1, i - occurrence[text[n + i]]);
@@ -86,7 +89,7 @@ namespace HospitalF.Utilities
         /// </summary>
         /// <param name="text">Input query text</param>
         /// <param name="pattern">Pattern that needed to find in a string</param>
-        /// <returns>9999: Not matched, #9999: Matching position</returns>
+        /// <returns>9999: Not matched, #9999: Matched position</returns>
         public static int TakeMatchedStringPosition(string text, string pattern)
         {
             // Shifiting index
