@@ -29,15 +29,12 @@ namespace HospitalF.Utilities
         /// </returns>
         private static int[] CreateBadMatchTable(string pattern)
         {
-            int a = 0;
             // Create an array of shifting index
             int[] occurrence = new int[10000];
             // Assign shifting index
             for (int n = 0; n < pattern.Length; n++)
             {
-                char b = pattern[n];
                 occurrence[pattern[n]] = n;
-                a = occurrence[pattern[n]];
             }
             // Return bad match table of a pattern
             return occurrence;
@@ -228,11 +225,24 @@ namespace HospitalF.Utilities
         /// Load list of string from bytes
         /// </summary>
         /// <param name="byteList">Byte array</param>
+        /// <param name="inputWord">Word</param>
         /// <returns>String array</returns>
-        private static string[] TakeStringFromByte(byte[] byteList)
+        private static List<string> TakeSuggestionFromDictionary(byte[] byteList, string inputWord)
         {
             string dicFileString = System.Text.Encoding.UTF8.GetString(byteList);
-            return dicFileString.Split(Constants.Enter);
+            List<string> suggestionList = dicFileString.Split(Constants.Enter).ToList();
+            List<string> returnList = new List<string>();
+
+            foreach (string word in suggestionList)
+            {
+                if (CompareString(word, inputWord) >= 0.5f)
+                {
+                    returnList.Add(word);
+                }
+            }
+
+            // Return suggestion words in dictionary
+            return returnList;
         }
 
         /// <summary>
@@ -387,11 +397,8 @@ namespace HospitalF.Utilities
                         // Find best value for each best suggesion word
                         string bestSuggestion = string.Empty;
                         int max = -1;
-                        var sortedBestSuggestionList = from element in bestSuggestionList
-                                                       orderby element.Length
-                                                       select element;
 
-                        foreach (string suggestion in sortedBestSuggestionList)
+                        foreach (string suggestion in bestSuggestionList)
                         {
                             // Case of best suggestion contains in the input word
                             if (IsPatternMatched(suggestion, word) || IsPatternMatched(word, suggestion))
