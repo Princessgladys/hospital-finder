@@ -10,14 +10,13 @@ CREATE FUNCTION [dbo].[FU_CREATE_BAD_MATCH_TABLE]
 RETURNS NVARCHAR(256)
 AS
 BEGIN
-	SET @Pattern = LOWER(@Pattern)
 	DECLARE @BadMatchTable NVARCHAR(256) = NULL
 
 	DECLARE @Count INT = 1
 	DECLARE @PatternLength INT 
-	SET @PatternLength = LEN(RTRIM(LTRIM(@Pattern)))
+	SET @PatternLength = LEN(@Pattern)
 
-	DECLARE @CharInPattern CHAR = NULL
+	DECLARE @CharInPattern NVARCHAR(1) = NULL
 
 	WHILE (@Count <= @PatternLength)
 	BEGIN
@@ -27,11 +26,11 @@ BEGIN
 		BEGIN
 			SET @BadMatchTable = REPLACE(@BadMatchTable,
 				SUBSTRING(@BadMatchTable,
-					CHARINDEX(@CharInPattern, @BadMatchTable) - 2, 1), @Count)
+					CHARINDEX(@CharInPattern, @BadMatchTable) - 2, 1), @Count - 1)
 		END
 		ELSE
 		BEGIN
-			SET @BadMatchTable = CONCAT(@BadMatchTable, '[', @Count, ',', @CharInPattern, ']|')
+			SET @BadMatchTable = CONCAT(@BadMatchTable, '[', @Count - 1, ',', @CharInPattern, ']|')
 		END
 
 		SET @Count += 1
