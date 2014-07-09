@@ -157,7 +157,6 @@ namespace HospitalF.Controllers
         public async Task<ActionResult> SearchResult(HomeModels model, FormCollection form)
         {
             List<Hospital> hospitalList = new List<Hospital>();
-            // Check if all validations are correct
 
             try
             {
@@ -227,7 +226,6 @@ namespace HospitalF.Controllers
 
             // Move to result page
             return View(hospitalList);
-
         }
 
         /// <summary>
