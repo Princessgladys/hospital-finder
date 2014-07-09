@@ -64,11 +64,8 @@ namespace HospitalF.Utilities
                 shift = 0;
                 for (int i = patternLength - 1; i >= 0; i--)
                 {
-                    char a = pattern[i];
-                    char b = text[n + i];
                     if (pattern[i] != text[n + i])
                     {
-                        int bc = occurrence[text[n + i]];
                         shift = Math.Max(1, i - occurrence[text[n + i]]);
                         break;
                     }
@@ -108,11 +105,8 @@ namespace HospitalF.Utilities
                 shift = 0;
                 for (int i = patternLength - 1; i >= 0; i--)
                 {
-                    char a = pattern[i];
-                    char b = text[n + i];
                     if (pattern[i] != text[n + i])
                     {
-                        int bc = occurrence[text[n + i]];
                         shift = Math.Max(1, i - occurrence[text[n + i]]);
                         break;
                     }
