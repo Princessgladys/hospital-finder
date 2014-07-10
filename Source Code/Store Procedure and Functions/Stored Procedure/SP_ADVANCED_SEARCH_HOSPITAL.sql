@@ -63,7 +63,8 @@ BEGIN
 	BEGIN
 		SET @ConditionPhrase += CASE WHEN @DistrictID IS NOT NULL
 								THEN N' AND h.District_ID = @DistrictID'
-								ELSE '' END;
+								ELSE ''
+								END;
 		SET @ConditionPhrase += N' AND h.City_ID = @CityID'
 			
 		SET @SqlQuery = @SelectPhrase + CHAR(13) + @FromPhrase + CHAR(13) +
@@ -77,21 +78,35 @@ BEGIN
 	
 	-- CASE THAT WHAT PHRASE AND WHERE PHRASE HAVE VALUE
 	IF (@WhatPhrase = 1)
-	BEGIN
-		SET @FromPhrase += N', Hospital_Speciality s, Speciality_Disease d'
-		
+	BEGIN		
+		SET @FromPhrase += CASE WHEN @SpecialityID IS NOT NULL
+						   THEN N', Hospital_Speciality hs'
+						   ELSE ''
+						   END;
+		SET @FromPhrase += CASE WHEN @DiseaseID IS NOT NULL
+						   THEN N', Speciality_Disease sd, Hospital_Speciality hs'
+						   ELSE ''
+						   END;
+
 		SET @ConditionPhrase += CASE WHEN @SpecialityID IS NOT NULL
-								THEN N' AND d.Speciality_ID = @SpecialityID'
-								ELSE '' END;
+								THEN N' AND hs.Speciality_ID = @SpecialityID'
+								ELSE ''
+								END;
 		SET @ConditionPhrase += CASE WHEN @DiseaseID IS NOT NULL
-								THEN N' AND d.Disease_ID = @DiseaseID'
-								ELSE '' END;
+								THEN N' AND sd.Disease_ID = @DiseaseID' +
+									 N' AND hs.Speciality_ID = sd.Speciality_ID'
+								ELSE ''
+								END;
+		SET @ConditionPhrase += CASE WHEN (@SpecialityID IS NOT NULL) AND (@DiseaseID IS NOT NULL)
+								THEN N' AND h.Hospital_ID = hs.Hospital_ID'
+								ELSE N' AND h.Hospital_ID = hs.Hospital_ID'
+								END;
+
 		SET @ConditionPhrase += N' AND h.City_ID = @CityID'
 		SET @ConditionPhrase += CASE WHEN @DistrictID IS NOT NULL
 								THEN N' AND h.District_ID = @DistrictID'
-								ELSE '' END;
-		SET @ConditionPhrase += N' AND s.Speciality_ID = d.Speciality' +
-								N' AND h.Hospital_ID = s.Hospital_ID'
+								ELSE ''
+								END;
 
 		SET @SqlQuery = @SelectPhrase + CHAR(13) + @FromPhrase + CHAR(13) +
 						@ConditionPhrase + CHAR(13) + @OrderPhrase
