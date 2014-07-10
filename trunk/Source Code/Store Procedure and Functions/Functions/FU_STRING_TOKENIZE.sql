@@ -9,10 +9,10 @@ CREATE FUNCTION [dbo].[FU_STRING_TOKENIZE]
 	@InputStr NVARCHAR(MAX),
 	@Delimeter VARCHAR(1)
 )
-RETURNS @TokenList TABLE ([Token] [nvarchar] (512))
+RETURNS @TokenList TABLE ([Token] [NVARCHAR] (32))
 AS
 BEGIN
-	DECLARE @Token NVARCHAR(128)
+	DECLARE @Token NVARCHAR(32)
 	DECLARE @Position INT
 
 	WHILE CHARINDEX(@Delimeter, @InputStr) > 0
