@@ -7,7 +7,8 @@ CREATE FUNCTION [dbo].[FU_TAKE_PAIRS_OF_LETTER]
 (
 	@Word NVARCHAR(32)
 )
-RETURNS @PairList TABLE ([Pair] [nvarchar] (512))
+RETURNS @PairList TABLE (ID INT PRIMARY KEY,
+						 Pair NVARCHAR(512))
 AS
 BEGIN
 	DECLARE @Pair NVARCHAR(32)
@@ -19,7 +20,7 @@ BEGIN
 		SET @Pair = SUBSTRING(@Word, @Count + 1, 2)
 
 		INSERT INTO @PairList 
-		SELECT @Pair
+		SELECT @Count + 1, @Pair
 
 		SET @Count += 1
 	END
