@@ -34,17 +34,17 @@
             if (!string.IsNullOrEmpty(suggestionSentence))
             {
                 suggestionSentence = suggestionSentence.Trim();
-                <p>
-                    Có phải bạn muốn tìm <i>
-                        @Html.ActionLink(suggestionSentence,
+                    <p>
+                        Có phải bạn muốn tìm <i>
+                            @Html.ActionLink(suggestionSentence,
                                 Constants.SearchResultAction, Constants.HomeController,
                                 new { SearchValue = suggestionSentence }, null)
-                    </i>
-                </p>
+                        </i>
+                    </p>
             }
             if (hospitalList.Count == 0)
             {
-                <p>Không có kết quả tìm kiếm với từ khóa <i><font color="blue">@ViewBag.SearchValue</font></i></p>
+                    <p>Không có kết quả tìm kiếm với từ khóa <i><font color="blue">@ViewBag.SearchValue</font></i></p>
                     <input id="result-count" type="hidden" value="@hospitalList.Count" />
             }
                 }
@@ -92,33 +92,33 @@
             {
                 foreach (Hospital hospital in hospitalList)
                 {
-                    <div class="search-results clearfix smart-form">
+                <div class="search-results clearfix smart-form">
 
-                        <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h4>
+                    <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h4>
 
-                        <div>
-                            <div class="rating display-inline">
-                                <input type="radio" name="stars-rating" id="stars-rating-5">
-                                <label for="stars-rating-5"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="stars-rating" id="stars-rating-4">
-                                <label for="stars-rating-4"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="stars-rating" id="stars-rating-3">
-                                <label for="stars-rating-3"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="stars-rating" id="stars-rating-2">
-                                <label for="stars-rating-2"><i class="fa fa-star"></i></label>
-                                <input type="radio" name="stars-rating" id="stars-rating-1">
-                                <label for="stars-rating-1"><i class="fa fa-star"></i></label>
-                            </div>
-                            <br>
-                            <div class="url text-success">
-                                www.timkiembenhvien.com <i class="fa fa-caret-down"></i>
-                            </div>
-                            <p class="description">
-                                Đây là cái bệnh viện.
-                            </p>
+                    <div>
+                        <div class="rating display-inline">
+                            <input type="radio" name="stars-rating" id="stars-rating-5">
+                            <label for="stars-rating-5"><i class="fa fa-star"></i></label>
+                            <input type="radio" name="stars-rating" id="stars-rating-4">
+                            <label for="stars-rating-4"><i class="fa fa-star"></i></label>
+                            <input type="radio" name="stars-rating" id="stars-rating-3">
+                            <label for="stars-rating-3"><i class="fa fa-star"></i></label>
+                            <input type="radio" name="stars-rating" id="stars-rating-2">
+                            <label for="stars-rating-2"><i class="fa fa-star"></i></label>
+                            <input type="radio" name="stars-rating" id="stars-rating-1">
+                            <label for="stars-rating-1"><i class="fa fa-star"></i></label>
                         </div>
-
+                        <br>
+                        <div class="url text-success">
+                            www.timkiembenhvien.com <i class="fa fa-caret-down"></i>
+                        </div>
+                        <p class="description">
+                            Đây là cái bệnh viện.
+                        </p>
                     </div>
+
+                </div>
                 }
             }
             <div class="text-center">
@@ -151,9 +151,11 @@
                 <br>
             </div>
         </div>
+
         <div id="map-results" class="col-md-8">
             <div id="map-canvas"></div>
         </div>
+
     </div>
 </div>
 <!-- END MAIN CONTENT -->
@@ -212,102 +214,158 @@
         });
     });
 
-    // Google Map API - Geolocation
-    /*
-    var map;
+    // GOOGLE - API
 
-    function initialize() {
-        var mapOptions = {
-            zoom: 6
-        };
-        map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
-
-        // Try HTML5 geolocation
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var pos = new google.maps.LatLng(position.coords.latitude,
-                                                 position.coords.longitude);
-
-                var infowindow = new google.maps.InfoWindow({
-                    map: map,
-                    position: pos,
-                    content: 'Vị trí hiện tại của bạn.'
-                });
-
-                map.setCenter(pos);
-            }, function () {
-                handleNoGeolocation(true);
-            });
-        } else {
-            // Browser doesn't support Geolocation
-            handleNoGeolocation(false);
-        }
-    }
-
-    function handleNoGeolocation(errorFlag) {
-        if (errorFlag) {
-            var content = 'Error: The Geolocation service failed.';
-        } else {
-            var content = 'Error: Your browser doesn\'t support geolocation.';
-        }
-
-        var options = {
-            map: map,
-            position: new google.maps.LatLng(60, 105),
-            content: content
-        };
-
-        var infowindow = new google.maps.InfoWindow(options);
-        map.setCenter(options.position);
-    }
-
-    google.maps.event.addDomListener(window, 'load', initialize);
-    */
-    // Set map
+    // Google map
     var map;
     // List markers on map
     var markers = [];
-    @if (hospitalList != null)
-    {
-        foreach (Hospital hospital in hospitalList)
-        {
-        <text>
-    var hospital = [];
-    hospital.push('@(Html.Raw(hospital.Hospital_Name))');
-    var coordinate = '@(hospital.Coordinate)';
-    var longitude = (coordinate.split(',')[0]).trim();
-    var latitude = (coordinate.split(',')[1]).trim();
-    hospital.push(longitude);
-    hospital.push(latitude);
-    markers.push(hospital);
-    </text>
-        }
-    }
-    function initializeMap() {
-        var latlng = new google.maps.LatLng(markers[0][1], markers[0][2]);
-        var options = {
-            zoom: 15,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            mapTypeControl: false
+    // List of windows that show detailed information of hospital on map
+    var infowindow = new google.maps.InfoWindow();
+    // Parse JSON hospital list to javascript object
+    var hospitalList = JSON && JSON.parse('@Html.Raw(ViewBag.JsonHospitalList)') || $.parseJSON('@Html.Raw(ViewBag.JsonHospitalList)');
+    // Position
+    var position = '@(ViewBag.Position)';
+
+    // Create marker of hospital on map
+    function createMarker(latlng, html, markerType) {
+        // Add markers to the map
+
+        // Marker sizes are expressed as a Size of X,Y
+        // where the origin of the image (0,0) is located
+        // in the top left of the image.
+
+        // Origins, anchor positions and coordinates of the marker
+        // increase in the X direction to the right and in
+        // the Y direction down.
+        var image = {
+            url: '../Content/img/City-Hospital-icon.png',
+            // This marker is 20 pixels wide by 32 pixels tall.
+            size: new google.maps.Size(32, 32),
+            // The origin for this image is 0,0.
+            origin: new google.maps.Point(0,0),
+            // The anchor for this image is the base of the flagpole at 0,32.
+            anchor: new google.maps.Point(0, 32)
         };
-        map = new google.maps.Map(document.getElementById("map-canvas"), options);
-        var infowindow = new google.maps.InfoWindow(), marker, i;
-        for (i = 0; i < markers.length; i++) {
+        // Shapes define the clickable region of the icon.
+        // The type defines an HTML &lt;area&gt; element 'poly' which
+        // traces out a polygon as a series of X,Y points. The final
+        // coordinate closes the poly by connecting to the first
+        // coordinate.
+        var shape = {
+            coords: [1, 1, 1, 32, 32, 32, 32 , 1],
+            type: 'poly'
+        };
+
+        var contentString = html;
+        var marker;
+        if (markerType == 0) {
             marker = new google.maps.Marker({
-                position: new google.maps.LatLng(markers[i][1], markers[i][2]),
-                map: map
+                position: latlng,
+                map: map,               
+                zIndex: Math.round(latlng.lat()*-100000)<<5
             });
-            google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                return function () {
-                    infowindow.setContent(markers[i][0]);
-                    infowindow.open(map, marker);
-                }
-            })(marker, i));
+        } else {
+            marker = new google.maps.Marker({
+                position: latlng,
+                map: map,
+                icon: image,
+                shape: shape,
+                zIndex: Math.round(latlng.lat()*-100000)<<5
+            });
+        }
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(contentString); 
+            infowindow.open(map,marker);
+            map.panTo(marker.getPosition());
+        });
+
+        google.maps.event.addListener(marker, 'mouseover', function() {
+            infowindow.setContent(contentString); 
+            infowindow.open(map,marker);
+        });
+        
+    }
+    // ------------------------------------------------------------------------
+
+    function initializeMap() {
+        if (hospitalList.length > 0) {
+            var latlng = null;
+            if (position) {
+                // Get coordinate of position
+                postionLongitude = position.split(',')[0];
+                postionLatitude = position.split(',')[1].trim();
+                latlng = new google.maps.LatLng(postionLongitude, postionLatitude);            
+            }
+            // Draw the map
+            var options = {
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false
+            };
+
+            map = new google.maps.Map(document.getElementById("map-canvas"), options);
+            
+            google.maps.event.addListener(map, 'click', function() {
+                infowindow.close();
+            });
+            // ------------------------------------------------------------------------
+            if (position) {
+                // Draw circle to show the radius from input position
+                var circleOptions = {
+                    strokeColor: '#2c699d',
+                    strokeOpacity: 0.5,
+                    strokeWeight: 2,
+                    fillColor: '#3276b1',
+                    fillOpacity: 0.1,
+                    map: map,
+                    center: latlng,
+                    radius: @(ViewBag.Radius * 1000)
+                    };
+
+                var circle = new google.maps.Circle(circleOptions);
+
+                google.maps.event.addListener(circle, 'click', (function () {
+                    infowindow.close();
+                }));
+            }
+            // ------------------------------------------------------------------------
+
+            // Fit map for user can view all marker on map with highest zoom level
+            var myBounds = new google.maps.LatLngBounds();            
+            // Create marker on map with info window
+            for (i = 0; i < hospitalList.length; i++) {
+                var coordinate = hospitalList[i].Coordinate;
+                var longitude = (hospitalList[i].Coordinate.split(',')[0]).trim();
+                var latitude = (hospitalList[i].Coordinate.split(',')[1]).trim();
+                myBounds.extend(new google.maps.LatLng(longitude, latitude));
+                var contentString = '<div style="width: 300px;">' +
+                                    '<table class="table table-bordered">' + 
+                                    '<thead>' + 
+                                    '<tr class="info">' +
+                                    '<th>' + hospitalList[i].Hospital_Name + '</th>' +
+                                    '</tr>' +
+                                    '</thead>' +
+                                    '<tbody>' +
+                                    '<tr>' +
+                                    '<td>' + hospitalList[i].Address +'</td>' +
+                                    '</tr>' +
+                                    '</tbody>' +
+                                    '</table>' +
+                                    '</div>'
+            
+                createMarker(new google.maps.LatLng(longitude, latitude), contentString, 1);              
+            }
+            if (position) {
+                myBounds.extend(latlng);
+                createMarker(new google.maps.LatLng(postionLongitude, postionLatitude), "Vị trí hiện tại", 0);
+            }
+            map.fitBounds(myBounds);
+            // ------------------------------------------------------------------------
         }
     }
 
-
+    // Initialize map when page load 
     google.maps.event.addDomListener(window, 'load', initializeMap);
+    // ------------------------------------------------------------------------
 </script>

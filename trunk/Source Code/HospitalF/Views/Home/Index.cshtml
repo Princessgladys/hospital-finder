@@ -51,7 +51,7 @@
             </div>
 
             <div class="tab-pane fade" id="s2">
-                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = @Constants.LocationSearchForm }))
+                @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @target = "_blank", @class = "smart-form", @id = @Constants.LocationSearchForm }))
                 {
                     <fieldset>
                         <legend>Nhập thông tin vị trí</legend>
@@ -93,7 +93,7 @@
                         </div>
                     </fieldset>
                     <footer>
-                        <button class="btn btn-primary" type="submit"
+                        <button class="btn btn-primary"
                                 value="@Constants.LocationSearchForm" name="@Constants.Button">
                             <i class="fa fa-search"></i>&nbsp;
                             Tìm Kiếm
@@ -255,28 +255,57 @@
 
     @*Location type text changed*@
     $(document).ready(function () {
+
+        function setPosition(position) {
+            var currentLat = position.coords.latitude;
+            var currentLng = position.coords.longitude;
+            $("#Coordinate").val(currentLat + ", " + currentLng);
+        }
+
+        function getCurrentPosition() {
+            // Try HTML5 geolocation
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(setPosition, function () {
+                    console.log("Browser does not support geolocation...");
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                return false;
+            }
+        }
+
+        function getLatLong(address) {
+            var geo = new google.maps.Geocoder;
+
+            geo.geocode({ 'address': address }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    return results[0].geometry.location;
+                } else {
+                    console.log("Geocode was not successful for the following reason: " + status);
+                }
+
+            });
+
+        }
+
+        $('#location-search-form button').click(function (event) {
+            if ($("#LocationType").val() == 1) {
+                var object;
+                $.when(getCurrentPosition()).done(function () {
+                    $('#location-search-form').submit();
+                });
+            }
+        });
+
         $("#LocationType").change(function () {
             var selectedItem = $(this).val();
             if (selectedItem == 1) {
                 $("#CurrentLocationSection").hide();
                 $("#CurrentLocationLabel").hide();
-                // Try HTML5 geolocation
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        var currentLat = position.coords.latitude;
-                        var currentLng = position.coords.longitude;
-                        $("#Coordinate").val(currentLat + ", " + currentLng);
-                    }, function () {
-            
-                    });
-                } else {
-                    // Browser doesn't support Geolocation
-           
-                }
+
             } else {
                 $("#CurrentLocationSection").show();
                 $("#CurrentLocationLabel").show();
-
             }
         });
     });
