@@ -88,6 +88,8 @@ BEGIN
 		SET @ConditionPhrase += CASE WHEN @DistrictID IS NOT NULL
 								THEN N' AND h.District_ID = @DistrictID'
 								ELSE '' END;
+		SET @ConditionPhrase += N' AND s.Speciality_ID = d.Speciality' +
+								N' AND h.Hospital_ID = s.Hospital_ID'
 
 		SET @SqlQuery = @SelectPhrase + CHAR(13) + @FromPhrase + CHAR(13) +
 						@ConditionPhrase + CHAR(13) + @OrderPhrase
