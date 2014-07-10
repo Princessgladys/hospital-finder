@@ -28,7 +28,7 @@ BEGIN
 						 FROM (SELECT ROW_NUMBER()
 							   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
 							   FROM [dbo].[FU_STRING_TOKENIZE] (@InputStr, ' ') TokenList) AS TokenList
-							   WHERE RowNumber = @RowNumber1)
+						 WHERE RowNumber = @RowNumber1)
 
 		SELECT @NumOfPairs = (SELECT COUNT(PairList.ID)
 							  FROM [dbo].[FU_TAKE_PAIRS_OF_LETTER] (@Token) PairList)
@@ -40,7 +40,7 @@ BEGIN
 							FROM (SELECT ROW_NUMBER()
 								  OVER (ORDER BY PairList.ID ASC) AS RowNumber, PairList.Pair
 								  FROM [dbo].[FU_TAKE_PAIRS_OF_LETTER] (@Token) PairList) AS PairList
-								  WHERE RowNumber = @RowNumber2)
+							WHERE RowNumber = @RowNumber2)
 
 			INSERT INTO @PairList 
 			SELECT @Id, @Pair
