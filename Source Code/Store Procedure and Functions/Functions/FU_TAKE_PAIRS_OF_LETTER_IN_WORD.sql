@@ -11,7 +11,7 @@ RETURNS @PairList TABLE (ID INT PRIMARY KEY,
 						 Pair NVARCHAR(2))
 AS
 BEGIN
-	DECLARE @RowNumber INT = 1
+	DECLARE @RowNumber1 INT = 1
 	DECLARE @NumOfPairs INT
 	DECLARE @RowNumber2 INT
 	DECLARE @Token NVARCHAR(32)
@@ -22,13 +22,13 @@ BEGIN
 	SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 						  FROM [dbo].[FU_STRING_TOKENIZE] (@InputStr, ' ') TokenList)
 
-	WHILE (@RowNumber <= @TotalToken)
+	WHILE (@RowNumber1 <= @TotalToken)
 	BEGIN
 		SELECT @Token = (SELECT TokenList.Token
-						FROM (SELECT ROW_NUMBER()
-							  OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
-							  FROM [dbo].[FU_STRING_TOKENIZE] (@InputStr, ' ') TokenList) AS TokenList
-							  WHERE RowNumber = @RowNumber)
+						 FROM (SELECT ROW_NUMBER()
+							   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+							   FROM [dbo].[FU_STRING_TOKENIZE] (@InputStr, ' ') TokenList) AS TokenList
+							   WHERE RowNumber = @RowNumber1)
 
 		SELECT @NumOfPairs = (SELECT COUNT(PairList.ID)
 							  FROM [dbo].[FU_TAKE_PAIRS_OF_LETTER] (@Token) PairList)
@@ -49,7 +49,7 @@ BEGIN
 			SET @Id += 1
 		END
 
-		SET @RowNumber += 1
+		SET @RowNumber1 += 1
 	END
 
 	RETURN
