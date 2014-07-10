@@ -35,7 +35,7 @@ BEGIN
 							FROM (SELECT ROW_NUMBER()
 								  OVER (ORDER BY PairList.ID ASC) AS RowNumber, PairList.Pair
 								  FROM [dbo].[FU_TAKE_PAIRS_OF_LETTER_IN_WORD] (@InputStr1) PairList) AS PairList
-								  WHERE RowNumber = @RowNumber1)
+							WHERE RowNumber = @RowNumber1)
 		SET @RowNumber2 = 1
 
 		WHILE (@RowNumber2 <= @NumOfPairsStr2)
@@ -44,7 +44,7 @@ BEGIN
 								FROM (SELECT ROW_NUMBER()
 									  OVER (ORDER BY PairList.ID ASC) AS RowNumber, PairList.Pair
 									  FROM [dbo].[FU_TAKE_PAIRS_OF_LETTER_IN_WORD] (@InputStr2) PairList) AS PairList
-									  WHERE RowNumber = @RowNumber2)
+								WHERE RowNumber = @RowNumber2)
 
 			IF (@PairStr1 = @PairStr2)
 			BEGIN
