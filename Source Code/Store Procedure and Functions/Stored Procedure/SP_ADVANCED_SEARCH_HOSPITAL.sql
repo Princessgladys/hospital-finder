@@ -48,7 +48,7 @@ BEGIN
 						N'h.Is_Allow_Appointment, h.Is_Active'
 
 	DECLARE @FromPhrase NVARCHAR(512) = NULL
-	SET @FromPhrase = N'FROM Hospital h, Hospital_Speciality s, Speciality_Disease d'
+	SET @FromPhrase = N'FROM Hospital h'
 
 	DECLARE @ConditionPhrase NVARCHAR(512) = NULL
 	SET @ConditionPhrase = N'WHERE h.Is_Active = ''True'''
@@ -78,6 +78,8 @@ BEGIN
 	-- CASE THAT WHAT PHRASE AND WHERE PHRASE HAVE VALUE
 	IF (@WhatPhrase = 1)
 	BEGIN
+		SET @FromPhrase += N', Hospital_Speciality s, Speciality_Disease d'
+		
 		SET @ConditionPhrase += CASE WHEN @SpecialityID IS NOT NULL
 								THEN N' AND d.Speciality_ID = @SpecialityID'
 								ELSE '' END;
