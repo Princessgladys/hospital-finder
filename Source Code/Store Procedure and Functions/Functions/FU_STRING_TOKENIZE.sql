@@ -9,11 +9,13 @@ CREATE FUNCTION [dbo].[FU_STRING_TOKENIZE]
 	@InputStr NVARCHAR(MAX),
 	@Delimeter VARCHAR(1)
 )
-RETURNS @TokenList TABLE ([Token] [NVARCHAR] (32))
+RETURNS @TokenList TABLE (ID INT PRIMARY KEY,
+						  Token NVARCHAR(32))
 AS
 BEGIN
 	DECLARE @Token NVARCHAR(32)
 	DECLARE @Position INT
+	DECLARE @Id INT = 1
 
 	WHILE CHARINDEX(@Delimeter, @InputStr) > 0
 	BEGIN
@@ -21,13 +23,14 @@ BEGIN
 		SELECT @Token = SUBSTRING(@InputStr, 1, @Position - 1)
 
 		INSERT INTO @TokenList 
-		SELECT @Token
+		SELECT @Id, @Token
 
 		SELECT @InputStr = SUBSTRING(@InputStr, @Position + 1, LEN(@InputStr) - @Position)
+		SET @Id += 1
 	END
 
-	INSERT INTO @TokenList
-	SELECT @InputStr
+	INSERT INTO @TokenList 
+	SELECT @Id, @InputStr
 
 	RETURN
 END
