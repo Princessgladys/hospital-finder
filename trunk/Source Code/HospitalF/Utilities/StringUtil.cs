@@ -149,7 +149,7 @@ namespace HospitalF.Utilities
         }
 
         /// <summary>
-        /// Take pairs of letters of each word in  list of tokens
+        /// Take pairs of letters of each word in list of tokens
         /// </summary>
         /// <param name="tokenList">List of tokens</param>
         /// <returns>
