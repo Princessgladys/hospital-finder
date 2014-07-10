@@ -226,6 +226,8 @@
     var hospitalList = JSON && JSON.parse('@Html.Raw(ViewBag.JsonHospitalList)') || $.parseJSON('@Html.Raw(ViewBag.JsonHospitalList)');
     // Position
     var position = '@(ViewBag.Position)';
+    // Radius
+    var radius = @(ViewBag.Radius);
 
     // Create marker of hospital on map
     function createMarker(latlng, html, markerType) {
@@ -243,7 +245,7 @@
             // This marker is 20 pixels wide by 32 pixels tall.
             size: new google.maps.Size(32, 32),
             // The origin for this image is 0,0.
-            origin: new google.maps.Point(0,0),
+            origin: new google.maps.Point(0, 0),
             // The anchor for this image is the base of the flagpole at 0,32.
             anchor: new google.maps.Point(0, 32)
         };
@@ -253,7 +255,7 @@
         // coordinate closes the poly by connecting to the first
         // coordinate.
         var shape = {
-            coords: [1, 1, 1, 32, 32, 32, 32 , 1],
+            coords: [1, 1, 1, 32, 32, 32, 32, 1],
             type: 'poly'
         };
 
@@ -262,8 +264,8 @@
         if (markerType == 0) {
             marker = new google.maps.Marker({
                 position: latlng,
-                map: map,               
-                zIndex: Math.round(latlng.lat()*-100000)<<5
+                map: map,
+                zIndex: Math.round(latlng.lat() * -100000) << 5
             });
         } else {
             marker = new google.maps.Marker({
@@ -271,20 +273,20 @@
                 map: map,
                 icon: image,
                 shape: shape,
-                zIndex: Math.round(latlng.lat()*-100000)<<5
+                zIndex: Math.round(latlng.lat() * -100000) << 5
             });
         }
-        google.maps.event.addListener(marker, 'click', function() {
-            infowindow.setContent(contentString); 
-            infowindow.open(map,marker);
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
             map.panTo(marker.getPosition());
         });
 
-        google.maps.event.addListener(marker, 'mouseover', function() {
-            infowindow.setContent(contentString); 
-            infowindow.open(map,marker);
+        google.maps.event.addListener(marker, 'mouseover', function () {
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
         });
-        
+
     }
     // ------------------------------------------------------------------------
 
@@ -295,7 +297,7 @@
                 // Get coordinate of position
                 postionLongitude = position.split(',')[0];
                 postionLatitude = position.split(',')[1].trim();
-                latlng = new google.maps.LatLng(postionLongitude, postionLatitude);            
+                latlng = new google.maps.LatLng(postionLongitude, postionLatitude);
             }
             // Draw the map
             var options = {
@@ -305,8 +307,8 @@
             };
 
             map = new google.maps.Map(document.getElementById("map-canvas"), options);
-            
-            google.maps.event.addListener(map, 'click', function() {
+
+            google.maps.event.addListener(map, 'click', function () {
                 infowindow.close();
             });
             // ------------------------------------------------------------------------
@@ -320,8 +322,8 @@
                     fillOpacity: 0.1,
                     map: map,
                     center: latlng,
-                    radius: @(ViewBag.Radius * 1000)
-                    };
+                    radius: isNaN(radius) ? 0 : radius
+                };
 
                 var circle = new google.maps.Circle(circleOptions);
 
@@ -332,7 +334,7 @@
             // ------------------------------------------------------------------------
 
             // Fit map for user can view all marker on map with highest zoom level
-            var myBounds = new google.maps.LatLngBounds();            
+            var myBounds = new google.maps.LatLngBounds();
             // Create marker on map with info window
             for (i = 0; i < hospitalList.length; i++) {
                 var coordinate = hospitalList[i].Coordinate;
@@ -340,21 +342,21 @@
                 var latitude = (hospitalList[i].Coordinate.split(',')[1]).trim();
                 myBounds.extend(new google.maps.LatLng(longitude, latitude));
                 var contentString = '<div style="width: 300px;">' +
-                                    '<table class="table table-bordered">' + 
-                                    '<thead>' + 
+                                    '<table class="table table-bordered">' +
+                                    '<thead>' +
                                     '<tr class="info">' +
                                     '<th>' + hospitalList[i].Hospital_Name + '</th>' +
                                     '</tr>' +
                                     '</thead>' +
                                     '<tbody>' +
                                     '<tr>' +
-                                    '<td>' + hospitalList[i].Address +'</td>' +
+                                    '<td>' + hospitalList[i].Address + '</td>' +
                                     '</tr>' +
                                     '</tbody>' +
                                     '</table>' +
                                     '</div>'
-            
-                createMarker(new google.maps.LatLng(longitude, latitude), contentString, 1);              
+
+                createMarker(new google.maps.LatLng(longitude, latitude), contentString, 1);
             }
             if (position) {
                 myBounds.extend(latlng);

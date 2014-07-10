@@ -233,7 +233,7 @@ namespace HospitalF.Controllers
                     }
                     hospitalList = await model.LocationSearchHospital(lat, lng, model.Radius * 1000);
                     ViewBag.Position = lat + ", " + lng;
-                    ViewBag.Radius = model.Radius;
+                    ViewBag.Radius = model.Radius * 1000;
                     ViewBag.JsonHospitalList = JsonConvert.SerializeObject(hospitalList);
                 }
 
