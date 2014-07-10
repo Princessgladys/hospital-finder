@@ -273,6 +273,7 @@
     <Content Include="Content\img\avatars\sunny-big.png" />
     <Content Include="Content\img\avatars\sunny.png" />
     <Content Include="Content\img\background_1.jpg" />
+    <Content Include="Content\img\City-Hospital-icon.png" />
     <Content Include="Content\img\clear.png" />
     <Content Include="Content\img\demo\iphoneview.png" />
     <Content Include="Content\img\dropzone\spritemap.png" />

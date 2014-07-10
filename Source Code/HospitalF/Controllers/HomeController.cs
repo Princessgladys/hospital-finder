@@ -9,6 +9,9 @@ using HospitalF.Models;
 using HospitalF.Entities;
 using HospitalF.App_Start;
 using HospitalF.Utilities;
+using Newtonsoft.Json;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace HospitalF.Controllers
 {
@@ -154,7 +157,7 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [HttpGet]
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> SearchResult(HomeModels model, FormCollection form)
+        public async Task<ActionResult> SearchResult(HomeModels model)
         {
             List<Hospital> hospitalList = new List<Hospital>();
 
@@ -206,9 +209,32 @@ namespace HospitalF.Controllers
                     // Search hospitals
                     double lat = 0;
                     double lng = 0;
-                    double.TryParse(model.Coordinate.Split(',')[0], out lat);
-                    double.TryParse(model.Coordinate.Split(',')[1], out lng);
+                    if ("1".Equals(Request["LocationType"]))
+                    {
+                        if (model.Coordinate != null)
+                        {
+                            if (model.Coordinate.Split(',').Length > 1)
+                            {
+                                double.TryParse(model.Coordinate.Split(',')[0], out lat);
+                                double.TryParse(model.Coordinate.Split(',')[1], out lng);
+                            }                                               
+                        }
+                    }
+                    else if ("2".Equals(Request["LocationType"]))
+                    {
+                        WebClient client = new WebClient();
+                        string jsonResult = client.DownloadString(string.Concat("http://maps.googleapis.com/maps/api/geocode/json?address=", model.Position));
+                        // Json.Net is really helpful if you have to deal
+                        // with Json from .Net http://json.codeplex.com/
+                        JObject jsonGeoInfo = JObject.Parse(jsonResult);
+                        lat = jsonGeoInfo["results"].First["geometry"]["location"].Value<double>("lat");
+                        lng = jsonGeoInfo["results"].First["geometry"]["location"].Value<double>("lng");
+                       
+                    }
                     hospitalList = await model.LocationSearchHospital(lat, lng, model.Radius * 1000);
+                    ViewBag.Position = lat + ", " + lng;
+                    ViewBag.Radius = model.Radius;
+                    ViewBag.JsonHospitalList = JsonConvert.SerializeObject(hospitalList);
                 }
 
                 // Transfer list of hospitals to Search Result page
