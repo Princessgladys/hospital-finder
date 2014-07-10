@@ -19,16 +19,10 @@ BEGIN
     DECLARE @DIACRITIC_CHARS NCHAR(136)
     DECLARE @NON_DIACRITIC_CHARS NCHAR (136)
  
-    SET @DIACRITIC_CHARS = N'ăâđêôơưàảãạáằẳẵặắầẩẫậấèẻẽẹéềểễệế
-						   ìỉĩịíòỏõọóồổỗộốờởỡợớùủũụúừửữựứỳỷỹỵý
-						   ĂÂĐÊÔƠƯÀẢÃẠÁẰẲẴẶẮẦẨẪẬẤÈẺẼẸÉỀỂỄỆẾÌỈĨỊÍ
-						   ÒỎÕỌÓỒỔỖỘỐỜỞỠỢỚÙỦŨỤÚỪỬỮỰỨỲỶỸỴÝ' +
+    SET @DIACRITIC_CHARS = N'ăâđêôơưàảãạáằẳẵặắầẩẫậấèẻẽẹéềểễệếìỉĩịíòỏõọóồổỗộốờởỡợớùủũụúừửữựứỳỷỹỵý' +
 						   NCHAR(272) + NCHAR(208)
 
-    SET @NON_DIACRITIC_CHARS = N'aadeoouaaaaaaaaaaaaaaaeeeeeeeeee
-							   iiiiiooooooooooooooouuuuuuuuuuyyyyy
-							   AADEOOUAAAAAAAAAAAAAAAEEEEEEEEEEIIIII
-							   OOOOOOOOOOOOOOOUUUUUUUUUUYYYYYDD'
+    SET @NON_DIACRITIC_CHARS = N'aadeoouaaaaaaaaaaaaaaaeeeeeeeeeeiiiiiooooooooooooooouuuuuuuuuuyyyyy'
  
     DECLARE @COUNTER INT
     DECLARE @COUNTER1 INT
@@ -47,7 +41,7 @@ BEGIN
 										SUBSTRING(@strInput, @COUNTER + 1,LEN(@strInput) - 1)                  
 					ELSE
 						SET @strInput = SUBSTRING(@strInput, 1, @COUNTER - 1) +
-										SUBSTRING(@NON_DIACRITIC_CHARS, @COUNTER1,1) +
+										SUBSTRING(@NON_DIACRITIC_CHARS, @COUNTER1, 1) +
 										SUBSTRING(@strInput, @COUNTER + 1, LEN(@strInput) - @COUNTER)
 						BREAK
 				END
