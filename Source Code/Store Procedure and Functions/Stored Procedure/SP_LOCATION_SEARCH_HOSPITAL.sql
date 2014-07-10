@@ -7,7 +7,7 @@ GO
 CREATE PROCEDURE SP_LOCATION_SEARCH_HOSPITAL
 	@Latitude FLOAT,
 	@Longitude FLOAT,
-	@Distance INT	
+	@Distance FLOAT	
 AS
 BEGIN
 	SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
@@ -19,7 +19,7 @@ BEGIN
 		  [dbo].[FU_GET_DISTANCE] 
 			(CONVERT(FLOAT, SUBSTRING(h.Coordinate, 1, CHARINDEX(',', h.Coordinate) - 1)),
 			 CONVERT(FLOAT, SUBSTRING(h.Coordinate, CHARINDEX(',', h.Coordinate) + 1, LEN(h.Coordinate))),
-			 @Latitude, @Longitude) <= @Distance
+			 @Latitude, @Longitude) <= CONVERT(INT, @Distance)
 END
 
 <-- EXEC -->
