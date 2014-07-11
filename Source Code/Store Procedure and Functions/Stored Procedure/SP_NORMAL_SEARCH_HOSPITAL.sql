@@ -155,7 +155,7 @@ BEGIN
 
 		SET @ConditionPhrase += CASE WHEN @IsHaveSpeciality = 1
 								THEN N' AND ([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(s.Speciality_Name))' +
-									 N' LIKE (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@SpecialityName)) + N'%')' +
+									 N' LIKE (N''%'' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@SpecialityName)) + N''%'')' +
 									 N' OR [dbo].[FU_STRING_COMPARE] (LOWER(s.Speciality_Name), LOWER(@SpecialityName))' +
 									 N' >= @PercentageOfSimilarity)' +
 									 N' AND hs.Speciality_ID = s.Speciality_ID'
@@ -165,7 +165,7 @@ BEGIN
 								END;
 		SET @ConditionPhrase += CASE WHEN @IsHaveDisease = 1
 								THEN N' AND ([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(d.Disease_Name))' +
-									 N' LIKE (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@DiseaseName)) + N'%')' +
+									 N' LIKE (N''%'' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@DiseaseName)) + N''%'')' +
 									 N' OR [dbo].[FU_STRING_COMPARE] (LOWER(d.Disease_Name), LOWER(@DiseaseName))' +
 									 N' >= @PercentageOfSimilarity)' +
 									 N' AND sd.Disease_ID = d.Disease_ID'
@@ -208,7 +208,7 @@ BEGIN
 
 		SET @ConditionPhrase += CASE WHEN @IsHaveSpeciality = 1
 								THEN N' AND ([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(s.Speciality_Name))' +
-									 N' LIKE (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@SpecialityName)) + N'%')' +
+									 N' LIKE (N''%'' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@SpecialityName)) + N''%'')' +
 									 N' OR [dbo].[FU_STRING_COMPARE] (LOWER(s.Speciality_Name), LOWER(@SpecialityName))' +
 									 N' >= @PercentageOfSimilarity)' +
 									 N' AND hs.Speciality_ID = s.Speciality_ID'
@@ -218,7 +218,7 @@ BEGIN
 								END;
 		SET @ConditionPhrase += CASE WHEN @IsHaveDisease = 1
 								THEN N' AND ([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(d.Disease_Name))' +
-									 N' LIKE (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@DiseaseName)) + N'%')' +
+									 N' LIKE (N''%'' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@DiseaseName)) + N''%'')' +
 									 N' OR [dbo].[FU_STRING_COMPARE] (LOWER(d.Disease_Name), LOWER(@DiseaseName))' +
 									 N' >= @PercentageOfSimilarity)' +
 									 N' AND sd.Disease_ID = d.Disease_ID'
