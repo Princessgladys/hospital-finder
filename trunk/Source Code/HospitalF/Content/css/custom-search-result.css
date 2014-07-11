@@ -1,8 +1,15 @@
 ﻿#map-canvas
 {
-	height: 500px;
+	height: 750px;
 	width: 100%;
 	background-color: #cccccc;
 	margin: 0px;
 	padding: 0px;
+}
+
+.truncate {
+  width: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
