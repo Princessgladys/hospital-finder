@@ -79,13 +79,13 @@ BEGIN
 	-- CASE THAT WHAT PHRASE AND WHERE PHRASE HAVE VALUE
 	IF (@WhatPhrase = 1)
 	BEGIN		
-		SET @FromPhrase += CASE WHEN @SpecialityID IS NOT NULL
-						   THEN N', Hospital_Speciality hs'
+		SET @FromPhrase += CASE WHEN @DiseaseID IS NOT NULL
+						   THEN N', Speciality_Disease sd'
 						   ELSE ''
 						   END;
-		SET @FromPhrase += CASE WHEN @DiseaseID IS NOT NULL
-						   THEN N', Speciality_Disease sd, Hospital_Speciality hs'
-						   ELSE ''
+		SET @FromPhrase += CASE WHEN (@SpecialityID IS NOT NULL) AND (@DiseaseID IS NOT NULL)
+						   THEN N', Hospital_Speciality hs'
+						   ELSE N', Hospital_Speciality hs'
 						   END;
 
 		SET @ConditionPhrase += CASE WHEN @SpecialityID IS NOT NULL
