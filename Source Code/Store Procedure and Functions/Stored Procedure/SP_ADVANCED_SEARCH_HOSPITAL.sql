@@ -85,7 +85,10 @@ BEGIN
 						   END;
 		SET @FromPhrase += CASE WHEN (@SpecialityID IS NOT NULL) AND (@DiseaseID IS NOT NULL)
 						   THEN N', Hospital_Speciality hs'
-						   ELSE N', Hospital_Speciality hs'
+						   ELSE CASE WHEN (@SpecialityID IS NULL) AND (@DiseaseID IS NULL) 
+									 THEN ''
+									 ELSE N', Hospital_Speciality hs'
+									 END
 						   END;
 
 		SET @ConditionPhrase += CASE WHEN @SpecialityID IS NOT NULL
@@ -99,7 +102,10 @@ BEGIN
 								END;
 		SET @ConditionPhrase += CASE WHEN (@SpecialityID IS NOT NULL) AND (@DiseaseID IS NOT NULL)
 								THEN N' AND h.Hospital_ID = hs.Hospital_ID'
-								ELSE N' AND h.Hospital_ID = hs.Hospital_ID'
+								ELSE CASE WHEN (@SpecialityID IS NULL) AND (@DiseaseID IS NULL)
+									 THEN ''
+									 ELSE N' AND h.Hospital_ID = hs.Hospital_ID'
+									 END
 								END;
 
 		SET @ConditionPhrase += N' AND h.City_ID = @CityID'
