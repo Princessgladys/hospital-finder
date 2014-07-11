@@ -94,33 +94,21 @@
                 {
                 <div class="search-results clearfix smart-form">
 
-                    <h4><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h4>
+                    <h4 class="truncate"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h4>
 
-                    <div>
-                        <div class="rating display-inline">
-                            <input type="radio" name="stars-rating" id="stars-rating-5">
-                            <label for="stars-rating-5"><i class="fa fa-star"></i></label>
-                            <input type="radio" name="stars-rating" id="stars-rating-4">
-                            <label for="stars-rating-4"><i class="fa fa-star"></i></label>
-                            <input type="radio" name="stars-rating" id="stars-rating-3">
-                            <label for="stars-rating-3"><i class="fa fa-star"></i></label>
-                            <input type="radio" name="stars-rating" id="stars-rating-2">
-                            <label for="stars-rating-2"><i class="fa fa-star"></i></label>
-                            <input type="radio" name="stars-rating" id="stars-rating-1">
-                            <label for="stars-rating-1"><i class="fa fa-star"></i></label>
-                        </div>
-                        <br>
-                        <div class="url text-success">
-                            www.timkiembenhvien.com <i class="fa fa-caret-down"></i>
-                        </div>
-                        <p class="description">
-                            Đây là cái bệnh viện.
+                    <div style="width: 100%">
+                        <p class="description truncate">
+                            @(hospital.Address)
+                        </p>
+                        <p class="description truncate">
+                            @(hospital.Phone_Number)
                         </p>
                     </div>
 
                 </div>
                 }
             }
+
             <div class="text-center">
                 <hr>
                 <ul class="pagination no-margin">
@@ -163,6 +151,15 @@
 <script type="text/javascript">
     @*AJAX for auto completing basic search value textbox*@
     $(document).ready(function () {
+
+        $('.truncate').bind('mouseenter', function(){
+            var $this = $(this);
+
+            if(this.offsetWidth < this.scrollWidth && !$this.attr('title')){
+                $this.attr('title', $this.text());
+            }
+        });
+
         $("#SearchValue").on('input', function () {
             var statesProgress = $("#states-loading-search-progress");
             var availableTags = new Array();
@@ -218,8 +215,8 @@
 
     // Google map
     var map;
-    // List markers on map
-    var markers = [];
+    // Copy list of google markers
+    var markers = []; 
     // List of windows that show detailed information of hospital on map
     var infowindow = new google.maps.InfoWindow();
     // Parse JSON hospital list to javascript object
@@ -228,6 +225,27 @@
     var position = '@(ViewBag.Position)';
     // Radius
     var radius = @(ViewBag.Radius);
+
+    function panToMarker(coordinate) {
+        lat = coordinate.split(',')[0];
+        lng = coordinate.split(',')[1].trim();
+        map.panTo(new google.maps.LatLng(lat, lng));
+    }
+
+    function toggleBounce(marker) {
+
+        if (marker.getAnimation() != null) {
+            marker.setAnimation(null);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+    }
+
+    function clearToogleBounce() {
+        for (var i; i < markers.length; i++) {          
+            markers[i].setAnimation(null);          
+        }
+    }
 
     // Create marker of hospital on map
     function createMarker(latlng, html, markerType) {
@@ -241,9 +259,9 @@
         // increase in the X direction to the right and in
         // the Y direction down.
         var image = {
-            url: '../Content/img/City-Hospital-icon.png',
+            url: '../Content/img/hospital-2.png',
             // This marker is 20 pixels wide by 32 pixels tall.
-            size: new google.maps.Size(32, 32),
+            size: new google.maps.Size(32, 37),
             // The origin for this image is 0,0.
             origin: new google.maps.Point(0, 0),
             // The anchor for this image is the base of the flagpole at 0,32.
@@ -255,7 +273,7 @@
         // coordinate closes the poly by connecting to the first
         // coordinate.
         var shape = {
-            coords: [1, 1, 1, 32, 32, 32, 32, 1],
+            coords: [1, 1, 1, 37, 32, 37, 32 , 1],
             type: 'poly'
         };
 
@@ -265,26 +283,36 @@
             marker = new google.maps.Marker({
                 position: latlng,
                 map: map,
+                draggable: false,
+                optimized: false,
+                animation: google.maps.Animation.BOUNCE,
                 zIndex: Math.round(latlng.lat() * -100000) << 5
             });
         } else {
             marker = new google.maps.Marker({
                 position: latlng,
                 map: map,
+                draggable: false,
+                optimized: false,
+                animation: google.maps.Animation.DROP,
                 icon: image,
                 shape: shape,
                 zIndex: Math.round(latlng.lat() * -100000) << 5
             });
         }
-        google.maps.event.addListener(marker, 'click', function () {
+        markers.push(marker);
+        google.maps.event.addListener(marker, 'click', function () {          
             infowindow.setContent(contentString);
             infowindow.open(map, marker);
-            map.panTo(marker.getPosition());
+            map.panTo(marker.getPosition());           
         });
 
         google.maps.event.addListener(marker, 'mouseover', function () {
-            infowindow.setContent(contentString);
-            infowindow.open(map, marker);
+            toggleBounce(marker);
+        });
+
+        google.maps.event.addListener(marker, 'mouseout', function () {
+            toggleBounce(marker);
         });
 
     }
