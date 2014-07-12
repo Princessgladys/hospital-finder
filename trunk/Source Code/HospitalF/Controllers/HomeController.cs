@@ -12,6 +12,8 @@ using HospitalF.Utilities;
 using Newtonsoft.Json;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using PagedList;
+using System.Collections.Specialized;
 
 namespace HospitalF.Controllers
 {
@@ -118,7 +120,7 @@ namespace HospitalF.Controllers
         #endregion
 
         #region Search hospital
-
+       
         /// <summary>
         /// GET: /Home/Index
         /// </summary>
@@ -157,9 +159,9 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [HttpGet]
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> SearchResult(HomeModels model)
+        public async Task<ActionResult> SearchResult(HomeModels model, int page = 1)
         {
-            List<Hospital> hospitalList = new List<Hospital>();
+            List<Hospital> hospitalList = null;
 
             try
             {
@@ -217,28 +219,36 @@ namespace HospitalF.Controllers
                             {
                                 double.TryParse(model.Coordinate.Split(',')[0], out lat);
                                 double.TryParse(model.Coordinate.Split(',')[1], out lng);
-                            }                                               
+                            }
                         }
                     }
                     else if ("2".Equals(Request["LocationType"]))
                     {
-                        WebClient client = new WebClient();
-                        string jsonResult = client.DownloadString(string.Concat("http://maps.googleapis.com/maps/api/geocode/json?address=", model.Position));
-                        // Json.Net is really helpful if you have to deal
-                        // with Json from .Net http://json.codeplex.com/
-                        JObject jsonGeoInfo = JObject.Parse(jsonResult);
-                        lat = jsonGeoInfo["results"].First["geometry"]["location"].Value<double>("lat");
-                        lng = jsonGeoInfo["results"].First["geometry"]["location"].Value<double>("lng");
-                       
+                        if (!string.IsNullOrEmpty(model.Position))
+                        {
+                            WebClient client = new WebClient();
+                            string jsonResult = client.DownloadString(string.Concat("http://maps.googleapis.com/maps/api/geocode/json?address=", model.Position));
+                            // Json.Net is really helpful if you have to deal
+                            // with Json from .Net http://json.codeplex.com/
+                            JObject jsonGeoInfo = JObject.Parse(jsonResult);
+                            lat = jsonGeoInfo["results"].First["geometry"]["location"].Value<double>("lat");
+                            lng = jsonGeoInfo["results"].First["geometry"]["location"].Value<double>("lng");
+                        }
+
                     }
                     hospitalList = await model.LocationSearchHospital(lat, lng, model.Radius * 1000);
                     ViewBag.Position = lat + ", " + lng;
-                    ViewBag.Radius = model.Radius * 1000;
-                    ViewBag.JsonHospitalList = JsonConvert.SerializeObject(hospitalList);
+                    ViewBag.Radius = model.Radius * 1000;                
                 }
 
                 // Transfer list of hospitals to Search Result page
-                ViewBag.HospitalList = hospitalList;
+                ViewBag.HospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
+                ViewBag.JsonHospitalList = JsonConvert.SerializeObject(hospitalList.ToPagedList(page, Constants.PageSize));
+
+                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
+                queryString.Remove("page");
+                ViewBag.Query = queryString.ToString();
+
                 if (hospitalList.Count == 0)
                 {
                     ViewBag.SearchValue = model.SearchValue;
@@ -251,7 +261,7 @@ namespace HospitalF.Controllers
             }
 
             // Move to result page
-            return View(hospitalList);
+            return View();
         }
 
         /// <summary>

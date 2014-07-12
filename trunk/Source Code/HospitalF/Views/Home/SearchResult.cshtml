@@ -1,14 +1,15 @@
 ﻿@using HospitalF.Constant
 @using HospitalF.Models;
-@model List<HospitalF.Models.Hospital>
+@using PagedList.Mvc;
+@using PagedList;
 
 @{
-    List<Hospital> hospitalList = (List<Hospital>)ViewBag.HospitalList;
+    IPagedList<Hospital> hospitalList = (IPagedList<Hospital>)ViewBag.HospitalList;
     string suggestionSentence = (string)@ViewBag.SuggestionSentence;
 }
 
 <!-- MAIN CONTENT -->
-<div id="content-results" class="col-md-10 col-md-offset-1 well">
+<div id="content-results" class="col-md-12 col-md-offset-0 well">
     <div class="col-md-8">
         @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal", @id = Constants.NormalSearchForm }))
         {
@@ -30,10 +31,9 @@
         @using (Html.BeginForm(Constants.FilterResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
         {
             <fieldset>
-                @{
-            if (!string.IsNullOrEmpty(suggestionSentence))
-            {
-                suggestionSentence = suggestionSentence.Trim();
+                @if (!string.IsNullOrEmpty(suggestionSentence))
+                {
+                    suggestionSentence = suggestionSentence.Trim();
                     <p>
                         Có phải bạn muốn tìm <i>
                             @Html.ActionLink(suggestionSentence,
@@ -41,60 +41,61 @@
                                 new { SearchValue = suggestionSentence }, null)
                         </i>
                     </p>
-            }
-            if (hospitalList.Count == 0)
-            {
-                    <p>Không có kết quả tìm kiếm với từ khóa <i><font color="blue">@ViewBag.SearchValue</font></i></p>
-                    <input id="result-count" type="hidden" value="@hospitalList.Count" />
-            }
                 }
-
-                <div class="row" id="filter-bar">
-                    <div class="form-group col-md-4">
-                        <label class="control-label col-md-4" for="prepend">Đánh Giá</label>
-                        <div class="col-md-8">
-                            <div class="icon-addon addon-sm">
-                                <select class="form-control">
-                                    <option>Cao Nhất</option>
-                                    <option>Thấp Nhât</option>
-                                </select>
-                                <label class="glyphicon glyphicon-sort" title="Đánh Giá"></label>
+                @if (hospitalList.TotalItemCount == 0)
+                {
+                    <p>Không có kết quả tìm kiếm với từ khóa <span style="color:blue">@ViewBag.SearchValue</span></p>
+                }
+                else
+                {
+                    <div class="row" id="filter-bar">
+                        <div class="form-group col-md-4">
+                            <label class="control-label col-md-4" for="prepend">Đánh Giá</label>
+                            <div class="col-md-8">
+                                <div class="icon-addon addon-sm">
+                                    <select class="form-control">
+                                        <option>Cao Nhất</option>
+                                        <option>Thấp Nhât</option>
+                                    </select>
+                                    <label class="glyphicon glyphicon-sort" title="Đánh Giá"></label>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
 
-                    <div class="form-group col-md-4">
-                        <label class="control-label col-md-4" for="prepend">Loại</label>
-                        <div class="col-md-8">
-                            <div class="icon-addon addon-sm">
-                                @Html.DropDownList("HospitalType", (SelectList)ViewBag.HospitalTypes, "Tất Cả", new { @class = "form-control" })
-                                <label class="glyphicon glyphicon-list-alt" title="Loại Bệnh Viện"></label>
+                        <div class="form-group col-md-4">
+                            <label class="control-label col-md-4" for="prepend">Loại</label>
+                            <div class="col-md-8">
+                                <div class="icon-addon addon-sm">
+                                    @Html.DropDownList("HospitalType", (SelectList)ViewBag.HospitalTypes, "Tất Cả", new { @class = "form-control" })
+                                    <label class="glyphicon glyphicon-list-alt" title="Loại Bệnh Viện"></label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-primary pull-right" type="submit">
-                            <i class="fa fa-refresh"></i>&nbsp;
+                        <div class="col-md-4">
+                            <button class="btn btn-primary pull-right" type="submit">
+                                <i class="fa fa-refresh"></i>&nbsp;
                             Cập Nhật
-                        </button>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                }
             </fieldset>
         }
     </div>
 
     <div class="col-md-12">
         <hr />
-        <div id="hospital-list-results" class="col-md-4">
-            <h1 class="font-md">Danh sách <span class="semi-bold">bệnh viện</span><small class="text-danger"> &nbsp;&nbsp;(@(hospitalList != null ? hospitalList.Count : 0) kết quả)</small></h1>
-            @if (hospitalList != null)
+        <div id="hospital-list-results" class="col-md-4" style="padding: 0;">
+
+            @if (hospitalList.TotalItemCount > 0)
             {
+                <h1 class="font-md">Danh sách <span class="semi-bold">bệnh viện</span><small class="text-danger"> &nbsp;&nbsp;(@(hospitalList != null ? hospitalList.TotalItemCount : 0) kết quả)</small></h1>
                 foreach (Hospital hospital in hospitalList)
                 {
-                <div class="search-results clearfix smart-form">
+                <div class="search-results clearfix smart-form hospital-record">
 
-                    <h4 class="truncate"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h4>
+                    <h5 class="truncate"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h5>
 
                     <div style="width: 100%">
                         <p class="description truncate">
@@ -105,44 +106,35 @@
                         </p>
                     </div>
 
-                </div>
+                </div>               
                 }
+                
+                <div class="text-center">
+                    <hr>
+                    @Html.PagedListPager(hospitalList, page => Url.Content(Constants.SearchResultAction + "?" + ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                    <br>
+                    <br>
+                    <br>
+                </div>
+            }
+            else
+            {
+                <ul>
+                    <li>Xin bạn chắc chắn rằng tất cả các từ đều đúng chính tả.</li>
+                    <li>Hãy thử những từ khóa khác.</li>
+                </ul>
             }
 
-            <div class="text-center">
-                <hr>
-                <ul class="pagination no-margin">
-                    <li class="prev disabled">
-                        <a href="javascript:void(0);">Previous</a>
-                    </li>
-                    <li class="active">
-                        <a href="javascript:void(0);">1</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);">2</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);">3</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);">4</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);">5</a>
-                    </li>
-                    <li class="next">
-                        <a href="javascript:void(0);">Next</a>
-                    </li>
-                </ul>
-                <br>
-                <br>
-                <br>
-            </div>
+
         </div>
 
-        <div id="map-results" class="col-md-8">
-            <div id="map-canvas"></div>
-        </div>
+        @if (hospitalList.TotalItemCount > 0)
+        {
+            <div id="map-results" class="col-md-8" style="padding: 0;">
+                <div id="map-canvas"></div>
+            </div>
+        }
+
 
     </div>
 </div>
@@ -152,10 +144,10 @@
     @*AJAX for auto completing basic search value textbox*@
     $(document).ready(function () {
 
-        $('.truncate').bind('mouseenter', function(){
+        $('.truncate').bind('mouseenter', function () {
             var $this = $(this);
 
-            if(this.offsetWidth < this.scrollWidth && !$this.attr('title')){
+            if (this.offsetWidth < this.scrollWidth && !$this.attr('title')) {
                 $this.attr('title', $this.text());
             }
         });
@@ -187,17 +179,6 @@
         });
     });
 
-    @*Display fitler bar*@
-    $(document).ready(function () {
-        var resultCount = $('#result-count').val();
-        if (resultCount == 0) {
-            $("#filter-bar").hide();
-        }
-        else {
-            $("#filter-bar").show();
-        }
-    });
-
     @*Data validation*@
     $(document).ready(function () {
         $("#normal-search-button").click(function () {
@@ -216,7 +197,9 @@
     // Google map
     var map;
     // Copy list of google markers
-    var markers = []; 
+    var markers = [];
+    // Copy list of content string of inforwindow
+    var contentStringList = [];
     // List of windows that show detailed information of hospital on map
     var infowindow = new google.maps.InfoWindow();
     // Parse JSON hospital list to javascript object
@@ -224,7 +207,8 @@
     // Position
     var position = '@(ViewBag.Position)';
     // Radius
-    var radius = @(ViewBag.Radius);
+    var radius = @(ViewBag.Radius != null ? ViewBag.Radius : 0);
+ 
 
     function panToMarker(coordinate) {
         lat = coordinate.split(',')[0];
@@ -242,9 +226,17 @@
     }
 
     function clearToogleBounce() {
-        for (var i; i < markers.length; i++) {          
-            markers[i].setAnimation(null);          
+        for (var i; i < markers.length; i++) {
+            markers[i].setAnimation(null);
         }
+    }
+
+    function onClickHospitalRecord(record, marker, contentString) {
+        $(".hospital-record").attr("style", "");
+        record.attr("style", "background-color: #d9edf7");
+        map.panTo(marker.getPosition());
+        infowindow.setContent(contentString);
+        infowindow.open(map, marker);
     }
 
     // Create marker of hospital on map
@@ -273,7 +265,7 @@
         // coordinate closes the poly by connecting to the first
         // coordinate.
         var shape = {
-            coords: [1, 1, 1, 37, 32, 37, 32 , 1],
+            coords: [1, 1, 1, 37, 32, 37, 32, 1],
             type: 'poly'
         };
 
@@ -301,10 +293,10 @@
             });
         }
         markers.push(marker);
-        google.maps.event.addListener(marker, 'click', function () {          
+        google.maps.event.addListener(marker, 'click', function () {
             infowindow.setContent(contentString);
             infowindow.open(map, marker);
-            map.panTo(marker.getPosition());           
+            map.panTo(marker.getPosition());
         });
 
         google.maps.event.addListener(marker, 'mouseover', function () {
@@ -370,7 +362,7 @@
                 var latitude = (hospitalList[i].Coordinate.split(',')[1]).trim();
                 myBounds.extend(new google.maps.LatLng(longitude, latitude));
                 var contentString = '<div style="width: 300px;">' +
-                                    '<table class="table table-bordered">' +
+                                    '<table class="table">' +
                                     '<thead>' +
                                     '<tr class="info">' +
                                     '<th>' + hospitalList[i].Hospital_Name + '</th>' +
@@ -380,12 +372,20 @@
                                     '<tr>' +
                                     '<td>' + hospitalList[i].Address + '</td>' +
                                     '</tr>' +
+                                    '<tr>' +
+                                    '<td>' + hospitalList[i].Phone_Number + '</td>' +
+                                    '</tr>' +
                                     '</tbody>' +
                                     '</table>' +
-                                    '</div>'
-
+                                    '</div>';
+                contentStringList.push(contentString);
                 createMarker(new google.maps.LatLng(longitude, latitude), contentString, 1);
             }
+            $(".hospital-record").each(function (index) {
+                $(this).click(function () {
+                    onClickHospitalRecord($(this), markers[index], contentStringList[index]);
+                });
+            });
             if (position) {
                 myBounds.extend(latlng);
                 createMarker(new google.maps.LatLng(postionLongitude, postionLatitude), "Vị trí hiện tại", 0);
