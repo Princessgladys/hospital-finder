@@ -120,7 +120,7 @@ namespace HospitalF.Controllers
         #endregion
 
         #region Search hospital
-       
+
         /// <summary>
         /// GET: /Home/Index
         /// </summary>
@@ -161,8 +161,8 @@ namespace HospitalF.Controllers
         [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> SearchResult(HomeModels model, int page = 1)
         {
-            List<Hospital> hospitalList = null;
-
+            List<HospitalEntity> hospitalList = null;
+            IPagedList<HospitalEntity> pagedHospitalList = null;
             try
             {
                 // Load hospital types from database
@@ -195,6 +195,7 @@ namespace HospitalF.Controllers
 
                     // Search hospitals
                     hospitalList = await model.NormalSearchHospital();
+                    pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
                 }
 
                 // Advanced search form
@@ -203,6 +204,7 @@ namespace HospitalF.Controllers
                     // Search hospitals
                     hospitalList = await model.AdvancedSearchHospital(model.CityID, model.DistrictID,
                         model.SpecialityID, model.DiseaseName);
+                    pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
                 }
 
                 // Location search form
@@ -211,6 +213,7 @@ namespace HospitalF.Controllers
                     // Search hospitals
                     double lat = 0;
                     double lng = 0;
+                    WebClient client = new WebClient();
                     if ("1".Equals(Request["LocationType"]))
                     {
                         if (model.Coordinate != null)
@@ -226,24 +229,41 @@ namespace HospitalF.Controllers
                     {
                         if (!string.IsNullOrEmpty(model.Position))
                         {
-                            WebClient client = new WebClient();
-                            string jsonResult = client.DownloadString(string.Concat("http://maps.googleapis.com/maps/api/geocode/json?address=", model.Position));
+                            string geoJsonResult = client.DownloadString(string.Concat("http://maps.googleapis.com/maps/api/geocode/json?address=", model.Position));
                             // Json.Net is really helpful if you have to deal
                             // with Json from .Net http://json.codeplex.com/
-                            JObject jsonGeoInfo = JObject.Parse(jsonResult);
-                            lat = jsonGeoInfo["results"].First["geometry"]["location"].Value<double>("lat");
-                            lng = jsonGeoInfo["results"].First["geometry"]["location"].Value<double>("lng");
+                            JObject geoJsonObject = JObject.Parse(geoJsonResult);
+                            lat = geoJsonObject["results"].First["geometry"]["location"].Value<double>("lat");
+                            lng = geoJsonObject["results"].First["geometry"]["location"].Value<double>("lng");
                         }
 
                     }
                     hospitalList = await model.LocationSearchHospital(lat, lng, model.Radius * 1000);
+                    pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
+                    string distanceMatrixUrl = string.Concat("http://maps.googleapis.com/maps/api/distancematrix/json?origins=", lat, ",", lng, "&destinations=");
+                    int index = 0;
+                    foreach (HospitalEntity hospital in pagedHospitalList)
+                    {
+                        distanceMatrixUrl += (index == 0 ? string.Empty : "|") + hospital.Coordinate.Split(',')[0].Trim() + "," + hospital.Coordinate.Split(',')[1].Trim();
+                        index = -1;
+                    }
+                    string dMatrixJsonResult = client.DownloadString(distanceMatrixUrl);
+                    JObject dMatrixJsonObject = JObject.Parse(dMatrixJsonResult);
+
+                    index = 0;
+                    foreach (HospitalEntity hospital in pagedHospitalList)
+                    {
+                        hospital.Distance = dMatrixJsonObject["rows"].First["elements"].ElementAt(index++)["distance"].Value<double>("value");
+                    }
+
                     ViewBag.Position = lat + ", " + lng;
-                    ViewBag.Radius = model.Radius * 1000;                
+                    ViewBag.Radius = model.Radius * 1000;
                 }
 
                 // Transfer list of hospitals to Search Result page
-                ViewBag.HospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
-                ViewBag.JsonHospitalList = JsonConvert.SerializeObject(hospitalList.ToPagedList(page, Constants.PageSize));
+
+                ViewBag.HospitalList = pagedHospitalList;
+                ViewBag.JsonHospitalList = JsonConvert.SerializeObject(pagedHospitalList);
 
                 NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
                 queryString.Remove("page");

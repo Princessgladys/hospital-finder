@@ -12,17 +12,17 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Hospital_ID attribute
         /// <summary>
-        public int HospitalID { get; set; }
+        public int Hospital_ID { get; set; }
 
         /// <summary>
         /// Property for Hospital_Name attribute
         /// <summary>
-        public string HospitalName { get; set; }
+        public string Hospital_Name { get; set; }
 
         /// <summary>
         /// Property for Hospital_Type attribute
         /// <summary>
-        public int HospitalType { get; set; }
+        public int Hospital_Type { get; set; }
 
         /// <summary>
         /// Property for Address attribute
@@ -32,42 +32,72 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Ward_ID attribute
         /// <summary>
-        public int WardID { get; set; }
+        public int? Ward_ID { get; set; }
 
         /// <summary>
         /// Property for District_ID attribute
         /// <summary>
-        public int DistrictID { get; set; }
+        public int? District_ID { get; set; }
 
         /// <summary>
         /// Property for City_ID attribute
         /// <summary>
-        public int CityID { get; set; }
+        public int? City_ID { get; set; }
 
         /// <summary>
         /// Property for Phone_Number attribute
         /// <summary>
-        public string PhoneNumber { get; set; }
+        public string Phone_Number { get; set; }
 
         /// <summary>
         /// Property for Fax attribute
         /// <summary>
-        public string Fax { get; set; }    
+        public string Fax { get; set; }
 
         /// <summary>
         /// Property for Website attribute
         /// <summary>
         public string Website { get; set; }
-   
+
+        /// <summary>
+        /// Property for Email attribute
+        /// <summary>
+        public string Email { get; set; }
+
         /// <summary>
         /// Property for Coordinate attribute
         /// <summary>
-        public string Coordinate { get; set; }     
+        public string Coordinate { get; set; }
 
         /// <summary>
-        /// Property for Full_Description attribute
+        /// Property for Distance attribute
+        /// <summary>
+        public double Distance { get; set; }
+
+        /// <summary>
+        /// Property for Description attribute
         /// </summary>
-        public string Description { get; set; }       
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Property for Start_Time attribute
+        /// </summary>
+        public TimeSpan? Start_Time { get; set; }
+
+        /// <summary>
+        /// Property for End_Time attribute
+        /// </summary>
+        public TimeSpan? End_Time { get; set; }
+
+        /// <summary>
+        /// Property for Is_Allow_Appointment attribute
+        /// </summary>
+        public bool? Is_Allow_Appointment { get; set; }
+
+        /// <summary>
+        /// Property for Is_Active attribute
+        /// </summary>
+        public bool? Is_Active { get; set; }
 
         #endregion
     }

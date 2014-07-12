@@ -201,33 +201,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HospitalUserHomeController.cs" />
     <Compile Include="Controllers\SecurityBaseController.cs" />
-    <Compile Include="Entities\Appointment.cs" />
-    <Compile Include="Entities\City.cs" />
-    <Compile Include="Entities\Disease.cs" />
-    <Compile Include="Entities\District.cs" />
-    <Compile Include="Entities\Doctor.cs" />
-    <Compile Include="Entities\DoctorHospital.cs" />
-    <Compile Include="Entities\DoctorSpeciality.cs" />
-    <Compile Include="Entities\Facility.cs" />
-    <Compile Include="Entities\Feedback.cs" />
-    <Compile Include="Entities\FeedbackType.cs" />
-    <Compile Include="Entities\Hospital.cs" />
-    <Compile Include="Entities\HospitalFacility.cs" />
-    <Compile Include="Entities\HospitalService.cs" />
-    <Compile Include="Entities\HospitalSpeciality.cs" />
-    <Compile Include="Entities\HospitalType.cs" />
-    <Compile Include="Entities\Photo.cs" />
-    <Compile Include="Entities\Rating.cs" />
-    <Compile Include="Entities\Role.cs" />
-    <Compile Include="Entities\SentenceDictionary.cs" />
-    <Compile Include="Entities\SentenceWord.cs" />
-    <Compile Include="Entities\Service.cs" />
-    <Compile Include="Entities\Speciality.cs" />
-    <Compile Include="Entities\SpecialityDisease.cs" />
-    <Compile Include="Entities\User.cs" />
-    <Compile Include="Entities\Ward.cs" />
-    <Compile Include="Entities\WordDictionary.cs" />
-    <Compile Include="Entities\WordHospital.cs" />
+    <Compile Include="Entities\HospitalEntity.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

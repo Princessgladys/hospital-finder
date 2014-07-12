@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using HospitalF.Constant;
 using HospitalF.Models;
 using HospitalF.Utilities;
+using HospitalF.Entities;
 
 namespace HospitalF.Models
 {
@@ -497,9 +498,9 @@ namespace HospitalF.Models
         /// Search hospitals in database using normal option
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Hospital>> NormalSearchHospital()
+        public async Task<List<HospitalEntity>> NormalSearchHospital()
         {
-            List<Hospital> hospitalList = null;
+            List<HospitalEntity> hospitalList = null;
 
             // Take input values
             int cityId = this.CityID;
@@ -513,25 +514,24 @@ namespace HospitalF.Models
             {
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_ADVANCED_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseName)
-                     select new Hospital()
+                     select new HospitalEntity()
                      {
                          Hospital_ID = h.Hospital_ID,
                          Hospital_Name = h.Hospital_Name,
                          Address = h.Address,
-                         Ward_ID = h.Ward_ID,
-                         District_ID = h.District_ID,
-                         City_ID = h.City_ID,
+                         Ward_ID = (int)h.Ward_ID,
+                         District_ID = (int)h.District_ID,
+                         City_ID = (int)h.City_ID,
                          Phone_Number = h.Phone_Number,
                          Fax = h.Fax,
                          Email = h.Email,
                          Website = h.Website,
-                         Start_Time = h.Start_Time,
-                         End_Time = h.End_Time,
+                         Start_Time = (TimeSpan)h.Start_Time,
+                         End_Time = (TimeSpan)h.End_Time,
                          Coordinate = h.Coordinate,
-                         Short_Description = h.Short_Description,
-                         Full_Description = h.Full_Description,
-                         Is_Allow_Appointment = h.Is_Allow_Appointment,
-                         Is_Active = h.Is_Active
+                         Description = h.Full_Description,
+                         Is_Allow_Appointment = (bool)h.Is_Allow_Appointment,
+                         Is_Active = (bool)h.Is_Active
                      }).ToList());
             }
 
@@ -547,17 +547,17 @@ namespace HospitalF.Models
         /// <param name="specialityId">Speciality ID</param>
         /// <param name="diseaseName">Disease name</param>
         /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
-        public async Task<List<Hospital>> AdvancedSearchHospital(int cityId,
+        public async Task<List<HospitalEntity>> AdvancedSearchHospital(int cityId,
             int districtId, int specialityId, string diseaseName)
         {
-            List<Hospital> hospitalList = null;
+            List<HospitalEntity> hospitalList = null;
 
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_ADVANCED_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseName)
-                     select new Hospital()
+                     select new HospitalEntity()
                      {
                          Hospital_ID = h.Hospital_ID,
                          Hospital_Name = h.Hospital_Name,
@@ -572,8 +572,7 @@ namespace HospitalF.Models
                          Start_Time = h.Start_Time,
                          End_Time = h.End_Time,
                          Coordinate = h.Coordinate,
-                         Short_Description = h.Short_Description,
-                         Full_Description = h.Full_Description,
+                         Description = h.Full_Description,
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
                          Is_Active = h.Is_Active
                      }).ToList());
@@ -590,16 +589,16 @@ namespace HospitalF.Models
         /// <param name="longitude">Longitude</param>
         /// <param name="distance">Distance between 2 locations</param>
         /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
-        public async Task<List<Hospital>> LocationSearchHospital(double latitude, double longitude, double distance)
+        public async Task<List<HospitalEntity>> LocationSearchHospital(double latitude, double longitude, double distance)
         {
-            List<Hospital> hospitalList = null;
+            List<HospitalEntity> hospitalList = null;
 
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_LOCATION_SEARCH_HOSPITAL(latitude, longitude, distance)
-                     select new Hospital()
+                     select new HospitalEntity()
                      {
                          Hospital_ID = h.Hospital_ID,
                          Hospital_Name = h.Hospital_Name,
@@ -614,8 +613,7 @@ namespace HospitalF.Models
                          Start_Time = h.Start_Time,
                          End_Time = h.End_Time,
                          Coordinate = h.Coordinate,
-                         Short_Description = h.Short_Description,
-                         Full_Description = h.Full_Description,
+                         Description = h.Full_Description,
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
                          Is_Active = h.Is_Active
                      }).ToList());
