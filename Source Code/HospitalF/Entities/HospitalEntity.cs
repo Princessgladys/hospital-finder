@@ -52,57 +52,22 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Fax attribute
         /// <summary>
-        public string Fax { get; set; }
-
-        /// <summary>
-        /// Property for Email attribute
-        /// <summary>
-        public string Email { get; set; }
+        public string Fax { get; set; }    
 
         /// <summary>
         /// Property for Website attribute
         /// <summary>
         public string Website { get; set; }
-
-        /// <summary>
-        /// Property for Start_Time attribute
-        /// <summary>
-        public TimeSpan StartTime { get; set; }
-
-        /// <summary>
-        /// Property for End_Time attribute
-        /// <summary>
-        public TimeSpan EndTime { get; set; }
-
+   
         /// <summary>
         /// Property for Coordinate attribute
         /// <summary>
-        public string Coordinate { get; set; }
-
-        /// <summary>
-        /// Property for Short_Description attribute
-        /// </summary>
-        public string ShortDescription { get; set; }
+        public string Coordinate { get; set; }     
 
         /// <summary>
         /// Property for Full_Description attribute
         /// </summary>
-        public string FullDescription { get; set; }
-
-        /// <summary>
-        /// Property for Is_Allow_Appointment attribute
-        /// </summary>
-        public bool IsAllowAppointment { get; set; }
-
-        /// <summary>
-        /// Property for Created_Person attribute
-        /// <summary>
-        public int CreatedPerson { get; set; }
-
-        /// <summary>
-        /// Property for Is_Active attribute
-        /// <summary>
-        public bool IsActive { get; set; }
+        public string Description { get; set; }       
 
         #endregion
     }
