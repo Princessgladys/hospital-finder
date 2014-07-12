@@ -1,10 +1,10 @@
 ﻿@using HospitalF.Constant
-@using HospitalF.Models;
+@using HospitalF.Entities;
 @using PagedList.Mvc;
 @using PagedList;
 
 @{
-    IPagedList<Hospital> hospitalList = (IPagedList<Hospital>)ViewBag.HospitalList;
+    IPagedList<HospitalEntity> hospitalList = (IPagedList<HospitalEntity>)ViewBag.HospitalList;
     string suggestionSentence = (string)@ViewBag.SuggestionSentence;
 }
 
@@ -44,7 +44,7 @@
                 }
                 @if (hospitalList.TotalItemCount == 0)
                 {
-                    <p>Không có kết quả tìm kiếm với từ khóa <span style="color:blue">@ViewBag.SearchValue</span></p>
+                    <p>Không có kết quả tìm kiếm với từ khóa <span style="color: blue">@ViewBag.SearchValue</span></p>
                 }
                 else
                 {
@@ -91,13 +91,19 @@
             @if (hospitalList.TotalItemCount > 0)
             {
                 <h1 class="font-md">Danh sách <span class="semi-bold">bệnh viện</span><small class="text-danger"> &nbsp;&nbsp;(@(hospitalList != null ? hospitalList.TotalItemCount : 0) kết quả)</small></h1>
-                foreach (Hospital hospital in hospitalList)
+                foreach (HospitalEntity hospital in hospitalList)
                 {
                 <div class="search-results clearfix smart-form hospital-record">
 
                     <h5 class="truncate"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h5>
 
                     <div style="width: 100%">
+                        @if (hospital.Distance > 0)
+                        {
+                            <p class="description truncate">
+                                <i class="fa fa-truck"></i>&nbsp;@(hospital.Distance / 1000)&nbsp;km
+                            </p>
+                        }
                         <p class="description truncate">
                             @(hospital.Address)
                         </p>
