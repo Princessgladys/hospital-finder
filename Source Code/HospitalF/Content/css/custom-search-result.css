@@ -5,11 +5,22 @@
 	background-color: #cccccc;
 	margin: 0px;
 	padding: 0px;
+} 
+
+.truncate
+{
+	width: inherit;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-.truncate {
-  width: inherit;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.hospital-record
+{
 }
+
+	.hospital-record:hover
+	{
+		cursor: pointer;
+		background-color: #eee;
+	}

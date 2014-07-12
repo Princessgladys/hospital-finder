@@ -499,7 +499,7 @@ namespace HospitalF.Models
         /// <returns></returns>
         public async Task<List<Hospital>> NormalSearchHospital()
         {
-            List<Hospital> hospitalList = new List<Hospital>();
+            List<Hospital> hospitalList = null;
 
             // Take input values
             int cityId = this.CityID;
@@ -550,7 +550,7 @@ namespace HospitalF.Models
         public async Task<List<Hospital>> AdvancedSearchHospital(int cityId,
             int districtId, int specialityId, string diseaseName)
         {
-            List<Hospital> hospitalList = new List<Hospital>();
+            List<Hospital> hospitalList = null;
 
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
@@ -592,7 +592,7 @@ namespace HospitalF.Models
         /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
         public async Task<List<Hospital>> LocationSearchHospital(double latitude, double longitude, double distance)
         {
-            List<Hospital> hospitalList = new List<Hospital>();
+            List<Hospital> hospitalList = null;
 
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())

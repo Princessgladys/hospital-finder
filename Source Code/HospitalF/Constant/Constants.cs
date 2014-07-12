@@ -499,6 +499,11 @@ namespace HospitalF.Constant
         public const string NonDiacriticVietnameseCharacters = "aadeoouaaaaaaaaaaaaaaaeeeeeeeeeeiiiiiooooooooooooooouuuuuuuuuuyyyyy";
 
         /// <summary>
+        /// Constant for search result page size
+        /// </summary>
+        public const int PageSize = 5;
+
+        /// <summary>
         /// Take relative diacritic Vietnamese characters according to input letter
         /// </summary>
         /// <param name="letter">Input letter (a ă â e ê o ô ơ u ư i y đ)</param>
