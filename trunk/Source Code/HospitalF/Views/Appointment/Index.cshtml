@@ -5,13 +5,19 @@
 @* Captcha Ajax API*@
 <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 <script type="text/javascript">
-    
     $(function () {
         $(".datepicker").mask("99/99/9999");
         $("#txtDate").mask("99/99/9999");
         //$("#phoneNo").mask("9999-999-9999");
+        $("#startTime").mask("99:99");
+        //$("#startTime").val(new Date().getHours() + ":" + new Date().getMinutes());
+        //$("#startTime option[value="+(new Date().getHours() + ":" + new Date().getMinutes())+"]").attr("selected", "selected");
+        //window.alert(new Date().getTime().toString("HH:mm"));
+       
+
     });
     $(document).ready(function () {
+        $('#txtDate').datepicker().datepicker('setDate', 'today');
         @*AJAX for cascading Doctor drop down list*@
         $("#SpecialityID").change(function () {
             var selectedItem = $(this).val();
@@ -229,11 +235,10 @@
                                             @placeholder = "Ngày khám"
                                         })
                             </label>
-                        </section></div>
-                    <div class="row">
-                        <section class="col col-6">
-                            <label class="input">
-                                <i class="icon-append fa fa-timer"></i>
+                        </section>
+                        <section class="col col-4">
+                            <label class="select">
+                                <i class="icon-append fa fa-clock-o"></i>
                                 @Html.DropDownListFor(m => m.StartTime, (SelectList)ViewBag.TimeList, new
                            {
                                @class = "form-control",
@@ -242,12 +247,14 @@
                            })
                             </label>
                         </section>
-                        @*<section class="col col-9">
-                            <div id="recaptcha_div"></div>
+                        <script type="text/javascript">write()
+                        </script>
+                        <section class="col col-9">
+                            @*<div id="recaptcha_div"></div>
                             <input type="button" value="Show reCAPTCHA" onclick="showRecaptcha('recaptcha_div');"></input>
 
-                            <script type="text/javascript">DrawBotBoot()</script>
-                        </section>*@
+                            <script type="text/javascript">DrawBotBoot()</script>*@
+                        </section>
                     </div>
 
 
@@ -263,4 +270,6 @@
             </footer>
         }
     </div>
+
+    
 </article>

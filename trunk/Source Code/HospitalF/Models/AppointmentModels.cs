@@ -83,38 +83,7 @@ namespace HospitalF.Models
 
         #endregion
 
-        #region Load doctor
-        /// <summary>
-        /// Load all doctor in Doctor_Speciality
-        /// </summary>
-        /// <param name="SpecialityID"></param>
-        /// <returns>List[DoctorEnity] that contains list of doctor with appropriate Speciality code</returns>
-        public static async Task<List<Doctor>> LoadDoctorInDoctorSpecialityAsyn(int SpecialityID)
-        {
-            List<Doctor> doctorList = new List<Doctor>();
-            Doctor doctor = null;
-            List<SP_LOAD_DOCTOR_BY_SPECIALITYIDResult> result = null;
-            // Take doctor in specific speciality in database
-            using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                result = await Task.Run(() =>
-                data.SP_LOAD_DOCTOR_BY_SPECIALITYID(SpecialityID).ToList());
-            }
-            // Assign value for each doctor
-            foreach (SP_LOAD_DOCTOR_BY_SPECIALITYIDResult r in result)
-            {
-                doctor = new Doctor();
-                doctor.Doctor_ID = r.Doctor_ID;
-                doctor.First_Name = r.First_Name;
-                doctor.Last_Name = r.Last_Name;
-                doctorList.Add(doctor);
-            }
-            Appointment app = new Appointment();
-            return doctorList;
-        }
-        #endregion
-
-        #region
+        #region Load doctor in list of doctor
         public static async Task<Doctor> LoadDoctorInDoctorListAsyn(int DoctorID)
         {
             // Return list of dictionary words
@@ -124,19 +93,6 @@ namespace HospitalF.Models
                     (from d in data.Doctors
                      where d.Doctor_ID == DoctorID
                      select d).FirstOrDefault());
-            }
-        }
-        #endregion
-
-        #region Load hospital by hospital ID
-        public static async Task<Hospital> LoadHospitalByHospitalID(int hospitalID)
-        {
-            using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                return await Task.Run(() =>
-                    (from h in data.Hospitals
-                     where h.Hospital_ID == hospitalID
-                     select h).FirstOrDefault());
             }
         }
         #endregion

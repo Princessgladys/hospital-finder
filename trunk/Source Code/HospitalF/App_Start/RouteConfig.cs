@@ -46,6 +46,12 @@ namespace HospitalF
             routes.MapRoute("GetWorkingDay", 
                             "appointment/getworkingday/", 
                             new { controller = "Appointment", action = "GetWorkingDay" },
+                            new[]{"HospitalF.Controllers"}
+           );
+
+            routes.MapRoute("SearchDoctor",
+                            "hospital/searchdoctor/",
+                            new { controller = "Hospital", action = "SearchDoctor" },
                             new[]{"HospitalF.Controllers"});
         }
     }
