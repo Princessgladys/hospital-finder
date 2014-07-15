@@ -55,6 +55,11 @@ namespace HospitalF.Constant
         public const string AppointmentController = "Appointment";
 
         /// <summary>
+        /// Name of Hospital controller
+        /// </summary>
+        public const string HospitalController = "Hospital";
+
+        /// <summary>
         /// Name of AccountController
         /// </summary>
         public const string AccountController = "Account";
@@ -68,6 +73,16 @@ namespace HospitalF.Constant
         /// Name of GetDoctorBySpecialityAction
         /// </summary>
         public const string GetDoctorBySpecialityAction = "GetDoctorBySpeciality";
+
+        /// <summary>
+        /// Name of SearchDoctorAction
+        /// </summary>
+        public const string SearchDoctorAction = "SearchDoctor";
+
+        /// <summary>
+        /// Name of ViewDoctorDetailAction
+        /// </summary>
+        public const string ViewDoctorDetailAction = "ViewDoctorDetail";
 
         /// <summary>
         /// Name of GetWorkingDayAction
@@ -169,6 +184,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string Coordinate = "Tọa độ";
 
+        /// <summary>
+        /// Vietnamese name of property DoctorNameViet
+        /// </summary>
+        public const string DoctorNameViet = "Tên bác sĩ";
+
         #endregion
 
         #region Property English Name
@@ -218,7 +238,7 @@ namespace HospitalF.Constant
         /// </summary>
         public const string DiseaseName = "Disease_Name";
 
-        // <summary>
+        /// <summary>
         /// English name of property HospitalTypeName
         /// </summary>
         public const string HospitalTypeName = "Type_Name";
@@ -322,6 +342,33 @@ namespace HospitalF.Constant
         /// Vietnamese message request for Doctor
         /// </summary>
         public const string RequireDoctor = "-- Xin chọn bác sĩ --";
+
+        #endregion
+
+        #region HospitalModel
+
+        #region English name
+
+        /// <summary>
+        /// English name of property FacilityName
+        /// </summary>
+        public const string FacilityName = "Facility_Name";
+
+        /// <summary>
+        /// English name of property FacilityID
+        /// </summary>
+        public const string FacilityID = "Facility_ID";
+
+        /// <summary>
+        /// English name of property ServiceName
+        /// </summary>
+        public const string ServiceName = "Service_Name";
+
+        /// <summary>
+        /// English name of property ServiceID
+        /// </summary>
+        public const string ServiceID = "Service_ID";
+        #endregion
 
         #endregion
 

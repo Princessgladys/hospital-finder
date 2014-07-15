@@ -32,10 +32,13 @@ namespace HospitalF.Utilities
             // Assign values for each speciality
             foreach (SP_LOAD_SPECIALITY_BY_HOSPITALIDResult re in result)
             {
-                speciality = new Speciality();
-                speciality.Speciality_ID = re.Speciality_ID;
-                speciality.Speciality_Name = re.Speciality_Name;
-                specialityList.Add(speciality);
+                if (re.Speciality_ID != 1)
+                {
+                    speciality = new Speciality();
+                    speciality.Speciality_ID = re.Speciality_ID;
+                    speciality.Speciality_Name = re.Speciality_Name;
+                    specialityList.Add(speciality);
+                }
             }
 
             // Return list of speciality

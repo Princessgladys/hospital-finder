@@ -233,6 +233,33 @@
                 }
             });
         });
+
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '1403418919945133',
+                status: true, cookie: false, xfbml: true
+            });
+        };
+        function afterFacebookConnect() {
+            FB.getLoginStatus(function (response) {
+                if (response.session) {
+                    window.location = "../Account/FacebookLogin?token=" +
+                           response.session.access_token;
+                } else {
+                    // user clicked Cancel
+                }
+            });
+        };
+        $(document).ready(function () {
+            if (document.getElementById('fb-root') != undefined) {
+                var e = document.createElement('script');
+                e.type = 'text/javascript';
+                e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+                e.async = true;
+                document.getElementById('fb-root').appendChild(e);
+            }
+        });
+
     </script>
 </body>
 </html>

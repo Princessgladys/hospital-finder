@@ -77,6 +77,6 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
-
+        
     }
 }
