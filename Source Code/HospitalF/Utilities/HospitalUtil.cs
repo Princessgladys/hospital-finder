@@ -9,6 +9,22 @@ namespace HospitalF.Utilities
 {
     public class HospitalUtil
     {
+        /// <summary>
+        /// Load types of hospital in database
+        /// </summary>
+        /// <returns>List[HospitalType] that contains list of types of hospital</returns>
+        public static async Task<List<HospitalType>> LoadHospitalTypeAsync()
+        {
+            // Return list types of hospital
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from ht in data.HospitalTypes
+                     select ht
+                     ).OrderBy(ht => ht.Type_ID).ToList());
+            }
+        }
+
         #region Load hospital by hospital ID
         public static async Task<Hospital> LoadHospitalByHospitalIDAsync(int hospitalID)
         {
