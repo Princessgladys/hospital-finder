@@ -9,13 +9,122 @@ namespace HospitalF.Models
     public class HospitalModel
     {
         #region Hospital Properties
+
+        /// <summary>
+        /// Get/Set value for property HospitalID
+        /// </summary>
         public int HospitalID { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property HospitalID
+        /// </summary>
         public string HospitalName { get; set; }
-        public string Website { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property HospitalTypeName
+        /// </summary>
+        public string HospitalTypeName { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property HospitalTypeID
+        /// </summary>
+        public string HospitalTypeID { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property WardName
+        /// </summary>
         public string Address { get; set; }
-        public string TypeName { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property WardName
+        /// </summary>
+        public string WardName { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property WardID
+        /// </summary>
+        public int WardID { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property DistrictName
+        /// </summary>
+        public string DistrictName { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property DistrictID
+        /// </summary>
+        public int DistrictID { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property CityName
+        /// </summary>
+        public string CityName { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property CityID
+        /// </summary>
+        public int CityID { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property PhoneNo
+        /// </summary>
         public string PhoneNo { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property Fax
+        /// </summary>
         public string Fax { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property Website
+        /// </summary>
+        public string Website { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property OrdinaryStartTime
+        /// </summary>
+        public string OrdinaryStartTime { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property OrdinaryEndTime
+        /// </summary>
+        public string OrdinaryEndTime { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property HolidayStartTime
+        /// </summary>
+        public string HolidayStartTime { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property HolidayEndTime
+        /// </summary>
+        public string HolidayEndTime { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property Coordinate
+        /// </summary>
+        public string Coordinate { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property ShortDescription
+        /// </summary>
+        public string ShortDescription { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property FullDescription
+        /// </summary>
+        public string FullDescription { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property FullDescription
+        /// </summary>
+        public bool IsAllowAppointment { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property CreatedPerson
+        /// </summary>
+        public string CreatedPerson { get; set; }
+
         public string SpecialityName { get; set; }
         public int SpecialityID { get; set; }
         public string DoctorName { get; set; }
@@ -23,6 +132,7 @@ namespace HospitalF.Models
         public List<Speciality> SpecialityList { get; set; }
         public List<Service> ServiceList { get; set; }
         public List<Facility> FacilityList { get; set; }
+
         #endregion
 
         #region Doctor Properties

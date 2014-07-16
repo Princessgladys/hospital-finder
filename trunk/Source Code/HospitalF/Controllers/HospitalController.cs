@@ -13,6 +13,8 @@ namespace HospitalF.Controllers
 {
     public class HospitalController : Controller
     {
+        #region AnhDTH
+
         public static List<Doctor> doctorList = null;
         //public static List<Speciality> specialityList = null;
         //public static List<Service> serviceList = null;
@@ -35,7 +37,7 @@ namespace HospitalF.Controllers
             model.Website = hospital.Website;
             model.PhoneNo = hospital.Phone_Number;
             model.Fax = hospital.Fax;
-            model.TypeName = model.LoadHospitalTypeInList((int)hospital.Hospital_Type, typeList);
+            model.HospitalTypeName = model.LoadHospitalTypeInList((int)hospital.Hospital_Type, typeList);
             //load doctor of hospital
             //model.DoctorList = await HospitalUtil.LoadDoctorInDoctorHospitalAsync(hospitalID);
             //load speciality of hospital
@@ -92,5 +94,13 @@ namespace HospitalF.Controllers
             }
             return View();
         }
+
+        #endregion
+
+        #region SonNX
+
+
+
+        #endregion
     }
 }
