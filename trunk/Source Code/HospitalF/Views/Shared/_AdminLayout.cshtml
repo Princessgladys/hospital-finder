@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using HospitalF.Constant
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -191,19 +193,23 @@
         <div id="project-context" class="pull-right">
 
             <span><a href="/"><i class="fa fa-user"></i></a></span>
-            <span id="project-selector" data-toggle="dropdown">Lê Phước Việt <i class="fa fa-angle-down"></i></span>
+            @{
+                string username = @HospitalF.Models.SimpleSessionPersister.Username.Split(';')[1];
+                string email = @HospitalF.Models.SimpleSessionPersister.Username.Split(';')[0];
+            }
+            <span id="project-selector" data-toggle="dropdown">@username<i class="fa fa-angle-down"></i></span>
 
             <!-- Suggestion: populate this list with fetch and push technique -->
             <ul class="dropdown-menu">
                 <li>
-                    <a href="javascript:void(0);">Thông tin cá nhân</a>
+                    @Html.ActionLink("Thông tin cá nhân", Constants.DisplayProfileAction, Constants.AccountController)
                 </li>
                 <li>
-                    <a href="javascript:void(0);">Đổi mật khẩu</a>
+                    @Html.ActionLink("Đổi mật khẩu", Constants.ChangePasswordAction, Constants.AccountController)
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="javascript:void(0);">Đăng xuất</a>
+                    @Html.ActionLink("Đăng xuất", Constants.LogoutAction, Constants.AccountController)
                 </li>
             </ul>
             <!-- end dropdown-menu-->
@@ -224,10 +230,7 @@
                 <!-- User image size is adjusted inside CSS, it should stay as it -->
 
                 <a href="javascript:void(0);" id="show-shortcut">
-                    <img src="../Content/img/avatars/sunny.png" alt="me" class="online" />
-                    <span>Lê Phước Việt
-                    </span>
-                    <i class="fa fa-angle-down"></i>
+                    <span>@email</span>
                 </a>
 
             </span>

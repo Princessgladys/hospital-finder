@@ -110,6 +110,21 @@ namespace HospitalF.Constant
         public const string LoginAction = "Login";
 
         /// <summary>
+        /// Name of Logout method in AccountController
+        /// </summary>
+        public const string LogoutAction = "Logout";
+
+        /// <summary>
+        /// Name of ChangePassword method in AccountController
+        /// </summary>
+        public const string ChangePasswordAction = "ChangePassword";
+
+        /// <summary>
+        /// Name of Profile method in AccountController
+        /// </summary>
+        public const string DisplayProfileAction = "Profile";
+
+        /// <summary>
         /// Name of GetDistrictByCityAction method in HomeController
         /// </summary>
         public const string GetDistrictByCityAction = "GetDistrictByCity";

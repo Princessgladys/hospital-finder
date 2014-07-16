@@ -92,7 +92,7 @@ namespace HospitalF.Controllers
                 HttpCookie cookie2 = new HttpCookie("ASP.NET_SessionId", "");
                 cookie2.Expires = DateTime.Now.AddYears(-1);
                 Response.Cookies.Add(cookie2);
-                return RedirectToAction(Constants.IndexAction, Constants.HomeController);
+                return RedirectToAction(Constants.LoginAction, Constants.AccountController);
             }
             catch (Exception)
             {
