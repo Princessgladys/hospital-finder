@@ -523,7 +523,8 @@ namespace HospitalF.Models
                          Coordinate = h.Coordinate,
                          Description = h.Full_Description,
                          Is_Allow_Appointment = (bool)h.Is_Allow_Appointment,
-                         Is_Active = (bool)h.Is_Active
+                         Is_Active = (bool)h.Is_Active,
+                         Rating = h.Rating
                      }).ToList());
             }
 
@@ -568,7 +569,8 @@ namespace HospitalF.Models
                          Coordinate = h.Coordinate,
                          Description = h.Full_Description,
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
-                         Is_Active = h.Is_Active
+                         Is_Active = h.Is_Active,
+                         Rating = h.Rating
                      }).ToList());
             }
 
@@ -611,7 +613,8 @@ namespace HospitalF.Models
                          Coordinate = h.Coordinate,
                          Description = h.Full_Description,
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
-                         Is_Active = h.Is_Active
+                         Is_Active = h.Is_Active,
+                         Rating = h.Rating
                      }).ToList());
             }
 

@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using HospitalF.Constant;
 using Newtonsoft.Json.Linq;
 using HospitalF.Utilities;
+using HospitalF.Controllers;
 
 namespace HospitalF.Models
 {
