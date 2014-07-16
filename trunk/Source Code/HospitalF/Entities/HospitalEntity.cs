@@ -80,14 +80,24 @@ namespace HospitalF.Entities
         public string Description { get; set; }
 
         /// <summary>
-        /// Property for Start_Time attribute
+        /// Property for Ordinary_Start_Time attribute
         /// </summary>
-        public TimeSpan? Start_Time { get; set; }
+        public TimeSpan? Ordinary_Start_Time { get; set; }
 
         /// <summary>
-        /// Property for End_Time attribute
+        /// Property for Ordinary_End_Time attribute
         /// </summary>
-        public TimeSpan? End_Time { get; set; }
+        public TimeSpan? Ordinary_End_Time { get; set; }
+
+        /// <summary>
+        /// Property for Holiday_Start_Time attribute
+        /// </summary>
+        public TimeSpan? Holiday_Start_Time { get; set; }
+
+        /// <summary>
+        /// Property for Holiday_End_Time attribute
+        /// </summary>
+        public TimeSpan? Holiday_End_Time { get; set; }
 
         /// <summary>
         /// Property for Is_Allow_Appointment attribute
