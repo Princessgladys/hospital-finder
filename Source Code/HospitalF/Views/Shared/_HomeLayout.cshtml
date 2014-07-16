@@ -9,7 +9,7 @@
 
     <!-- Basic Styles -->
     @Styles.Render("~/Content/HomeLayout")
-    
+
     <!-- FAVICONS -->
     <link rel="shortcut icon" href="../Content/img/favicon/favicon.ico" type="image/x-icon">
     <link rel="icon" href="../Content/img/favicon/favicon.ico" type="image/x-icon">
@@ -80,7 +80,7 @@
     <!-- JQUERY RATING -->
     <script src="../Content/js/jquery.MetaData.js"></script>
     <script src="../Content/js/jquery.rating.js"></script>
-    
+
     <!-- MAIN APP JS FILE -->
     <script src="../Content/js/app.js"></script>
 
@@ -190,11 +190,7 @@
             event.preventDefault();
 
             // Clear facebook's session before system's session
-            facebookLogout(href);        
-        });
-
-        $('#fb-check').click(function () {
-            checkUserState();
+            facebookLogout(href);
         });
 
         function facebookLogin() {
@@ -218,12 +214,20 @@
         }
 
         function facebookLogout(href) {
-            FB.logout(function (response) {
-                console.log('User has logged out...');
+            FB.getLoginStatus(function (response) {
+                if (response.status === 'connected') {
+                    FB.logout(function (response) {
+                        console.log('User has logged out...');
 
-                // Clear system's session
-                window.location = href;
+                        // Clear system's session
+                        window.location = href;
+                    });
+                } else {
+                    // Clear system's session
+                    window.location = href;
+                }
             });
+
         }
 
         function checkUserState() {
