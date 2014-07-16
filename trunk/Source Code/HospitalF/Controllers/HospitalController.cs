@@ -11,7 +11,7 @@ using HospitalF.Utilities;
 
 namespace HospitalF.Controllers
 {
-    public class HospitalController : Controller
+    public class HospitalController : SecurityBaseController
     {
         #region AnhDTH
 
