@@ -6,252 +6,342 @@ IF OBJECT_ID('[SP_NORMAL_SEARCH_HOSPITAL]', 'P') IS NOT NULL
 GO
 CREATE PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
 	@WhatPhrase NVARCHAR(128), -- ALWAYS NOT NULL
-	@CityName NVARCHAR(32),
+	@CityID INT,
 	@DistrictName VARCHAR(32)
 AS
 BEGIN
-	-- VARIABLE FOR PERCENTAGE OF SIMILARITY
-	DECLARE @PercentageOfSimilarity FLOAT = 0.85
+	-- DEFAULT VALUE TO CONSIDER ANALYZING @WhatPhrase
+	DECLARE @Boundary INT = 30
 
-	-- VARIABLE FOR ROW NUMBER
-	DECLARE @RowNumber INT
+	-- DECLARE TEMPORARY TABLE THAT CONTAIN LIST OF HOSPITALS
+	DECLARE @HospitalList TABLE([Priority] INT IDENTITY(1,1) PRIMARY KEY,
+							    Hospital_ID INT)
 
-	-- VARIABLES FOR HOSPITALS
-	DECLARE @TotalHospital INT
-	DECLARE @HospitalName NVARCHAR(64)
-	
-	-- TRANSFORM @WhatPhrase to non-diacritic Vietnamese
-	SET @WhatPhrase = [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (@WhatPhrase)
-	
-	-- CHECK IF THERE IS ANY HOSPITAL NAME IN @WhatPhrase
-	SET @TotalHospital = (SELECT COUNT(h.Hospital_ID)
-						  FROM Hospital h)
-	SET @RowNumber = 1
+	INSERT INTO @HospitalList
+	SELECT (SELECT wh.Hospital_ID
+			FROM WordDictionary w, Word_Hospital wh
+			WHERE w.Word LIKE N'%' + @WhatPhrase + N'%' AND
+				  w.[Priority] != 1 AND
+				  w.Word_ID = wh.Word_ID)
 
-	WHILE (@RowNumber <= @TotalHospital)
+	-- DECLARE VARIABLE TO COUNT NUMBER OF RECORDS IN @HospitalList
+	DECLARE @TotalRecordInHospitalList INT = (SELECT COUNT([Priority])
+											  FROM @HospitalList)
+
+	-- CHECK IF THERE ARE LESS THAN 30 RECORD IN @TotalHospital
+	-- IF MORE THAN 30, QUERY DATA IN [Hospital] TABLE AND RETURN
+	-- IF NOT, CONTINUE ANALYZING @WhatPhrase AND @WherePhrase
+	IF (@TotalRecordInHospitalList > @Boundary)
 	BEGIN
-		-- GET HOSPITAL NAME FROM DATABASE
-		SELECT @HospitalName = LOWER([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (h.Hospital_Name))
-							   FROM (SELECT ROW_NUMBER()
-									 OVER (ORDER BY h.Hospital_ID ASC) AS RowNumber, h.Hospital_Name
-									 FROM Hospital h) AS h
-							   WHERE RowNumber = @RowNumber
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
+		RETURN;
+	END
+	
+-------------------------------------------------------------------------------------------
 
-		-- FIND MATCHED RESULT
-		IF ([dbo].[FU_IS_PATTERN_MATCHED] (@HospitalName, @WhatPhrase) = 1)
-		BEGIN
-			-- QUERY HOSPITAL NAME IN DATABASE
-			SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
-				   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
-				   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
-				   h.Is_Allow_Appointment, h.Is_Active
+	-- ADD THE HOSPITALS THAT HAVE NAME CONTAINS IN @WhatPhrase
+	INSERT INTO @HospitalList
+	SELECT (SELECT h.Hospital_ID
 			FROM Hospital h
-			WHERE [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(h.Hospital_Name)) LIKE
-				  (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@HospitalName)) + N'%') OR
-				  [dbo].[FU_STRING_COMPARE] (LOWER(h.Hospital_Name), LOWER(@HospitalName))
-							>= @PercentageOfSimilarity
-			ORDER BY h.Hospital_Name
-			RETURN;
-		END
-		
-		SET @RowNumber += 1
-	END
+			WHERE h.Hospital_Name LIKE
+				  @WhatPhrase)
 
-	-- VARIABLES FOR SPECIALITY
-	DECLARE @TotalSpeciality INT
-	DECLARE @SpecialityName NVARCHAR(64)
-	DECLARE @IsHaveSpeciality INT = 0
-
-	-- CHECK IF THERE IS ANY SPECIALITY NAME IN @WhatPhrase
-	SET @TotalSpeciality = (SELECT COUNT(s.Speciality_ID)
-							FROM Speciality s)
-	SET @RowNumber = 1
-
-	WHILE (@RowNumber < @TotalSpeciality)
-	BEGIN
-		-- GET SPECIALITY NAME FROM DATABASE
-		SELECT @SpecialityName = LOWER([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (s.Speciality_Name))
-								 FROM (SELECT ROW_NUMBER()
-									   OVER (ORDER BY s.Speciality_ID ASC) AS RowNumber, s.Speciality_Name
-									   FROM Speciality s) AS s
-								 WHERE RowNumber = @RowNumber
-
-		-- FIND MATCHED RESULT
-		IF ([dbo].[FU_IS_PATTERN_MATCHED] (@WhatPhrase, @SpecialityName) = 1)
-		BEGIN
-			SET @IsHaveSpeciality = 1
-			SET @SpecialityName = @SpecialityName
-			BREAK
-		END
-
-		SET @RowNumber += 1
-	END
-
-	-- VARIABLE FOR DISEASE
-	DECLARE @TotalDisease INT
-	DECLARE @DiseaseName NVARCHAR(64)
-	DECLARE @IsHaveDisease INT = 0
-
-	-- CHECK IF THERE IS ANY DISEASE NAME IN @WhatPhrase
-	SET @TotalDisease = (SELECT COUNT(d.Disease_ID)
-						 FROM Disease d)
-	SET @RowNumber = 1
-
-	WHILE (@RowNumber < @TotalDisease)
-	BEGIN
-		-- GET DISEASE NAME FROM DATABASE
-		SELECT @DiseaseName = LOWER([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (d.Disease_Name))
-							  FROM (SELECT ROW_NUMBER()
-									OVER (ORDER BY d.Disease_ID ASC) AS RowNumber, d.Disease_Name
-									FROM Disease d) AS d
-							  WHERE RowNumber = @RowNumber
-
-		-- FIND MATCHED RESULT
-		IF ([dbo].[FU_IS_PATTERN_MATCHED] (@WhatPhrase, @DiseaseName) = 1)
-		BEGIN
-			SET @IsHaveDisease = 1
-			SET @DiseaseName = @DiseaseName
-			BREAK
-		END
-
-		SET @RowNumber += 1
-	END
-
-	-- VARIABLE FOR WHERE PHRASE
-	DECLARE @WherePhrase INT
-
-	IF (@CityName IS NULL AND @DistrictName IS NULL)
-		SET @WherePhrase = 0
-	ELSE
-		SET @WherePhrase = 1
-
-	-- VARIABLES FOR SEARCH QUERY
-	DECLARE @SelectPhrase NVARCHAR(512) = NULL
-	SET @SelectPhrase = N'SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,' +
-						N'h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,' +
-						N'h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,' +
-						N'h.Is_Allow_Appointment, h.Is_Active'
-
-	DECLARE @FromPhrase NVARCHAR(512) = NULL
-	SET @FromPhrase = N'FROM Hospital h'
-
-	DECLARE @ConditionPhrase NVARCHAR(512) = NULL
-	SET @ConditionPhrase = N'WHERE h.Is_Active = ''True'''
-
-	DECLARE @OrderPhrase NVARCHAR(512)
-	SET @OrderPhrase = N'ORDER BY h.Hospital_Name'
-
-	DECLARE @SqlQuery NVARCHAR(512) = NULL
+	-- COUNT NUMBER OF RECORD IN @HospitalList AGAIN
+	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
+									  FROM @HospitalList)
 	
-	-- CHECK IF ONLY WHAT PHRASE IS AVAILABLE
-	IF (@WherePhrase = 0)
+	IF (@TotalRecordInHospitalList > @Boundary)
 	BEGIN
-		SET @FromPhrase += CASE WHEN @IsHaveSpeciality = 1
-						   THEN N', Speciality s, Hospital_Speciality hs'
-						   ELSE '' END;
-		SET @FromPhrase += CASE WHEN @IsHaveDisease = 1
-						   THEN N', Disease d, Speciality_Disease sd'
-						   ELSE '' END;
-
-		SET @ConditionPhrase += CASE WHEN @IsHaveSpeciality = 1
-								THEN N' AND ([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(s.Speciality_Name))' +
-									 N' LIKE (N''%'' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@SpecialityName)) + N''%'')' +
-									 N' OR [dbo].[FU_STRING_COMPARE] (LOWER(s.Speciality_Name), LOWER(@SpecialityName))' +
-									 N' >= @PercentageOfSimilarity)' +
-									 N' AND hs.Speciality_ID = s.Speciality_ID'
-								ELSE N' OR [dbo].[FU_STRING_COMPARE]' +
-									 N' (LOWER([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE]' +
-									 N' (s.Speciality_Name)), @WhatPhrase) >= @PercentageOfSimilarity'
-								END;
-		SET @ConditionPhrase += CASE WHEN @IsHaveDisease = 1
-								THEN N' AND ([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(d.Disease_Name))' +
-									 N' LIKE (N''%'' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@DiseaseName)) + N''%'')' +
-									 N' OR [dbo].[FU_STRING_COMPARE] (LOWER(d.Disease_Name), LOWER(@DiseaseName))' +
-									 N' >= @PercentageOfSimilarity)' +
-									 N' AND sd.Disease_ID = d.Disease_ID'
-								ELSE N' OR [dbo].[FU_STRING_COMPARE]' +
-									 N' (LOWER([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE]' +
-									 N' (d.Disease_Name)), @WhatPhrase) >= @PercentageOfSimilarity'
-								END;
-		SET @ConditionPhrase += CASE WHEN (@IsHaveSpeciality = 1) AND (@IsHaveDisease = 1)
-								THEN  N' AND h.Hospital_ID = hs.Speciality_ID'
-								ELSE CASE WHEN (@IsHaveSpeciality = 0) AND (@IsHaveDisease = 0)
-									 THEN ''
-									 ELSE N' AND h.Hospital_ID = hs.Speciality_ID'
-									 END
-							    END;
-
-		SET @SqlQuery = @SelectPhrase + CHAR(13) + @FromPhrase + CHAR(13) +
-						@ConditionPhrase + CHAR(13) + @OrderPhrase
-
-		EXECUTE SP_EXECUTESQL @SqlQuery,
-							  N'@SpecialityName NVARCHAR(64), @DiseaseName NVARCHAR(64)',
-							  @SpecialityName, @DiseaseName
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
 		RETURN;
 	END
 
-	-- CHECK IF ONLY WHAT PHRASE IS AVAILABLE
+-------------------------------------------------------------------------------------------
+
+	-- ADD THE HOSPITALS THAT HAVE SPECIALITY CONTAINS IN @WhatPhrase
+	INSERT INTO @HospitalList
+	SELECT (SELECT h.Hospital_ID
+			FROM Speciality s, Hospital h, Hospital_Speciality hs
+			WHERE s.Speciality_Name LIKE
+				  @WhatPhrase AND
+				  s.Speciality_ID = hs.Speciality_ID AND
+				  h.Hospital_ID = hs.Hospital_ID)
+
+	-- COUNT NUMBER OF RECORD IN @HospitalList AGAIN
+	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
+									  FROM @HospitalList)
+	
+	IF (@TotalRecordInHospitalList > @Boundary)
+	BEGIN
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
+		RETURN;
+	END
+
+-------------------------------------------------------------------------------------------
+
+	-- CHECK IF @WherePhrase IS AVAILABLE
+	IF (@CityID != 0 AND @DistrictName IS NOT NULl)
+	BEGIN
+		INSERT INTO @HospitalList
+		SELECT (SELECT h.Hospital_ID
+				FROM Hospital h, District d
+				WHERE h.City_ID = @CityID AND
+					  d.District_Name LIKE @DistrictName AND
+					  d.District_ID = h.District_ID)
+	END
 	ELSE
 	BEGIN
-		SET @FromPhrase += CASE WHEN @IsHaveSpeciality = 1
-						   THEN N', Speciality s, Hospital_Speciality hs'
-						   ELSE '' END;
-		SET @FromPhrase += CASE WHEN @IsHaveDisease = 1
-						   THEN N', Disease d, Speciality_Disease sd'
-						   ELSE '' END;
-		SET @FromPhrase += CASE WHEN @CityName IS NOT NULL
-						   THEN ' AND City c'
-						   ELSE '' END;
-		SET @FromPhrase += CASE WHEN @DistrictName IS NOT NULL
-						   THEN ' AND District di'
-						   ELSE '' END;
+		-- ADD THE HOSPITALS THAT HAVE CITY CONTAINS IN @WherePhrase
+		IF (@CityID != 0)
+		BEGIN
+			INSERT INTO @HospitalList
+			SELECT (SELECT h.Hospital_ID
+					FROM Hospital h
+					WHERE h.City_ID = @CityID)
+		END
 
-		SET @ConditionPhrase += CASE WHEN @IsHaveSpeciality = 1
-								THEN N' AND ([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(s.Speciality_Name))' +
-									 N' LIKE (N''%'' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@SpecialityName)) + N''%'')' +
-									 N' OR [dbo].[FU_STRING_COMPARE] (LOWER(s.Speciality_Name), LOWER(@SpecialityName))' +
-									 N' >= @PercentageOfSimilarity)' +
-									 N' AND hs.Speciality_ID = s.Speciality_ID'
-								ELSE N' OR [dbo].[FU_STRING_COMPARE]' +
-									 N' (LOWER([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE]' +
-									 N' (s.Speciality_Name)), @WhatPhrase) >= @PercentageOfSimilarity'
-								END;
-		SET @ConditionPhrase += CASE WHEN @IsHaveDisease = 1
-								THEN N' AND ([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(d.Disease_Name))' +
-									 N' LIKE (N''%'' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@DiseaseName)) + N''%'')' +
-									 N' OR [dbo].[FU_STRING_COMPARE] (LOWER(d.Disease_Name), LOWER(@DiseaseName))' +
-									 N' >= @PercentageOfSimilarity)' +
-									 N' AND sd.Disease_ID = d.Disease_ID'
-								ELSE N' OR [dbo].[FU_STRING_COMPARE]' +
-									 N' (LOWER([dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE]' +
-									 N' (d.Disease_Name)), @WhatPhrase) >= @PercentageOfSimilarity'
-								END;
-		SET @ConditionPhrase += CASE WHEN (@IsHaveSpeciality = 1) AND (@IsHaveDisease = 1)
-								THEN  N' AND h.Hospital_ID = hs.Speciality_ID'
-								ELSE CASE WHEN (@IsHaveSpeciality = 0) AND (@IsHaveDisease = 0)
-									 THEN ''
-									 ELSE N' AND h.Hospital_ID = hs.Speciality_ID'
-									 END
-							    END;
-		SET @ConditionPhrase += CASE WHEN @CityName IS NOT NULL
-								THEN N' AND [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(c.City_Name))' +
-									 N' LIKE N''%@[dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(CityName))%''' +
-									 N' AND h.City_ID = c.City_ID'
-								ELSE ''
-							    END;
-		SET @ConditionPhrase += CASE WHEN @DistrictName IS NOT NULL
-								THEN N' AND [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(di.District_Name))' +
-									 N' LIKE N''%[dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (LOWER(@DistrictName))%''' +
-									 N' AND h.District_ID = di.District_ID'
-								ELSE ''
-							    END;
+		-- ADD THE HOSPITALS THAT HAVE DISTRICT CONTAINS IN @WherePhrase
+		IF (@DistrictName IS NOT NULL)
+		BEGIN
+			INSERT INTO @HospitalList
+			SELECT (SELECT h.Hospital_ID
+					FROM District d, Hospital h
+					WHERE d.District_Name LIKE @DistrictName AND
+						  d.District_ID = h.District_ID)
+		END
+	END
 
-		SET @SqlQuery = @SelectPhrase + CHAR(13) + @FromPhrase + CHAR(13) +
-						@ConditionPhrase + CHAR(13) + @OrderPhrase
+	-- COUNT NUMBER OF RECORD IN @HospitalList AGAIN
+	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
+									  FROM @HospitalList)
+	
 
-		EXECUTE SP_EXECUTESQL @SqlQuery,
-							  N'@SpecialityName NVARCHAR(64), @DiseaseName NVARCHAR(64), @CityName NVARCHAR(32), @DistrictName NVARCHAR(32)',
-							  @SpecialityName, @DiseaseName, @CityName, @DistrictName
+	IF (@TotalRecordInHospitalList > @Boundary)
+	BEGIN
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
 		RETURN;
 	END
+
+
+-------------------------------------------------------------------------------------------
+
+	-- ADD THE HOSPITALS THAT HAVE DISEASE CONTAINS IN @WhatPhrase
+	INSERT INTO @HospitalList
+	SELECT (SELECT h.Hospital_ID
+			FROM Disease d, Speciality_Disease sd,
+					Hospital h, Hospital_Speciality hs
+			WHERE d.Disease_Name LIKE
+				  @WhatPhrase AND
+				  d.Disease_ID = sd.Disease_ID AND
+				  sd.Speciality_ID = hs.Speciality_ID AND
+				  h.Hospital_ID = hs.Hospital_ID)
+
+	-- COUNT NUMBER OF RECORD IN @HospitalList AGAIN
+	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
+									  FROM @HospitalList)
+	
+	IF (@TotalRecordInHospitalList > @Boundary)
+	BEGIN
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+				h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+				h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
+		RETURN;
+	END
+
+-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+
+	-- TRANSFORM @WhatPhrase TO NON-DIACRITIC VIETNAMSE
+	SET @WhatPhrase = [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (@WhatPhrase)
+
+	-- HOPITAL NAME
+	INSERT INTO @HospitalList
+	SELECT (SELECT wh.Hospital_ID
+			FROM WordDictionary w, Word_Hospital wh
+			WHERE w.Word LIKE N'%' + @WhatPhrase + N'%' AND
+				  w.[Priority] != 1 AND
+				  w.Word_ID = wh.Word_ID)
+
+	-- DECLARE VARIABLE TO COUNT NUMBER OF RECORDS IN @HospitalList
+	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
+									  FROM @HospitalList)
+
+	-- CHECK IF THERE ARE LESS THAN 30 RECORD IN @TotalHospital
+	-- IF MORE THAN 30, QUERY DATA IN [Hospital] TABLE AND RETURN
+	-- IF NOT, CONTINUE ANALYZING @WhatPhrase AND @WherePhrase
+	IF (@TotalRecordInHospitalList > @Boundary)
+	BEGIN
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
+		RETURN;
+	END
+	
+-------------------------------------------------------------------------------------------
+
+	-- ADD THE HOSPITALS THAT HAVE NAME CONTAINS IN @WhatPhrase
+	INSERT INTO @HospitalList
+	SELECT (SELECT h.Hospital_ID
+			FROM Hospital h
+			WHERE [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](h.Hospital_Name) LIKE
+				  @WhatPhrase)
+
+	-- COUNT NUMBER OF RECORD IN @HospitalList AGAIN
+	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
+									  FROM @HospitalList)
+	
+	IF (@TotalRecordInHospitalList > @Boundary)
+	BEGIN
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
+		RETURN;
+	END
+
+-------------------------------------------------------------------------------------------
+
+	-- ADD THE HOSPITALS THAT HAVE SPECIALITY CONTAINS IN @WhatPhrase
+	INSERT INTO @HospitalList
+	SELECT (SELECT h.Hospital_ID
+			FROM Speciality s, Hospital h, Hospital_Speciality hs
+			WHERE [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](s.Speciality_Name) LIKE
+				  @WhatPhrase AND
+				  s.Speciality_ID = hs.Speciality_ID AND
+				  h.Hospital_ID = hs.Hospital_ID)
+
+	-- COUNT NUMBER OF RECORD IN @HospitalList AGAIN
+	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
+									  FROM @HospitalList)
+	
+	IF (@TotalRecordInHospitalList > @Boundary)
+	BEGIN
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
+		RETURN;
+	END
+
+-------------------------------------------------------------------------------------------
+
+	-- CHECK IF @WherePhrase IS AVAILABLE
+	IF (@CityID != 0 AND @DistrictName IS NOT NULl)
+	BEGIN
+		INSERT INTO @HospitalList
+		SELECT (SELECT h.Hospital_ID
+				FROM Hospital h, District d
+				WHERE h.City_ID = @CityID AND
+					  d.District_Name LIKE @DistrictName AND
+					  d.District_ID = h.District_ID)
+	END
+	ELSE
+	BEGIN
+		-- ADD THE HOSPITALS THAT HAVE CITY CONTAINS IN @WherePhrase
+		IF (@CityID != 0)
+		BEGIN
+			INSERT INTO @HospitalList
+			SELECT (SELECT h.Hospital_ID
+					FROM Hospital h
+					WHERE h.City_ID = @CityID)
+		END
+
+		-- ADD THE HOSPITALS THAT HAVE DISTRICT CONTAINS IN @WherePhrase
+		IF (@DistrictName IS NOT NULL)
+		BEGIN
+			INSERT INTO @HospitalList
+			SELECT (SELECT h.Hospital_ID
+					FROM District d, Hospital h
+					WHERE d.District_Name LIKE @DistrictName AND
+						  d.District_ID = h.District_ID)
+		END
+	END
+
+	-- COUNT NUMBER OF RECORD IN @HospitalList AGAIN
+	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
+									  FROM @HospitalList)
+	
+
+	IF (@TotalRecordInHospitalList > @Boundary)
+	BEGIN
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+			   h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
+		RETURN;
+	END
+
+
+-------------------------------------------------------------------------------------------
+
+	-- ADD THE HOSPITALS THAT HAVE DISEASE CONTAINS IN @WhatPhrase
+	INSERT INTO @HospitalList
+	SELECT (SELECT h.Hospital_ID
+			FROM Disease d, Speciality_Disease sd,
+					Hospital h, Hospital_Speciality hs
+			WHERE [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](d.Disease_Name) LIKE
+					@WhatPhrase AND
+					d.Disease_ID = sd.Disease_ID AND
+					sd.Speciality_ID = hs.Speciality_ID AND
+					h.Hospital_ID = hs.Hospital_ID)
+
+	-- COUNT NUMBER OF RECORD IN @HospitalList AGAIN
+	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
+										FROM @HospitalList)
+	
+	IF (@TotalRecordInHospitalList > @Boundary)
+	BEGIN
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,
+				h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+				h.Is_Allow_Appointment, h.Is_Active
+		FROM Hospital h, @HospitalList list
+		WHERE h.Hospital_ID = list.Hospital_ID
+		ORDER BY list.[Priority] ASC
+		RETURN;
+	END
+
+-------------------------------------------------------------------------------------------
 END
