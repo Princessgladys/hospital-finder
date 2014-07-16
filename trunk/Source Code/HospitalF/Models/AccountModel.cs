@@ -52,8 +52,8 @@ namespace HospitalF.Models
                                  select u).SingleOrDefault();
                     if (user != null)
                     {
-                        SimpleSessionPersister.Username = user.Email + ";" +
-                            user.Last_Name + " " + user.First_Name + ";" + user.User_ID;
+                        SimpleSessionPersister.Username = user.Email + Constants.Minus +
+                            user.Last_Name + " " + user.First_Name + Constants.Minus + user.User_ID;
                         SimpleSessionPersister.Role = user.Role.Role_Name;
                         return true;
                     }

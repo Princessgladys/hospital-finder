@@ -13,6 +13,10 @@ namespace HospitalF.Controllers
 {
     public class HospitalController : SecurityBaseController
     {
+        // Declare public list items for Drop down lists
+        public static List<City> cityList = null;
+        public static List<HospitalType> hospitalTypeList = null;
+
         #region AnhDTH
 
         public static List<Doctor> doctorList = null;
@@ -106,7 +110,26 @@ namespace HospitalF.Controllers
         [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> HospitalList()
         {
-            return View();
+            HospitalModel model = new HospitalModel();
+            model.CityID = 79;
+
+            try
+            {
+                // Load list of cities
+                cityList = await LocationUtil.LoadCityAsync();
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+
+                // Load list of hospital types
+                hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
+                ViewBag.HospitalTypeID = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+
+            return View(model);
         }
 
 

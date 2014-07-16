@@ -219,6 +219,11 @@ namespace HospitalF.Constant
         public const string HospitalTypeID = "Type_ID";
 
         /// <summary>
+        /// English name of property HospitalTypeName
+        /// </summary>
+        public const string HospitalTypeName = "Type_Name";
+
+        /// <summary>
         /// English name of property CityID
         /// </summary>
         public const string CityID = "City_ID";
@@ -258,11 +263,6 @@ namespace HospitalF.Constant
         /// </summary>
         public const string DiseaseName = "Disease_Name";
 
-        /// <summary>
-        /// English name of property HospitalTypeName
-        /// </summary>
-        public const string HospitalTypeName = "Type_Name";
-
         #endregion
 
         /// <summary>
@@ -284,6 +284,11 @@ namespace HospitalF.Constant
         /// Vietnamese message request for Disease
         /// </summary>
         public const string RequireDisease = "-- Xin chọn triệu chứng --";
+
+        /// <summary>
+        /// Vietnamese message request for Hospital Type
+        /// </summary>
+        public const string RequireHospitalType = "-- Xin chọn loại bệnh viện --";
 
         /// <summary>
         /// Default matching value
@@ -388,6 +393,9 @@ namespace HospitalF.Constant
         /// English name of property ServiceID
         /// </summary>
         public const string ServiceID = "Service_ID";
+
+
+
         #endregion
 
         #endregion

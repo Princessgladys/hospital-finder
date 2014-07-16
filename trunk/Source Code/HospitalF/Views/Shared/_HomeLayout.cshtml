@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using HospitalF.Constant
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -118,7 +120,7 @@
                     <li>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user"></i>
-                            <span>@(User.Identity.Name.Split(';')[1])</span>
+                            <span>@(User.Identity.Name.Split(Char.Parse(Constants.Minus))[1])</span>
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu pull-right">

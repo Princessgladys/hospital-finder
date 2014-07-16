@@ -1,4 +1,5 @@
 ﻿@using HospitalF.Constant
+@using System.Collections.Generic
 
 <!DOCTYPE html>
 <html>
@@ -81,6 +82,7 @@
 
     <!-- MAIN APP JS FILE -->
     <script src="../Content/js/app.js"></script>
+
 </head>
 <body style="font-family: Arial;">
     <!-- HEADER -->
@@ -191,11 +193,19 @@
 
         <!-- projects dropdown -->
         <div id="project-context" class="pull-right">
-
+            
             <span><a href="/"><i class="fa fa-user"></i></a></span>
             @{
-                string username = @HospitalF.Models.SimpleSessionPersister.Username.Split(';')[1];
-                string email = @HospitalF.Models.SimpleSessionPersister.Username.Split(';')[0];
+                string username = string.Empty;
+                string email = string.Empty;
+               
+                if (HospitalF.Models.SimpleSessionPersister.Username != null)
+                {
+                    string[] userInfo = HospitalF.Models.SimpleSessionPersister.Username.
+                       Split(Char.Parse(Constants.Minus));
+                    username = userInfo[1];
+                    email = userInfo[0];
+                }
             }
             <span id="project-selector" data-toggle="dropdown">@username<i class="fa fa-angle-down"></i></span>
 
@@ -329,7 +339,7 @@
         <!-- END RIBBON -->
 
         <!-- MAIN CONTENT -->
-        <div id="content" style="font-family: Arial;">
+        <div id="content" style="opacity: 1;font-family: Arial;">
             @RenderBody()
         </div>
         <!-- END MAIN CONTENT -->
