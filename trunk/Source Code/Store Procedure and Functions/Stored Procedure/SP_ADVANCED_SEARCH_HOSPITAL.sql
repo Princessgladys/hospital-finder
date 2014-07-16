@@ -45,7 +45,8 @@ BEGIN
 	SET @SelectPhrase = N'SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,' +
 						N'h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,' +
 						N'h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,' +
-						N'h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,[dbo].[FU_CALCULATE_AVERAGE_RATING](h.Hospital_ID) AS Rating'
+						N'h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,' +
+						N'[dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating'
 
 	DECLARE @FromPhrase NVARCHAR(512) = NULL
 	SET @FromPhrase = N'FROM Hospital h'
