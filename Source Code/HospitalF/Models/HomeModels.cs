@@ -103,6 +103,11 @@ namespace HospitalF.Models
         /// </summary>
         public double Radius { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property WhatPhrase
+        /// </summary>
+        public string WhatPhrase { get; set; }
+
         #endregion
 
         #region GIR query analyzer
@@ -350,8 +355,6 @@ namespace HospitalF.Models
             List<City> cityList = await LocationUtil.LoadCityAsync();
             // Load list of districts
             List<District> districtList = await LocationUtil.LoadAllDistrictAsync();
-            // Load list of hospitals
-            List<Hospital> hospitalList = await LoadHospitalList();
 
             // Check if the lists are load successfully
             if ((wordDic == null) &&
@@ -443,19 +446,6 @@ namespace HospitalF.Models
                 what = tempWhat.Trim().ToLower();
             }
 
-            // Handle What phrase
-            // Load relation word dictionary
-            List<Speciality> specialityList = await SpecialityUtil.LoadSpecialityAsync();
-            // Load location dictionary
-            List<Disease> diseaseList = await SpecialityUtil.LoadAllDiseaseAsync();
-
-            // Check if the lists are load successfully
-            if ((specialityList != null) && (diseaseList != null))
-            {
-                // Handle well-formed What phrase
-                HandleWellFormedWhatPhrase(what, specialityList, diseaseList, hospitalList);
-            }
-
             string a = string.Format("[{0}][{1}][{2}]", what, relation, where);
             int hospitalId = this.HospitalID;
             string hospitalName = this.HospitalName;
@@ -467,6 +457,7 @@ namespace HospitalF.Models
             string speacialityName = this.SpecialityName;
             int diseaseId = this.DiseaseID;
             string diseaseName = this.DiseaseName;
+            this.WhatPhrase = what;
         }
 
         #endregion
@@ -503,17 +494,16 @@ namespace HospitalF.Models
             List<HospitalEntity> hospitalList = null;
 
             // Take input values
-            int cityId = this.CityID;
-            int districtId = this.DistrictID;
-            int specialityId = this.SpecialityID;
-            string diseaseName = this.DiseaseName;
-            string hospitalName = this.HospitalName;
+            string cityName = this.CityName;
+            string districtName = this.DistrictName;
+            string whatPhrase = this.WhatPhrase;
 
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 hospitalList = await Task.Run(() =>
-                    (from h in data.SP_ADVANCED_SEARCH_HOSPITAL(cityId, districtId, specialityId, diseaseName)
+                    (from h in data.SP_NORMAL_SEARCH_HOSPITAL(whatPhrase.Trim().ToLower(),
+                         cityName.ToLower(), districtName.ToLower())
                      select new HospitalEntity()
                      {
                          Hospital_ID = h.Hospital_ID,
@@ -569,8 +559,10 @@ namespace HospitalF.Models
                          Fax = h.Fax,
                          Email = h.Email,
                          Website = h.Website,
-                         Start_Time = h.Start_Time,
-                         End_Time = h.End_Time,
+                         Ordinary_Start_Time = h.Ordinary_Start_Time,
+                         Ordinary_End_Time = h.Ordinary_End_Time,
+                         Holiday_Start_Time = h.Holiday_Start_Time,
+                         Holiday_End_Time = h.Holiday_End_Time,
                          Coordinate = h.Coordinate,
                          Description = h.Full_Description,
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
@@ -610,8 +602,10 @@ namespace HospitalF.Models
                          Fax = h.Fax,
                          Email = h.Email,
                          Website = h.Website,
-                         Start_Time = h.Start_Time,
-                         End_Time = h.End_Time,
+                         Ordinary_Start_Time = h.Ordinary_Start_Time,
+                         Ordinary_End_Time = h.Ordinary_End_Time,
+                         Holiday_Start_Time = h.Holiday_Start_Time,
+                         Holiday_End_Time = h.Holiday_End_Time,
                          Coordinate = h.Coordinate,
                          Description = h.Full_Description,
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
