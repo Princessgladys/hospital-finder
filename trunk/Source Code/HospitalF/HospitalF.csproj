@@ -195,11 +195,9 @@
     <Compile Include="Constant\Constants.cs" />
     <Compile Include="Constant\ErrorMessage.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdminHomeController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\HospitalUserHomeController.cs" />
     <Compile Include="Controllers\SecurityBaseController.cs" />
     <Compile Include="Entities\HospitalEntity.cs" />
     <Compile Include="Global.asax.cs">
@@ -441,8 +439,6 @@
     <Content Include="Views\Shared\_HomeLayout.cshtml" />
     <Content Include="Views\Shared\_HospitalUserLayout.cshtml" />
     <Content Include="Views\Home\SearchResult.cshtml" />
-    <Content Include="Views\AdminHome\Index.cshtml" />
-    <Content Include="Views\HospitalUserHome\Index.cshtml" />
     <Content Include="Views\Error\SystemFailureHome.cshtml" />
     <Content Include="Views\Error\SystemFailureAdmin.cshtml" />
     <Content Include="Views\Error\SystemFailureHospitalUser.cshtml" />
