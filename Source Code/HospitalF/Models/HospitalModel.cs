@@ -125,6 +125,11 @@ namespace HospitalF.Models
         /// </summary>
         public string CreatedPerson { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property CreatedPerson
+        /// </summary>
+        public Boolean IsActive { get; set; }
+
         public string SpecialityName { get; set; }
         public int SpecialityID { get; set; }
         public string DoctorName { get; set; }

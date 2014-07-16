@@ -17,18 +17,39 @@ namespace HospitalF.Controllers
         //
         // GET: /Account/
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Login()
         {
             ViewBag.ErrorMesage = (string)TempData["ErrorMesage"];
             return View();
         }
 
+        /// <summary>
+        /// Check if an account is valid or not
+        /// </summary>
+        /// <param name="email">Input email</param>
+        /// <param name="password">Input password</param>
+        /// <returns>Boolean value indicating an account is valid or not</returns>
         [HttpPost]
         public ActionResult Login(string email, string password)
         {
+            // Check if an account is valid or not
             bool checkLogin = AccountModel.CheckLogin(email, password);
+
             if (checkLogin)
             {
+                // Check if user is Administrator
+                if (User.IsInRole(Constants.AdministratorRoleName))
+                {
+                    return RedirectToAction(Constants.HospitalListAction, Constants.HospitalController);
+                }
+
+                // Check if user is Hospital User
+                if (User.IsInRole(Constants.HospitalUserRoleName))
+                {
+
+                }
+
+                // Redirect to Login page as default
                 return RedirectToAction(Constants.IndexAction, Constants.AccountController);
             }
             else
