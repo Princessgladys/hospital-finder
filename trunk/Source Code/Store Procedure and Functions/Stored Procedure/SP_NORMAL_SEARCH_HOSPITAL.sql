@@ -7,7 +7,7 @@ GO
 CREATE PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
 	@WhatPhrase NVARCHAR(128), -- ALWAYS NOT NULL
 	@CityID INT,
-	@DistrictName VARCHAR(32)
+	@DistrictName NVARCHAR(32)
 AS
 BEGIN
 	-- DEFAULT VALUE TO CONSIDER ANALYZING @WhatPhrase
@@ -101,7 +101,7 @@ BEGIN
 		SELECT (SELECT h.Hospital_ID
 				FROM Hospital h, District d
 				WHERE h.City_ID = @CityID AND
-					  d.District_Name LIKE @DistrictName AND
+					  d.District_Name = @DistrictName AND
 					  d.District_ID = h.District_ID)
 	END
 	ELSE
@@ -121,7 +121,7 @@ BEGIN
 			INSERT INTO @HospitalList
 			SELECT (SELECT h.Hospital_ID
 					FROM District d, Hospital h
-					WHERE d.District_Name LIKE @DistrictName AND
+					WHERE d.District_Name = @DistrictName AND
 						  d.District_ID = h.District_ID)
 		END
 	END
@@ -251,7 +251,7 @@ BEGIN
 	BEGIN
 		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
-			   h.h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID
@@ -262,13 +262,16 @@ BEGIN
 -------------------------------------------------------------------------------------------
 
 	-- CHECK IF @WherePhrase IS AVAILABLE
+	SET @DistrictName = [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (@DistrictName)
+
 	IF (@CityID != 0 AND @DistrictName IS NOT NULl)
 	BEGIN
 		INSERT INTO @HospitalList
 		SELECT (SELECT h.Hospital_ID
 				FROM Hospital h, District d
 				WHERE h.City_ID = @CityID AND
-					  d.District_Name LIKE @DistrictName AND
+					  [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (d.District_Name)
+					  LIKE @DistrictName AND
 					  d.District_ID = h.District_ID)
 	END
 	ELSE
@@ -288,7 +291,8 @@ BEGIN
 			INSERT INTO @HospitalList
 			SELECT (SELECT h.Hospital_ID
 					FROM District d, Hospital h
-					WHERE d.District_Name LIKE @DistrictName AND
+					WHERE [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (d.District_Name)
+						  LIKE @DistrictName AND
 						  d.District_ID = h.District_ID)
 		END
 	END
@@ -310,7 +314,6 @@ BEGIN
 		RETURN;
 	END
 
-
 -------------------------------------------------------------------------------------------
 
 	-- ADD THE HOSPITALS THAT HAVE DISEASE CONTAINS IN @WhatPhrase
@@ -319,10 +322,10 @@ BEGIN
 			FROM Disease d, Speciality_Disease sd,
 					Hospital h, Hospital_Speciality hs
 			WHERE [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](d.Disease_Name) LIKE
-					@WhatPhrase AND
-					d.Disease_ID = sd.Disease_ID AND
-					sd.Speciality_ID = hs.Speciality_ID AND
-					h.Hospital_ID = hs.Hospital_ID)
+				  @WhatPhrase AND
+				  d.Disease_ID = sd.Disease_ID AND
+				  sd.Speciality_ID = hs.Speciality_ID AND
+				  h.Hospital_ID = hs.Hospital_ID)
 
 	-- COUNT NUMBER OF RECORD IN @HospitalList AGAIN
 	SET @TotalRecordInHospitalList = (SELECT COUNT([Priority])
