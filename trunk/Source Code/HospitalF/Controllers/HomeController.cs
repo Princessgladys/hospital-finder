@@ -305,5 +305,15 @@ namespace HospitalF.Controllers
         }
 
         #endregion
+
+        /// <summary>
+        /// GET: /Home/Index
+        /// </summary>
+        /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.HomeLayout)]
+        public async Task<ActionResult> Hospital(int id)
+        {
+            return View();
+        }
     }
 }

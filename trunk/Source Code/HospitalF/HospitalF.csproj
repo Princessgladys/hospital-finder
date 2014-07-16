@@ -445,6 +445,7 @@
     <Content Include="Views\Error\SystemFailureAdmin.cshtml" />
     <Content Include="Views\Error\SystemFailureHospitalUser.cshtml" />
     <Content Include="Views\Appointment\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Appointment\Confirm.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -453,6 +454,7 @@
     <Content Include="Views\Hospital\ViewDoctorDetail.cshtml" />
     <Content Include="Views\Hospital\HospitalList.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Home\Hospital.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
