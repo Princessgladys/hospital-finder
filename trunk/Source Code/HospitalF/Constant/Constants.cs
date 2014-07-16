@@ -124,6 +124,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string LoadSuggestSentenceAction = "LoadSuggestSentence";
 
+        /// <summary>
+        /// Name of HospitalList method in HospitalController
+        /// </summary>
+        public const string HospitalListAction = "HospitalList";
+
         #endregion
 
         #region AccountModel

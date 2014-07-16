@@ -55,7 +55,6 @@ namespace HospitalF.Controllers
             {
                 int tempSpecialityID, tempHospitalID;
                 doctorList = new List<Doctor>();
-                Photo photo = null;
                 if (SpecialityID == "")
                 {
                     SpecialityID = "0";
@@ -99,7 +98,16 @@ namespace HospitalF.Controllers
 
         #region SonNX
 
-
+        /// <summary>
+        /// GET: /Hospital/HospitalList
+        /// </summary>
+        /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> HospitalList()
+        {
+            return View();
+        }
 
 
         #endregion
