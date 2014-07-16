@@ -43,9 +43,9 @@ BEGIN
 
 	DECLARE @SelectPhrase NVARCHAR(512) = NULL
 	SET @SelectPhrase = N'SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,' +
-						N'h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Start_Time,' +
-						N'h.End_Time, h.Coordinate, h.Short_Description, h.Full_Description,' +
-						N'h.Is_Allow_Appointment, h.Is_Active'
+						N'h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,' +
+						N'h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,' +
+						N'h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time'
 
 	DECLARE @FromPhrase NVARCHAR(512) = NULL
 	SET @FromPhrase = N'FROM Hospital h'
