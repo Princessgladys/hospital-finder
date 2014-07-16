@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using HospitalF.App_Start;
 using HospitalF.Constant;
 using HospitalF.Models;
+using HospitalF.Utilities;
 using Newtonsoft.Json.Linq;
 
 namespace HospitalF.Controllers
@@ -34,17 +36,17 @@ namespace HospitalF.Controllers
         {
             // Check if an account is valid or not
             bool checkLogin = AccountModel.CheckLogin(email, password);
-
+            
             if (checkLogin)
             {
                 // Check if user is Administrator
-                if (User.IsInRole(Constants.AdministratorRoleName))
+                if (SimpleSessionPersister.Role.Equals(Constants.AdministratorRoleName))
                 {
                     return RedirectToAction(Constants.HospitalListAction, Constants.HospitalController);
                 }
 
                 // Check if user is Hospital User
-                if (User.IsInRole(Constants.HospitalUserRoleName))
+                if (SimpleSessionPersister.Role.Equals(Constants.HospitalUserRoleName))
                 {
 
                 }
@@ -57,7 +59,6 @@ namespace HospitalF.Controllers
                 TempData["ErrorMesage"] = "Sai thông tin đăng nhập";
                 return RedirectToAction(Constants.IndexAction, Constants.AccountController);
             }
-
         }
 
         [HttpGet]
@@ -98,6 +99,6 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
-        
+
     }
 }

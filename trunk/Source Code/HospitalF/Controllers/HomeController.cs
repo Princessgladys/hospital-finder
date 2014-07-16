@@ -24,7 +24,7 @@ namespace HospitalF.Controllers
         public static List<District> districtList = null;
         public static List<Speciality> specialityList = null;
         public static List<Disease> diseaseList = null;
-
+        
         #region AJAX calling methods
 
         /// <summary>
