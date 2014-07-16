@@ -63,23 +63,26 @@
                 var doctorname = $('#DoctorName').val();
                 var specialityid = $('#SpecialityID').val();
                 var hospitalid = $('#HospitalID').val();
-                var statesProgress = $("#states-loading-doctor-progress");
-                statesProgress.show();
-                $.ajax({
-                    cache: false,
-                    type: "GET",
-                    url: "@(Url.RouteUrl(Constants.SearchDoctorAction))",
-                    data: { doctorName: doctorname, specialityID: specialityid, hospitalID: hospitalid },
-                    success: function (data) {
-                        $('#SearchResult').replaceWith(data);
-                        statesProgress.hide();
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        $('#wid-id-1').replaceWith(data);
-                        statesProgress.hide();
-                        alert("specialityID: " + specialityID);
-                    }
-                });
+                if ((doctorname == '' && specialityid != 0) || (doctorname != '' && specialityid == 0) || (doctorname != '' && specialityid != 0)) {
+                    var statesProgress = $("#states-loading-doctor-progress");
+                    statesProgress.show();
+                    $.ajax({
+                        cache: false,
+                        type: "GET",
+                        url: "@(Url.RouteUrl(Constants.SearchDoctorAction))",
+                        data: { doctorName: doctorname, specialityID: specialityid, hospitalID: hospitalid },
+                        success: function (data) {
+                            $('#SearchResult').replaceWith(data);
+                            statesProgress.hide();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            $('#wid-id-1').replaceWith(data);
+                            statesProgress.hide();
+                        }
+                    });
+                } else {
+                    window.alert('Vui lòng nhập tên bác sĩ hoặc chọn chuyên khoa');
+                }
             });
         });
     });
@@ -97,7 +100,6 @@
                 <header style="border: none; height: 40px;">
                     <span class="widget-icon" style="font-size: 180%;"><i class="fa fa-eye"></i></span>
                     <h1 style="line-height: 40px; padding-left: 30px;">Thông tin bệnh viện</h1>
-                    )
                 </header>
 
                 <!-- widget div-->
@@ -114,7 +116,7 @@
                     <div class="widget-body">
 
                         <form class="form-horizontal">
-                            <input type="hidden" value="25" name="hddHospitalID" />
+                            <input type="hidden" value="25" />
                             @Html.TextBoxFor(m => m.HospitalID, new
                        {
                            @type = "hidden"
@@ -193,10 +195,11 @@
 
                             <fieldset>
                                 <legend><span>Chuyên khoa</span>
-                                    <button class="btn btn-primary" type="submit">
+                                    <a href="#"><button class="btn btn-primary" type="button">
                                         <i class="fa fa-edit"></i>
                                         Chỉnh sửa
-                                    </button>
+                                    </button></a>
+                                    
                                 </legend>
                                 @{List<Speciality> SpecialityList = Model.SpecialityList;
                                   for (int i = 0; i < SpecialityList.Count; i++)
@@ -249,7 +252,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="SearchResult"></div>
+                                
+                                <div id="SearchResult">
+                                    <br />
+                                    <!--Search result display here-->
+
+                                </div>
                                 <!-- end widget -->
 
                             </fieldset>
