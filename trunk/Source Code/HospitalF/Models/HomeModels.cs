@@ -494,7 +494,7 @@ namespace HospitalF.Models
             List<HospitalEntity> hospitalList = null;
 
             // Take input values
-            string cityName = this.CityName;
+            int cityId = this.CityID;
             string districtName = this.DistrictName;
             string whatPhrase = this.WhatPhrase;
 
@@ -503,7 +503,7 @@ namespace HospitalF.Models
             {
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_NORMAL_SEARCH_HOSPITAL(whatPhrase.Trim().ToLower(),
-                         cityName.ToLower(), districtName.ToLower())
+                         cityId, districtName.ToLower())
                      select new HospitalEntity()
                      {
                          Hospital_ID = h.Hospital_ID,
@@ -516,8 +516,10 @@ namespace HospitalF.Models
                          Fax = h.Fax,
                          Email = h.Email,
                          Website = h.Website,
-                         Start_Time = (TimeSpan)h.Start_Time,
-                         End_Time = (TimeSpan)h.End_Time,
+                         Ordinary_Start_Time = (TimeSpan) h.Ordinary_Start_Time,
+                         Ordinary_End_Time = (TimeSpan) h.OrDinary_End_Time,
+                         Holiday_Start_Time = (TimeSpan) h.Holiday_Start_Time,
+                         Holiday_End_Time = (TimeSpan) h.Holiday_End_Time,
                          Coordinate = h.Coordinate,
                          Description = h.Full_Description,
                          Is_Allow_Appointment = (bool)h.Is_Allow_Appointment,
