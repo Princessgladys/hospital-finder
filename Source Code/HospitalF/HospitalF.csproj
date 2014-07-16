@@ -199,7 +199,6 @@
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\HospitalController.cs" />
     <Compile Include="Controllers\HospitalUserHomeController.cs" />
     <Compile Include="Controllers\SecurityBaseController.cs" />
     <Compile Include="Entities\HospitalEntity.cs" />
@@ -209,7 +208,6 @@
     <Compile Include="Models\AppointmentModels.cs" />
     <Compile Include="Models\HomeModels.cs" />
     <Compile Include="Models\AccountModel.cs" />
-    <Compile Include="Models\HospitalModel.cs" />
     <Compile Include="Models\LinqDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -228,19 +226,21 @@
   <ItemGroup>
     <Content Include="App_Data\vi_VN.aff" />
     <Content Include="App_Data\vi_VN.dic" />
-    <Content Include="Content\css\admin-layout.css" />
     <Content Include="Content\css\bootstrap.m.css" />
     <Content Include="Content\css\custom-home.css" />
     <Content Include="Content\css\custom-hospital-user.css" />
     <Content Include="Content\css\custom-search-result.css" />
+    <Content Include="Content\css\delete.gif" />
     <Content Include="Content\css\demo.css" />
     <Content Include="Content\css\error.css" />
     <Content Include="Content\css\font-awesome.m.css" />
+    <Content Include="Content\css\jquery.rating.css" />
     <Content Include="Content\css\lockscreen.css" />
     <Content Include="Content\css\smartadmin-production.css" />
     <Content Include="Content\css\smartadmin-production.m.css" />
     <Content Include="Content\css\smartadmin-skins.css" />
     <Content Include="Content\css\smartadmin-skins.m.css" />
+    <Content Include="Content\css\star.gif" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-2.html" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-3.html" />
@@ -295,6 +295,9 @@
     <Content Include="Content\css\custom-font.css" />
     <Content Include="Content\js\custom.js" />
     <Content Include="Content\js\demo.js" />
+    <Content Include="Content\js\jquery.MetaData.js" />
+    <Content Include="Content\js\jquery.rating.js" />
+    <Content Include="Content\js\jquery.rating.pack.js" />
     <Content Include="Content\js\libs\jquery-2.0.2.m.js" />
     <Content Include="Content\js\libs\jquery-ui-1.10.3.m.js" />
     <Content Include="Content\js\notification\SmartNotification.min.js" />

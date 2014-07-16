@@ -43,6 +43,7 @@ namespace HospitalF
                         "~/Content/css/font-awesome.m.css",
                         "~/Content/css/smartadmin-production.css",
                         "~/Content/css/smartadmin-skins.css",
+                        "~/Content/css/jquery.rating.css",
                         "~/Content/css/custom-home.css",
                         "~/Content/css/custom-font.css",
                         "~/Content/css/custom-search-result.css"));

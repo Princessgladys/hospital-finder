@@ -105,6 +105,11 @@ namespace HospitalF.Entities
         public bool? Is_Allow_Appointment { get; set; }
 
         /// <summary>
+        /// Property for Rating attribute
+        /// </summary>
+        public double? Rating { get; set; }
+
+        /// <summary>
         /// Property for Is_Active attribute
         /// </summary>
         public bool? Is_Active { get; set; }
