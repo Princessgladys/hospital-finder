@@ -50,7 +50,7 @@ namespace HospitalF.Controllers
                 }
 
                 // Redirect to Login page as default
-                return RedirectToAction(Constants.IndexAction, Constants.AccountController);
+                return RedirectToAction(Constants.LoginAction, Constants.AccountController);
             }
             else
             {
