@@ -6,6 +6,7 @@ using System.Web;
 using System.Threading.Tasks;
 using HospitalF.Constant;
 using System.Text.RegularExpressions;
+using HospitalF.Utilities;
 
 namespace HospitalF.Models
 {
@@ -101,7 +102,7 @@ namespace HospitalF.Models
         public static async Task<List<string>> LoadTimeCheckHealth(int hospitalID)
         {
             List<string> listTime = new List<string>();
-            Hospital hospital = await LoadHospitalByHospitalID(hospitalID);
+            Hospital hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
             TimeSpan ordinaryStart = (TimeSpan)hospital.Ordinary_Start_Time;
             TimeSpan ordinaryEnd = (TimeSpan)hospital.Ordinary_End_Time;
             TimeSpan holidayStart = (TimeSpan)hospital.Holiday_Start_Time;
