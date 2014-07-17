@@ -6,7 +6,7 @@ using System.Web;
 
 namespace HospitalF.Models
 {
-    public class HospitalModel
+    public class HospitalModels
     {
         #region Hospital Properties
 
