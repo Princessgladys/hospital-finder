@@ -214,13 +214,8 @@
             } else {
                 confirmMessage = "Bạn có muốn kích hoạt [" + hospitalName + "] hay không?"
             }
-            notif({
-                msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
-                type: "error",
-                width: 500,
-                fade: true,
-                multiline: true
-            });
+
+            var ddlDistrict = $("#DistrictID");
             if (confirm(confirmMessage)) {
                 $.ajax({
                     cache: false,
@@ -228,7 +223,7 @@
                     url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
                     data: { "hospitalId": hospitalId },
                     success: function (data) {
-                        if (data == 0) {
+                        if (data.val == 0) {
                             notif({
                                 msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
                                 type: "error",
@@ -237,7 +232,7 @@
                                 multiline: true
                             });
                         } else {
-                            if (status == true) {
+                            if (status == "True") {
                                 notif({
                                     msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
                                     type: "success",
