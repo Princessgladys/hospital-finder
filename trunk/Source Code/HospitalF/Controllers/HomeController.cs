@@ -24,7 +24,7 @@ namespace HospitalF.Controllers
         public static List<District> districtList = null;
         public static List<Speciality> specialityList = null;
         public static List<Disease> diseaseList = null;
-        
+
         #region AJAX calling methods
 
         /// <summary>
@@ -311,8 +311,34 @@ namespace HospitalF.Controllers
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> Hospital(int id)
+        public async Task<ActionResult> Hospital(int id = 0)
         {
+            try
+            {
+                HospitalEntity hospital = null;
+                if (id > 0)
+                {
+                    hospital = await HomeModels.LoadHospitalById(id);
+                    if (hospital != null)
+                    {
+                        ViewBag.HospitalEntity = hospital;
+                    }
+                    else
+                    {
+                        return RedirectToAction(Constants.IndexAction, Constants.HomeController);
+                    }
+                }
+                else
+                {
+                    return RedirectToAction(Constants.IndexAction, Constants.HomeController);
+                }
+
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
             return View();
         }
     }

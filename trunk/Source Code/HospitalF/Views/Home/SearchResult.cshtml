@@ -86,7 +86,7 @@
 
     <div class="col-md-12">
         <hr />
-        <div id="hospital-list-results" class="col-md-4" style="padding: 0;">
+        <div id="hospital-list-results" class="col-md-4" style="padding: 0">
             @if (hospitalList.TotalItemCount > 0)
             {
                 <h1 class="font-md">Danh sách <span class="semi-bold">bệnh viện</span><small class="text-danger"> &nbsp;&nbsp;(@(hospitalList != null ? hospitalList.TotalItemCount : 0) kết quả)</small></h1>
@@ -94,9 +94,9 @@
                 {
                 <div class="search-results clearfix smart-form hospital-record">
 
-                    <h5 class="truncate"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="javascript:void(0);">@(hospital.Hospital_Name)</a></h5>
+                    <h5 class="truncate"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="/Home/Hospital?id=@(hospital.Hospital_ID)">@(hospital.Hospital_Name)</a></h5>
 
-                    <div style="width: 100%">                      
+                    <div style="width: 100%">
                         <div class="display-inline">
                             @if (hospital.Rating != null)
                             {
@@ -105,11 +105,11 @@
                                     double rate = Math.Ceiling((double)hospital.Rating * 2);
                                     if (rate == i)
                                     {
-                                        <input name="star-@(hospital.Hospital_ID)" type="radio" class="star {half:true}" checked="checked" disabled="disabled"/>
+                                <input name="star-@(hospital.Hospital_ID)" type="radio" class="star {half:true}" checked="checked" disabled="disabled"/>
                                     }
                                     else
                                     {
-                                        <input name="star-@(hospital.Hospital_ID)" type="radio" class="star {half:true}" disabled="disabled"/>
+                                <input name="star-@(hospital.Hospital_ID)" type="radio" class="star {half:true}" disabled="disabled"/>
                                     }
                                 }
                             }
@@ -164,7 +164,7 @@
 
         @if (hospitalList.TotalItemCount > 0)
         {
-            <div id="map-results" class="col-md-8" style="padding: 0;">
+            <div id="map-results" class="col-md-8" style="padding: 0">
                 <div id="map-canvas"></div>
             </div>
         }
