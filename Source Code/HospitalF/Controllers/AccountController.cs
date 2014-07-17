@@ -35,7 +35,7 @@ namespace HospitalF.Controllers
         public ActionResult Login(string email, string password)
         {
             // Check if an account is valid or not
-            bool checkLogin = AccountModel.CheckLogin(email, password);
+            bool checkLogin = AccountModels.CheckLogin(email, password);
             
             if (checkLogin)
             {
@@ -70,7 +70,7 @@ namespace HospitalF.Controllers
             // with Json from .Net http://json.codeplex.com/
             JObject jsonUserInfo = JObject.Parse(jsonResult);
 
-            bool checkFacebookLogin = AccountModel.CheckFacebookLogin(jsonUserInfo);
+            bool checkFacebookLogin = AccountModels.CheckFacebookLogin(jsonUserInfo);
 
             return RedirectToAction(Constants.IndexAction, Constants.HomeController);
         }

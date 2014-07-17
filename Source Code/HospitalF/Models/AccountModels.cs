@@ -16,7 +16,7 @@ namespace HospitalF.Models
     /// <summary>
     /// Class define properties for /Account/Login View
     /// </summary>
-    public class AccountModel
+    public class AccountModels
     {
         public static bool IsExistedUser(string email)
         {

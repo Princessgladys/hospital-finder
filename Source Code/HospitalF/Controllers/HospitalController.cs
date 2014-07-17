@@ -26,13 +26,13 @@ namespace HospitalF.Controllers
         //public static List<HospitalType> typeList = null;
         public static int hospitalID = 25;
         public Hospital hospital = null;
-        public static HospitalModel model = null;
+        public static HospitalModels model = null;
         //
         // GET: /Hospital/
         [LayoutInjecter(Constants.HospitalUserLayout)]
         public async Task<ActionResult> Index()
         {
-            model = new HospitalModel();
+            model = new HospitalModels();
             List<HospitalType> typeList = await HospitalUtil.LoadTypeInHospitalTypeAsync(hospitalID);
             hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
             model.HospitalID = hospitalID;
