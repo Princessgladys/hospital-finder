@@ -207,6 +207,7 @@
     <Compile Include="Models\AppointmentModels.cs" />
     <Compile Include="Models\HomeModels.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\HospitalModel.cs" />
     <Compile Include="Models\HospitalModels.cs" />
     <Compile Include="Models\LinqDB.designer.cs">
       <AutoGen>True</AutoGen>
@@ -226,12 +227,15 @@
   <ItemGroup>
     <Content Include="App_Data\vi_VN.aff" />
     <Content Include="App_Data\vi_VN.dic" />
+    <Content Include="Content\css\asc.gif" />
+    <Content Include="Content\css\bg.gif" />
     <Content Include="Content\css\bootstrap.m.css" />
     <Content Include="Content\css\custom-home.css" />
     <Content Include="Content\css\custom-hospital-user.css" />
     <Content Include="Content\css\custom-search-result.css" />
     <Content Include="Content\css\delete.gif" />
     <Content Include="Content\css\demo.css" />
+    <Content Include="Content\css\desc.gif" />
     <Content Include="Content\css\error.css" />
     <Content Include="Content\css\font-awesome.m.css" />
     <Content Include="Content\css\jquery.rating.css" />
@@ -241,6 +245,7 @@
     <Content Include="Content\css\smartadmin-skins.css" />
     <Content Include="Content\css\smartadmin-skins.m.css" />
     <Content Include="Content\css\star.gif" />
+    <Content Include="Content\css\tablesorter.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-2.html" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-3.html" />
@@ -309,6 +314,7 @@
     <Content Include="Content\js\plugin\datatables\DT_bootstrap.js" />
     <Content Include="Content\js\plugin\datatables\FixedColumns.min.js" />
     <Content Include="Content\js\plugin\datatables\jquery.dataTables-cust.min.js" />
+    <Content Include="Content\js\plugin\datatables\jquery.tablesorter.js" />
     <Content Include="Content\js\plugin\datatables\media\js\TableTools.min.js" />
     <Content Include="Content\js\plugin\datatables\ZeroClipboard.js" />
     <Content Include="Content\js\plugin\easy-pie-chart\jquery.easy-pie-chart.min.js" />
