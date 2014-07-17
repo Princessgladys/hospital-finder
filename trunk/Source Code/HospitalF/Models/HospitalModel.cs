@@ -183,12 +183,13 @@ namespace HospitalF.Models
         /// </summary>
         /// <param name="hospitalName">Hospital name</param>
         /// <param name="cityId">City ID</param>
+        /// <param name="districtId">District ID</param>
         /// <param name="hospitalType">Hospital type ID</param>
         /// <param name="isActive">Status</param>
         /// <param name="pageNumber">Current page number</param>
         /// <returns>List[SP_LOAD_HOSPITAL_LISTResult] that contains list of suitable hospitals</returns>
         public async Task<List<SP_LOAD_HOSPITAL_LISTResult>> LoadListOfHospital(
-            string hospitalName, int cityId, int hospitalType, bool isActive, int pageNumber)
+            string hospitalName, int cityId, int districtId, int hospitalType, bool isActive, int pageNumber)
         {
             // Declare new list
             List<SP_LOAD_HOSPITAL_LISTResult> hospitalList = 
@@ -198,7 +199,7 @@ namespace HospitalF.Models
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 hospitalList = await Task.Run(() =>
-                    data.SP_LOAD_HOSPITAL_LIST(HospitalName, cityId,
+                    data.SP_LOAD_HOSPITAL_LIST(HospitalName, cityId, districtId,
                     hospitalType, isActive, pageNumber).ToList());
             }
 
