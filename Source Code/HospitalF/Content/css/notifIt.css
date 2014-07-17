@@ -1,0 +1,45 @@
+#ui_notifIt{
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+#ui_notifIt p{
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Color setup */
+/* Configure this if you want */
+.success{
+    background-color: #5b835b;
+    border-color: #4c6e4c;
+    color: white;
+}
+.error{
+    background-color: #931313;
+    border-color: #931313;
+    color: white;
+}
+.warning{
+    background-color: #C79121;
+    border-color: #C79121;
+    color: white;
+}
+.info{
+    background-color: #275b89;
+    border-color: #1f496d;
+    color: white;
+}
+.default{
+    background-color: #EEE;
+    color: #444;
+}
