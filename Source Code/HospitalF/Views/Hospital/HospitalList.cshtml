@@ -181,10 +181,10 @@
                 url: "@(Url.RouteUrl("GetDistrictByCity-Hospital"))",
                 data: { "cityId": selectedItem },
                 success: function (data) {
-                        ddlDistrict.html('');
-                        $.each(data, function (id, option) {
-                            ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
-                        });
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                    });
                         statesProgress.hide();
                     },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -194,6 +194,7 @@
         });
     });
 
+    //Update hospital status
     $(document).ready(function () {
         $('#hospital-table .btn').on('click', function () {
             var row = $(this).closest('tr');
@@ -214,8 +215,8 @@
             } else {
                 confirmMessage = "Bạn có muốn kích hoạt [" + hospitalName + "] hay không?"
             }
-
-            var ddlDistrict = $("#DistrictID");
+            var result = "";
+            
             if (confirm(confirmMessage)) {
                 $.ajax({
                     cache: false,
@@ -223,47 +224,42 @@
                     url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
                     data: { "hospitalId": hospitalId },
                     success: function (data) {
-                        if (data.val == 0) {
-                            notif({
-                                msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
-                                type: "error",
-                                width: 600,
-                                fade: true,
-                                multiline: true
-                            });
-                        } else {
-                            if (status == "True") {
-                                notif({
-                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
-                                    type: "success",
-                                    width: 600,
-                                    fade: true,
-                                    multiline: true
-                                });
-                            } else {
-                                notif({
-                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
-                                    type: "success",
-                                    width: 600,
-                                    fade: true,
-                                    multiline: true
-                                });
-                            }
-                            var tr = $(this).closest('tr');
-                            row.css("background-color", "#275b89");
-                            row.fadeOut(400, function () {
-                                row.remove();
-                            });
-                            return false;
-                        }
-                        statesProgress.hide();
+                        row.css("background-color", "#275b89");
+                        row.fadeOut(400, function () {
+                            row.remove();
+                        });
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
+                        notif({
+                            msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
+                            type: "error",
+                            width: 600,
+                            fade: true,
+                            multiline: true
+                        });
                         statesProgress.hide();
                     }
                 });
             } else {
                 return false;
+            }
+
+            if (status == "True") {
+                notif({
+                    msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
+                    type: "success",
+                    width: 600,
+                    fade: true,
+                    multiline: true
+                });
+            } else {
+                notif({
+                    msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
+                    type: "success",
+                    width: 600,
+                    fade: true,
+                    multiline: true
+                });
             }
         });
     });
