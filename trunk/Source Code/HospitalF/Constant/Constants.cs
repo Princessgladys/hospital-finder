@@ -581,7 +581,12 @@ namespace HospitalF.Constant
         /// <summary>
         /// Constant for search result page size
         /// </summary>
-        public const int PageSize = 10;
+        public const int PageSize = 5;
+
+        /// <summary>
+        /// Constant for element 'page' in URL rewriting
+        /// </summary>
+        public const string PageUrlRewriting = "page";
 
         /// <summary>
         /// Take relative diacritic Vietnamese characters according to input letter

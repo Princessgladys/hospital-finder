@@ -186,10 +186,9 @@ namespace HospitalF.Models
         /// <param name="districtId">District ID</param>
         /// <param name="hospitalType">Hospital type ID</param>
         /// <param name="isActive">Status</param>
-        /// <param name="pageNumber">Current page number</param>
         /// <returns>List[SP_LOAD_HOSPITAL_LISTResult] that contains list of suitable hospitals</returns>
         public async Task<List<SP_LOAD_HOSPITAL_LISTResult>> LoadListOfHospital(
-            string hospitalName, int cityId, int districtId, int hospitalType, bool isActive, int pageNumber)
+            string hospitalName, int cityId, int districtId, int hospitalType, bool isActive)
         {
             // Declare new list
             List<SP_LOAD_HOSPITAL_LISTResult> hospitalList = 
@@ -200,7 +199,7 @@ namespace HospitalF.Models
             {
                 hospitalList = await Task.Run(() =>
                     data.SP_LOAD_HOSPITAL_LIST(HospitalName, cityId, districtId,
-                    hospitalType, isActive, pageNumber).ToList());
+                    hospitalType, isActive).ToList());
             }
 
             // Return list of hospitals
