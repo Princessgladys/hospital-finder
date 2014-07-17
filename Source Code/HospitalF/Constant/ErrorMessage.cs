@@ -59,7 +59,7 @@
         /// <summary>
         /// Update hospital status failed
         /// </summary>
-        public const string SEM010 = "Không thay đổi được trạng thái của {0}.";
+        public const string SEM010 = "Không thay đổi được trạng thái của ";
 
         #endregion
     }
