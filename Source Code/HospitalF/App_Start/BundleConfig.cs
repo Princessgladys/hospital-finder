@@ -54,7 +54,8 @@ namespace HospitalF
                         "~/Content/css/font-awesome.m.css",
                         "~/Content/css/smartadmin-production.m.css",
                         "~/Content/css/smartadmin-skins.m.css",
-                        "~/Content/css/custom-font.css"));
+                        "~/Content/css/custom-font.css",
+                        "~/Content/css/tablesorter.css"));
 
             // Bundle for Error page
             bundles.Add(new StyleBundle("~/Content/Error").Include(

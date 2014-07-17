@@ -142,7 +142,12 @@ namespace HospitalF.Constant
         /// <summary>
         /// Name of HospitalList method in HospitalController
         /// </summary>
-        public const string DisplayHospitalListAction = "HospitalList";
+        public const string InitialHospitalListAction = "HospitalList";
+
+        /// <summary>
+        /// Name of HospitalList method in HospitalController
+        /// </summary>
+        public const string DisplayHospitalListAction = "DisplayHospitalList";
 
         #endregion
 
@@ -576,7 +581,7 @@ namespace HospitalF.Constant
         /// <summary>
         /// Constant for search result page size
         /// </summary>
-        public const int PageSize = 5;
+        public const int PageSize = 10;
 
         /// <summary>
         /// Take relative diacritic Vietnamese characters according to input letter

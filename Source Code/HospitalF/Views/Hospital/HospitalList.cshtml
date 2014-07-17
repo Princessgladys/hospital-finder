@@ -1,128 +1,167 @@
 ﻿@using HospitalF.Constant
-@using PagedList.Mvc;
+@using PagedList.Mvc
 @using PagedList;
+@using HospitalF.Models
 
 @model HospitalF.Models.HospitalModel
 @{
     ViewBag.Title = "Danh sách bệnh viện";
+    IPagedList<SP_LOAD_HOSPITAL_LISTResult> hospitalList = 
+        (IPagedList<SP_LOAD_HOSPITAL_LISTResult>) ViewBag.HospitalList;
 }
-
-<div class="row">
-    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
-        <h1 class="page-title txt-color-blueDark">
-            <i class="fa fa-table fa-fw "></i>
-            Danh sách bệnh viện
-        </h1>
+<script src="../Content/js/plugin/datatables/jquery.tablesorter.js"></script>
+@using (Html.BeginForm(Constants.DisplayHospitalListAction, Constants.HospitalController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
+{
+    <div class="row">
+        <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-table fa-fw "></i>
+                Danh sách bệnh viện
+            </h1>
+        </div>
     </div>
-</div>
 
-<label class="select">
-    @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
+    <label class="select">
+        @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
+                Constants.RequireCity, new { @class = "form-control" })
+        <i></i>
+    </label>
+
+    <label class="select">
+        @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.HospitalTypeList,
         new { @class = "form-control" })
-    <i></i>
-</label>
+        <i></i>
+    </label>
 
-<label class="select">
-    @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.HospitalTypeList,
-        new { @class = "form-control" })
-    <i></i>
-</label>
+    <label class="select">
+        <select class="form-control" id="IsActive" name="IsActive">
+            <option value="true">Còn hoạt động</option>
+            <option value="false">Ngưng hoạit động</option>
+        </select>
+        <i></i>
+    </label>
 
-<label class="select">
-    <select class="form-control" id="Radius" name="Radius">
-        <option value="1">Còn hoạt động</option>
-        <option value="0">Ngưng hoạit động</option>
-    </select>
-    <i></i>
-</label>
-
-<!-- widget grid -->
-<section id="widget-grid" class="">
-    <!-- row -->
-    @using (Html.BeginForm(Constants.DisplayHospitalListAction, Constants.HospitalController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
-    {
-        <div class="well">
-            <div class="input-group">
-                @Html.TextBoxFor(m => m.HospitalName, new
+    <div class="well">
+        <div class="input-group">
+            @Html.TextBoxFor(m => m.HospitalName, new
                              {
                                  @placeholder = "Tìm kiếm tên bệnh viện",
                                  @class = "form-control",
+                                 @id = "hospital-name-search"
                              })
-                <div class="input-group-btn">
-                    <button class="btn btn-default btn-primary" type="submit"
-                            value="@Constants.NormalSearchForm" name="@Constants.Button"
-                            id="normal-search-button">
-                        <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
-                    </button>
-                </div>
+            <div class="input-group-btn">
+                <button class="btn btn-default btn-primary" type="submit"
+                        value="@Constants.NormalSearchForm" name="@Constants.Button"
+                        id="normal-search-button">
+                    <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
+                </button>
             </div>
         </div>
-    }
-    <div class="row">
-        <!-- NEW WIDGET START -->
-        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <!-- Widget ID (each widget will need unique ID)-->
-            <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0"
-                 data-widget-colorbutton="false"
-                 data-widget-editbutton="false"
-                 data-widget-togglebutton="false"
-                 data-widget-deletebutton="false"
-                 data-widget-fullscreenbutton="false"
-                 data-widget-custombutton="false"
-                 data-widget-collapsed="false"
-                 data-widget-sortable="false">
-
-                <header>
-                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                    <h2>Danh sách</h2>
-                </header>
-                <!-- widget div-->
-                <div>
-                    <!-- widget edit box -->
-                    <div class="jarviswidget-editbox">
-                        <!-- This area used as dropdown edit box -->
-                    </div>
-                    <!-- end widget edit box -->
-                    <!-- widget content -->
-                    <div class="widget-body">
-                        <p>Adds borders to any table row within <code>&lt;table&gt;</code> by adding the <code>.table-bordered</code> with the base class</p>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Column name</th>
-                                        <th>Column name</th>
-                                        <th>Column name</th>
-                                        <th>Column name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Row 1</td>
-                                        <td>Row 2</td>
-                                        <td>Row 3</td>
-                                        <td>Row 4</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-                    <!-- end widget content -->
-                </div>
-                <!-- end widget div -->
-            </div>
-            <!-- end widget -->
-        </article>
-        <!-- WIDGET END -->
     </div>
-</section>
-<!-- end widget grid -->
 
+    <!-- widget grid -->
+    <section id="widget-grid" class="">
+        <!-- row -->
+        <div class="row">
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0"
+                     data-widget-colorbutton="false"
+                     data-widget-editbutton="false"
+                     data-widget-togglebutton="false"
+                     data-widget-deletebutton="false"
+                     data-widget-fullscreenbutton="false"
+                     data-widget-custombutton="false"
+                     data-widget-collapsed="false"
+                     data-widget-sortable="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Danh sách</h2>
+                    </header>
+                    <!-- widget div-->
+                    <div>
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body">
+                            <p>Adds borders to any table row within <code>&lt;table&gt;</code> by adding the <code>.table-bordered</code> with the base class</p>
+                            <div class="table-responsive">
+                                <table class="table table-bordered tablesorter" id="hospital-table">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tên bệnh viện</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Row 1</td>
+                                            <td>Row 2</td>
+                                            <td>Row 3</td>
+                                            <td>Row 4</td>
+                                            <td>Row 5</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Row 4</td>
+                                            <td>Row 5</td>
+                                            <td>Row 6</td>
+                                            <td>Row 7</td>
+                                            <td>Row 8</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            @Html.PagedListPager(hospitalList, page => Url.Content(Constants.SearchResultAction + "?" + ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- WIDGET END -->
+        </div>
+    </section>
+    <!-- end widget grid -->
+}
 <script type="text/javascript">
-    // DO NOT REMOVE : GLOBAL FUNCTIONS!
-    pageSetUp();
 
-    // PAGE RELATED SCRIPTS
+    $(document).ready(function () {
+        $("#hospital-table").tablesorter();
+    });
+
+    @*AJAX for cascading hospital list to table*@
+    @*$(document).ready(function () {
+        $("#CityID").change(function () {
+            var selectedItem = $(this).val();
+            var table = $("#hospital-table");
+            var statesProgress = $("#states-loading-district-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.DisplayHospitalListAction))",
+                data: { "cityId": selectedItem },
+                success: function (data) {
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
+    });*@
 
 </script>

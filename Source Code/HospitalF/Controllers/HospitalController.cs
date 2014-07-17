@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using HospitalF.App_Start;
 using HospitalF.Constant;
 using HospitalF.Models;
@@ -26,13 +27,13 @@ namespace HospitalF.Controllers
         //public static List<HospitalType> typeList = null;
         public static int hospitalID = 25;
         public Hospital hospital = null;
-        public static HospitalModels model = null;
+        public static HospitalModel model = null;
         //
         // GET: /Hospital/
         [LayoutInjecter(Constants.HospitalUserLayout)]
         public async Task<ActionResult> Index()
         {
-            model = new HospitalModels();
+            model = new HospitalModel();
             List<HospitalType> typeList = await HospitalUtil.LoadTypeInHospitalTypeAsync(hospitalID);
             hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
             model.HospitalID = hospitalID;
@@ -121,6 +122,11 @@ namespace HospitalF.Controllers
                 // Load list of hospital types
                 hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+
+                // Declare new hospital list
+                List<SP_LOAD_HOSPITAL_LISTResult> hospitalList =
+                    new List<SP_LOAD_HOSPITAL_LISTResult>();
+                ViewBag.HospitalList = hospitalList.ToPagedList(1, Constants.PageSize);
             }
             catch (Exception exception)
             {
@@ -129,6 +135,42 @@ namespace HospitalF.Controllers
             }
 
             return View();
+        }
+
+        /// <summary>
+        /// GET: /Hospital/DisplayHospitalList
+        /// </summary>
+        /// <returns>Task[ActionResult]</returns>
+        public async Task<ActionResult> DisplayHospitalList(HospitalModel model, int? page)
+        {
+            // Declare new hospital list
+            List<SP_LOAD_HOSPITAL_LISTResult> hospitalList =
+                new List<SP_LOAD_HOSPITAL_LISTResult>();
+
+            // Check if page parameter is null
+            if (page == null)
+            {
+                page = 1;
+            }
+
+            try
+            {
+                // Load list of hospital
+                hospitalList =
+                    await model.LoadListOfHospital(model.HospitalName,
+                    model.CityID, model.HospitalTypeID,
+                    model.IsActive, page.Value);
+
+                // Return value to view
+
+                ViewBag.HospitalList = hospitalList.ToPagedList(1, Constants.PageSize);
+                return View(Constants.InitialHospitalListAction, hospitalList);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
         }
 
         #endregion

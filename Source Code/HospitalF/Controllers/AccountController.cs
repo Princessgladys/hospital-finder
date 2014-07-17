@@ -42,7 +42,7 @@ namespace HospitalF.Controllers
                 // Check if user is Administrator
                 if (SimpleSessionPersister.Role.Equals(Constants.AdministratorRoleName))
                 {
-                    return RedirectToAction(Constants.DisplayHospitalListAction, Constants.HospitalController);
+                    return RedirectToAction(Constants.InitialHospitalListAction, Constants.HospitalController);
                 }
 
                 // Check if user is Hospital User

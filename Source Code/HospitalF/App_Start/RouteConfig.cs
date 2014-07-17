@@ -53,6 +53,11 @@ namespace HospitalF
                             "hospital/searchdoctor/",
                             new { controller = "Hospital", action = "SearchDoctor" },
                             new[]{"HospitalF.Controllers"});
+
+            routes.MapRoute("DisplayHospitalList",
+                            "hospital/displayhospitallist/",
+                            new { controller = "Hospital", action = "DisplayHospitalList" },
+                            new[] { "HospitalF.Controllers" });
         }
     }
 }
