@@ -102,6 +102,8 @@ namespace HospitalF.Controllers
 
         #region SonNX
 
+        #region Display Hospital List
+
         /// <summary>
         /// GET: /Hospital/HospitalList
         /// </summary>
@@ -110,9 +112,6 @@ namespace HospitalF.Controllers
         [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> HospitalList()
         {
-            HospitalModel model = new HospitalModel();
-            model.CityID = 79;
-
             try
             {
                 // Load list of cities
@@ -121,7 +120,7 @@ namespace HospitalF.Controllers
 
                 // Load list of hospital types
                 hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
-                ViewBag.HospitalTypeID = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
             }
             catch (Exception exception)
             {
@@ -129,9 +128,10 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
 
-            return View(model);
+            return View();
         }
 
+        #endregion
 
         #endregion
     }
