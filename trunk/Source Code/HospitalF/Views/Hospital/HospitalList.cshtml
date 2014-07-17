@@ -118,6 +118,9 @@
                                                 foreach (var hospital in Model)
                                                 {
                                                     <tr>
+                                                        <td hidden>@hospital.Hospital_ID</td>
+                                                        <td hidden>@hospital.Hospital_Name</td>
+                                                        <td hidden>@hospital.Is_Active</td>
                                                         <td>
                                                             @Html.ActionLink(@hospital.Hospital_Name,
                                                                 "HospitalDetail", Constants.HospitalController,
@@ -127,13 +130,9 @@
                                                         <td>@hospital.Type_Name</td>
                                                         <td>@(@hospital.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
                                                         <td>
-                                                            <button class="btn btn-sm btn-success btn-next" type="submit"
-                                                                    value="@string.Format("{0}|{1}|{2}",
-                                                                        hospital.Hospital_ID, hospital.Hospital_Name, hospital.Is_Active)"
-                                                                    name="@Constants.Button"
-                                                                    id="change-status-button">
-                                                                @(@hospital.Is_Active.Value ? "Ngừng" : "Kích hoạt")
-                                                            </button>
+                                                            <a href="" class="btn btn-sm btn-success btn-next">
+                                                                @(hospital.Is_Active.Value ? "Ngừng" : "Kích hoạt")
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 }
@@ -196,42 +195,81 @@
     });
 
     $(document).ready(function () {
-        $('#change-status-button').click(function (event) {
-            var selectedItem = $(this).text();
-            var argument = data.split('|');
+        $('#hospital-table .btn').on('click', function () {
+            var row = $(this).closest('tr');
+            var columns = row.find('td');
+            var valueInRow = "";
+            $.each(columns, function (i, item) {
+                valueInRow = valueInRow + item.innerHTML + '|';
+            });
+            var argument = valueInRow.split('|');
             var hospitalId = argument[0];
             var hospitalName = argument[1];
             var status = argument[2];
-            if (status == true) {
-                status = ' đã thay đổi trạng thái thành Ngừng hoạt động';
-            } else {
-                status = ' đã thay đổi trạng thái Hoạt động trở lại'
-            }
             var statesProgress = $("#states-loading-district-progress");
             statesProgress.show();
-            $.ajax({
-                cache: false,
-                type: "GET",
-                url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
-                data: { "hospitalId": hospitalId },
-                success: function (data) {
-                    if (data == 0) {
-                        notif({
-                            msg: hospitalName + status,
-                            type: "error"
-                        });
-                    } else {
-                        notif({
-                            msg: hospitalName + status,
-                            type: "success"
-                        });
-                    }
+            var confirmMessage = "";
+            if (status == "True") {
+                confirmMessage = "Bạn có muốn ngừng [" + hospitalName + "] hay không?"
+            } else {
+                confirmMessage = "Bạn có muốn kích hoạt [" + hospitalName + "] hay không?"
+            }
+            notif({
+                msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
+                type: "error",
+                width: 500,
+                fade: true,
+                multiline: true
+            });
+            if (confirm(confirmMessage)) {
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
+                    data: { "hospitalId": hospitalId },
+                    success: function (data) {
+                        if (data == 0) {
+                            notif({
+                                msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
+                                type: "error",
+                                width: 600,
+                                fade: true,
+                                multiline: true
+                            });
+                        } else {
+                            if (status == true) {
+                                notif({
+                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
+                                    type: "success",
+                                    width: 600,
+                                    fade: true,
+                                    multiline: true
+                                });
+                            } else {
+                                notif({
+                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
+                                    type: "success",
+                                    width: 600,
+                                    fade: true,
+                                    multiline: true
+                                });
+                            }
+                            var tr = $(this).closest('tr');
+                            row.css("background-color", "#275b89");
+                            row.fadeOut(400, function () {
+                                row.remove();
+                            });
+                            return false;
+                        }
                         statesProgress.hide();
                     },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    statesProgress.hide();
-                }
-            });
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        statesProgress.hide();
+                    }
+                });
+            } else {
+                return false;
+            }
         });
     });
 

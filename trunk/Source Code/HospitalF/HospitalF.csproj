@@ -232,7 +232,6 @@
     <Content Include="Content\css\bootstrap.m.css" />
     <Content Include="Content\css\custom-home.css" />
     <Content Include="Content\css\custom-hospital-user.css" />
-    <Content Include="Content\css\custom-hospital.css" />
     <Content Include="Content\css\custom-search-result.css" />
     <Content Include="Content\css\delete.gif" />
     <Content Include="Content\css\demo.css" />
@@ -241,6 +240,7 @@
     <Content Include="Content\css\font-awesome.m.css" />
     <Content Include="Content\css\jquery.rating.css" />
     <Content Include="Content\css\lockscreen.css" />
+    <Content Include="Content\css\notifIt.css" />
     <Content Include="Content\css\smartadmin-production.css" />
     <Content Include="Content\css\smartadmin-production.m.css" />
     <Content Include="Content\css\smartadmin-skins.css" />
@@ -306,10 +306,11 @@
     <Content Include="Content\js\jquery.rating.pack.js" />
     <Content Include="Content\js\libs\jquery-2.0.2.m.js" />
     <Content Include="Content\js\libs\jquery-ui-1.10.3.m.js" />
+    <Content Include="Content\js\notification\notifIt.js" />
     <Content Include="Content\js\notification\SmartNotification.min.js" />
     <Content Include="Content\js\plugin\bootstrap-slider\bootstrap-slider.min.js" />
     <Content Include="Content\js\plugin\bootstrap-timepicker\bootstrap-timepicker.min.js" />
-    <Content Include="Content\js\plugin\bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
+    <Content Include="Content\js\plugin\confirm\jquery.confirm.js" />
     <Content Include="Content\js\plugin\datatables\ColReorder.min.js" />
     <Content Include="Content\js\plugin\datatables\ColVis.min.js" />
     <Content Include="Content\js\plugin\datatables\DT_bootstrap.js" />

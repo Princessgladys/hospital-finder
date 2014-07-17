@@ -163,7 +163,8 @@ namespace HospitalF.Controllers
             try
             {
                 HospitalModel model = new HospitalModel();
-                return Json(await model.ChangeHospitalStatusAsync(hospitalId), JsonRequestBehavior.AllowGet);
+                int result = await model.ChangeHospitalStatusAsync(hospitalId);
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
             {
