@@ -1,5 +1,212 @@
 ﻿@{
     ViewBag.Title = "Hospital";
 }
+@using HospitalF.Entities;
+@{
+    HospitalEntity hospital = (HospitalEntity)ViewBag.HospitalEntity;
+}
+<!-- MAIN CONTENT -->
+<div id="content-results" class="col-md-10 col-md-offset-1 well">
+    <div class="col-md-12">
+        <div class="pull-left">
+            <h1 class="txt-color-blue"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;@(hospital.Hospital_Name)</h1>
+            <address>
+                <strong>Địa chỉ</strong>: @(hospital.Address) <i class="fa fa-location-arrow"></i>
+                <br />
+                <strong>Điện thoại</strong>: @(hospital.Phone_Number) <i class="fa fa-mobile"></i>
+                <br />
+                <strong>Website</strong>: <a href="http://@(hospital.Website)" target="_blank" class="text-success">@(hospital.Website) </a><i class="fa fa-caret-down"></i>
+            </address>
+        </div>
+        <div class="pull-right">
+            <div class="rate-info text-center">
+                <div class="display-inline">
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" checked="checked"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                </div>
+                <p>Dựa trên <strong>69</strong> bình chọn</p>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr />
+    </div>
+    <div class="col-md-12">
+        <ul id="myTab1" class="nav nav-tabs bordered">
+            <li class="active">
+                <a href="#s1" data-toggle="tab"><i class="fa fa-fw fa-lg fa-search"></i>&nbsp;Tổng quan</a>
+            </li>
+            <li>
+                <a href="#s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-location-arrow"></i>&nbsp;Dịch vụ</a>
+            </li>
+            <li>
+                <a href="#s3" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i>&nbsp;Liên hệ</a>
+            </li>
+            <li>
+                <a href="#s3" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i>&nbsp;Nhận xét</a>
+            </li>
+        </ul>
+        <div id="myTabContent1" class="tab-content padding-10">
+            <div class="tab-pane fade in active" id="s1">
+                <div class="row">
+                    <section class="col-md-7">
+                        <h5 class="txt-color-blue">Giới thiệu về bệnh viện</h5>
+                        <p class="description">
+                            @(Html.Raw(hospital.Description))
+                        </p>
+                    </section>
+                    <section class="col-md-5">
+                        <div class="contact-info">
+                            <h5 class="txt-color-blue">Thông tin liên hệ</h5>
+                            <hr />
+                            <strong>Địa chỉ</strong>: @(hospital.Address) <i class="fa fa-location-arrow"></i>
+                            <br />
+                            <strong>Điện thoại</strong>: @(hospital.Phone_Number) <i class="fa fa-mobile"></i>
+                            <br />
+                            <strong>Website</strong>: <a href="http://@(hospital.Website)" target="_blank" class="text-success">@(hospital.Website) </a><i class="fa fa-caret-down"></i>
+                            <br />
+                            <strong>Email</strong>: <a href="#" class="text-success">@(hospital.Email) </a><i class="fa fa-envelope-o"></i>
+                            <br />
+                            <strong>Fax</strong>: <a href="#" class="text-success">@(hospital.Fax) </a><i class="fa fa-fax"></i>
+                        </div>
+                        <hr />
+                        <div id="map-canvas-hospital"></div>                       
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h2>Hospital</h2>
+<script>
+    // GOOGLE - API
+
+    // Google map
+    var map;
+    // List of windows that show detailed information of hospital on map
+    var infowindow = new google.maps.InfoWindow();
+
+    function toggleBounce(marker) {
+        if (marker.getAnimation() != null) {
+            marker.setAnimation(null);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+    }
+
+    // Create marker of hospital on map
+    function createMarker(latlng, html) {
+        // Add markers to the map
+
+        // Marker sizes are expressed as a Size of X,Y
+        // where the origin of the image (0,0) is located
+        // in the top left of the image.
+
+        // Origins, anchor positions and coordinates of the marker
+        // increase in the X direction to the right and in
+        // the Y direction down.
+        var image = {
+            url: '../Content/img/hospital-2.png',
+            // This marker is 20 pixels wide by 32 pixels tall.
+            size: new google.maps.Size(32, 37),
+            // The origin for this image is 0,0.
+            origin: new google.maps.Point(0, 0),
+            // The anchor for this image is the base of the flagpole at 0,32.
+            anchor: new google.maps.Point(0, 32)
+        };
+        // Shapes define the clickable region of the icon.
+        // The type defines an HTML &lt;area&gt; element 'poly' which
+        // traces out a polygon as a series of X,Y points. The final
+        // coordinate closes the poly by connecting to the first
+        // coordinate.
+        var shape = {
+            coords: [1, 1, 1, 37, 32, 37, 32, 1],
+            type: 'poly'
+        };
+
+        var contentString = html;
+        var marker;
+
+        marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            draggable: false,
+            optimized: false,
+            animation: google.maps.Animation.DROP,
+            icon: image,
+            shape: shape,
+            zIndex: Math.round(latlng.lat() * -100000) << 5
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
+            map.panTo(marker.getPosition());
+        });
+
+        google.maps.event.addListener(marker, 'mouseover', function () {
+            toggleBounce(marker);
+        });
+
+        google.maps.event.addListener(marker, 'mouseout', function () {
+            toggleBounce(marker);
+        });
+
+    }
+    // ------------------------------------------------------------------------
+
+    function initializeMap() {
+        var latlng = null;
+        // Get coordinate of position
+        postionLongitude = '@(hospital.Coordinate.Split(',')[0].Trim())';
+        postionLatitude = '@(hospital.Coordinate.Split(',')[1].Trim())';
+        latlng = new google.maps.LatLng(postionLongitude, postionLatitude);
+
+        // Draw the map
+        var options = {
+            zoom: 13,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false
+        };
+
+        map = new google.maps.Map(document.getElementById("map-canvas-hospital"), options);
+
+        google.maps.event.addListener(map, 'click', function () {
+            infowindow.close();
+        });
+
+        // Create marker on map with info window
+        var contentString = '<div style="width: 300px;">' +
+                            '<table class="table">' +
+                            '<thead>' +
+                            '<tr class="info">' +
+                            '<th>' + '@(hospital.Hospital_Name)' + '</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody>' +
+                        '<tr>' +
+                        '<td><i class="fa fa-location-arrow"></i>&nbsp;' + '@(hospital.Address)' + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td><i class="fa fa-mobile"></i>&nbsp;' + '@(hospital.Phone_Number)' + '</td>' +
+                        '</tr>' +
+                        '</tbody>' +
+                        '</table>' +
+                        '</div>';
+        createMarker(latlng, contentString);
+
+        // ------------------------------------------------------------------------
+    }
+
+    // Initialize map when page load 
+    google.maps.event.addDomListener(window, 'load', initializeMap);
+    // ------------------------------------------------------------------------
+</script>

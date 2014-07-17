@@ -46,6 +46,7 @@ namespace HospitalF
                         "~/Content/css/jquery.rating.css",
                         "~/Content/css/custom-home.css",
                         "~/Content/css/custom-font.css",
+                        "~/Content/css/custom-hospital.css",
                         "~/Content/css/custom-search-result.css"));
 
             // Bundle for Admin and Hospital User layout

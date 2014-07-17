@@ -110,7 +110,7 @@ namespace HospitalF.Models
 
         #endregion
 
-        #region GIR query analyzer
+        #region GIR Query Analyzer
 
         /// <summary>
         /// Check if input token is a relation word
@@ -462,27 +462,6 @@ namespace HospitalF.Models
 
         #endregion
 
-        #region Location Search Functions
-        private double GetRadius(double x)
-        {
-            return (x * Math.PI / 180);
-        }
-
-        private double GetDistance(double lat1, double lng1, double lat2, double lng2)
-        {
-            double R = 6371000;
-            var dLat = GetRadius(lat2 - lat1);
-            var dLong = GetRadius(lng2 - lng1);
-
-            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-              Math.Cos(GetRadius(lat1)) * Math.Cos(GetRadius(lat1)) *
-              Math.Sin(dLong / 2) * Math.Sin(dLong / 2);
-            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            var d = R * c;
-            return d; // returns the distance in meter
-        }
-        #endregion
-
         #region Search Hospital
 
         /// <summary>
@@ -622,6 +601,40 @@ namespace HospitalF.Models
             return hospitalList;
         }
 
+        #endregion
+
+        #region Other Functions
+        public static async Task<HospitalEntity> LoadHospitalById(int id)
+        {
+            HospitalEntity hospital = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                hospital = await Task.Run(() => (from h in data.Hospitals
+                                                 where h.Hospital_ID == id
+                                                 select new HospitalEntity()
+                                                 {
+                                                     Hospital_ID = h.Hospital_ID,
+                                                     Hospital_Name = h.Hospital_Name,
+                                                     Address = h.Address,
+                                                     Ward_ID = h.Ward_ID,
+                                                     District_ID = h.District_ID,
+                                                     City_ID = h.City_ID,
+                                                     Phone_Number = h.Phone_Number,
+                                                     Fax = h.Fax,
+                                                     Email = h.Email,
+                                                     Website = h.Website,
+                                                     Ordinary_Start_Time = h.Ordinary_Start_Time,
+                                                     Ordinary_End_Time = h.Ordinary_End_Time,
+                                                     Holiday_Start_Time = h.Holiday_Start_Time,
+                                                     Holiday_End_Time = h.Holiday_End_Time,
+                                                     Coordinate = h.Coordinate,
+                                                     Description = h.Full_Description,
+                                                     Is_Allow_Appointment = h.Is_Allow_Appointment,
+                                                     Is_Active = h.Is_Active
+                                                 }).SingleOrDefault());
+            }
+            return hospital;
+        }
         #endregion
     }
 }

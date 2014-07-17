@@ -1,0 +1,22 @@
+﻿.rate-info
+{
+	border: 1px solid #2c699d;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #f5f5f5;
+}
+
+.contact-info
+{
+	border: 1px solid #2c699d;
+	padding: 10px;
+}
+
+#map-canvas-hospital
+{
+	height: 300px;
+	width: 100%;
+	background-color: #cccccc;
+	margin: 0px;
+	padding: 0px;
+}
