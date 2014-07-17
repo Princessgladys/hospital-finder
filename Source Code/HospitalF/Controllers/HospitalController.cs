@@ -260,6 +260,21 @@ namespace HospitalF.Controllers
 
         #endregion
 
+        #region Add Hospital
+
+        /// <summary>
+        /// GET: /Hospital/AddHospital
+        /// </summary>
+        /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> AddHospital()
+        {
+            return View();
+        }
+
+        #endregion
+
         #endregion
     }
 }
