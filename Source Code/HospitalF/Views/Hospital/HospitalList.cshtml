@@ -7,7 +7,7 @@
 @{
     ViewBag.Title = "Danh sách bệnh viện";
 }
-<script src="../Content/js/plugin/datatables/jquery.tablesorter.js"></script>
+
 @using (Html.BeginForm(Constants.DisplayHospitalListAction, Constants.HospitalController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
 {
     <div class="row">
@@ -22,7 +22,6 @@
     <label class="select">
         @Html.DropDownList("CityID", (SelectList)ViewBag.CityList,
                 "Cả nước", new { @class = "form-control" })
-        @Html.TextBox("CityName", null, new { @type = "hidden" })
         <i></i>
     </label>
 
@@ -40,8 +39,8 @@
 
     <label class="select">
         <select class="form-control" id="IsActive" name="IsActive">
-            <option value="true">Còn hoạt động</option>
-            <option value="false">Ngưng hoạit động</option>
+            <option value="true">Đang hoạt động</option>
+            <option value="false">Ngưng hoạt động</option>
         </select>
         <i></i>
     </label>
@@ -72,14 +71,14 @@
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <!-- Widget ID (each widget will need unique ID)-->
                 <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0"
-                     data-widget-colorbutton="false"
-                     data-widget-editbutton="false"
-                     data-widget-togglebutton="false"
-                     data-widget-deletebutton="false"
-                     data-widget-fullscreenbutton="false"
-                     data-widget-custombutton="false"
-                     data-widget-collapsed="false"
-                     data-widget-sortable="false">
+                        data-widget-colorbutton="false"
+                        data-widget-editbutton="false"
+                        data-widget-togglebutton="false"
+                        data-widget-deletebutton="false"
+                        data-widget-fullscreenbutton="false"
+                        data-widget-custombutton="false"
+                        data-widget-collapsed="false"
+                        data-widget-sortable="false">
 
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
@@ -126,8 +125,16 @@
                                                         </td>
                                                         <td>@hospital.Address</td>
                                                         <td>@hospital.Type_Name</td>
-                                                        <td>@hospital.Is_Active</td>
-                                                        <td>Chưa làm</td>
+                                                        <td>@(@hospital.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-success btn-next" type="submit"
+                                                                    value="@string.Format("{0}|{1}|{2}",
+                                                                        hospital.Hospital_ID, hospital.Hospital_Name, hospital.Is_Active)"
+                                                                    name="@Constants.Button"
+                                                                    id="change-status-button">
+                                                                @(@hospital.Is_Active.Value ? "Ngừng" : "Kích hoạt")
+                                                            </button>
+                                                        </td>
                                                     </tr>
                                                 }
                                             }
@@ -136,11 +143,7 @@
                                 </table>
                             </div>
                             @{
-                                if (Model.Count == 0)
-                                {
-                                    
-                                }
-                                else
+                                if (Model.Count != 0)
                                 {
                                     @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
                                         ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
@@ -158,6 +161,7 @@
     </section>
     <!-- end widget grid -->
 }
+
 <script type="text/javascript">
 
     @*Sort table*@
@@ -182,6 +186,46 @@
                         $.each(data, function (id, option) {
                             ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
                         });
+                        statesProgress.hide();
+                    },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('#change-status-button').click(function (event) {
+            var selectedItem = $(this).text();
+            var argument = data.split('|');
+            var hospitalId = argument[0];
+            var hospitalName = argument[1];
+            var status = argument[2];
+            if (status == true) {
+                status = ' đã thay đổi trạng thái thành Ngừng hoạt động';
+            } else {
+                status = ' đã thay đổi trạng thái Hoạt động trở lại'
+            }
+            var statesProgress = $("#states-loading-district-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
+                data: { "hospitalId": hospitalId },
+                success: function (data) {
+                    if (data == 0) {
+                        notif({
+                            msg: hospitalName + status,
+                            type: "error"
+                        });
+                    } else {
+                        notif({
+                            msg: hospitalName + status,
+                            type: "success"
+                        });
+                    }
                         statesProgress.hide();
                     },
                 error: function (xhr, ajaxOptions, thrownError) {

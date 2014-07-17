@@ -150,6 +150,28 @@ namespace HospitalF.Controllers
             }
         }
 
+        /// <summary>
+        /// GET: /Hospital/ChangeHospitalStatus
+        /// </summary>
+        /// <param name="hospitalId">Hosptal ID</param>
+        /// <returns>
+        /// Task[ActionResult] with JSON contains value
+        /// indicating update process is successful or not
+        /// </returns>
+        public async Task<ActionResult> ChangeHospitalStatus(int hospitalId)
+        {
+            try
+            {
+                HospitalModel model = new HospitalModel();
+                return Json(await model.ChangeHospitalStatusAsync(hospitalId), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
         #endregion
 
         #region Display Hospital List
@@ -198,28 +220,25 @@ namespace HospitalF.Controllers
         [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> DisplayHospitalList(HospitalModel model, int? page)
         {
-            // Declare new hospital list
-            List<SP_LOAD_HOSPITAL_LISTResult> hospitalList =
-                new List<SP_LOAD_HOSPITAL_LISTResult>();
-
-            // Check if page parameter is null
-            if (page == null)
-            {
-                page = 1;
-            }
-
             try
             {
-                // Load list of hospital
-                hospitalList =
-                    await model.LoadListOfHospital(model.HospitalName,
-                    model.CityID, model.DistrictID, model.HospitalTypeID,
-                    model.IsActive);
 
                 // Cacading again drop down list
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
                 ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+
+                // Check if page parameter is null
+                if (page == null)
+                {
+                    page = 1;
+                }
+
+                // Load list of hospital
+                List<SP_LOAD_HOSPITAL_LISTResult> hospitalList =
+                    await model.LoadListOfHospital(model.HospitalName,
+                    model.CityID, model.DistrictID, model.HospitalTypeID,
+                    model.IsActive);
 
                 // Handle query string
                 NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);

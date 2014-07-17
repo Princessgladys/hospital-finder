@@ -56,6 +56,11 @@
         /// </summary>
         public const string SEM001 = "Đã có lỗi xảy ra trong quá trình xử lý thông tin. Mong quý vị thông cảm và thử lại sau vài phút.";
 
+        /// <summary>
+        /// Update hospital status failed
+        /// </summary>
+        public const string SEM010 = "Không thay đổi được trạng thái của {0}.";
+
         #endregion
     }
 }

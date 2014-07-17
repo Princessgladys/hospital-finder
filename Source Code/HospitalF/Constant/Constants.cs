@@ -149,6 +149,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string DisplayHospitalListAction = "DisplayHospitalList";
 
+        /// <summary>
+        /// Name of ChangeHospitalStatusAction method in HospitalController
+        /// </summary>
+        public const string ChangeHospitalStatusAction = "ChangeHospitalStatus";
+
         #endregion
 
         #region AccountModel

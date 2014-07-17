@@ -64,6 +64,12 @@ namespace HospitalF
                             new { controller = "Hospital", action = "GetDistrictByCity" },
                             new[] { "HospitalF.Controllers" }
             );
+
+            routes.MapRoute("ChangeHospitalStatus",
+                            "hospital/changehospitalstatus/",
+                            new { controller = "Hospital", action = "ChangeHospitalStatus" },
+                            new[] { "HospitalF.Controllers" }
+            );
         }
     }
 }
