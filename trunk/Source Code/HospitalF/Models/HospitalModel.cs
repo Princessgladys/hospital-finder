@@ -206,6 +206,25 @@ namespace HospitalF.Models
             return hospitalList;
         }
 
+        /// <summary>
+        /// Change status of a specific hospital
+        /// </summary>
+        /// <param name="hospitalId">Hospital ID</param>
+        /// <returns>1: Successful. 0: Failed</returns>
+        public async Task<int> ChangeHospitalStatusAsync(int hospitalId)
+        {
+            int result = 0;
+
+            // Search for suitable hospitals in database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() =>
+                    data.SP_CHANGE_HOSPITAL_STATUS(hospitalId));
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }
