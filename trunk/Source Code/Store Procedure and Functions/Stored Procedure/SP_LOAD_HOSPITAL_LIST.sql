@@ -6,6 +6,7 @@ GO
 CREATE PROCEDURE SP_LOAD_HOSPITAL_LIST
 	@HospitalName NVARCHAR(128),
 	@CityID INT,
+	@DistrictID INT,
 	@HospitalType INT,
 	@IsActive BIT,
 	@PageNumber INT
@@ -26,11 +27,15 @@ BEGIN
 							 THEN N' AND h.City_ID = @CityID'
 							 ELSE ''
 							 END;
-	SET @ChildWherePHrase += CASE WHEN @IsActive IS NOT NULL
-							 THEN N' AND h.Hospital_Type = @HospitalType'
+	SET @ChildWherePHrase += CASE WHEN @DistrictID != 0
+							 THEN N' AND h.District_ID = @DistrictID'
 							 ELSE ''
 							 END;
 	SET @ChildWherePHrase += CASE WHEN @HospitalType != 0
+							 THEN N' AND h.Hospital_Type = @HospitalType'
+							 ELSE ''
+							 END;
+	SET @ChildWherePHrase += CASE WHEN @IsActive IS NOT NULL
 							 THEN N' AND h.Is_Active = @IsActive'
 							 ELSE ''
 							 END;
@@ -51,6 +56,6 @@ BEGIN
 					CHAR(13) + @FatherWherePhrase
 
 	EXECUTE SP_EXECUTESQL @SqlQuery,
-						  N'@HospitalName NVARCHAR(128), @CityID INT, @HospitalType INT, @IsActive BIT, @PageNumber INT, @RowsPerPage INT',
-						  @HospitalName, @CityID, @HospitalType, @IsActive, @PageNumber, @RowsPerPage
+						  N'@HospitalName NVARCHAR(128), @CityID INT, @DistrictID INT, @HospitalType INT, @IsActive BIT, @PageNumber INT, @RowsPerPage INT',
+						  @HospitalName, @CityID, @DistrictID, @HospitalType, @IsActive, @PageNumber, @RowsPerPage
 END
