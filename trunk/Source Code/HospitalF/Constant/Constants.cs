@@ -142,7 +142,7 @@ namespace HospitalF.Constant
         /// <summary>
         /// Name of HospitalList method in HospitalController
         /// </summary>
-        public const string HospitalListAction = "HospitalList";
+        public const string DisplayHospitalListAction = "HospitalList";
 
         #endregion
 
