@@ -3,11 +3,9 @@
 @using PagedList;
 @using HospitalF.Models
 
-@model HospitalF.Models.HospitalModel
+@model IPagedList<SP_LOAD_HOSPITAL_LISTResult>
 @{
     ViewBag.Title = "Danh sách bệnh viện";
-    IPagedList<SP_LOAD_HOSPITAL_LISTResult> hospitalList = 
-        (IPagedList<SP_LOAD_HOSPITAL_LISTResult>) ViewBag.HospitalList;
 }
 <script src="../Content/js/plugin/datatables/jquery.tablesorter.js"></script>
 @using (Html.BeginForm(Constants.DisplayHospitalListAction, Constants.HospitalController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
@@ -22,14 +20,21 @@
     </div>
 
     <label class="select">
-        @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
-                Constants.RequireCity, new { @class = "form-control" })
+        @Html.DropDownList("CityID", (SelectList)ViewBag.CityList,
+                "Cả nước", new { @class = "form-control" })
+        @Html.TextBox("CityName", null, new { @type = "hidden" })
         <i></i>
     </label>
 
     <label class="select">
-        @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.HospitalTypeList,
-        new { @class = "form-control" })
+        @Html.DropDownList("DistrictID", (SelectList)ViewBag.DistrictList,
+                    "Tất cả các quận", new { @class = "form-control" })
+        <i></i>
+    </label>
+    
+    <label class="select">
+        @Html.DropDownList("HospitalTypeID", (SelectList)ViewBag.HospitalTypeList,
+            "Tất cả các loại bệnh viện", new { @class = "form-control" })
         <i></i>
     </label>
 
@@ -43,7 +48,7 @@
 
     <div class="well">
         <div class="input-group">
-            @Html.TextBoxFor(m => m.HospitalName, new
+            @Html.TextBox("HospitalName", null, new
                              {
                                  @placeholder = "Tìm kiếm tên bệnh viện",
                                  @class = "form-control",
@@ -89,37 +94,58 @@
                         <!-- end widget edit box -->
                         <!-- widget content -->
                         <div class="widget-body">
-                            <p>Adds borders to any table row within <code>&lt;table&gt;</code> by adding the <code>.table-bordered</code> with the base class</p>
+                            <p>Chọn thông tin phụ hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> bệnh viện trong hệ thống</p>
                             <div class="table-responsive">
                                 <table class="table table-bordered tablesorter" id="hospital-table">
                                     <thead>
                                         <tr>
-                                            <th>STT</th>
                                             <th>Tên bệnh viện</th>
                                             <th>Địa chỉ</th>
+                                            <th>Loại</th>
                                             <th>Trạng thái</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Row 1</td>
-                                            <td>Row 2</td>
-                                            <td>Row 3</td>
-                                            <td>Row 4</td>
-                                            <td>Row 5</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Row 4</td>
-                                            <td>Row 5</td>
-                                            <td>Row 6</td>
-                                            <td>Row 7</td>
-                                            <td>Row 8</td>
-                                        </tr>
+                                        @{
+                                            if (Model.Count == 0)
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có dữ liệu</td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                foreach (var hospital in Model)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @Html.ActionLink(@hospital.Hospital_Name,
+                                                                "HospitalDetail", Constants.HospitalController,
+                                                                new { id = @hospital.Hospital_ID }, null)
+                                                        </td>
+                                                        <td>@hospital.Address</td>
+                                                        <td>@hospital.Type_Name</td>
+                                                        <td>@hospital.Is_Active</td>
+                                                        <td>Chưa làm</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
                                     </tbody>
                                 </table>
                             </div>
-                            @Html.PagedListPager(hospitalList, page => Url.Content(Constants.SearchResultAction + "?" + ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                            @{
+                                if (Model.Count == 0)
+                                {
+                                    
+                                }
+                                else
+                                {
+                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
+                                        ViewBag.Query + "&page=" + page), PagedListRenderOptions.PageNumbersOnly)
+                                }
+                            }
                         </div>
                         <!-- end widget content -->
                     </div>
@@ -134,8 +160,35 @@
 }
 <script type="text/javascript">
 
+    @*Sort table*@
     $(document).ready(function () {
         $("#hospital-table").tablesorter();
+    });
+
+    @*AJAX for cascading District drop down list*@
+    $(document).ready(function () {
+        $("#CityID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlDistrict = $("#DistrictID");
+            var statesProgress = $("#states-loading-district-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("GetDistrictByCity-Hospital"))",
+                data: { "cityId": selectedItem },
+                success: function (data) {
+                        ddlDistrict.html('');
+                        $.each(data, function (id, option) {
+                            ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                        });
+                        statesProgress.hide();
+                    },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
     });
 
     @*AJAX for cascading hospital list to table*@
