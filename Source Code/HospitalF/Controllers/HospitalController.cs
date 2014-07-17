@@ -9,6 +9,7 @@ using HospitalF.App_Start;
 using HospitalF.Constant;
 using HospitalF.Models;
 using HospitalF.Utilities;
+using System.Collections.Specialized;
 
 namespace HospitalF.Controllers
 {
@@ -151,7 +152,7 @@ namespace HospitalF.Controllers
 
         #endregion
 
-        #region Display Hospital List     
+        #region Display Hospital List
 
         /// <summary>
         /// GET: /Hospital/HospitalList
@@ -177,9 +178,8 @@ namespace HospitalF.Controllers
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
 
                 // Declare new hospital list
-                List<SP_LOAD_HOSPITAL_LISTResult> hospitalList = new List<SP_LOAD_HOSPITAL_LISTResult>();
-                pagedHospitalList = hospitalList.ToPagedList(1, Constants.PageSize);
-                ViewBag.HospitalList = hospitalList.ToPagedList(1, Constants.PageSize);
+                pagedHospitalList = new
+                    List<SP_LOAD_HOSPITAL_LISTResult>().ToPagedList(1, Constants.PageSize);
             }
             catch (Exception exception)
             {
@@ -214,17 +214,21 @@ namespace HospitalF.Controllers
                 hospitalList =
                     await model.LoadListOfHospital(model.HospitalName,
                     model.CityID, model.DistrictID, model.HospitalTypeID,
-                    model.IsActive, page.Value);
+                    model.IsActive);
 
                 // Cacading again drop down list
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
                 ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
 
+                // Handle query string
+                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
+                queryString.Remove(Constants.PageUrlRewriting);
+                ViewBag.Query = queryString.ToString();
+
                 // Return value to view
                 IPagedList<SP_LOAD_HOSPITAL_LISTResult> pagedHospitalList =
                     hospitalList.ToPagedList(page.Value, Constants.PageSize);
-                ViewBag.HospitalList = pagedHospitalList;
                 return View(Constants.InitialHospitalListAction, pagedHospitalList);
             }
             catch (Exception exception)
