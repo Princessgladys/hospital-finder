@@ -70,15 +70,15 @@
             <!-- NEW WIDGET START -->
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <!-- Widget ID (each widget will need unique ID)-->
-                <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0"
-                        data-widget-colorbutton="false"
-                        data-widget-editbutton="false"
-                        data-widget-togglebutton="false"
-                        data-widget-deletebutton="false"
-                        data-widget-fullscreenbutton="false"
-                        data-widget-custombutton="false"
-                        data-widget-collapsed="false"
-                        data-widget-sortable="false">
+                <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                     data-widget-colorbutton="false"
+                     data-widget-editbutton="false"
+                     data-widget-togglebutton="false"
+                     data-widget-deletebutton="false"
+                     data-widget-fullscreenbutton="false"
+                     data-widget-custombutton="false"
+                     data-widget-collapsed="false"
+                     data-widget-sortable="false">
 
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
@@ -107,52 +107,53 @@
                                     </thead>
                                     <tbody>
                                         @{
-                                            if (Model.Count == 0)
-                                            {
-                                                <tr>
-                                                    <td colspan="5">Không có dữ liệu</td>
-                                                </tr>
-                                            }
-                                            else
-                                            {
-                                                foreach (var hospital in Model)
-                                                {
-                                                    <tr>
-                                                        <td hidden>@hospital.Hospital_ID</td>
-                                                        <td hidden>@hospital.Hospital_Name</td>
-                                                        <td hidden>@hospital.Is_Active</td>
-                                                        <td>
-                                                            @Html.ActionLink(@hospital.Hospital_Name,
+    if (Model.Count == 0)
+    {
+            <tr>
+                <td colspan="5">Không có dữ liệu</td>
+            </tr>
+    }
+    else
+    {
+        foreach (var hospital in Model)
+        {
+            <tr>
+                <td hidden>@hospital.Hospital_ID</td>
+                <td hidden>@hospital.Hospital_Name</td>
+                <td hidden>@hospital.Is_Active</td>
+                <td>
+                    @Html.ActionLink(@hospital.Hospital_Name,
                                                                 "HospitalDetail", Constants.HospitalController,
                                                                 new { id = @hospital.Hospital_ID }, null)
-                                                        </td>
-                                                        <td>@hospital.Address</td>
-                                                        <td>@hospital.Type_Name</td>
-                                                        <td>@(@hospital.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
-                                                        <td>
-                                                            <a href="" class="btn btn-sm btn-success btn-next">
-                                                                @(hospital.Is_Active.Value ? "Ngừng" : "Kích hoạt")
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            }
+                </td>
+                <td>@hospital.Address</td>
+                <td>@hospital.Type_Name</td>
+                <td>@(@hospital.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
+                <td>
+                    <a href="" class="btn btn-sm btn-success btn-next">
+                        @(hospital.Is_Active.Value ? "Ngừng" : "Kích hoạt")
+                    </a>
+                </td>
+            </tr>
+        }
+    }
                                         }
                                     </tbody>
                                 </table>
                             </div>
                             @{
-                                if (Model.Count != 0)
-                                {
-                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
+    if (Model.Count != 0)
+    {
+            @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
                                         ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
-                                }
+    }
                             }
                         </div>
                         <!-- end widget content -->
                     </div>
                     <!-- end widget div -->
                 </div>
+
                 <!-- end widget -->
             </article>
             <!-- WIDGET END -->
