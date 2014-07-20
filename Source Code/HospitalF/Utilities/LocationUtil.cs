@@ -61,5 +61,23 @@ namespace HospitalF.Utilities
                      ).OrderBy(d => d.District_Name).ToList());
             }
         }
+
+        /// <summary>
+        /// Load a list of ward in a specific district
+        /// </summary>
+        /// <param name="districtId">District ID</param>
+        /// <returns>List[Ward] that contains a list of wards in a district</returns>
+        public static async Task<List<Ward>> LoadWardInDistrictAsync(int districtId)
+        {
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from w in data.Wards
+                     where districtId.Equals(w.District_ID)
+                     select w
+                     ).OrderBy(w => w.Ward_Name).ToList());
+            }
+        }
     }
 }
