@@ -41,7 +41,7 @@ namespace HospitalF.Controllers
             hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
             model.HospitalID = hospitalID;
             model.HospitalName = hospital.Hospital_Name;
-            model.Address = hospital.Address;
+            model.FullAddress = hospital.Address;
             model.Website = hospital.Website;
             model.PhoneNo = hospital.Phone_Number;
             model.Fax = hospital.Fax;

@@ -31,11 +31,21 @@ namespace HospitalF.Models
         /// Get/Set value for property HospitalTypeID
         /// </summary>
         public int HospitalTypeID { get; set; }
+        
+        /// <summary>
+        /// Get/Set value for property LocationAddress
+        /// </summary>
+        public string LocationAddress { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property StreetAddress
+        /// </summary>
+        public string StreetAddress { get; set; }
 
         /// <summary>
         /// Get/Set value for property WardName
         /// </summary>
-        public string Address { get; set; }
+        public string FullAddress { get; set; }
 
         /// <summary>
         /// Get/Set value for property WardName
