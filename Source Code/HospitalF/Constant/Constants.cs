@@ -397,9 +397,29 @@ namespace HospitalF.Constant
         public const string Email = "Địa chỉ email";
 
         /// <summary>
+        /// Vietnames name of property Website
+        /// </summary>
+        public const string Website = "Địa chỉ trang web";
+
+        /// <summary>
+        /// Vietnames name of property Fax
+        /// </summary>
+        public const string Fax = "Số fax";
+
+        /// <summary>
         /// Vietnames name of property PhoneNo
         /// </summary>
         public const string PhoneNo = "Số điện thoại";
+
+        /// <summary>
+        /// Vietnames name of property PhoneNo2
+        /// </summary>
+        public const string AlternativePhone = "Số điện thoại";
+
+        /// <summary>
+        /// Vietnames name of property PhoneN3
+        /// </summary>
+        public const string MobilePhone = "Số di động";
 
         /// <summary>
         /// Vietnames name of property Doctor
@@ -415,6 +435,16 @@ namespace HospitalF.Constant
         /// Vietnames name of property StartTime
         /// </summary>
         public const string StartTime = "Giờ khám";
+
+        /// <summary>
+        /// Vietnames name of property HolidayTime
+        /// </summary>
+        public const string OrdinaryTime = "Giờ khám ngày thường";
+
+        /// <summary>
+        /// Vietnames name of property StartTime
+        /// </summary>
+        public const string HolidayTime = "Giờ khám ngày lễ và cuối tuần";
 
         #endregion
 
@@ -466,6 +496,7 @@ namespace HospitalF.Constant
         /// Regular expression to find white spaces
         /// </summary>
         public const string FindWhiteSpaceRegex = @"\w+";
+
         /// <summary>
         /// Regular expression to validate email
         /// </summary>
@@ -495,6 +526,11 @@ namespace HospitalF.Constant
         /// Constant for unicode code of letter Đ
         /// </summary>
         public const char LatinCapitalLetterDWithStroke = '\u0110';
+
+        /// <summary>
+        /// Regular expression to validate full time in day
+        /// </summary>
+        public const string TimeInDayRegex = @"/^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9])$";
 
         #endregion
 

@@ -45,7 +45,12 @@
         /// <summary>
         /// Drop down list required field is blank
         /// </summary>
-        public const string CEM011 = "Xin hãy chọn {0}";
+        public const string CEM011 = "Xin hãy chọn {0}.";
+
+        /// <summary>
+        /// Min length is not valid
+        /// </summary>
+        public const string CEM012 = "{0} phải có ít nhất {1} ký tự.";
 
         #endregion
 
