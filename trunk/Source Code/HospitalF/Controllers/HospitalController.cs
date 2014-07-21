@@ -237,6 +237,9 @@ namespace HospitalF.Controllers
                 hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
 
+                // Load list of status
+                ViewBag.CurrentStatus = true;
+
                 // Declare new hospital list
                 pagedHospitalList = new
                     List<SP_LOAD_HOSPITAL_LISTResult>().ToPagedList(1, Constants.PageSize);
@@ -264,6 +267,7 @@ namespace HospitalF.Controllers
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
                 ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+                ViewBag.CurrentStatus = model.IsActive;
 
                 // Check if page parameter is null
                 if (page == null)
