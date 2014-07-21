@@ -126,7 +126,7 @@ namespace HospitalF.Controllers
                                   select new
                                   {
                                       id = d.District_ID,
-                                      name = d.District_Name
+                                      name = d.Type + Constants.WhiteSpace + d.District_Name
                                   });
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -169,7 +169,7 @@ namespace HospitalF.Controllers
                                   select new
                                   {
                                       id = w.Ward_ID,
-                                      name = w.Ward_Name
+                                      name = w.Type + Constants.WhiteSpace + w.Ward_Name
                                   });
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
