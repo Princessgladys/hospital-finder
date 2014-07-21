@@ -1,5 +1,6 @@
-﻿@model HospitalF.Models.HospitalModel
+﻿@using HospitalF.Constant;
 
+@model HospitalF.Models.HospitalModel
 @{
     ViewBag.Title = "Thêm mới bệnh viện";
 }
@@ -46,7 +47,7 @@
 
                 <header>
                     <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                    <h2></h2>
+                    <h2>Thông tin bệnh viện</h2>
                 </header>
 
                 <!-- widget div-->
@@ -56,95 +57,76 @@
                     <!-- widget content -->
                     <div class="widget-body">
 
-                        <form class="form-horizontal">
+                        @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Get, new { @class = "form-horizontal", @id = "add-hospital-form" }))
+                        {
 
                             <fieldset>
-                                <legend>Default Form Elements</legend>
+                                <legend>Thông tin cơ bản</legend>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Text field</label>
+                                    <label class="col-md-2 control-label">Tên bệnh viện</label>
                                     <div class="col-md-10">
-                                        <input class="form-control" placeholder="Default Text Field" type="text">
+                                        @Html.TextBoxFor(m => m.HospitalName, new
+                                         {
+                                             @placeholder = "Nhập tên bệnh viện",
+                                             @class = "form-control"
+                                         })
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Auto Complete</label>
+                                    <label class="col-md-2 control-label">Kiểu dịch vụ</label>
                                     <div class="col-md-10">
-                                        <input class="form-control" placeholder="Type somethine..." type="text" list="list">
-                                        <datalist id="list">
-                                            <option value="Alexandra">Alexandra</option>
-                                            <option value="Alice">Alice</option>
-                                            <option value="Anastasia">Anastasia</option>
-                                            <option value="Avelina">Avelina</option>
-                                            <option value="Basilia">Basilia</option>
-                                            <option value="Beatrice">Beatrice</option>
-                                            <option value="Cassandra">Cassandra</option>
-                                            <option value="Cecil">Cecil</option>
-                                            <option value="Clemencia">Clemencia</option>
-                                            <option value="Desiderata">Desiderata</option>
-                                            <option value="Dionisia">Dionisia</option>
-                                            <option value="Edith">Edith</option>
-                                            <option value="Eleanora">Eleanora</option>
-                                            <option value="Elizabeth">Elizabeth</option>
-                                            <option value="Emma">Emma</option>
-                                            <option value="Felicia">Felicia</option>
-                                            <option value="Florence">Florence</option>
-                                            <option value="Galiana">Galiana</option>
-                                            <option value="Grecia">Grecia</option>
-                                            <option value="Helen">Helen</option>
-                                            <option value="Helewisa">Helewisa</option>
-                                            <option value="Idonea">Idonea</option>
-                                            <option value="Isabel">Isabel</option>
-                                            <option value="Joan">Joan</option>
-                                            <option value="Juliana">Juliana</option>
-                                            <option value="Karla">Karla</option>
-                                            <option value="Karyn">Karyn</option>
-                                            <option value="Kate">Kate</option>
-                                            <option value="Lakisha">Lakisha</option>
-                                            <option value="Lana">Lana</option>
-                                            <option value="Laura">Laura</option>
-                                            <option value="Leona">Leona</option>
-                                            <option value="Mandy">Mandy</option>
-                                            <option value="Margaret">Margaret</option>
-                                            <option value="Maria">Maria</option>
-                                            <option value="Nanacy">Nanacy</option>
-                                            <option value="Nicole">Nicole</option>
-                                            <option value="Olga">Olga</option>
-                                            <option value="Pamela">Pamela</option>
-                                            <option value="Patricia">Patricia</option>
-                                            <option value="Qiana">Qiana</option>
-                                            <option value="Rachel">Rachel</option>
-                                            <option value="Ramona">Ramona</option>
-                                            <option value="Samantha">Samantha</option>
-                                            <option value="Sandra">Sandra</option>
-                                            <option value="Tanya">Tanya</option>
-                                            <option value="Teresa">Teresa</option>
-                                            <option value="Ursula">Ursula</option>
-                                            <option value="Valerie">Valerie</option>
-                                            <option value="Veronica">Veronica</option>
-                                            <option value="Wilma">Wilma</option>
-                                            <option value="Yasmin">Yasmin</option>
-                                            <option value="Zelma">Zelma</option>
-                                        </datalist>
-                                        <p class="note"><strong>Note:</strong> works in Chrome, Firefox, Opera and IE10.</p>
-                                    </div>
-
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Password field</label>
-                                    <div class="col-md-10">
-                                        <input class="form-control" placeholder="Password field" type="password" value="mypassword">
+                                        <label class="select">
+                                            @Html.DropDownList("HospitalTypeID", (SelectList)ViewBag.HospitalTypeList,
+                                                    new { @class = "form-control" })
+                                            <i></i>
+                                        </label>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Textarea</label>
+                                    <label class="col-md-2 control-label">Địa chỉ</label>
                                     <div class="col-md-10">
-                                        <textarea class="form-control" placeholder="Textarea" rows="4"></textarea>
+                                        @Html.TextBoxFor(m => m.Address, new
+                                         {
+                                             @placeholder = "Địa chỉ và tên đường",
+                                             @class = "form-control"
+                                         })
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Thành phố</label>
+                                    <div class="col-md-10">
+                                        <label class="select">
+                                            @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
+                                                    Constants.RequireCity, new { @class = "form-control" })
+                                            <i></i>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Quận / Huyện</label>
+                                    <div class="col-md-10">
+                                        <label class="select">
+                                            @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
+                                                    Constants.RequireDistrict, new { @class = "form-control" })
+                                            <i></i>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Phường / Xã</label>
+                                    <div class="col-md-10">
+                                        <label class="select">
+                                            @Html.DropDownListFor(m => m.WardID, (SelectList)ViewBag.WardList,
+                                                    Constants.RequireWard, new { @class = "form-control" })
+                                            <i></i>
+                                        </label>
+                                    </div>
+                                </div>
 
                             </fieldset>
 
@@ -994,7 +976,7 @@
                                 </div>
                             </div>
 
-                        </form>
+                        }
 
                     </div>
                     <!-- end widget content -->
@@ -1004,7 +986,7 @@
 
             </div>
             <!-- end widget -->
-    
+
 
         </article>
         <!-- WIDGET END -->
@@ -1017,6 +999,58 @@
 <!-- end widget grid -->
 
 <script type="text/javascript">
+
+    @*AJAX for cascading District drop down list*@
+    $(document).ready(function () {
+        $("#CityID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlDistrict = $("#DistrictID");
+            var statesProgress = $("#states-loading-district-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetDistrictByCityAction))",
+                data: { "cityId": selectedItem },
+                success: function (data) {
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
+    });
+
+    @*AJAX for cascading Ward drop down list*@
+    $(document).ready(function () {
+        $("#DistrictID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlWard = $("#WardID");
+            var statesProgress = $("#states-loading-district-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetWardByDistrictAction))",
+                data: { "districtId": selectedItem },
+                success: function (data) {
+                    ddlWard.html('');
+                    $.each(data, function (id, option) {
+                        ddlWard.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
+    });
 
     // DO NOT REMOVE : GLOBAL FUNCTIONS!
     pageSetUp();

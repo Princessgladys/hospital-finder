@@ -130,6 +130,11 @@ namespace HospitalF.Constant
         public const string GetDistrictByCityAction = "GetDistrictByCity";
 
         /// <summary>
+        /// Name of GetWardByDistritctyAction method in HospitalController
+        /// </summary>
+        public const string GetWardByDistrictAction = "GetWardByDistritct";
+
+        /// <summary>
         /// Name of GetDeseaseBySpecialityAction in HomeController
         /// </summary>
         public const string GetDeseaseBySpecialityAction = "GetDeseaseBySpeciality";
@@ -153,6 +158,11 @@ namespace HospitalF.Constant
         /// Name of ChangeHospitalStatusAction method in HospitalController
         /// </summary>
         public const string ChangeHospitalStatusAction = "ChangeHospitalStatus";
+
+        /// <summary>
+        /// Name of AddHospital method in HospitalController
+        /// </summary>
+        public const string AddHospitalAction = "AddHospital";
 
         #endregion
 
@@ -254,6 +264,16 @@ namespace HospitalF.Constant
         public const string DistrictName = "District_Name";
 
         /// <summary>
+        /// English name of property WardID
+        /// </summary>
+        public const string WardID = "Ward_ID";
+
+        /// <summary>
+        /// English name of property WardName
+        /// </summary>
+        public const string WardName = "Ward_Name";
+
+        /// <summary>
         ///  English name of property SpecialityID
         /// </summary>
         public const string SpecialityID = "Speciality_ID";
@@ -284,6 +304,11 @@ namespace HospitalF.Constant
         /// Vietnamese message request for District
         /// </summary>
         public const string RequireDistrict = "-- Xin chọn quận / huyện --";
+
+        /// <summary>
+        /// Vietnamese message request for Ward
+        /// </summary>
+        public const string RequireWard = "-- Xin chọn phường / xã --";
 
         /// <summary>
         /// Vietnamese message request for Speciality
