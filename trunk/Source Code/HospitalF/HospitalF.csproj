@@ -208,7 +208,6 @@
     <Compile Include="Models\HomeModels.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\HospitalModel.cs" />
-    <Compile Include="Models\HospitalModels.cs" />
     <Compile Include="Models\LinqDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
