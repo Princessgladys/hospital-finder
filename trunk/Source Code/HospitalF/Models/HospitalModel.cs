@@ -88,6 +88,16 @@ namespace HospitalF.Models
         public string PhoneNo { get; set; }
 
         /// <summary>
+        /// Get/Set value for property PhoneNo2
+        /// </summary>
+        public string PhoneNo2 { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property PhoneNo3
+        /// </summary>
+        public string PhoneNo3 { get; set; }
+
+        /// <summary>
         /// Get/Set value for property Fax
         /// </summary>
         public string Fax { get; set; }

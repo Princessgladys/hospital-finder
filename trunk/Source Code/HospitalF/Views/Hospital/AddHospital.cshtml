@@ -75,14 +75,14 @@
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
-                                            @Html.TextBoxFor(m => m.OrdinaryStartTime, new { @placeholder = "Giờ làm ngày thường", @id = "OrdinaryTime" })
+                                            @Html.TextBoxFor(m => m.OrdinaryStartTime, new { @placeholder = "Giờ khám ngày thường", @id = "OrdinaryTime" })
                                         </label>
                                         <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
                                     </section>
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
-                                            @Html.TextBoxFor(m => m.OrdinaryEndTime, new { @placeholder = "Giờ làm ngày lễ", @id = "HolidayTime" })
+                                            @Html.TextBoxFor(m => m.HolidayStartTime, new { @placeholder = "Giờ khám ngày lễ và cuối tuần", @id = "HolidayTime" })
                                         </label>
                                         <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
                                     </section>
@@ -153,17 +153,22 @@
                             <fieldset>
                                 <legend>Thông tin liên lạc</legend>
                                 <div class="row">
-                                    <section class="col col-6">
+                                    <section class="col col-4">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Nhập số điện thoại" })
                                         </label>
-                                        <p class="note"><strong>Lưu ý:</strong> Các số điện thoại cách nhau bằng dấu ','</p>
                                     </section>
-                                    <section class="col col-6">
+                                    <section class="col col-4">
                                         <label class="input">
-                                            <i class="icon-prepend fa fa-globe"></i>
-                                            @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
+                                            <i class="icon-prepend fa fa-phone"></i>
+                                            @Html.TextBoxFor(m => m.PhoneNo2, new { @placeholder = "Số thay thế (nếu có)" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-4">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-phone"></i>
+                                            @Html.TextBoxFor(m => m.PhoneNo3, new { @placeholder = "Số di động (nếu có)" })
                                         </label>
                                     </section>
                                 </div>
@@ -177,14 +182,21 @@
                                     </section>
                                     <section class="col col-6">
                                         <label class="input">
+                                            <i class="icon-prepend fa fa-globe"></i>
+                                            @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="input">
                                             <i class="icon-prepend fa fa-fax"></i>
                                             @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax" })
                                         </label>
                                     </section>
                                 </div>
                             </fieldset>
-
-                            
                             
                             <footer>
                                 <button class="btn" type="reset">
@@ -207,6 +219,7 @@
         <!-- WIDGET END -->
     </div>
     <!-- end row -->
+
 </section>
 <!-- end widget grid -->
 
@@ -300,6 +313,23 @@
 
     @*Data validation*@
     $(document).ready(function () {
+        $.validator.addMethod("time", 
+            function (value, element) {
+                var regex = '@Constants.TimeInDayRegex';
+                var fullTime = value.split('-');
+                var startTime = fullTime[0].trim();
+                var endTime = fullTime[1].trim();
+
+                var startValue = parseInt(startTime.replace(':', ''), 10);
+                var endValue = parseInt(endTime.replace(':', ''), 10);
+
+                if (startValue < endValue) {
+                    return true;
+                }
+
+                return false;
+            }, "Thời gian không phù hợp");
+
         $('#add-hospital-form').validate({
             // Rules for form validation
             rules: {
@@ -329,6 +359,41 @@
                 },
                 WardID: {
                     required: true
+                },
+                PhoneNo: {
+                    required: true,
+                    minlength: 7,
+                    maxlength: 8,
+                    digits: true
+                },
+                PhoneNo2: {
+                    minlength: 7,
+                    maxlength: 8,
+                    digits: true
+                },
+                PhoneNo3: {
+                    minlength: 11,
+                    maxlength: 13,
+                    digits: true
+                },
+                Email: {
+                    email: true
+                },
+                Website: {
+                    url: true
+                },
+                Fax: {
+                    minlength: 8,
+                    maxlength: 16,
+                    digits: true
+                },
+                OrdinaryStartTime: {
+                    required: true,
+                    time: true
+                },
+                HolidayStartTime: {
+                    required: true,
+                    time: true
                 }
             },
 
@@ -336,18 +401,21 @@
             messages: {
                 HospitalName: {
                     required: '@string.Format(ErrorMessage.CEM001, Constants.HospitalName)',
-                    maxlength: '@string.Format(ErrorMessage.CEM002, Constants.HospitalName, 2, 64)'
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.HospitalName, 2)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.HospitalName, 64)'
                 },
                 HospitalTypeID: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.HospitalType)'
                 },
                 LocationAddress: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.LocationAddress)',
-                    maxlength: '@string.Format(ErrorMessage.CEM002, Constants.HospitalName, 1, 10)'
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.LocationAddress, 1)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.LocationAddress, 10)'
                 },
                 StreetAddress: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.StreetAddress)',
-                    maxlength: '@string.Format(ErrorMessage.CEM002, Constants.HospitalName, 2, 32)'
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.StreetAddress, 2)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.StreetAddress, 32)'
                 },
                 CityID: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.City)'
@@ -357,14 +425,47 @@
                 },
                 Ward: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.Ward)'
+                },
+                PhoneNo: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.PhoneNo)',
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.PhoneNo, 7)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.PhoneNo, 8)',
+                    digits: '@string.Format(ErrorMessage.CEM005, Constants.PhoneNo)'
+                },
+                PhoneNo2: {
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.AlternativePhone, 7)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.AlternativePhone, 8)',
+                    digits: '@string.Format(ErrorMessage.CEM005, Constants.AlternativePhone)'
+                },
+                PhoneNo3: {
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.MobilePhone, 11)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.MobilePhone, 13)',
+                    digits: '@string.Format(ErrorMessage.CEM005, Constants.MobilePhone)'
+                },
+                Email: {
+                    email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
+                },
+                Website: {
+                    url: '@string.Format(ErrorMessage.CEM005, Constants.Website)'
+                },
+                Fax: {
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.Fax, 8)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.Fax, 16)',
+                    digits: '@string.Format(ErrorMessage.CEM005, Constants.Fax)'
+                },
+                OrdinaryStartTime: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.OrdinaryTime)'
+                },
+                HolidayStartTime: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.HolidayTime)'
                 }
             },
 
-        // Do not change code below
-        errorPlacement: function (error, element) {
-            error.insertAfter(element.parent());
-        }
-    });
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
     });
 
 </script>
