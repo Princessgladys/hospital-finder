@@ -35,45 +35,61 @@ namespace HospitalF.Controllers
         [HttpPost]
         public ActionResult Login(string email, string password)
         {
-            // Check if an account is valid or not
-            bool checkLogin = AccountModels.CheckLogin(email, password);
-            
-            if (checkLogin)
+            try
             {
-                // Check if user is Administrator
-                if (SimpleSessionPersister.Role.Equals(Constants.AdministratorRoleName))
+                // Check if an account is valid or not
+                bool checkLogin = AccountModels.CheckLogin(email, password);
+
+                if (checkLogin)
                 {
-                    return RedirectToAction(Constants.InitialHospitalListAction, Constants.HospitalController);
-                }
+                    // Check if user is Administrator
+                    if (SimpleSessionPersister.Role.Equals(Constants.AdministratorRoleName))
+                    {
+                        return RedirectToAction(Constants.InitialHospitalListAction, Constants.HospitalController);
+                    }
 
-                // Check if user is Hospital User
-                if (SimpleSessionPersister.Role.Equals(Constants.HospitalUserRoleName))
+                    // Check if user is Hospital User
+                    if (SimpleSessionPersister.Role.Equals(Constants.HospitalUserRoleName))
+                    {
+
+                    }
+
+                    // Redirect to Login page as default
+                    return RedirectToAction(Constants.LoginAction, Constants.AccountController);
+                }
+                else
                 {
-
+                    TempData["ErrorMesage"] = "Sai thông tin đăng nhập";
+                    return RedirectToAction(Constants.IndexAction, Constants.AccountController);
                 }
-
-                // Redirect to Login page as default
-                return RedirectToAction(Constants.LoginAction, Constants.AccountController);
             }
-            else
+            catch (Exception exception)
             {
-                TempData["ErrorMesage"] = "Sai thông tin đăng nhập";
-                return RedirectToAction(Constants.IndexAction, Constants.AccountController);
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
 
         [HttpGet]
         public ActionResult FacebookLogin(string token)
         {
-            WebClient client = new WebClient();
-            string jsonResult = client.DownloadString(string.Concat("https://graph.facebook.com/me?access_token=", token));
-            // Json.Net is really helpful if you have to deal
-            // with Json from .Net http://json.codeplex.com/
-            JObject jsonUserInfo = JObject.Parse(jsonResult);
+            try
+            {
+                WebClient client = new WebClient();
+                string jsonResult = client.DownloadString(string.Concat("https://graph.facebook.com/me?access_token=", token));
+                // Json.Net is really helpful if you have to deal
+                // with Json from .Net http://json.codeplex.com/
+                JObject jsonUserInfo = JObject.Parse(jsonResult);
 
-            bool checkFacebookLogin = AccountModels.CheckFacebookLogin(jsonUserInfo);
+                bool checkFacebookLogin = AccountModels.CheckFacebookLogin(jsonUserInfo);
 
-            return RedirectToAction(Constants.IndexAction, Constants.HomeController);
+                return RedirectToAction(Constants.IndexAction, Constants.HomeController);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
         }
 
         [HttpGet]
@@ -95,8 +111,9 @@ namespace HospitalF.Controllers
                 Response.Cookies.Add(cookie2);
                 return RedirectToAction(Constants.LoginAction, Constants.AccountController);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                LoggingUtil.LogException(exception);
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
