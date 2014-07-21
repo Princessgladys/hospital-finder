@@ -157,7 +157,7 @@
                             if (Model.Count != 0)
                             {
                                     @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
-                                                                ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                                        ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
                             }
                         }
                     </div>
@@ -228,29 +228,27 @@
             } else {
                 confirmMessage = "Bạn có muốn kích hoạt [" + hospitalName + "] hay không?"
             }
-            var result = "";
 
             if (confirm(confirmMessage)) {
                 $.ajax({
                     cache: false,
                     type: "GET",
                     url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
-                    data: { "hospitalId": hospitalId },
+                    data: {
+                        "hospitalId": hospitalId
+                    },
                     success: function (data) {
-                        row.css("background-color", "#275b89");
-                        row.fadeOut(400, function () {
-                            row.remove();
-                        });
+                        alert(data);
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        notif({
-                            msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
-                            type: "error",
-                            width: 600,
-                            position: "center",
-                            fade: true,
-                            multiline: true
-                        });
+                        //notif({
+                        //    msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
+                        //    type: "error",
+                        //    width: 600,
+                        //    position: "center",
+                        //    fade: true,
+                        //    multiline: true
+                        //});
                         statesProgress.hide();
                     }
                 });
@@ -258,25 +256,30 @@
                 return false;
             }
 
-            if (status == "True") {
-                notif({
-                    msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
-                    type: "success",
-                    width: 600,
-                    position: "center",
-                    fade: true,
-                    multiline: true
-                });
-            } else {
-                notif({
-                    msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
-                    type: "success",
-                    width: 600,
-                    position: "center",
-                    fade: true,
-                    multiline: true
-                });
-            }
+            //if (status == "True") {
+            //    notif({
+            //        msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
+            //        type: "success",
+            //        width: 600,
+            //        position: "center",
+            //        fade: true,
+            //        multiline: true
+            //    });
+            //} else {
+            //    notif({
+            //        msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
+            //        type: "success",
+            //        width: 600,
+            //        position: "center",
+            //        fade: true,
+            //        multiline: true
+            //    });
+            //}
+
+            row.css("background-color", "#275b89");
+            row.fadeOut(400, function () {
+                row.remove();
+            });
         });
     });
 
