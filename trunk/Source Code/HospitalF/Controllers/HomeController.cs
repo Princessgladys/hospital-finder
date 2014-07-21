@@ -45,7 +45,7 @@ namespace HospitalF.Controllers
                                   select new
                                   {
                                       id = d.District_ID,
-                                      name = d.District_Name
+                                      name = d.Type + Constants.WhiteSpace + d.District_Name
                                   });
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
