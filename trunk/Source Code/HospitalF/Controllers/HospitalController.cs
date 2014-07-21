@@ -310,21 +310,52 @@ namespace HospitalF.Controllers
         [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> AddHospital()
         {
-            // Load list of cities
-            cityList = await LocationUtil.LoadCityAsync();
-            ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+            try
+            {
+                // Load list of cities
+                cityList = await LocationUtil.LoadCityAsync();
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
 
-            // Load list of districts
-            districtList = new List<District>();
-            ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+                // Load list of districts
+                districtList = new List<District>();
+                ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
 
-            // Load list of districts
-            wardList = new List<Ward>();
-            ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
+                // Load list of districts
+                wardList = new List<Ward>();
+                ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
 
-            // Load list of hospital types
-            hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
-            ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                // Load list of hospital types
+                hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+
+            return View();
+        }
+
+        /// <summary>
+        /// POST: /Hospital/AddHospital
+        /// </summary>
+        /// <param name="model">Hospital Model</param>
+        /// <returns>Task[ActionResult]</returns>
+        [HttpPost]
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> AddHospital(HospitalModel model)
+        {
+            try
+            {
+
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
 
             return View();
         }

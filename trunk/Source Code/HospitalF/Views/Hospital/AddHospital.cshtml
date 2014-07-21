@@ -27,13 +27,10 @@
 
 <!-- widget grid -->
 <section id="widget-grid" class="">
-
     <!-- row -->
     <div class="row">
-
         <!-- NEW WIDGET START -->
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
-
             <!-- Widget ID (each widget will need unique ID)-->
             <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
                  data-widget-colorbutton="false"
@@ -44,38 +41,70 @@
                  data-widget-custombutton="false"
                  data-widget-collapsed="false"
                  data-widget-sortable="false">
-
                 <header>
                     <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
                     <h2>Thông tin bệnh viện</h2>
                 </header>
-
                 <!-- widget div-->
                 <div>
-
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
-
                         @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Get, new { @class = "smart-form", @id = "add-hospital-form" }))
                         {
-                            <legend>Thông tin căn bản</legend>
                             <fieldset>
-								<div class="row">
-									<section class="col col-6">
-										<label class="input"> <i class="icon-prepend fa fa-home"></i>
+                                <legend>Thông tin căn bản</legend>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-home"></i>
                                             @Html.TextBoxFor(m => m.HospitalName, new { @placeholder = "Nhập tên bệnh viện" })
-										</label>
-									</section>
-									<section class="col col-6">
-                                        <label class="select"> <i></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="select">
+                                            <i></i>
                                             @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.HospitalTypeList,
                                                 Constants.RequireHospitalType, new { @class = "form-control" })
                                             @Html.TextBoxFor(m => m.HospitalTypeName, new { @type = "hidden" })
-                                        </label>    
-									</section>
-								</div>
+                                        </label>
+                                    </section>
+                                </div>
 
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-clock-o"></i>
+                                            @Html.TextBoxFor(m => m.OrdinaryStartTime, new { @placeholder = "Giờ làm ngày thường", @id = "OrdinaryTime" })
+                                        </label>
+                                        <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-clock-o"></i>
+                                            @Html.TextBoxFor(m => m.OrdinaryEndTime, new { @placeholder = "Giờ làm ngày lễ", @id = "HolidayTime" })
+                                        </label>
+                                        <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
+                                    </section>
+                                </div>
+
+                                <section>
+                                    <div class="inline-group">
+                                        <label class="radio">
+                                            @Html.TextBoxFor(m => m.IsAllowAppointment, new { @type = "radio", @name = "radio-inline", @checked = "checked" })
+                                            <i></i>Cho phép đăng ký khám trực tuyến
+                                        </label>
+                                        <label class="radio">
+                                            @Html.TextBoxFor(m => m.IsAllowAppointment, new { @type = "radio", @name = "radio-inline" })
+                                            <i></i>Không có dịch vụ đăng ký khám trực tuyến
+                                        </label>
+                                    </div>
+                                </section>
+
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Địa chỉ</legend>
                                 <div class="row">
                                     <section class="col col-6">
                                         <label class="input">
@@ -90,22 +119,23 @@
                                         </label>
                                     </section>
                                 </div>
-                             
-								<div class="row">
-									<section class="col col-4">
-                                        <label class="select"> <i></i>
+                                <div class="row">
+                                    <section class="col col-4">
+                                        <label class="select">
+                                            <i></i>
                                             @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
                                                 Constants.RequireCity, new { @class = "form-control" })
                                             @Html.TextBoxFor(m => m.CityName, new { @type = "hidden" })
                                         </label>
-									</section>
-									<section class="col col-4">
-                                        <label class="select"> <i></i>
+                                    </section>
+                                    <section class="col col-4">
+                                        <label class="select">
+                                            <i></i>
                                             @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
                                                 Constants.RequireDistrict, new { @class = "form-control" })
                                             @Html.TextBoxFor(m => m.DistrictName, new { @type = "hidden" })
                                         </label>
-									</section>
+                                    </section>
                                     <section class="col col-4">
                                         <label class="select">
                                             <i></i>
@@ -114,41 +144,87 @@
                                             @Html.TextBoxFor(m => m.WardName, new { @type = "hidden" })
                                         </label>
                                     </section>
-								</div>
-							</fieldset>
-                        }
+                                </div>
+                                @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
+                            </fieldset>
 
+                            <fieldset>
+                                <legend>Thông tin liên lạc</legend>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-phone"></i>
+                                            @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Nhập số điện thoại" })
+                                        </label>
+                                        <p class="note"><strong>Lưu ý:</strong> Các số điện thoại cách nhau bằng dấu ','</p>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-globe"></i>
+                                            @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-envelope"></i>
+                                            @Html.TextBoxFor(m => m.Email, new { @placeholder = "Nhập địa chỉ hộp thư điện tử" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-fax"></i>
+                                            @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax" })
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            
+                            <div class="form-actions">
+								<div class="row">
+									<div class="col-md-12">
+										<button class="btn btn-default" type="submit">
+											Cancel
+										</button>
+										<button class="btn btn-primary" type="submit">
+											<i class="fa fa-save"></i>
+											Submit
+										</button>
+									</div>
+								</div>
+							</div>
+                        }
                     </div>
                     <!-- end widget content -->
-
                 </div>
                 <!-- end widget div -->
-
             </div>
             <!-- end widget -->
-
-
         </article>
         <!-- WIDGET END -->
-
     </div>
     <!-- end row -->
-
-
 </section>
 <!-- end widget grid -->
 
 <script type="text/javascript">
 
-    @*Take text value of hospital type drop down list*@
     $(document).ready(function () {
+        @*Format textbox data*@
+        $(function ($) {
+            $('#OrdinaryTime').mask('99:99 - 99:99', { placeholder: "x" });
+            $('#HolidayTime').mask('99:99 - 99:99', { placeholder: "x" });
+        });
+
+        @*Take text value of hospital type drop down list*@
         $("#HospitalTypeID").change(function () {
             $('#HospitalTypeName').val($("#HospitalTypeID option:selected").text());
         });
-    });
 
-    @*AJAX for cascading District drop down list*@
-    $(document).ready(function () {
+
+        @*AJAX for cascading District drop down list*@
         $("#CityID").change(function () {
             $('#CityName').val($("#CityID option:selected").text());
             var selectedItem = $(this).val();
@@ -193,10 +269,8 @@
                 }
             });
         });
-    });
 
-    @*AJAX for cascading Ward drop down list*@
-    $(document).ready(function () {
+        @*AJAX for cascading Ward drop down list*@
         $("#DistrictID").change(function () {
             var selectedItem = $(this).val();
             var ddlWard = $("#WardID");
