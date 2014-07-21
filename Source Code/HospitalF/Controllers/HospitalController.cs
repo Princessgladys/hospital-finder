@@ -19,6 +19,7 @@ namespace HospitalF.Controllers
         public static List<City> cityList = null;
         public static List<HospitalType> hospitalTypeList = null;
         public static List<District> districtList = null;
+        public static List<Ward> wardList = null;
 
         #region AnhDTH
 
@@ -151,6 +152,42 @@ namespace HospitalF.Controllers
         }
 
         /// <summary>
+        /// GET: /Hospital/GetWardByDistritct
+        /// </summary>
+        /// <param name="districtId">District ID</param>
+        /// <returns>Task[ActionResult] with JSON contains list of Wards</returns>
+        public async Task<ActionResult> GetWardByDistritct(string districtId)
+        {
+            try
+            {
+                int tempDistrictId = 0;
+                // Check if city ID is null or not
+                if (!String.IsNullOrEmpty(districtId) && Int32.TryParse(districtId, out tempDistrictId))
+                {
+                    wardList = await LocationUtil.LoadWardInDistrictAsync(tempDistrictId);
+                    var result = (from w in wardList
+                                  select new
+                                  {
+                                      id = w.Ward_ID,
+                                      name = w.Ward_Name
+                                  });
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    // Return default value
+                    wardList = new List<Ward>();
+                    return Json(wardList, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
         /// GET: /Hospital/ChangeHospitalStatus
         /// </summary>
         /// <param name="hospitalId">Hosptal ID</param>
@@ -223,7 +260,6 @@ namespace HospitalF.Controllers
         {
             try
             {
-
                 // Cacading again drop down list
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
@@ -270,6 +306,22 @@ namespace HospitalF.Controllers
         [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> AddHospital()
         {
+            // Load list of cities
+            cityList = await LocationUtil.LoadCityAsync();
+            ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+
+            // Load list of districts
+            districtList = new List<District>();
+            ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+
+            // Load list of districts
+            wardList = new List<Ward>();
+            ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
+
+            // Load list of hospital types
+            hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
+            ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+
             return View();
         }
 

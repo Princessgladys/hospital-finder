@@ -48,11 +48,11 @@
     <div class="well">
         <div class="input-group">
             @Html.TextBox("HospitalName", null, new
-                             {
-                                 @placeholder = "Tìm kiếm tên bệnh viện",
-                                 @class = "form-control",
-                                 @id = "hospital-name-search"
-                             })
+            {
+                @placeholder = "Tìm kiếm tên bệnh viện",
+                @class = "form-control",
+                @id = "hospital-name-search"
+            })
             <div class="input-group-btn">
                 <button class="btn btn-default btn-primary" type="submit"
                         value="@Constants.NormalSearchForm" name="@Constants.Button"
@@ -62,105 +62,106 @@
             </div>
         </div>
     </div>
-
-    <!-- widget grid -->
-    <section id="widget-grid" class="">
-        <!-- row -->
-        <div class="row">
-            <!-- NEW WIDGET START -->
-            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <!-- Widget ID (each widget will need unique ID)-->
-                <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
-                     data-widget-colorbutton="false"
-                     data-widget-editbutton="false"
-                     data-widget-togglebutton="false"
-                     data-widget-deletebutton="false"
-                     data-widget-fullscreenbutton="false"
-                     data-widget-custombutton="false"
-                     data-widget-collapsed="false"
-                     data-widget-sortable="false">
-
-                    <header>
-                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Danh sách</h2>
-                    </header>
-                    <!-- widget div-->
-                    <div>
-                        <!-- widget edit box -->
-                        <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-                        </div>
-                        <!-- end widget edit box -->
-                        <!-- widget content -->
-                        <div class="widget-body">
-                            <p>Chọn thông tin phụ hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> bệnh viện trong hệ thống</p>
-                            <div class="table-responsive">
-                                <table class="table table-bordered tablesorter" id="hospital-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Tên bệnh viện</th>
-                                            <th>Địa chỉ</th>
-                                            <th>Loại</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{
-    if (Model.Count == 0)
-    {
-            <tr>
-                <td colspan="5">Không có dữ liệu</td>
-            </tr>
-    }
-    else
-    {
-        foreach (var hospital in Model)
-        {
-            <tr>
-                <td hidden>@hospital.Hospital_ID</td>
-                <td hidden>@hospital.Hospital_Name</td>
-                <td hidden>@hospital.Is_Active</td>
-                <td>
-                    @Html.ActionLink(@hospital.Hospital_Name,
-                                                                "HospitalDetail", Constants.HospitalController,
-                                                                new { id = @hospital.Hospital_ID }, null)
-                </td>
-                <td>@hospital.Address</td>
-                <td>@hospital.Type_Name</td>
-                <td>@(@hospital.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
-                <td>
-                    <a href="" class="btn btn-sm btn-success btn-next">
-                        @(hospital.Is_Active.Value ? "Ngừng" : "Kích hoạt")
-                    </a>
-                </td>
-            </tr>
-        }
-    }
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            @{
-    if (Model.Count != 0)
-    {
-            @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
-                                        ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
-    }
-                            }
-                        </div>
-                        <!-- end widget content -->
-                    </div>
-                    <!-- end widget div -->
-                </div>
-
-                <!-- end widget -->
-            </article>
-            <!-- WIDGET END -->
-        </div>
-    </section>
-    <!-- end widget grid -->
 }
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                    data-widget-colorbutton="false"
+                    data-widget-editbutton="false"
+                    data-widget-togglebutton="false"
+                    data-widget-deletebutton="false"
+                    data-widget-fullscreenbutton="false"
+                    data-widget-custombutton="false"
+                    data-widget-collapsed="false"
+                    data-widget-sortable="false">
+
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                    <h2>Danh sách</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <p>Chọn thông tin phụ hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> bệnh viện trong hệ thống</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered tablesorter" id="hospital-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên bệnh viện</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Loại</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        if (Model.Count == 0)
+                                        {
+                                                <tr>
+                                                    <td colspan="5">Không có dữ liệu</td>
+                                                </tr>
+                                        }
+                                        else
+                                        {
+                                            foreach (var hospital in Model)
+                                            {
+                                                <tr>
+                                                    <td hidden>@hospital.Hospital_ID</td>
+                                                    <td hidden>@hospital.Hospital_Name</td>
+                                                    <td hidden>@hospital.Is_Active</td>
+                                                    <td>
+                                                        @Html.ActionLink(@hospital.Hospital_Name,
+                                                            "HospitalDetail", Constants.HospitalController,
+                                                            new { id = @hospital.Hospital_ID }, null)
+                                                    </td>
+                                                    <td>@hospital.Address</td>
+                                                    <td>@hospital.Type_Name</td>
+                                                    <td>@(@hospital.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
+                                                    <td>
+                                                        <a href="" class="btn btn-sm btn-success btn-next">
+                                                            @(hospital.Is_Active.Value ? "Ngừng" : "Kích hoạt")
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @{
+                            if (Model.Count != 0)
+                            {
+                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
+                                                                ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                            }
+                        }
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+</section>
+<!-- end widget grid -->
+
 
 <script type="text/javascript">
 
@@ -217,7 +218,7 @@
                 confirmMessage = "Bạn có muốn kích hoạt [" + hospitalName + "] hay không?"
             }
             var result = "";
-            
+
             if (confirm(confirmMessage)) {
                 $.ajax({
                     cache: false,
@@ -235,6 +236,7 @@
                             msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
                             type: "error",
                             width: 600,
+                            position: "center",
                             fade: true,
                             multiline: true
                         });
@@ -250,6 +252,7 @@
                     msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
                     type: "success",
                     width: 600,
+                    position: "center",
                     fade: true,
                     multiline: true
                 });
@@ -258,37 +261,12 @@
                     msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
                     type: "success",
                     width: 600,
+                    position: "center",
                     fade: true,
                     multiline: true
                 });
             }
         });
     });
-
-    @*AJAX for cascading hospital list to table*@
-    @*$(document).ready(function () {
-        $("#CityID").change(function () {
-            var selectedItem = $(this).val();
-            var table = $("#hospital-table");
-            var statesProgress = $("#states-loading-district-progress");
-            statesProgress.show();
-            $.ajax({
-                cache: false,
-                type: "GET",
-                url: "@(Url.RouteUrl(Constants.DisplayHospitalListAction))",
-                data: { "cityId": selectedItem },
-                success: function (data) {
-                    ddlDistrict.html('');
-                    $.each(data, function (id, option) {
-                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
-                    });
-                    statesProgress.hide();
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    statesProgress.hide();
-                }
-            });
-        });
-    });*@
 
 </script>
