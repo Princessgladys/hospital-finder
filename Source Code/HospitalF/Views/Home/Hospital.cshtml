@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Hospital";
 }
+@using HospitalF.Constant;
 @using HospitalF.Entities;
 @{
     HospitalEntity hospital = (HospitalEntity)ViewBag.HospitalEntity;
@@ -10,27 +11,34 @@
     <div class="col-md-12">
         <div class="pull-left">
             <h1 class="txt-color-blue"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;@(hospital.Hospital_Name)</h1>
-            <address>
-                <strong>Địa chỉ</strong>: @(hospital.Address) <i class="fa fa-location-arrow"></i>
-                <br />
-                <strong>Điện thoại</strong>: @(hospital.Phone_Number) <i class="fa fa-mobile"></i>
-                <br />
-                <strong>Website</strong>: <a href="http://@(hospital.Website)" target="_blank" class="text-success">@(hospital.Website) </a><i class="fa fa-caret-down"></i>
-            </address>
+            <hr />
+            <div class="contact-info">
+                <address>
+                    <strong>Địa chỉ</strong>: @(hospital.Address) <i class="fa fa-location-arrow"></i>
+                    <br />
+                    <strong>Điện thoại</strong>: @(hospital.Phone_Number) <i class="fa fa-mobile"></i>
+                    <br />
+                    <strong>Website</strong>: <a href="http://@(hospital.Website)" target="_blank" class="text-success">@(hospital.Website) </a><i class="fa fa-caret-down"></i>
+                    <br />
+                    <strong>Email</strong>: <a href="#" class="text-success">@(hospital.Email) </a><i class="fa fa-envelope-o"></i>
+                    <br />
+                    <strong>Fax</strong>: <a href="#" class="text-success">@(hospital.Fax) </a><i class="fa fa-fax"></i>
+                </address>
+            </div>
         </div>
         <div class="pull-right">
             <div class="rate-info text-center">
                 <div class="display-inline">
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" checked="checked"/>
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled"/>
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" checked="checked" />
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
+                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
                 </div>
                 <p>Dựa trên <strong>69</strong> bình chọn</p>
             </div>
@@ -63,24 +71,22 @@
                         </p>
                     </section>
                     <section class="col-md-5">
-                        <div class="contact-info">
-                            <h5 class="txt-color-blue">Thông tin liên hệ</h5>
+                        <div class="image-info">
+                            <h5 class="txt-color-blue">Hình ảnh</h5>
                             <hr />
-                            <strong>Địa chỉ</strong>: @(hospital.Address) <i class="fa fa-location-arrow"></i>
-                            <br />
-                            <strong>Điện thoại</strong>: @(hospital.Phone_Number) <i class="fa fa-mobile"></i>
-                            <br />
-                            <strong>Website</strong>: <a href="http://@(hospital.Website)" target="_blank" class="text-success">@(hospital.Website) </a><i class="fa fa-caret-down"></i>
-                            <br />
-                            <strong>Email</strong>: <a href="#" class="text-success">@(hospital.Email) </a><i class="fa fa-envelope-o"></i>
-                            <br />
-                            <strong>Fax</strong>: <a href="#" class="text-success">@(hospital.Fax) </a><i class="fa fa-fax"></i>
+                            <strong>Chưa có gì hết.</strong>
                         </div>
                         <hr />
-                        <div id="map-canvas-hospital"></div>                       
+                        <div id="map-canvas-hospital"></div>
                     </section>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <hr />
+        <div class="fb-comments" data-href="@(Request.Url)" data-colorscheme="light"
+            data-numposts="10" data-width="100%">
         </div>
     </div>
 </div>

@@ -231,7 +231,7 @@
     <Content Include="Content\css\bg.gif" />
     <Content Include="Content\css\bootstrap.m.css" />
     <Content Include="Content\css\custom-home.css" />
-    <Content Include="Content\css\custom-hospital-user.css" />
+    <Content Include="Content\css\custom-hospital.css" />
     <Content Include="Content\css\custom-search-result.css" />
     <Content Include="Content\css\delete.gif" />
     <Content Include="Content\css\demo.css" />

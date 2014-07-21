@@ -164,6 +164,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string AddHospitalAction = "AddHospital";
 
+        /// <summary>
+        /// Name of HospitalAction in HomeController
+        /// </summary>
+        public const string HospitalAction = "Hospital";
+
         #endregion
 
         #region AccountModel
@@ -644,6 +649,13 @@ namespace HospitalF.Constant
             }
         }
 
+        #endregion
+
+        #region Others
+        /// <summary>
+        /// Value of HospitalF Facebook App_Id
+        /// </summary>
+        public const string FacebookAppId = "1403418919945133";
         #endregion
     }
 }
