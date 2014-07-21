@@ -78,6 +78,11 @@ namespace HospitalF.Models
         public int CityID { get; set; }
 
         /// <summary>
+        /// Get/Set value for property Email
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
         /// Get/Set value for property PhoneNo
         /// </summary>
         public string PhoneNo { get; set; }
