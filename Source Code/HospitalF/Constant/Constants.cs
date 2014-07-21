@@ -205,6 +205,11 @@ namespace HospitalF.Constant
         public const string District = "Quận / Huyện";
 
         /// <summary>
+        /// Vietnamese name of property Ward
+        /// </summary>
+        public const string Ward = "Phường / Xã";
+
+        /// <summary>
         ///  Vietnamese name of property CurrentLocation
         /// </summary>
         public const string CurrentLocation = "Địa điểm hiện tại";
@@ -220,9 +225,24 @@ namespace HospitalF.Constant
         public const string HospitalName = "Tên bệnh viện";
 
         /// <summary>
+        /// Vietnamese name of property HospitalType
+        /// </summary>
+        public const string HospitalType = "Loại bệnh viện";
+
+        /// <summary>
         /// Vietnamese name of property HospitalAddress
         /// </summary>
         public const string HospitalAddress = "Địa chỉ bệnh viện";
+
+        /// <summary>
+        /// Vietnamese name of property LocationAddress
+        /// </summary>
+        public const string LocationAddress = "Số địa chỉ";
+
+        /// <summary>
+        /// Vietnamese name of property StreetAddress
+        /// </summary>
+        public const string StreetAddress = "Tên đường";
 
         /// <summary>
         /// Vietnamese name of property Coordinate
