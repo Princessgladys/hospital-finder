@@ -349,7 +349,7 @@ namespace HospitalF.Controllers
         {
             try
             {
-
+                
             }
             catch (Exception exception)
             {

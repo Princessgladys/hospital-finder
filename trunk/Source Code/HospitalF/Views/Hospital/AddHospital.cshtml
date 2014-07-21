@@ -50,7 +50,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
-                        @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Get, new { @class = "smart-form", @id = "add-hospital-form" }))
+                        @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "add-hospital-form" }))
                         {
                             <fieldset>
                                 <legend>Thông tin căn bản</legend>
@@ -91,11 +91,13 @@
                                 <section>
                                     <div class="inline-group">
                                         <label class="radio">
-                                            @Html.TextBoxFor(m => m.IsAllowAppointment, new { @type = "radio", @name = "radio-inline", @checked = "checked" })
+                                            @Html.RadioButtonFor(m => m.IsAllowAppointment, true,
+                                                new { @type = "radio", @name = "radio-inline", @checked = "checked" })
                                             <i></i>Cho phép đăng ký khám trực tuyến
                                         </label>
                                         <label class="radio">
-                                            @Html.TextBoxFor(m => m.IsAllowAppointment, new { @type = "radio", @name = "radio-inline" })
+                                            @Html.RadioButtonFor(m => m.IsAllowAppointment, false,
+                                                new { @type = "radio", @name = "radio-inline" })
                                             <i></i>Không có dịch vụ đăng ký khám trực tuyến
                                         </label>
                                     </div>
@@ -181,20 +183,19 @@
                                     </section>
                                 </div>
                             </fieldset>
+
                             
-                            <div class="form-actions">
-								<div class="row">
-									<div class="col-md-12">
-										<button class="btn btn-default" type="submit">
-											Cancel
-										</button>
-										<button class="btn btn-primary" type="submit">
-											<i class="fa fa-save"></i>
-											Submit
-										</button>
-									</div>
-								</div>
-							</div>
+                            
+                            <footer>
+                                <button class="btn" type="reset">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Nhập lại
+                                </button>
+                                <button class="btn btn-primary" type="submit" id="confirm-button">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Xác nhận
+                                </button>
+                            </footer>
                         }
                     </div>
                     <!-- end widget content -->
@@ -295,6 +296,75 @@
                 }
             });
         });
+    });
+
+    @*Data validation*@
+    $(document).ready(function () {
+        $('#add-hospital-form').validate({
+            // Rules for form validation
+            rules: {
+                HospitalName: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 64
+                },
+                HospitalTypeID: {
+                    required: true
+                },
+                LocationAddress: {
+                    required: true,
+                    minlength: 1,
+                    maxlength: 10
+                },
+                StreetAddress: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 32
+                },
+                CityID: {
+                    required: true
+                },
+                DistrictID: {
+                    required: true
+                },
+                WardID: {
+                    required: true
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                HospitalName: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.HospitalName)',
+                    maxlength: '@string.Format(ErrorMessage.CEM002, Constants.HospitalName, 2, 64)'
+                },
+                HospitalTypeID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.HospitalType)'
+                },
+                LocationAddress: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.LocationAddress)',
+                    maxlength: '@string.Format(ErrorMessage.CEM002, Constants.HospitalName, 1, 10)'
+                },
+                StreetAddress: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.StreetAddress)',
+                    maxlength: '@string.Format(ErrorMessage.CEM002, Constants.HospitalName, 2, 32)'
+                },
+                CityID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.City)'
+                },
+                DistrictID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.District)'
+                },
+                Ward: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.Ward)'
+                }
+            },
+
+        // Do not change code below
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent());
+        }
+    });
     });
 
 </script>
