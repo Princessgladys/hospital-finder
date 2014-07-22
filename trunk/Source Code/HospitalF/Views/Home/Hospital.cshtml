@@ -29,16 +29,18 @@
         <div class="pull-right">
             <div class="rate-info text-center">
                 <div class="display-inline">
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" checked="checked" />
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
-                    <input name="star" type="radio" class="star {half:true}" disabled="disabled" />
+                    @for (int i = 1; i <= 10; i++)
+                    {
+                        double rate = Math.Ceiling((double)(hospital.Rating == null ? 0 : hospital.Rating) * 2);
+                        if (rate == i)
+                        {
+                        <input name="star-@(hospital.Hospital_ID)" type="radio" class="star {half:true}" checked="checked" disabled="disabled"/>
+                        }
+                        else
+                        {
+                        <input name="star-@(hospital.Hospital_ID)" type="radio" class="star {half:true}" disabled="disabled"/>
+                        }
+                    }
                 </div>
                 <p>Dựa trên <strong>69</strong> bình chọn</p>
             </div>
@@ -65,13 +67,18 @@
             <div class="tab-pane fade in active" id="s1">
                 <div class="row">
                     <section class="col-md-7">
-                        <h5 class="txt-color-blue">Giới thiệu về bệnh viện</h5>
-                        <p class="description">
-                            @(Html.Raw(hospital.Description))
-                        </p>
+                        <div>
+                            <h5 class="txt-color-blue">Giới thiệu về bệnh viện</h5>
+                            <p class="description">
+                                @(Html.Raw(hospital.Description))
+                            </p>
+                        </div>
                         <hr />
-                        <div class="contact-info">
+                        <div>
                             <h5 class="txt-color-blue">Đánh giá bệnh viện</h5>
+                            <p class="description">
+                                Mong bạn dành chút thời gian để giúp chúng tôi đánh giá bệnh viện này.
+                            </p>
                             <div class="display-inline">
                                 <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tạm Được" value="1" />
                                 <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Được" value="2"/>
