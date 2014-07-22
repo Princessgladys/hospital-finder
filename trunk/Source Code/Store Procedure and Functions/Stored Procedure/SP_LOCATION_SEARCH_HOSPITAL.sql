@@ -13,8 +13,7 @@ BEGIN
 	SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 		   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 		   h.Ordinary_End_Time, h.Short_Description, h.Full_Description, h.Holiday_End_Time,
-		   h.Is_Allow_Appointment, h.Is_Active, h.Coordinate, h.Holiday_Start_Time,
-		   [dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+		   h.Is_Allow_Appointment, h.Is_Active, h.Coordinate, h.Holiday_Start_Time, h.Rating
 	FROM Hospital h
 	WHERE h.Is_Active = 'True' AND
 		  [dbo].[FU_GET_DISTANCE] 
