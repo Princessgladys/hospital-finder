@@ -5,6 +5,8 @@
     ViewBag.Title = "Thêm mới bệnh viện";
 }
 
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
 <div class="row">
     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
         <h1 class="page-title txt-color-blueDark">
@@ -52,8 +54,6 @@
                     <div class="widget-body">
                         @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "add-hospital-form" }))
                         {
-                            
-                            
                             <fieldset>
                                 <legend>Thông tin căn bản</legend>
                                 <div class="row">
@@ -202,24 +202,44 @@
 
                             <fieldset>
                                 <legend>Thông tin chuyên môn</legend>
-                                <div class="form-group">
-                                    <label><strong>Danh sách chuyên ngành</strong></label>
-                                    @Html.DropDownListFor(m => m.SelectedSpecialities,
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Danh sách chuyên ngành</strong></label>
+                                        @Html.DropDownListFor(m => m.SelectedSpecialities,
                                         (SelectList)ViewBag.SpecialityList,
-                                        new { @class = "select2", @style = "width:100%", @multiple="multiple" })
-                                    <div class="note">
-                                        <strong>Chỉ dẫn:</strong> Danh sách chuyên ngành góp phần gia tăng việc tìm kiếm bệnh viện
+                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                        <div class="note">
+                                            <strong>Chỉ dẫn:</strong> Danh sách chuyên ngành góp phần gia tăng việc tìm kiếm bệnh viện
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Danh sách chuyên ngành</strong></label>
+                                        @Html.DropDownListFor(m => m.SelectedSpecialities,
+                                        (SelectList)ViewBag.SpecialityList,
+                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                        <div class="note">
+                                            <strong>Chỉ dẫn:</strong> Cung cấp danh sách các dịch vụ và cơ sở vật chất góp phần làm tăng độ tin cậy của bệnh viện
+                                        </div>
                                     </div>
                                 </div>
                             </fieldset>
-                            
-                            <fieldset></fieldset>
-                            
+
+                            <fieldset>
+                            </fieldset>
+
                             <footer>
                                 <button class="btn" type="reset">
                                     <i class="fa fa-save"></i>&nbsp;
                                     Nhập lại
                                 </button>
+                                <a href="/Hospital/EditHospitalDescription" class="btn btn-sm btn-success btn-next"
+                                   data-ajax="true" data-ajax-mode="replace" data-ajax-update="#partial-description"
+                                   name="edit-description">
+                                    Chỉnh sửa đặc tả bệnh viện
+                                </a>
                                 <button class="btn btn-primary" type="submit" id="confirm-button">
                                     <i class="fa fa-save"></i>&nbsp;
                                     Xác nhận
@@ -244,6 +264,15 @@
     pageSetUp();
 
     $(document).ready(function () {
+        $("#edit-description").change(function () {
+            if ($("#partial-description").is(":visible")) {
+                $("#partial-description").hide();
+            } else {
+                $("#partial-description").show();
+            }
+        });
+
+
         @*Format textbox data*@
         $(function ($) {
             $('#OrdinaryTime').mask('99:99 - 99:99', { placeholder: "x" });
@@ -331,7 +360,7 @@
 
     @*Data validation*@
     $(document).ready(function () {
-        $.validator.addMethod("time", 
+        $.validator.addMethod("time",
             function (value, element) {
                 var regex = '@Constants.TimeInDayRegex';
                 var fullTime = value.split('-');
@@ -487,3 +516,5 @@
     });
 
 </script>
+
+<div id="partial-description"></div>
