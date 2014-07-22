@@ -197,6 +197,12 @@
                                             @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax" })
                                         </label>
                                     </section>
+                                    @*<section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-male"></i>
+                                            @Html.TextBoxFor(m => m.CreatedPerson, new { @placeholder = "Nhập Email của người chịu trách nhiệm" })
+                                        </label>
+                                    </section>*@
                                 </div>
                             </fieldset>
 
@@ -213,12 +219,21 @@
                                         </div>
                                     </div>
                                 </div>
+                                <br />
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Danh sách dịch vụ</strong></label>
+                                        @Html.DropDownListFor(m => m.SelectedServices,
+                                            (SelectList)ViewBag.ServiceList,
+                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                    </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="form-group">
-                                        <label><strong>Danh sách chuyên ngành</strong></label>
-                                        @Html.DropDownListFor(m => m.SelectedSpecialities,
-                                        (SelectList)ViewBag.SpecialityList,
+                                        <label><strong>Danh sách cơ sở vậy chất</strong></label>
+                                        @Html.DropDownListFor(m => m.SelectedFacilities,
+                                            (SelectList)ViewBag.FacilityList,
                                         new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
                                         <div class="note">
                                             <strong>Chỉ dẫn:</strong> Cung cấp danh sách các dịch vụ và cơ sở vật chất góp phần làm tăng độ tin cậy của bệnh viện
@@ -272,6 +287,49 @@
             }
         });
 
+
+        @*Check if user email is existed in database*@
+        $("#CreatedPerson").change(function () {
+            var selectedItem = $(this).val();
+            var ddlDistrict = $("#DistrictID");
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetDistrictByCityAction))",
+                data: { "cityId": selectedItem },
+                success: function (data) {
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    statesProgress.hide();
+                    $('#DistrictName').val($("#DistrictID option:selected").text());
+
+                    selectedItem = $("#DistrictID").val();
+                    var ddlWard = $("#WardID");
+                    $.ajax({
+                        cache: false,
+                        type: "GET",
+                        url: "@(Url.RouteUrl(Constants.GetWardByDistrictAction))",
+                        data: { "districtId": selectedItem },
+                        success: function (data) {
+                            ddlWard.html('');
+                            $.each(data, function (id, option) {
+                                ddlWard.append($('<option></option>').val(option.id).html(option.name));
+                            });
+                            statesProgress.hide();
+                            $('#WardName').val($("#WardID option:selected").text());
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            statesProgress.hide();
+                        }
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
 
         @*Format textbox data*@
         $(function ($) {

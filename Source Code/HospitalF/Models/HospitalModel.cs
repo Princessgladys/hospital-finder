@@ -162,6 +162,15 @@ namespace HospitalF.Models
         /// </summary>
         public List<string> SelectedSpecialities { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property SelectedServices
+        /// </summary>
+        public List<string> SelectedServices { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property SelectedFacilities
+        /// </summary>
+        public List<string> SelectedFacilities { get; set; }
 
         public List<Speciality> SpecialityList { get; set; }
         public List<Service> ServiceList { get; set; }
@@ -253,6 +262,20 @@ namespace HospitalF.Models
                     data.SP_CHANGE_HOSPITAL_STATUS(hospitalId));
             }
 
+            return result;
+        }
+
+        public async Task<int> InsertHospitalAsync(HospitalModel model, string speciality, string service, string facility)
+        {
+            int result = 0;
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() => data.SP_INSERT_HOSPITAL(model.HospitalName, model.HospitalTypeID, model.FullAddress,
+                    model.CityID, model.DistrictID, model.WardID, model.PhoneNo, model.Fax, model.Email,
+                    model.Website, model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime, model.OrdinaryEndTime,
+                    model.Coordinate, model.IsAllowAppointment, 1, null, speciality, service, facility));
+            }
             return result;
         }
 

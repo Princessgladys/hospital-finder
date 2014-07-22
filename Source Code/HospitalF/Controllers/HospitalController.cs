@@ -21,6 +21,8 @@ namespace HospitalF.Controllers
         public static List<District> districtList = null;
         public static List<Ward> wardList = null;
         public static List<Speciality> specialityList = null;
+        public static List<Service> serviceList = null;
+        public static List<Facility> facilitiList = null;
 
         #region AnhDTH
 
@@ -211,6 +213,28 @@ namespace HospitalF.Controllers
             }
         }
 
+        /// <summary>
+        /// Check if an user have been existed in database
+        /// </summary>
+        /// <param name="email">Input email</param>
+        /// <returns>
+        /// Task[ActionResult] with JSON that contains the value of:
+        /// 1: Valid
+        /// 0: Invalid
+        /// </returns>
+        public async Task<ActionResult> CheckValidUser(string email)
+        {
+            try
+            {
+                return Json(1, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
         #endregion
 
         #region Display Hospital List
@@ -332,6 +356,14 @@ namespace HospitalF.Controllers
                 // Load list of specialities
                 specialityList = await SpecialityUtil.LoadSpecialityAsync();
                 ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+
+                // Load list of services
+                serviceList = await ServiceFacilityUtil.LoadServiceAsync();
+                ViewBag.ServiceList = new SelectList(serviceList, Constants.ServiceID, Constants.ServiceName);
+
+                // Load list of facilitites
+                facilitiList = await ServiceFacilityUtil.LoadFacilityAsync();
+                ViewBag.FacilityList = new SelectList(facilitiList, Constants.FacilityID, Constants.FacilityName);
             }
             catch (Exception exception)
             {
@@ -365,7 +397,68 @@ namespace HospitalF.Controllers
         {
             try
             {
-                
+                // Prepare data
+                int result = 0;
+                string address = string.Format("{0} {1} {2} {3} {4}",
+                    model.LocationAddress, model.StreetAddress, model.WardName,
+                    model.DistrictName, model.CityName);
+                model.FullAddress = address;
+
+                string phoneNumber = model.PhoneNo;
+                if (!string.IsNullOrEmpty(model.PhoneNo2))
+                {
+                    phoneNumber += Constants.Slash + model.PhoneNo2;
+                }
+                if (!string.IsNullOrEmpty(model.PhoneNo3))
+                {
+                    phoneNumber += Constants.Slash + model.PhoneNo3;
+                }
+                model.PhoneNo = phoneNumber;
+
+                string[] holidayTime =  model.HolidayStartTime.Split('-');
+                string holidayStartTime = holidayTime[0].Trim();
+                model.HolidayStartTime = holidayStartTime;
+                string holidayEndTime = holidayTime[1].Trim();
+                model.HolidayEndTime = holidayEndTime;
+
+                string[] OrdinaryTime = model.OrdinaryStartTime.Split('-');
+                string ordinaryStartTime = OrdinaryTime[0].Trim();
+                model.OrdinaryStartTime = ordinaryStartTime;
+                string ordinaryEndTime = OrdinaryTime[1].Trim();
+                model.OrdinaryEndTime = ordinaryEndTime;
+
+                string speciality = string.Empty;
+                foreach (string data in model.SelectedSpecialities)
+                {
+                    speciality += specialityList + Constants.Minus + data;
+                }
+
+                string service = string.Empty;
+                foreach (string data in model.SelectedServices)
+                {
+                    service += specialityList + Constants.Minus + data;
+                }
+
+                string facility = string.Empty;
+                foreach (string data in model.SelectedFacilities)
+                {
+                    facility += specialityList + Constants.Minus + data;
+                }
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.InsertHospitalAsync(model, speciality, service, facility);
+                }
+
+                if (result ==0)
+                {
+                    
+                }
+                else
+                {
+
+                }
             }
             catch (Exception exception)
             {
@@ -373,7 +466,7 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
 
-            return View();
+            return View(new HospitalModel());
         }
 
         #endregion
