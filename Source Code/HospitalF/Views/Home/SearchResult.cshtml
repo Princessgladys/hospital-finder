@@ -102,7 +102,7 @@
                             {
                                 for (int i = 1; i <= 10; i++)
                                 {
-                                    double rate = Math.Ceiling((double)hospital.Rating * 2);
+                                    double rate = Math.Ceiling((double)(hospital.Rating == null ? 0 : hospital.Rating) * 2);
                                     if (rate == i)
                                     {
                                 <input name="star-@(hospital.Hospital_ID)" type="radio" class="star {half:true}" checked="checked" disabled="disabled"/>

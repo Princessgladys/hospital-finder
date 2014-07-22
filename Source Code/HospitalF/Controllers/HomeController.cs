@@ -350,6 +350,7 @@ namespace HospitalF.Controllers
                 bool check = HomeModels.IsValidRatingAction(email, id);
                 if (check)
                 {
+                    int userId = AccountModels.LoadUserIdByEmail(email);
                     return HomeModels.RateHospital(userId, id, score);
                 }
                 return false;

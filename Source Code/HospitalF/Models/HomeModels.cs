@@ -629,6 +629,7 @@ namespace HospitalF.Models
                                                      Holiday_End_Time = h.Holiday_End_Time,
                                                      Coordinate = h.Coordinate,
                                                      Description = h.Full_Description,
+                                                     Rating = h.Rating,
                                                      Is_Allow_Appointment = h.Is_Allow_Appointment,
                                                      Is_Active = h.Is_Active
                                                  }).SingleOrDefault());

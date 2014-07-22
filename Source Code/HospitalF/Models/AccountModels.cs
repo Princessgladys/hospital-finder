@@ -90,5 +90,16 @@ namespace HospitalF.Models
 
 
         }
+
+        public static int LoadUserIdByEmail(string email)
+        {
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                int userId = (from u in data.Users
+                              where u.Email.Equals(email)
+                              select u.User_ID).SingleOrDefault();
+                return userId;
+            }
+        }
     }
 }
