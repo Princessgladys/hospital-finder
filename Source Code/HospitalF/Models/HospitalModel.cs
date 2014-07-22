@@ -157,14 +157,20 @@ namespace HospitalF.Models
         /// </summary>
         public Boolean IsActive { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property SelectedSpecialities
+        /// </summary>
+        public List<string> SelectedSpecialities { get; set; }
+
+
+        public List<Speciality> SpecialityList { get; set; }
+        public List<Service> ServiceList { get; set; }
+        public List<Facility> FacilityList { get; set; }
         public string SpecialityName { get; set; }
         public int SpecialityID { get; set; }
         public string DoctorName { get; set; }
         public List<Doctor> DoctorList { get; set; }
-        public List<Speciality> SpecialityList { get; set; }
-        public List<Service> ServiceList { get; set; }
-        public List<Facility> FacilityList { get; set; }
-
+        
         #endregion
 
         #region Doctor Properties

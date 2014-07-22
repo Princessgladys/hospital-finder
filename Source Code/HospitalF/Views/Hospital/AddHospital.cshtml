@@ -52,6 +52,8 @@
                     <div class="widget-body">
                         @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "add-hospital-form" }))
                         {
+                            
+                            
                             <fieldset>
                                 <legend>Thông tin căn bản</legend>
                                 <div class="row">
@@ -197,6 +199,21 @@
                                     </section>
                                 </div>
                             </fieldset>
+
+                            <fieldset>
+                                <legend>Thông tin chuyên môn</legend>
+                                <div class="form-group">
+                                    <label><strong>Danh sách chuyên ngành</strong></label>
+                                    @Html.DropDownListFor(m => m.SelectedSpecialities,
+                                        (SelectList)ViewBag.SpecialityList,
+                                        new { @class = "select2", @style = "width:100%", @multiple="multiple" })
+                                    <div class="note">
+                                        <strong>Chỉ dẫn:</strong> Danh sách chuyên ngành góp phần gia tăng việc tìm kiếm bệnh viện
+                                    </div>
+                                </div>
+                            </fieldset>
+                            
+                            <fieldset></fieldset>
                             
                             <footer>
                                 <button class="btn" type="reset">
@@ -224,6 +241,7 @@
 <!-- end widget grid -->
 
 <script type="text/javascript">
+    pageSetUp();
 
     $(document).ready(function () {
         @*Format textbox data*@

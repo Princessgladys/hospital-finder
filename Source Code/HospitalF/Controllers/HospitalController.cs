@@ -20,6 +20,7 @@ namespace HospitalF.Controllers
         public static List<HospitalType> hospitalTypeList = null;
         public static List<District> districtList = null;
         public static List<Ward> wardList = null;
+        public static List<Speciality> specialityList = null;
 
         #region AnhDTH
 
@@ -327,6 +328,10 @@ namespace HospitalF.Controllers
                 // Load list of hospital types
                 hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+
+                // Load list of specialities
+                specialityList = await SpecialityUtil.LoadSpecialityAsync();
+                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
             }
             catch (Exception exception)
             {
