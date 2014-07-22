@@ -22,7 +22,7 @@ BEGIN
 			SET @Average_Score = [dbo].[FU_CALCULATE_AVERAGE_RATING] (@Hospital_ID)
 			
 			UPDATE Hospital
-			SET Score = @Average_Score
+			SET Rating = @Average_Score
 			WHERE Hospital_ID = @Hospital_ID
 			
 			COMMIT TRAN

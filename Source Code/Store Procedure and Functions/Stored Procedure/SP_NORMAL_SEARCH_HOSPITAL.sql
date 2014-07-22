@@ -90,7 +90,7 @@ BEGIN
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 			   h.OrDinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-			   [dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+			   h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'
@@ -117,7 +117,7 @@ BEGIN
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 			   h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-			   [dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+			   h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'
@@ -146,7 +146,7 @@ BEGIN
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 			   h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-			   [dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+			   h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'
@@ -199,7 +199,7 @@ BEGIN
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 			   h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-			   [dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+			   h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'
@@ -231,7 +231,7 @@ BEGIN
 				h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 				h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 				h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-				[dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+				h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'
@@ -267,7 +267,7 @@ BEGIN
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 			   h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-			   [dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+			   h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'
@@ -294,7 +294,7 @@ BEGIN
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 			   h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-			   [dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+			   h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'
@@ -323,7 +323,7 @@ BEGIN
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 			   h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-			   [dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+			   h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'
@@ -380,7 +380,7 @@ BEGIN
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 			   h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-			   [dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+			   h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'
@@ -411,7 +411,7 @@ BEGIN
 				h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 				h.Holiday_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
 				h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-				[dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating
+				h.Rating
 		FROM Hospital h, @HospitalList list
 		WHERE h.Hospital_ID = list.Hospital_ID AND
 			  h.Is_Active = 'True'

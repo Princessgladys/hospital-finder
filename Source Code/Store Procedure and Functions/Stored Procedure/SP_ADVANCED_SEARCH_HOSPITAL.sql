@@ -46,7 +46,7 @@ BEGIN
 						N'h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,' +
 						N'h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,' +
 						N'h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,' +
-						N'[dbo].[FU_CALCULATE_AVERAGE_RATING] (h.Hospital_ID) AS Rating'
+						N'h.Rating'
 
 	DECLARE @FromPhrase NVARCHAR(512) = NULL
 	SET @FromPhrase = N'FROM Hospital h'
