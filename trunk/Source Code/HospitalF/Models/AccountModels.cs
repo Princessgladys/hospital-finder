@@ -20,92 +20,75 @@ namespace HospitalF.Models
     {
         public static bool IsExistedUser(string email)
         {
-            try
+
+            using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                using (LinqDBDataContext data = new LinqDBDataContext())
+                User user = (from u in data.Users
+                             where u.Email.Equals(email.Trim())
+                             select u).SingleOrDefault();
+                if (user != null)
                 {
-                    User user = (from u in data.Users
-                                 where u.Email.Equals(email.Trim())
-                                 select u).SingleOrDefault();
-                    if (user != null)
-                    {
-                        return true;
-                    }
-                    return false;
+                    return true;
                 }
-            }
-            catch (Exception exception)
-            {
-                LoggingUtil.LogException(exception);
                 return false;
             }
+
         }
 
         public static bool CheckLogin(string email, string password)
         {
-            try
+
+            using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                using (LinqDBDataContext data = new LinqDBDataContext())
+                User user = (from u in data.Users
+                             where u.Email.Equals(email.Trim()) && u.Password.Equals(password)
+                             select u).SingleOrDefault();
+                if (user != null)
                 {
-                    User user = (from u in data.Users
-                                 where u.Email.Equals(email.Trim()) && u.Password.Equals(password)
-                                 select u).SingleOrDefault();
-                    if (user != null)
-                    {
-                        SimpleSessionPersister.Username = user.Email + Constants.Minus +
-                            user.Last_Name + " " + user.First_Name + Constants.Minus + user.User_ID;
-                        SimpleSessionPersister.Role = user.Role.Role_Name;
-                        return true;
-                    }
-                    return false;
+                    SimpleSessionPersister.Username = user.Email + Constants.Minus +
+                        user.Last_Name + " " + user.First_Name + Constants.Minus + user.User_ID;
+                    SimpleSessionPersister.Role = user.Role.Role_Name;
+                    return true;
                 }
-            }
-            catch (Exception exception)
-            {
-                LoggingUtil.LogException(exception);
                 return false;
             }
+
         }
 
         public static bool CheckFacebookLogin(JObject jsonUserInfo)
         {
-            try
-            {
-                string email = jsonUserInfo.Value<string>("email");
-                if (!IsExistedUser(email))
-                {
-                    string firstName = jsonUserInfo.Value<string>("first_name");
-                    string lastName = jsonUserInfo.Value<string>("last_name");
-                    using (TransactionScope ts = new TransactionScope())
-                    {
 
-                        using (LinqDBDataContext data = new LinqDBDataContext())
+            string email = jsonUserInfo.Value<string>("email");
+            if (!IsExistedUser(email))
+            {
+                string firstName = jsonUserInfo.Value<string>("first_name");
+                string lastName = jsonUserInfo.Value<string>("last_name");
+                using (TransactionScope ts = new TransactionScope())
+                {
+
+                    using (LinqDBDataContext data = new LinqDBDataContext())
+                    {
+                        User newUser = new User()
                         {
-                            User newUser = new User()
-                            {
-                                Email = email,
-                                First_Name = firstName,
-                                Last_Name = lastName,
-                                Role_ID = Constants.UserRoleId,
-                                Is_Active = true
-                            };
-                            data.Users.InsertOnSubmit(newUser);
-                            data.SubmitChanges();
-                            ts.Complete();
-                        }
+                            Email = email,
+                            First_Name = firstName,
+                            Last_Name = lastName,
+                            Role_ID = Constants.UserRoleId,
+                            Is_Active = true
+                        };
+                        data.Users.InsertOnSubmit(newUser);
+                        data.SubmitChanges();
+                        ts.Complete();
                     }
                 }
+            }
 
-                string fullName = jsonUserInfo.Value<string>("name");
-                SimpleSessionPersister.Username = email + ";" + fullName;
-                SimpleSessionPersister.Role = Constants.UserRoleName;
-                return true;
-            }
-            catch (Exception exception)
-            {
-                LoggingUtil.LogException(exception);
-                return false;
-            }
+            string fullName = jsonUserInfo.Value<string>("name");
+            SimpleSessionPersister.Username = email + Constants.Minus + fullName;
+            SimpleSessionPersister.Role = Constants.UserRoleName;
+            return true;
+
+
         }
     }
 }

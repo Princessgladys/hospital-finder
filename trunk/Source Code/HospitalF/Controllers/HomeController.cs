@@ -341,5 +341,24 @@ namespace HospitalF.Controllers
             }
             return View();
         }
+
+        public bool RateHospital(int id = 0, int score = 0)
+        {
+            try
+            {
+                string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+                bool check = HomeModels.IsValidRatingAction(email, id);
+                if (check)
+                {
+                    return HomeModels.RateHospital(userId, id, score);
+                }
+                return false;
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return false;
+            }
+        }
     }
 }

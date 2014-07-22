@@ -635,6 +635,31 @@ namespace HospitalF.Models
             }
             return hospital;
         }
+
+        public static bool IsValidRatingAction(string user, int hospitalId)
+        {
+            Rating rating = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                rating = (from r in data.Ratings
+                          where r.User.Email.Equals(user) && r.Hospital_ID == hospitalId
+                          select r).SingleOrDefault();
+                if (rating != null)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public static bool RateHospital(int userId, int hospitalId, int score)
+        {
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                data.SP_RATE_HOSPITAL(userId, hospitalId, score);
+                return true;
+            }
+        }
         #endregion
     }
 }

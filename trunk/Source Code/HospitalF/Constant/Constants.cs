@@ -169,6 +169,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string HospitalAction = "Hospital";
 
+        /// <summary>
+        /// Name of RateHospitalAction in HomeController
+        /// </summary>
+        public const string RateHospitalAction = "RateHospital";
+
         #endregion
 
         #region AccountModel
