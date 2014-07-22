@@ -95,6 +95,12 @@ namespace HospitalF.Constant
         public const string IndexAction = "Index";
 
         /// <summary>
+        /// Name of HospitalBasicInforUpdate action
+        /// </summary>
+        public const string HospitalBasicInforUpdateAction = "HospitalBasicInforUpdate";
+
+        /// <summary>
+        /// <summary>
         /// Name of SearchResultAction
         /// </summary>
         public const string SearchResultAction = "SearchResult";

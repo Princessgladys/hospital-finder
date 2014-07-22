@@ -53,7 +53,6 @@ namespace HospitalF
                             "hospital/searchdoctor/",
                             new { controller = "Hospital", action = "SearchDoctor" },
                             new[]{"HospitalF.Controllers"});
-
             routes.MapRoute("DisplayHospitalList",
                             "hospital/displayhospitallist/",
                             new { controller = "Hospital", action = "DisplayHospitalList" },
@@ -76,6 +75,10 @@ namespace HospitalF
                             new { controller = "Hospital", action = "GetWardByDistritct" },
                             new[] { "HospitalF.Controllers" }
             );
+            routes.MapRoute("HospitalBasicInforUpdate",
+                            "hospital/hospitalbasicinforupdate/",
+                            new { controller = "Hospital", action = "HospitalBasicInforUpdate" },
+                            new[] { "HospitalF.Controllers" });
         }
     }
 }

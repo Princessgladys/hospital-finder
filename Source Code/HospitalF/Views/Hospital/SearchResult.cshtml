@@ -7,7 +7,6 @@
 
     loadDataTableScripts();
     function loadDataTableScripts() {
-
         loadScript("../Content/js/plugin/datatables/jquery.dataTables-cust.min.js", dt_2);
 
         function dt_2() {
@@ -127,8 +126,8 @@
                                     <td style="width: 150px;">
                                         @Html.ActionLink(fullname, Constants.ViewDoctorDetailAction, Constants.HospitalController, new
                                    {
-                                       doctorID=@doctor.Doctor_ID
-                                   })</td>
+                                       id=@doctor.Doctor_ID
+                                   },null)</td>
                                     <td>@doctor.Degree</td>
                                     <td>@doctor.Experience</td>
                                     <td>

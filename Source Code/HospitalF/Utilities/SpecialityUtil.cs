@@ -13,6 +13,25 @@ namespace HospitalF.Utilities
     /// </summary>
     public class SpecialityUtil
     {
+        public static async Task<List<Speciality>> LoadSpecialityInDoctorSpeciality(int doctorID)
+        {
+            List<Speciality> list=new List<Speciality>();
+            List<SP_LOAD_SPECIALITY_IN_DOCTOR_SPECIALITYResult> result;
+            Speciality speciality=null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(()=>data.SP_LOAD_SPECIALITY_IN_DOCTOR_SPECIALITY(doctorID).ToList());
+                foreach (SP_LOAD_SPECIALITY_IN_DOCTOR_SPECIALITYResult re in result)
+                {
+                    speciality = new Speciality();
+                    speciality.Speciality_ID = re.Speciality_ID;
+                    speciality.Speciality_Name = re.Speciality_Name;
+                    list.Add(speciality);
+                }
+            }
+            return list;
+        }
+
         /// <summary>
         /// Load all speciality by hospital code
         /// </summary>

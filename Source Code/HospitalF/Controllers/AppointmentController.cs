@@ -111,7 +111,7 @@ namespace HospitalF.Controllers
                 // Check if city ID is null or not
                 if (!String.IsNullOrEmpty(specialityID) && Int32.TryParse(specialityID, out tempSpecialityID))
                 {
-                    doctorList = await HospitalUtil.LoadDoctorInDoctorSpecialityAsyn(tempSpecialityID);
+                    doctorList = await HospitalUtil.LoadDoctorInDoctorSpecialityAsyn(tempSpecialityID, hospitalID);
                     var result = (from d in doctorList
                                   select new
                                   {
