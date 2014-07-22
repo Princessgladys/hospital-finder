@@ -151,7 +151,7 @@ namespace HospitalF.Utilities
         /// </summary>
         /// <param name="SpecialityID"></param>
         /// <returns>List[DoctorEnity] that contains list of doctor with appropriate Speciality code</returns>
-        public static async Task<List<Doctor>> LoadDoctorInDoctorSpecialityAsyn(int SpecialityID)
+        public static async Task<List<Doctor>> LoadDoctorInDoctorSpecialityAsyn(int SpecialityID,int HospitalID)
         {
             List<Doctor> doctorList = new List<Doctor>();
             Doctor doctor = null;
@@ -160,7 +160,7 @@ namespace HospitalF.Utilities
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 result = await Task.Run(() =>
-                data.SP_LOAD_DOCTOR_BY_SPECIALITYID(SpecialityID).ToList());
+                data.SP_LOAD_DOCTOR_BY_SPECIALITYID(SpecialityID,HospitalID).ToList());
             }
             // Assign value for each doctor
             foreach (SP_LOAD_DOCTOR_BY_SPECIALITYIDResult r in result)

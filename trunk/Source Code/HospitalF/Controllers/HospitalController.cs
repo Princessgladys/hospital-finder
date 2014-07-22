@@ -20,29 +20,36 @@ namespace HospitalF.Controllers
         public static List<HospitalType> hospitalTypeList = null;
         public static List<District> districtList = null;
         public static List<Ward> wardList = null;
-        public static List<Speciality> specialityList = null;
         public static List<Service> serviceList = null;
         public static List<Facility> facilitiList = null;
 
         #region AnhDTH
 
         public static List<Doctor> doctorList = null;
-        //public static List<Speciality> specialityList = null;
-        //public static List<Service> serviceList = null;
-        //public static List<Facility> facilityList = null;
-        //public static List<HospitalType> typeList = null;
+        public static List<Speciality> specialityList = null;
+        public static List<Service> serviceList = null;
+        public static List<Facility> facilityList = null;
+        public static List<HospitalType> typeList = null;
         public static int hospitalID = 25;
         public Hospital hospital = null;
         public static HospitalModel model = null;
+        public static DoctorModels DoctorModel = null;
         //
         // GET: /Hospital/
         [LayoutInjecter(Constants.HospitalUserLayout)]
         public async Task<ActionResult> Index()
         {
             model = new HospitalModel();
-            List<HospitalType> typeList = await HospitalUtil.LoadTypeInHospitalTypeAsync(hospitalID);
             hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
-            model.HospitalID = hospitalID;
+typeList = await HospitalUtil.LoadTypeInHospitalTypeAsync(hospitalID);
+            string hospitalTypeName = model.LoadHospitalTypeInList((int)hospital.Hospital_Type, typeList);
+
+            //assign value for model attributes
+
+            ViewBag.TypeList = new SelectList(typeList, Constants.HospitalTypeID, Constants.HospitalTypeName, hospital.Hospital_Type);
+            ViewBag.HospitalTypeName = hospitalTypeName;
+            ViewBag.HospitalObject = hospital;
+model.HospitalID = hospitalID;
             model.HospitalName = hospital.Hospital_Name;
             model.FullAddress = hospital.Address;
             model.Website = hospital.Website;
@@ -51,14 +58,16 @@ namespace HospitalF.Controllers
             model.HospitalTypeName = model.LoadHospitalTypeInList((int)hospital.Hospital_Type, typeList);
             //load doctor of hospital
             //model.DoctorList = await HospitalUtil.LoadDoctorInDoctorHospitalAsync(hospitalID);
-            //load speciality of hospital
-            model.SpecialityList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
-            ViewBag.SpecialityList = new SelectList(model.SpecialityList, Constants.SpecialityID, Constants.SpecialityName);
+//load speciality of hospital
+            specialityList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
+            ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
             //load facility of hospital
-            model.FacilityList = await HospitalUtil.LoadFacilityInHospitalFacilityAsync(hospitalID);
+            facilityList = await HospitalUtil.LoadFacilityInHospitalFacilityAsync(hospitalID);
+            ViewBag.FacilityList = facilityList;
             //load service of hospital
-            model.ServiceList = await HospitalUtil.LoadServiceInHospitalServiceAsync(hospitalID);
-            return View(model);
+            serviceList = await HospitalUtil.LoadServiceInHospitalServiceAsync(hospitalID);
+            ViewBag.ServiceList = serviceList;
+            return View();
         }
         public async Task<ActionResult> SearchDoctor(string SpecialityID, string DoctorName, string HospitalID)
         {
@@ -87,22 +96,117 @@ namespace HospitalF.Controllers
         }
 
         [LayoutInjecter(Constants.HospitalUserLayout)]
-        public async Task<ActionResult> ViewDoctorDetail(string doctorID)
+        public async Task<ActionResult> ViewDoctorDetail(string id)
         {
             int tempDoctorID;
             Doctor doctor = null;
-            if (!string.IsNullOrEmpty(doctorID) && Int32.TryParse(doctorID, out tempDoctorID))
+            try
             {
-                using (LinqDBDataContext data = new LinqDBDataContext())
+                if (!string.IsNullOrEmpty(id) && Int32.TryParse(id, out tempDoctorID))
                 {
-                    doctor = await Task.Run(() => (
-                        from d in data.Doctors
-                        where d.Doctor_ID == tempDoctorID
-                        select d).FirstOrDefault());
-                    ViewBag.Doctor = doctor;
+                    using (LinqDBDataContext data = new LinqDBDataContext())
+                    {
+                        doctor = await Task.Run(() => (
+                            from d in data.Doctors
+                            where d.Doctor_ID == tempDoctorID
+                            select d).FirstOrDefault());
+                        ViewBag.Doctor = doctor;
+                        ViewBag.Photo = HospitalModel.LoadPhotoByPhotoID((int)doctor.Photo_ID);
+                        //get all speciality of doctor
+                        specialityList = specialityList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
+                        List<Speciality> selectList = await SpecialityUtil.LoadSpecialityInDoctorSpeciality(doctor.Doctor_ID);
+                        ViewBag.SpecialityList = specialityList;
+                        
+                        //get photo file path
+                        Photo photo = await Task.Run(() => (
+                            from p in data.Photos
+                            where p.Photo_ID == doctor.Photo_ID
+                            select p).SingleOrDefault());
+                        DoctorModel = new DoctorModels();
+                        DoctorModel.DoctorID = doctor.Doctor_ID;
+                        DoctorModel.FirstName = doctor.First_Name;
+                        DoctorModel.LastName = doctor.Last_Name;
+                        DoctorModel.Fullname = DoctorModel.LastName + " " + DoctorModel.FirstName;
+                        DoctorModel.Degree = doctor.Degree;
+                        DoctorModel.Experience = doctor.Experience;
+                        DoctorModel.Gender = doctor.Gender==true?1:0;
+                        DoctorModel.PhotoFilePath = photo.File_Path;
+                        DoctorModel.SpecialityList = selectList;
+                    }
                 }
+                return View(DoctorModel);
             }
-            return View();
+            catch (Exception ex)
+            {
+                LoggingUtil.LogException(ex);
+                return RedirectToAction(Constants.SystemFailureHospitalUserAction, Constants.SystemFailureHospitalUserAction);
+            }
+        }
+
+        /// <summary>
+        /// Get: [Hospital/HospitalBasicInforUpdate]
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="address"></param>
+        /// <param name="website"></param>
+        /// <param name="hospitalType"></param>
+        /// <param name="phoneNo"></param>
+        /// <param name="fax"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> HospitalBasicInforUpdate(string id, string name,string address,
+            string website,string hospitalType, string phoneNo,string fax)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return View();
+            //}
+            //else
+            //{
+                try
+                {
+                    using (LinqDBDataContext data = new LinqDBDataContext())
+                    {
+                        Hospital oldHospital = await Task.Run(() => (
+                            from h in data.Hospitals
+                            where h.Hospital_ID == Int32.Parse(id)
+                            select h).FirstOrDefault());
+                        if (!oldHospital.Hospital_Name.Equals(name))
+                        {
+                            oldHospital.Hospital_Name = name;
+                        }
+                        if (!oldHospital.Website.Equals(website))
+                        {
+                            oldHospital.Website = website;
+                        }
+                        if (oldHospital.Hospital_Type != Int32.Parse(hospitalType))
+                        {
+                            oldHospital.Hospital_Type = Int32.Parse(hospitalType);
+                        }
+                        if (!oldHospital.Phone_Number.Equals(phoneNo))
+                        {
+                            oldHospital.Phone_Number = phoneNo;
+                        }
+                        if (!oldHospital.Fax.Equals(fax))
+                        {
+                            oldHospital.Fax = fax;
+                        }
+                        if (!oldHospital.Address.Equals(address))
+                        {
+                            oldHospital.Address = address;
+                        }
+                        data.SubmitChanges();
+                        hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(Int32.Parse(id));
+                        return Json(hospital, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggingUtil.LogException(ex);
+                    return RedirectToAction(Constants.SystemFailureHospitalUserAction, Constants.ErrorController);
+                }
+            //}
         }
 
         #endregion
