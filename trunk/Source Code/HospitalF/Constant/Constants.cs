@@ -595,6 +595,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const char Enter = '\n';
 
+        /// <summary>
+        ///  Constant for '/' character
+        /// </summary>
+        public const string Slash = "/";
+
         #endregion
 
         #region Utilities
