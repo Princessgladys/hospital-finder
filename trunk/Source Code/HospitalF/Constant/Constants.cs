@@ -362,6 +362,11 @@ namespace HospitalF.Constant
         public const string RequireHospitalType = "-- Xin chọn loại bệnh viện --";
 
         /// <summary>
+        /// Vietnamese message to display all districts in a specific city
+        /// </summary>
+        public const string DisplayAllDistrict = "Tất cả các quận";
+
+        /// <summary>
         /// Default matching value
         /// </summary>
         public const int DefaultMatchingValue = 9999;

@@ -117,7 +117,7 @@
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="table-body">
                                     @{
                                         if (Model.Count == 0)
                                         {
@@ -153,13 +153,15 @@
                                 </tbody>
                             </table>
                         </div>
-                        @{
-                            if (Model.Count != 0)
-                            {
+                        <div id="paging">
+                            @{
+                                if (Model.Count != 0)
+                                {
                                     @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
                                         ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                                }
                             }
-                        }
+                        </div>
                     </div>
                     <!-- end widget content -->
                 </div>
@@ -207,7 +209,7 @@
         });
     });
 
-    //Update hospital status
+    @*Update hospital status*@
     $(document).ready(function () {
         $('#hospital-table .btn').on('click', function () {
             var row = $(this).closest('tr');
@@ -238,17 +240,39 @@
                         "hospitalId": hospitalId
                     },
                     success: function (data) {
-                        alert(data);
+                        if (data.value == 1) {
+                            if (status == "True") {
+                                notif({
+                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
+                                    type: "success",
+                                    width: 600,
+                                    position: "center",
+                                    fade: true,
+                                    multiline: true
+                                });
+                            } else {
+                                notif({
+                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
+                                    type: "success",
+                                    width: 600,
+                                    position: "center",
+                                    fade: true,
+                                    multiline: true
+                                });
+                            }
+                        } else {
+
+                        }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        //notif({
-                        //    msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
-                        //    type: "error",
-                        //    width: 600,
-                        //    position: "center",
-                        //    fade: true,
-                        //    multiline: true
-                        //});
+                        notif({
+                            msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
+                            type: "error",
+                            width: 600,
+                            position: "center",
+                            fade: true,
+                            multiline: true
+                        });
                         statesProgress.hide();
                     }
                 });
@@ -256,30 +280,18 @@
                 return false;
             }
 
-            //if (status == "True") {
-            //    notif({
-            //        msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
-            //        type: "success",
-            //        width: 600,
-            //        position: "center",
-            //        fade: true,
-            //        multiline: true
-            //    });
-            //} else {
-            //    notif({
-            //        msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
-            //        type: "success",
-            //        width: 600,
-            //        position: "center",
-            //        fade: true,
-            //        multiline: true
-            //    });
-            //}
+            var numOfVisibleRows = $('#table-body').children('tr').length;
+            if ((numOfVisibleRows - 1) == 0) {
+                row.replaceWith('<tr><td colspan="5">Không có dữ liệu</td></tr>');
+                $('#paging').hide();
+            } else {
+                row.css("background-color", "#275b89");
+                row.fadeOut(400, function () {
+                    row.remove();
+                });
+            }
 
-            row.css("background-color", "#275b89");
-            row.fadeOut(400, function () {
-                row.remove();
-            });
+            return false;
         });
     });
 

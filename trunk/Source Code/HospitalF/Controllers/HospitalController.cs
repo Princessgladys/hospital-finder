@@ -243,7 +243,7 @@ model.HospitalID = hospitalID;
                                   select new
                                   {
                                       id = 0,
-                                      name = "Tất cả các quận"
+                                      name = Constants.DisplayAllDistrict
                                   });
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -305,7 +305,7 @@ model.HospitalID = hospitalID;
             {
                 HospitalModel model = new HospitalModel();
                 int result = await model.ChangeHospitalStatusAsync(hospitalId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(new { value = result}, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
             {
