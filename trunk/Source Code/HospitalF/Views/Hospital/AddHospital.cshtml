@@ -232,8 +232,8 @@
                                 <div class="row">
                                     <div class="form-group">
                                         <label><strong>Danh sách cơ sở vậy chất</strong></label>
-                                        @Html.DropDownListFor(m => m.SelectedFacilities,
-                                            (SelectList)ViewBag.FacilityList,
+                                        @Html.DropDownGroupListFor(m => m.SelectedFacilities,
+                                            (IEnumerable<GroupedSelectListItem>) ViewBag.FacilityList,
                                         new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
                                         <div class="note">
                                             <strong>Chỉ dẫn:</strong> Cung cấp danh sách các dịch vụ và cơ sở vật chất góp phần làm tăng độ tin cậy của bệnh viện
@@ -417,7 +417,7 @@
     });
 
     @*Data validation*@
-    $(document).ready(function () {
+    @*$(document).ready(function () {
         $.validator.addMethod("time",
             function (value, element) {
                 var fullTime = value.split('-');
@@ -570,7 +570,7 @@
                 error.insertAfter(element.parent());
             }
         });
-    });
+    });*@
 
 </script>
 

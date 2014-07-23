@@ -21,7 +21,7 @@ namespace HospitalF.Controllers
         public static List<District> districtList = null;
         public static List<Ward> wardList = null;
         public static IEnumerable<GroupedSelectListItem> serviceList = null;
-        public static List<Facility> facilityList = null;
+        public static IEnumerable<GroupedSelectListItem> facilityList = null;
         public static List<Doctor> doctorList = null;
         public static List<Speciality> specialityList = null;
 
@@ -59,7 +59,7 @@ model.HospitalID = hospitalID;
             specialityList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
             ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
             //load facility of hospital
-            facilityList = await HospitalUtil.LoadFacilityInHospitalFacilityAsync(hospitalID);
+            List<Facility> facilityList = await HospitalUtil.LoadFacilityInHospitalFacilityAsync(hospitalID);
             ViewBag.FacilityList = facilityList;
             //load service of hospital
             List<Service> serviceList = await HospitalUtil.LoadServiceInHospitalServiceAsync(hospitalID);
@@ -465,7 +465,7 @@ model.HospitalID = hospitalID;
 
                 // Load list of facilitites
                 facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
-                ViewBag.FacilityList = new SelectList(facilityList, Constants.FacilityID, Constants.FacilityName);
+                ViewBag.FacilityList = facilityList;
             }
             catch (Exception exception)
             {
