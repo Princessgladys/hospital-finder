@@ -93,14 +93,14 @@ BEGIN
 								   ORDER BY Hospital_ID DESC)
 
 		SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
-							  FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, '-') TokenList)
+							  FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, '|') TokenList)
 
 		WHILE (@RowNumber <= @TotalToken)
 		BEGIN
 			SELECT @Token = (SELECT TokenList.Token
 							 FROM (SELECT ROW_NUMBER()
 								   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
-								   FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, ' ') TokenList) AS TokenList
+								   FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, '|') TokenList) AS TokenList
 							 WHERE RowNumber = @RowNumber)
 			INSERT INTO Hospital_Speciality
 			(
@@ -129,14 +129,14 @@ BEGIN
 		SET @TotalToken = 0;
 
 		SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
-							  FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, '-') TokenList)
+							  FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, '|') TokenList)
 
 		WHILE (@RowNumber <= @TotalToken)
 		BEGIN
 			SELECT @Token = (SELECT TokenList.Token
 							 FROM (SELECT ROW_NUMBER()
 								   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
-								   FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, ' ') TokenList) AS TokenList
+								   FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, '|') TokenList) AS TokenList
 							 WHERE RowNumber = @RowNumber)
 			INSERT INTO Hospital_Service
 			(
@@ -163,14 +163,14 @@ BEGIN
 		SET @TotalToken = 0;
 
 		SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
-							  FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, '-') TokenList)
+							  FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, '|') TokenList)
 
 		WHILE (@RowNumber <= @TotalToken)
 		BEGIN
 			SELECT @Token = (SELECT TokenList.Token
 							 FROM (SELECT ROW_NUMBER()
 								   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
-								   FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, ' ') TokenList) AS TokenList
+								   FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, '|') TokenList) AS TokenList
 							 WHERE RowNumber = @RowNumber)
 			INSERT INTO Hospital_Facility
 			(
