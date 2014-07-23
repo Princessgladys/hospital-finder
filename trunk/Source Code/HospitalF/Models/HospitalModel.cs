@@ -265,6 +265,14 @@ namespace HospitalF.Models
             return result;
         }
 
+        /// <summary>
+        /// Insert new hospital
+        /// </summary>
+        /// <param name="model">Hospital model</param>
+        /// <param name="speciality">Speciality list</param>
+        /// <param name="service">Service list</param>
+        /// <param name="facility">Facility list</param>
+        /// <returns></returns>
         public async Task<int> InsertHospitalAsync(HospitalModel model, string speciality, string service, string facility)
         {
             int result = 0;

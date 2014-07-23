@@ -20,7 +20,7 @@ namespace HospitalF.Controllers
         public static List<HospitalType> hospitalTypeList = null;
         public static List<District> districtList = null;
         public static List<Ward> wardList = null;
-        public static List<Service> serviceList = null;
+        public static IEnumerable<GroupedSelectListItem> serviceList = null;
         public static List<Facility> facilityList = null;
         public static List<Doctor> doctorList = null;
         public static List<Speciality> specialityList = null;
@@ -62,7 +62,7 @@ model.HospitalID = hospitalID;
             facilityList = await HospitalUtil.LoadFacilityInHospitalFacilityAsync(hospitalID);
             ViewBag.FacilityList = facilityList;
             //load service of hospital
-            serviceList = await HospitalUtil.LoadServiceInHospitalServiceAsync(hospitalID);
+            List<Service> serviceList = await HospitalUtil.LoadServiceInHospitalServiceAsync(hospitalID);
             ViewBag.ServiceList = serviceList;
             return View();
         }
@@ -460,7 +460,8 @@ model.HospitalID = hospitalID;
 
                 // Load list of services
                 serviceList = await ServiceFacilityUtil.LoadServiceAsync();
-                ViewBag.ServiceList = new SelectList(serviceList, Constants.ServiceID, Constants.ServiceName);
+                int a = serviceList.Count();
+                ViewBag.ServiceList = serviceList;
 
                 // Load list of facilitites
                 facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
