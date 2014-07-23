@@ -417,7 +417,7 @@
     });
 
     @*Data validation*@
-    @*$(document).ready(function () {
+    $(document).ready(function () {
         $.validator.addMethod("time",
             function (value, element) {
                 var fullTime = value.split('-');
@@ -570,7 +570,7 @@
                 error.insertAfter(element.parent());
             }
         });
-    });*@
+    });
 
 </script>
 
