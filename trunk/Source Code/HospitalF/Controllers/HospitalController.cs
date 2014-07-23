@@ -21,15 +21,12 @@ namespace HospitalF.Controllers
         public static List<District> districtList = null;
         public static List<Ward> wardList = null;
         public static List<Service> serviceList = null;
-        public static List<Facility> facilitiList = null;
-
-        #region AnhDTH
-
+        public static List<Facility> facilityList = null;
         public static List<Doctor> doctorList = null;
         public static List<Speciality> specialityList = null;
-        public static List<Service> serviceList = null;
-        public static List<Facility> facilityList = null;
-        public static List<HospitalType> typeList = null;
+
+        #region AnhDTH
+        
         public static int hospitalID = 25;
         public Hospital hospital = null;
         public static HospitalModel model = null;
@@ -41,12 +38,12 @@ namespace HospitalF.Controllers
         {
             model = new HospitalModel();
             hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
-typeList = await HospitalUtil.LoadTypeInHospitalTypeAsync(hospitalID);
-            string hospitalTypeName = model.LoadHospitalTypeInList((int)hospital.Hospital_Type, typeList);
+            hospitalTypeList = await HospitalUtil.LoadTypeInHospitalTypeAsync(hospitalID);
+            string hospitalTypeName = model.LoadHospitalTypeInList((int)hospital.Hospital_Type, hospitalTypeList);
 
             //assign value for model attributes
 
-            ViewBag.TypeList = new SelectList(typeList, Constants.HospitalTypeID, Constants.HospitalTypeName, hospital.Hospital_Type);
+            ViewBag.hospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName, hospital.Hospital_Type);
             ViewBag.HospitalTypeName = hospitalTypeName;
             ViewBag.HospitalObject = hospital;
 model.HospitalID = hospitalID;
@@ -55,7 +52,7 @@ model.HospitalID = hospitalID;
             model.Website = hospital.Website;
             model.PhoneNo = hospital.Phone_Number;
             model.Fax = hospital.Fax;
-            model.HospitalTypeName = model.LoadHospitalTypeInList((int)hospital.Hospital_Type, typeList);
+            model.HospitalTypeName = model.LoadHospitalTypeInList((int)hospital.Hospital_Type, hospitalTypeList);
             //load doctor of hospital
             //model.DoctorList = await HospitalUtil.LoadDoctorInDoctorHospitalAsync(hospitalID);
 //load speciality of hospital
@@ -466,8 +463,8 @@ model.HospitalID = hospitalID;
                 ViewBag.ServiceList = new SelectList(serviceList, Constants.ServiceID, Constants.ServiceName);
 
                 // Load list of facilitites
-                facilitiList = await ServiceFacilityUtil.LoadFacilityAsync();
-                ViewBag.FacilityList = new SelectList(facilitiList, Constants.FacilityID, Constants.FacilityName);
+                facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
+                ViewBag.FacilityList = new SelectList(facilityList, Constants.FacilityID, Constants.FacilityName);
             }
             catch (Exception exception)
             {
