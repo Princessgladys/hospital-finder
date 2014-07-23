@@ -158,7 +158,7 @@
                                     <section class="col col-4">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
-                                            @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Nhập số điện thoại" })
+                                            @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Nhập số điện thoại chính" })
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -420,7 +420,6 @@
     $(document).ready(function () {
         $.validator.addMethod("time",
             function (value, element) {
-                var regex = '@Constants.TimeInDayRegex';
                 var fullTime = value.split('-');
                 var startTime = fullTime[0].trim();
                 var endTime = fullTime[1].trim();
@@ -428,7 +427,7 @@
                 var startValue = parseInt(startTime.replace(':', ''), 10);
                 var endValue = parseInt(endTime.replace(':', ''), 10);
 
-                if (startValue < endValue) {
+                if ((startValue >= 0) && (endValue <= 2400) && (startValue < endValue)) {
                     return true;
                 }
 

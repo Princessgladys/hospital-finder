@@ -541,7 +541,7 @@ namespace HospitalF.Constant
         /// <summary>
         /// Regular expression to validate full time in day
         /// </summary>
-        public const string TimeInDayRegex = @"/^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9])$";
+        public const string TimeInDayRegex = @"/^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9])$/";
 
         #endregion
 
