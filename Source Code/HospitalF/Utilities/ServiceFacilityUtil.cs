@@ -38,14 +38,20 @@ namespace HospitalF.Utilities
         /// Load a list of facilities in database
         /// </summary>
         /// <returns>List[Facility] that contains a list of services</returns>
-        public static async Task<List<Facility>> LoadFacilityAsync()
+        public static async Task<IEnumerable<GroupedSelectListItem>> LoadFacilityAsync()
         {
             // Return list of dictionary words
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
-                    (from f in data.Facilities
-                     select f).OrderBy(f => f.Facility_Name).ToList());
+                    (from f in data.SP_TAKE_FACILITY_AND_TYPE().ToList()
+                     select new GroupedSelectListItem
+                     {
+                         GroupKey = f.Type_ID.ToString(),
+                         GroupName = f.Type_Name,
+                         Text = f.Facility_Name,
+                         Value = f.Facility_ID.ToString()
+                     }));
             }
         }
     }
