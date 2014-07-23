@@ -501,11 +501,14 @@ model.HospitalID = hospitalID;
             {
                 // Prepare data
                 int result = 0;
+
+                // Address
                 string address = string.Format("{0} {1} {2} {3} {4}",
                     model.LocationAddress, model.StreetAddress, model.WardName,
                     model.DistrictName, model.CityName);
                 model.FullAddress = address;
 
+                // Phone number
                 string phoneNumber = model.PhoneNo;
                 if (!string.IsNullOrEmpty(model.PhoneNo2))
                 {
@@ -517,30 +520,35 @@ model.HospitalID = hospitalID;
                 }
                 model.PhoneNo = phoneNumber;
 
-                string[] holidayTime =  model.HolidayStartTime.Split('-');
+                // Holiday time
+                string[] holidayTime = model.HolidayStartTime.Split(char.Parse(Constants.Minus));
                 string holidayStartTime = holidayTime[0].Trim();
                 model.HolidayStartTime = holidayStartTime;
                 string holidayEndTime = holidayTime[1].Trim();
                 model.HolidayEndTime = holidayEndTime;
 
-                string[] OrdinaryTime = model.OrdinaryStartTime.Split('-');
+                // Ordinary time
+                string[] OrdinaryTime = model.OrdinaryStartTime.Split(char.Parse(Constants.Minus));
                 string ordinaryStartTime = OrdinaryTime[0].Trim();
                 model.OrdinaryStartTime = ordinaryStartTime;
                 string ordinaryEndTime = OrdinaryTime[1].Trim();
                 model.OrdinaryEndTime = ordinaryEndTime;
 
+                // Speciality list
                 string speciality = string.Empty;
                 foreach (string data in model.SelectedSpecialities)
                 {
-                    speciality += specialityList + Constants.Minus + data;
+                    speciality += specialityList + Constants.VerticalBar.ToString() +data;
                 }
 
+                // Service list
                 string service = string.Empty;
                 foreach (string data in model.SelectedServices)
                 {
-                    service += specialityList + Constants.Minus + data;
+                    service += specialityList + Constants.VerticalBar.ToString() + data;
                 }
 
+                // Facility list
                 string facility = string.Empty;
                 foreach (string data in model.SelectedFacilities)
                 {
@@ -553,13 +561,15 @@ model.HospitalID = hospitalID;
                     result = await model.InsertHospitalAsync(model, speciality, service, facility);
                 }
 
-                if (result ==0)
+                // Check if insert process is success or not
+                if (result == 0)
                 {
-                    
+                    ViewBag.InsertStatus = 0.ToString() + Constants.Minus + model.HospitalName;
                 }
                 else
                 {
-
+                    model = new HospitalModel();
+                    ViewBag.InsertStatus = 1.ToString() + Constants.Minus + model.HospitalName;
                 }
             }
             catch (Exception exception)
@@ -568,7 +578,7 @@ model.HospitalID = hospitalID;
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
 
-            return View(new HospitalModel());
+            return View(model);
         }
 
         #endregion

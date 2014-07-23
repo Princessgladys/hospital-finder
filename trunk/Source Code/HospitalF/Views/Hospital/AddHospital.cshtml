@@ -6,6 +6,7 @@
 }
 
 <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
 
 <div class="row">
     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
@@ -149,6 +150,11 @@
                                         </label>
                                     </section>
                                 </div>
+                                <div class="row">
+                                    <section class="col col-12">
+                                        <div id="google-map"></div>
+                                    </section>
+                                </div>
                                 @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
                             </fieldset>
 
@@ -198,11 +204,11 @@
                                         </label>
                                     </section>
                                     @*<section class="col col-6">
-                                        <label class="input">
-                                            <i class="icon-prepend fa fa-male"></i>
-                                            @Html.TextBoxFor(m => m.CreatedPerson, new { @placeholder = "Nhập Email của người chịu trách nhiệm" })
-                                        </label>
-                                    </section>*@
+                                            <label class="input">
+                                                <i class="icon-prepend fa fa-male"></i>
+                                                @Html.TextBoxFor(m => m.CreatedPerson, new { @placeholder = "Nhập Email của người chịu trách nhiệm" })
+                                            </label>
+                                        </section>*@
                                 </div>
                             </fieldset>
 
@@ -224,7 +230,7 @@
                                     <div class="form-group">
                                         <label><strong>Danh sách dịch vụ</strong></label>
                                         @Html.DropDownGroupListFor(m => m.SelectedServices,
-                                            (IEnumerable<GroupedSelectListItem>) ViewBag.ServiceList,
+                                            (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList,
                                         new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
                                     </div>
                                 </div>
@@ -233,7 +239,7 @@
                                     <div class="form-group">
                                         <label><strong>Danh sách cơ sở vậy chất</strong></label>
                                         @Html.DropDownGroupListFor(m => m.SelectedFacilities,
-                                            (IEnumerable<GroupedSelectListItem>) ViewBag.FacilityList,
+                                            (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList,
                                         new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
                                         <div class="note">
                                             <strong>Chỉ dẫn:</strong> Cung cấp danh sách các dịch vụ và cơ sở vật chất góp phần làm tăng độ tin cậy của bệnh viện
@@ -242,8 +248,7 @@
                                 </div>
                             </fieldset>
 
-                            <fieldset>
-                            </fieldset>
+                            <fieldset></fieldset>
 
                             <footer>
                                 <button class="btn" type="reset">
@@ -278,6 +283,38 @@
 <script type="text/javascript">
     pageSetUp();
 
+    @*Display notification*@
+    $(document).ready(function () {
+        if ('@ViewBag.InsertStatus' == '') {
+            return false;
+        }
+
+        var returnValue = '@ViewBag.InsertStatus';
+        returnValue = returnValue.split('-');
+        var status = returnValue[0];
+        var hospitalName = returnValue[1];
+
+        if (status != 0) {
+            notif({
+                msg: "Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.",
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        } else {
+            notif({
+                msg: "Thêm mới [" + hospitalName + "] thành công!",
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+    });
+
     $(document).ready(function () {
         $("#edit-description").change(function () {
             if ($("#partial-description").is(":visible")) {
@@ -286,7 +323,6 @@
                 $("#partial-description").show();
             }
         });
-
 
         @*Check if user email is existed in database*@
         $("#CreatedPerson").change(function () {
@@ -302,7 +338,6 @@
                     $.each(data, function (id, option) {
                         ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
                     });
-                    statesProgress.hide();
                     $('#DistrictName').val($("#DistrictID option:selected").text());
 
                     selectedItem = $("#DistrictID").val();
@@ -317,16 +352,13 @@
                             $.each(data, function (id, option) {
                                 ddlWard.append($('<option></option>').val(option.id).html(option.name));
                             });
-                            statesProgress.hide();
                             $('#WardName').val($("#WardID option:selected").text());
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
-                            statesProgress.hide();
                         }
                     });
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    statesProgress.hide();
                 }
             });
         });
@@ -348,8 +380,6 @@
             $('#CityName').val($("#CityID option:selected").text());
             var selectedItem = $(this).val();
             var ddlDistrict = $("#DistrictID");
-            var statesProgress = $("#states-loading-district-progress");
-            statesProgress.show();
             $.ajax({
                 cache: false,
                 type: "GET",
@@ -360,7 +390,6 @@
                     $.each(data, function (id, option) {
                         ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
                     });
-                    statesProgress.hide();
                     $('#DistrictName').val($("#DistrictID option:selected").text());
 
                     selectedItem = $("#DistrictID").val();
@@ -375,16 +404,13 @@
                             $.each(data, function (id, option) {
                                 ddlWard.append($('<option></option>').val(option.id).html(option.name));
                             });
-                            statesProgress.hide();
                             $('#WardName').val($("#WardID option:selected").text());
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
-                            statesProgress.hide();
                         }
                     });
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    statesProgress.hide();
                 }
             });
         });
@@ -393,8 +419,6 @@
         $("#DistrictID").change(function () {
             var selectedItem = $(this).val();
             var ddlWard = $("#WardID");
-            var statesProgress = $("#states-loading-district-progress");
-            statesProgress.show();
 
             $.ajax({
                 cache: false,
@@ -406,11 +430,9 @@
                     $.each(data, function (id, option) {
                         ddlWard.append($('<option></option>').val(option.id).html(option.name));
                     });
-                    statesProgress.hide();
                     $('#WardName').val($("#WardID option:selected").text());
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    statesProgress.hide();
                 }
             });
         });
@@ -572,6 +594,108 @@
         });
     });
 
+    @*Google map*@
+    $(document).ready(function () {
+        @*Check if browser support identifying current location*@
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(initializeMap);
+        }
+        else {
+            notif({
+                msg: "Trình duyệt không hỗ trợ xác định vị trí.",
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Declare marker - Make it global so only one marker can be created
+        var marker;
+        // Time out variable to prevent double click event creating new marker
+        var update_timeout = null;
+
+        @*Display current location*@
+        function initializeMap(position) {
+            // Get current latitude and longitude
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var currentLocation = new google.maps.LatLng(latitude, longitude);
+
+            // Initial map options
+            var mapOptions = {
+                zoom: 11,
+                center: currentLocation,
+                mapTypeControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            // Create the map, and place it in the HTML google-map div
+            map = new google.maps.Map(
+                document.getElementById("google-map"), mapOptions
+            );
+
+            // Allow create marker on click event after 300ms
+            google.maps.event.addListener(map, 'click', function (event) {
+                update_timeout = setTimeout(function () {
+                    placeMarker(event.latLng);
+                    // Get coordinate at the marker's location after clicking on map
+                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                    $('#Coordinate').val(currentCoordinate);
+                    alert(currentCoordinate);
+                }, 300);
+            });
+
+            // Prevent double click event to create new marker
+            google.maps.event.addListener(map, 'dblclick', function (event) {
+                clearTimeout(update_timeout);
+            });
+
+            
+
+            // Place marker at current location
+            //var marker = new google.maps.Marker({
+            //    position: coords,
+            //    map: map,
+            //    title: "Vị trí hiện tại"
+            //});
+        }
+
+        // Load initial options on loading event
+        google.maps.event.addDomListener(window, 'load', initializeMap);
+
+        // Allow creating only one marker at a time
+        function placeMarker(location) {
+            if (marker) {
+                marker.setPosition(location);
+            } else {
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP
+                });
+
+                // Get coordinate at the marker's location after dragging process
+                google.maps.event.addListener(marker, 'dragend', function (event) {
+                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                    $('#Coordinate').val(currentCoordinate);
+                    alert(currentCoordinate);
+                });
+            }
+        }
+
+    });
 </script>
+
+<style>
+    #google-map {
+        height: 300px;
+        width: 687px;
+    }
+</style>
+
+
 
 <div id="partial-description"></div>

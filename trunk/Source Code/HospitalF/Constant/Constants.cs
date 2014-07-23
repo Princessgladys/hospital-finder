@@ -611,6 +611,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string Slash = "/";
 
+        /// <summary>
+        /// Constant for character '|'
+        /// </summary>
+        public const char VerticalBar = '|';
+
         #endregion
 
         #region Utilities
