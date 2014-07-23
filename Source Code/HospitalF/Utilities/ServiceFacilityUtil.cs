@@ -17,14 +17,20 @@ namespace HospitalF.Utilities
         /// Load a list of services in database
         /// </summary>
         /// <returns>List[Service] that contains a list of services</returns>
-        public static async Task<List<Service>> LoadServiceAsync()
+        public static async Task<IEnumerable<GroupedSelectListItem>> LoadServiceAsync()
         {
             // Return list of dictionary words
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
-                    (from s in data.Services
-                     select s).OrderBy(s => s.Service_Name).ToList());
+                    (from s in data.SP_TAKE_SERVICE_AND_TYPE().ToList()
+                     select new GroupedSelectListItem
+                     {
+                         GroupKey = s.Type_ID.ToString(),
+                         GroupName = s.Type_Name,
+                         Text = s.Service_Name,
+                         Value = s.Service_ID.ToString()
+                     }));
             }
         }
 

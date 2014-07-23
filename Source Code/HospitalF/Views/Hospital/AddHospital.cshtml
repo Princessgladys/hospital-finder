@@ -212,7 +212,7 @@
                                     <div class="form-group">
                                         <label><strong>Danh sách chuyên ngành</strong></label>
                                         @Html.DropDownListFor(m => m.SelectedSpecialities,
-                                        (SelectList)ViewBag.SpecialityList,
+                                            (SelectList)ViewBag.SpecialityList,
                                         new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
                                         <div class="note">
                                             <strong>Chỉ dẫn:</strong> Danh sách chuyên ngành góp phần gia tăng việc tìm kiếm bệnh viện
@@ -223,8 +223,8 @@
                                 <div class="row">
                                     <div class="form-group">
                                         <label><strong>Danh sách dịch vụ</strong></label>
-                                        @Html.DropDownListFor(m => m.SelectedServices,
-                                            (SelectList)ViewBag.ServiceList,
+                                        @Html.DropDownGroupListFor(m => m.SelectedServices,
+                                            (IEnumerable<GroupedSelectListItem>) ViewBag.ServiceList,
                                         new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
                                     </div>
                                 </div>
