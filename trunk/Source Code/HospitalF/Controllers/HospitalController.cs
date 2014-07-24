@@ -507,12 +507,13 @@ model.HospitalID = hospitalID;
         /// POST: /Hospital/AddHospital
         /// </summary>
         /// <param name="model">Hospital Model</param>
+        /// <param name="files">Photo files</param>
         /// <returns>Task[ActionResult]</returns>
         [HttpPost]
         [LayoutInjecter(Constants.AdmidLayout)]
         [Authorize(Roles = Constants.AdministratorRoleName)]
         [ValidateInput(false)]
-        public async Task<ActionResult> AddHospital(HospitalModel model)
+        public async Task<ActionResult> AddHospital(HospitalModel model, List<HttpPostedFileBase> file)
         {
             try
             {

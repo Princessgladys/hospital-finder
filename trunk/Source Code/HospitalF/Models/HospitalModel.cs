@@ -153,6 +153,11 @@ namespace HospitalF.Models
         public int CreatedPerson { get; set; }
 
         /// <summary>
+        /// Get/Set value for property PersonInCharged
+        /// </summary>
+        public string PersonInCharged { get; set; }
+
+        /// <summary>
         /// Get/Set value for property CreatedPerson
         /// </summary>
         public Boolean IsActive { get; set; }
