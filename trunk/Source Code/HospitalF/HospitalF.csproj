@@ -334,6 +334,7 @@
     <Content Include="Content\js\plugin\pace\pace.min.js" />
     <Content Include="Content\js\plugin\select2\select2.min.js" />
     <Content Include="Content\js\plugin\sparkline\jquery.sparkline.min.js" />
+    <Content Include="Content\js\plugin\summernote\summernote-vi-VN.js" />
     <Content Include="Content\js\smartwidgets\jarvis.widget.min.js" />
     <Content Include="Content\js\plugin\summernote\summernote.js" />
     <Content Include="Content\PagedList.css" />
@@ -472,7 +473,6 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\Hospital.cshtml" />
     <Content Include="Views\Hospital\AddHospital.cshtml" />
-    <Content Include="Views\Hospital\EditHospitalDescription.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

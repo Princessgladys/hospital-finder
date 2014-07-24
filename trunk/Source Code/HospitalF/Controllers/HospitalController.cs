@@ -505,17 +505,6 @@ model.HospitalID = hospitalID;
         }
 
         /// <summary>
-        /// Load paritial view EditHospitalDescription
-        /// </summary>
-        /// <returns>ActionResult</returns>
-        [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles = Constants.AdministratorRoleName)]
-        public ActionResult EditHospitalDescription()
-        {
-            return PartialView("EditHospitalDescription");
-        }
-
-        /// <summary>
         /// POST: /Hospital/AddHospital
         /// </summary>
         /// <param name="model">Hospital Model</param>
