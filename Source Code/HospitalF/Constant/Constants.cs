@@ -548,6 +548,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string TimeInDayRegex = @"/^(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9])$/";
 
+        /// <summary>
+        /// Regular expression for Vietnamese phone number
+        /// </summary>
+        public const string VietnamesePhoneNumberRegex = @"/^[0-9()]*$/";
+
         #endregion
 
         #region Constant value in database
