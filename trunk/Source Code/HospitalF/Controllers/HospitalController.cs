@@ -521,6 +521,11 @@ model.HospitalID = hospitalID;
 
                 #region Prepare data
 
+                // Full address
+                model.FullAddress = string.Format("{0} {1}, {2}, {3}, {4}",
+                    model.LocationAddress, model.StreetAddress, model.WardName,
+                    model.DistrictName, model.CityName);
+
                 // Phone number
                 string phoneNumber = model.PhoneNo;
                 if (!string.IsNullOrEmpty(model.PhoneNo2))

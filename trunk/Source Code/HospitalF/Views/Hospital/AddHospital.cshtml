@@ -327,7 +327,7 @@
 
         if (status != 0) {
             notif({
-                msg: "Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.",
+                msg: "Thêm mới [" + hospitalName + "] thành công!",
                 type: "success",
                 width: 600,
                 position: "center",
@@ -336,7 +336,7 @@
             });
         } else {
             notif({
-                msg: "Thêm mới [" + hospitalName + "] thành công!",
+                msg: "Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.",
                 type: "error",
                 width: 600,
                 position: "center",
@@ -511,17 +511,6 @@
             return false;
         }
 
-        if ((locationAddress == "") &&
-            (streetAddress == "") && (city == "") &&
-            (district == "") && (ward == "")) {
-            $("#invalidIcon").hide();
-            $("#address-message").hide();
-            $("#validIcon").hide();
-            $('#FullAddress').css('background', '#fff');
-            $('#FullAddress').css('border-color', '#BDBDBD');
-            return false;
-        }
-
         if ((locationAddress != "") &&
             (streetAddress != "") && (city != "") &&
             (district != "") && (ward != "")) {
@@ -577,11 +566,7 @@
         $('#confirm-button').click(function () {
             var coordinate = $("#Coordinate").val();
             if (coordinate.trim() == "") {
-                $("#validIcon").hide();
-                $("#invalidIcon").show();
-                $("#address-message").text("Xin hãy chọn địa điểm bệnh viện trên bản đồ.");
-                $('#FullAddress').css('background', '#fff0f0');
-                $('#FullAddress').css('border-color', '#A90329');
+                setAddressNotificationMessage("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 0);
             }
 
             var fullAddress = $("#FullAddress").val();
