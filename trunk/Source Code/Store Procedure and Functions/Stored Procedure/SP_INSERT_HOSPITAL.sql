@@ -124,6 +124,8 @@ BEGIN
 					ROLLBACK TRAN T;
 					RETURN 0;
 				END
+
+				SET @RowNumber += 1
 			END
 		END
 
@@ -161,6 +163,8 @@ BEGIN
 					ROLLBACK TRAN T;
 					RETURN 0;
 				END
+
+				SET @RowNumber += 1
 			END
 		END
 
@@ -198,6 +202,8 @@ BEGIN
 					ROLLBACK TRAN T;
 					RETURN 0;
 				END
+
+				SET @RowNumber += 1
 			END
 		END	
 	END
