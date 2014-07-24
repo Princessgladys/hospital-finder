@@ -150,7 +150,7 @@ namespace HospitalF.Models
         /// <summary>
         /// Get/Set value for property CreatedPerson
         /// </summary>
-        public string CreatedPerson { get; set; }
+        public int CreatedPerson { get; set; }
 
         /// <summary>
         /// Get/Set value for property CreatedPerson
@@ -305,8 +305,8 @@ namespace HospitalF.Models
                     model.HospitalTypeID, model.FullAddress, model.CityID, model.DistrictID,
                     model.WardID, model.PhoneNo, model.Fax, model.Email, model.Website,
                     model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
-                    model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment, 1,
-                    null, speciality, service, facility));
+                    model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment, model.CreatedPerson,
+                    model.FullDescription, speciality, service, facility));
             }
             return result;
         }

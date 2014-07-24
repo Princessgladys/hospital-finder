@@ -9,7 +9,6 @@
 <script src="~/Content/js/plugin/summernote/summernote.js"></script>
 <script src="~/Content/js/plugin/summernote/summernote-vi-VN.js"></script>
 
-
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
 
 <div class="row">
@@ -197,6 +196,7 @@
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Nhập số điện thoại chính" })
                                         </label>
+                                        <p class="note"><strong>Lưu ý:</strong> Không nhập khoảng trắng.</p>
                                     </section>
                                     <section class="col col-4">
                                         <label class="input">
@@ -614,6 +614,11 @@
                 return false;
             }, "Thời gian không phù hợp.");
 
+        $.validator.addMethod("phone",
+            function (value, element) {
+                return /^[0-9()]*$/.test(value);
+            }, "Số điện thoại không phù hợp.");
+
         $('#add-hospital-form').validate({
             // Rules for form validation
             rules: {
@@ -644,14 +649,14 @@
                 },
                 PhoneNo: {
                     required: true,
-                    minlength: 7,
-                    maxlength: 8,
-                    digits: true
+                    minlength: 8,
+                    maxlength: 13,
+                    phone: true
                 },
                 PhoneNo2: {
-                    minlength: 7,
-                    maxlength: 8,
-                    digits: true
+                    minlength: 8,
+                    maxlength: 13,
+                    phone: true
                 },
                 PhoneNo3: {
                     minlength: 11,
@@ -708,13 +713,13 @@
                 },
                 PhoneNo: {
                     required: '@string.Format(ErrorMessage.CEM001, Constants.PhoneNo)',
-                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.PhoneNo, 7)',
-                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.PhoneNo, 8)',
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.PhoneNo, 8)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.PhoneNo, 13)',
                     digits: '@string.Format(ErrorMessage.CEM005, Constants.PhoneNo)'
                 },
                 PhoneNo2: {
-                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.AlternativePhone, 7)',
-                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.AlternativePhone, 8)',
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.AlternativePhone, 8)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.AlternativePhone, 13)',
                     digits: '@string.Format(ErrorMessage.CEM005, Constants.AlternativePhone)'
                 },
                 PhoneNo3: {
@@ -893,7 +898,12 @@
     $(document).ready(function () {
         $('#edit-description').click(function () {
             if ($("#partial-description").is(":visible")) {
-                $("#partial-description").hide();
+                if (confirm('Lưu thông tin trước khi thoát, mọi thông tin chưa lưu sẽ không có hiệu lực!')) {
+                    $('.summernote').destroy();
+                    $("#partial-description").hide();
+                } else {
+                    return false;
+                }
             } else {
                 $("#partial-description").show();
             }
@@ -912,7 +922,7 @@
 
         $('#quit-button').click(function () {
             if (confirm('Lưu thông tin trước khi thoát, mọi thông tin chưa lưu sẽ không có hiệu lực!')) {
-                $('.summernote').destroy();
+                $('#summernote').destroy();
                 $("#partial-description").hide();
             } else {
                 return false;
@@ -920,7 +930,9 @@
         });
 
         $('#save-button').click(function () {
-            $("#FullDescription").val($('.summernote').code());
+            var a = $('#summernote').code();
+
+            $("#FullDescription").val($('#summernote').code());
             notif({
                 msg: "Lưu thông tin thành công.",
                 type: "success",

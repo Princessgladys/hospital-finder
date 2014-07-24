@@ -488,7 +488,6 @@ model.HospitalID = hospitalID;
 
                 // Load list of services
                 serviceList = await ServiceFacilityUtil.LoadServiceAsync();
-                int a = serviceList.Count();
                 ViewBag.ServiceList = serviceList;
 
                 // Load list of facilitites
@@ -512,12 +511,15 @@ model.HospitalID = hospitalID;
         [HttpPost]
         [LayoutInjecter(Constants.AdmidLayout)]
         [Authorize(Roles = Constants.AdministratorRoleName)]
+        [ValidateInput(false)]
         public async Task<ActionResult> AddHospital(HospitalModel model)
         {
             try
             {
                 // Prepare data
                 int result = 0;
+
+                #region Prepare data
 
                 // Phone number
                 string phoneNumber = model.PhoneNo;
@@ -547,34 +549,64 @@ model.HospitalID = hospitalID;
 
                 // Speciality list
                 string speciality = string.Empty;
-                if (model.SelectedSpecialities.Count != 0)
+                if ((model.SelectedSpecialities != null) && (model.SelectedSpecialities.Count != 0))
                 {
-                    foreach (string data in model.SelectedSpecialities)
+                    for (int n = 0; n < model.SelectedSpecialities.Count; n++)
                     {
-                        speciality += specialityList + Constants.VerticalBar.ToString() + data;
+                        if (n == (model.SelectedSpecialities.Count - 1))
+                        {
+                            speciality += model.SelectedSpecialities[n];
+                        }
+                        else
+                        {
+                            speciality += model.SelectedSpecialities[n] +
+                                Constants.VerticalBar.ToString();
+                        }
                     }
                 }
 
                 // Service list
                 string service = string.Empty;
-                if (model.SelectedServices.Count != 0)
+                if ((model.SelectedServices != null) && (model.SelectedServices.Count != 0))
                 {
-                    foreach (string data in model.SelectedServices)
+                    for (int n = 0; n < model.SelectedServices.Count; n++)
                     {
-                        service += specialityList + Constants.VerticalBar.ToString() + data;
+                        if (n == (model.SelectedServices.Count - 1))
+                        {
+                            service += model.SelectedServices[n];
+                        }
+                        else
+                        {
+                            service += model.SelectedServices[n] +
+                                Constants.VerticalBar.ToString();
+                        }
                     }
                 }
-                
 
                 // Facility list
                 string facility = string.Empty;
-                if (model.SelectedFacilities.Count != 0)
+                if ((model.SelectedFacilities != null) && (model.SelectedFacilities.Count != 0))
                 {
-                    foreach (string data in model.SelectedFacilities)
+                    for (int n = 0; n < model.SelectedFacilities.Count; n++)
                     {
-                        facility += specialityList + Constants.Minus + data;
+                        if (n == (model.SelectedFacilities.Count - 1))
+                        {
+                            facility += model.SelectedFacilities[n];
+                        }
+                        else
+                        {
+                            facility += model.SelectedFacilities[n] +
+                                Constants.VerticalBar.ToString();
+                        }
                     }
-                }       
+                }
+
+                // User ID
+                model.CreatedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+
+                #endregion
+
+                #region Add Hospital to database
 
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
@@ -589,9 +621,24 @@ model.HospitalID = hospitalID;
                 }
                 else
                 {
-                    model = new HospitalModel();
                     ViewBag.InsertStatus = 1.ToString() + Constants.Minus + model.HospitalName;
+                    model = new HospitalModel();
                 }
+
+                #endregion
+
+                #region Cascade drop down list
+
+                // Assign value for drop down list
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+                ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+                ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+                ViewBag.ServiceList = serviceList;
+                ViewBag.FacilityList = facilityList;
+
+                #endregion
             }
             catch (Exception exception)
             {
