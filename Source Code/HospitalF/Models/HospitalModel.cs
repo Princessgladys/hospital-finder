@@ -219,6 +219,29 @@ namespace HospitalF.Models
         #region SonNX
 
         /// <summary>
+        /// Check if there is  similar hospital with name and address
+        /// are equal with given data from user
+        /// </summary>
+        /// <param name="locationAddress">Location address</param>
+        /// <param name="cityId">City ID</param>
+        /// <param name="districtId">District ID</param>
+        /// <param name="wardId">Ward ID</param>
+        /// <param name="hospitalName">Hospital name</param>
+        /// <returns> 1: Not duplicated, 0: Duplicated</returns>
+        public async Task<int> CheckValidHospitalWithAddress(string address,
+            int cityId, int districtId, int wardId, string hospitalName)
+        {
+            int result = 0;
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() => data.SP_CHECK_NOT_DUPLICATED_HOSPITAL(hospitalName,
+                    cityId, districtId, wardId, address));
+            }
+            return result;
+        }
+
+        /// <summary>
         /// [Aministrator] Load list of hospital base on input values
         /// </summary>
         /// <param name="hospitalName">Hospital name</param>

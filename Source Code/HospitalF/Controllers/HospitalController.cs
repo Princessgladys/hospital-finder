@@ -298,6 +298,8 @@ model.HospitalID = hospitalID;
         /// <returns>
         /// Task[ActionResult] with JSON contains value
         /// indicating update process is successful or not
+        /// 1: Successful
+        /// 0: Failed
         /// </returns>
         public async Task<ActionResult> ChangeHospitalStatus(int hospitalId)
         {
@@ -328,6 +330,33 @@ model.HospitalID = hospitalID;
             try
             {
                 return Json(1, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Check if there is  similar hospital with name and address
+        /// are equal with given data from user
+        /// </summary>
+        /// <param name="locationAddress">Location address</param>
+        /// <param name="cityId">City ID</param>
+        /// <param name="districtId">District ID</param>
+        /// <param name="wardId">Ward ID</param>
+        /// <param name="hospitalName">Hospital name</param>
+        /// <returns> 1: Not duplicated, 0: Duplicated</returns>
+        public async Task<ActionResult> CheckValidHospitalWithAddress(string address,
+            int cityId, int districtId, int wardId, string hospitalName)
+        {
+            try
+            {
+                HospitalModel model = new HospitalModel();
+                int result = await model.CheckValidHospitalWithAddress(address,
+                    cityId, districtId, wardId, hospitalName);
+                return Json(new { value = result }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
             {
