@@ -8,6 +8,7 @@
 <link href="~/Content/css/summernote.css" rel="stylesheet" />
 <script src="~/Content/js/plugin/summernote/summernote.js"></script>
 <script src="~/Content/js/plugin/summernote/summernote-vi-VN.js"></script>
+<script src="~/Content/js/plugin/dropzone/dropzone.js"></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
 
@@ -215,7 +216,7 @@
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-envelope"></i>
-                                            @Html.TextBoxFor(m => m.Email, new { @placeholder = "Nhập địa chỉ hộp thư điện tử" })
+                                            @Html.TextBoxFor(m => m.Email, new { @placeholder = "Nhập địa chỉ Email bệnh viện" })
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -229,16 +230,28 @@
                                 <div class="row">
                                     <section class="col col-6">
                                         <label class="input">
-                                            <i class="icon-prepend fa fa-fax"></i>
-                                            @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax" })
+                                            <i class="icon-prepend fa fa-male"></i>
+                                            @Html.TextBoxFor(m => m.CreatedPerson, new { @placeholder = "Nhập Email của người chịu trách nhiệm" })
                                         </label>
                                     </section>
-                                    @*<section class="col col-6">
-                                            <label class="input">
-                                                <i class="icon-prepend fa fa-male"></i>
-                                                @Html.TextBoxFor(m => m.CreatedPerson, new { @placeholder = "Nhập Email của người chịu trách nhiệm" })
-                                            </label>
-                                        </section>*@
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-fax"></i>
+                                            @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax của bệnh viện" })
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-8">
+                                        <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
+                                             style="display: none;" id="loaderIconUser">
+                                        <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
+                                             style="display: none;" id="validIconUser">
+                                        <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
+                                             style="display: none;" id="invalidIconUser">
+                                        <span id="user-message"></span>
+                                    </section>
                                 </div>
                             </fieldset>
 
@@ -823,143 +836,143 @@
 
     @*Google map*@
     $(document).ready(function () {
-        // Check if browser support identifying current location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(initializeMap);
-        }
-        else {
-            notif({
-                msg: "Trình duyệt không hỗ trợ xác định vị trí.",
-                type: "error",
-                width: 600,
-                position: "center",
-                fade: true,
-                multiline: true
-            });
-        }
+        //// Check if browser support identifying current location
+        //if (navigator.geolocation) {
+        //    navigator.geolocation.getCurrentPosition(initializeMap);
+        //}
+        //else {
+        //    notif({
+        //        msg: "Trình duyệt không hỗ trợ xác định vị trí.",
+        //        type: "error",
+        //        width: 600,
+        //        position: "center",
+        //        fade: true,
+        //        multiline: true
+        //    });
+        //}
 
-        // Declare marker - Make it global so only one marker can be created
-        var marker;
-        // Time out variable to prevent double click event creating new marker
-        var update_timeout = null;
-        // Declare variable to create Google map
-        var map;
-        // Variable to analyze coordinate from address
-        var geocoder;
+        //// Declare marker - Make it global so only one marker can be created
+        //var marker;
+        //// Time out variable to prevent double click event creating new marker
+        //var update_timeout = null;
+        //// Declare variable to create Google map
+        //var map;
+        //// Variable to analyze coordinate from address
+        //var geocoder;
 
-        // Display current location
-        function initializeMap(position) {
-            // Get current latitude and longitude
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            var currentLocation = new google.maps.LatLng(latitude, longitude);
-            geocoder = new google.maps.Geocoder();
+        //// Display current location
+        //function initializeMap(position) {
+        //    // Get current latitude and longitude
+        //    var latitude = position.coords.latitude;
+        //    var longitude = position.coords.longitude;
+        //    var currentLocation = new google.maps.LatLng(latitude, longitude);
+        //    geocoder = new google.maps.Geocoder();
 
-            // Initial map options
-            var mapOptions = {
-                zoom: 11,
-                center: currentLocation,
-                mapTypeControl: true,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
+        //    // Initial map options
+        //    var mapOptions = {
+        //        zoom: 11,
+        //        center: currentLocation,
+        //        mapTypeControl: true,
+        //        mapTypeId: google.maps.MapTypeId.ROADMAP
+        //    };
 
-            // Create the map, and place it in the HTML google-map div
-            map = new google.maps.Map(
-                document.getElementById("google-map"), mapOptions
-            );
+        //    // Create the map, and place it in the HTML google-map div
+        //    map = new google.maps.Map(
+        //        document.getElementById("google-map"), mapOptions
+        //    );
 
-            // Allow create marker on click event after 300ms
-            google.maps.event.addListener(map, 'click', function (event) {
-                update_timeout = setTimeout(function () {
-                    placeMarker(event.latLng);
-                    // Get coordinate at the marker's location after clicking on map
-                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
-                    $('#Coordinate').val(currentCoordinate);
-                }, 300);
-            });
+        //    // Allow create marker on click event after 300ms
+        //    google.maps.event.addListener(map, 'click', function (event) {
+        //        update_timeout = setTimeout(function () {
+        //            placeMarker(event.latLng);
+        //            // Get coordinate at the marker's location after clicking on map
+        //            var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+        //            $('#Coordinate').val(currentCoordinate);
+        //        }, 300);
+        //    });
 
-            // Prevent double click event to create new marker
-            google.maps.event.addListener(map, 'dblclick', function (event) {
-                clearTimeout(update_timeout);
-            });
-        }
+        //    // Prevent double click event to create new marker
+        //    google.maps.event.addListener(map, 'dblclick', function (event) {
+        //        clearTimeout(update_timeout);
+        //    });
+        //}
 
-        // Load initial options on loading event
-        google.maps.event.addDomListener(window, 'load', initializeMap);
+        //// Load initial options on loading event
+        //google.maps.event.addDomListener(window, 'load', initializeMap);
 
-        // Press button get location from address
-        $("#button-get-loction").click(function () {
-            if ($("#validIcon").is(":visible")) {
-                getCoordinateFromAddress();
-            } else {
-                setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
-            }
-            return false;
-        });
+        //// Press button get location from address
+        //$("#button-get-loction").click(function () {
+        //    if ($("#validIcon").is(":visible")) {
+        //        getCoordinateFromAddress();
+        //    } else {
+        //        setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+        //    }
+        //    return false;
+        //});
 
-        // Allow creating only one marker at a time
-        function placeMarker(location) {
-            if (marker) {
-                marker.setPosition(location);
-            } else {
-                marker = new google.maps.Marker({
-                    position: location,
-                    map: map,
-                    draggable: true,
-                    animation: google.maps.Animation.DROP
-                });
+        //// Allow creating only one marker at a time
+        //function placeMarker(location) {
+        //    if (marker) {
+        //        marker.setPosition(location);
+        //    } else {
+        //        marker = new google.maps.Marker({
+        //            position: location,
+        //            map: map,
+        //            draggable: true,
+        //            animation: google.maps.Animation.DROP
+        //        });
 
-                // Get coordinate at the marker's location after dragging process
-                google.maps.event.addListener(marker, 'dragend', function (event) {
-                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
-                    $('#Coordinate').val(currentCoordinate);
-                });
-            }
-        }
+        //        // Get coordinate at the marker's location after dragging process
+        //        google.maps.event.addListener(marker, 'dragend', function (event) {
+        //            var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+        //            $('#Coordinate').val(currentCoordinate);
+        //        });
+        //    }
+        //}
 
-        // Get coordinate from a specific address
-        function getCoordinateFromAddress() {
-            $("#loaderIcon").show();
-            $("#validIcon").hide();
-            $("#invalidIcon").hide();
-            $("#address-message").text("Đang xử lý thông tin.");
+        //// Get coordinate from a specific address
+        //function getCoordinateFromAddress() {
+        //    $("#loaderIcon").show();
+        //    $("#validIcon").hide();
+        //    $("#invalidIcon").hide();
+        //    $("#address-message").text("Đang xử lý thông tin.");
 
-            // Take full address
-            var address = $("#FullAddress").val();
-            address = address + ", " + "Việt Nam";
+        //    // Take full address
+        //    var address = $("#FullAddress").val();
+        //    address = address + ", " + "Việt Nam";
 
-            // Query address from Google
-            geocoder.geocode({ 'address': address }, function (results, status) {
-                // Check if address is understandable
-                if (status == google.maps.GeocoderStatus.OK) {
-                    map.setCenter(results[0].geometry.location);
+        //    // Query address from Google
+        //    geocoder.geocode({ 'address': address }, function (results, status) {
+        //        // Check if address is understandable
+        //        if (status == google.maps.GeocoderStatus.OK) {
+        //            map.setCenter(results[0].geometry.location);
 
-                    // Check if marker is already existed
-                    if (marker != null) {
-                        marker.setMap(null);
-                    }
+        //            // Check if marker is already existed
+        //            if (marker != null) {
+        //                marker.setMap(null);
+        //            }
 
-                    // Create marker
-                    marker = new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location,
-                        draggable: true,
-                        animation: google.maps.Animation.DROP
-                    });
+        //            // Create marker
+        //            marker = new google.maps.Marker({
+        //                map: map,
+        //                position: results[0].geometry.location,
+        //                draggable: true,
+        //                animation: google.maps.Animation.DROP
+        //            });
 
-                    // Set coordinate value
-                    var currentCoordinate = results[0].geometry.location.lat().toFixed(6) +
-                        ", " + results[0].geometry.location.lng().toFixed(6);
-                    $('#Coordinate').val(currentCoordinate);
+        //            // Set coordinate value
+        //            var currentCoordinate = results[0].geometry.location.lat().toFixed(6) +
+        //                ", " + results[0].geometry.location.lng().toFixed(6);
+        //            $('#Coordinate').val(currentCoordinate);
 
-                    // Display message
-                    setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
-                } else {
-                    setAddressNotificationMessage("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 0);
-                }
-            });
-            return false;
-        }
+        //            // Display message
+        //            setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
+        //        } else {
+        //            setAddressNotificationMessage("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 0);
+        //        }
+        //    });
+        //    return false;
+        //}
     });
 
     @*Hopsital description*@

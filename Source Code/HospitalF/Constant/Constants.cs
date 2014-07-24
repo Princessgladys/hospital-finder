@@ -721,6 +721,11 @@ namespace HospitalF.Constant
         public const string PageUrlRewriting = "page";
 
         /// <summary>
+        /// Constant for PhotoFolder key in appSettings section of Web.config
+        /// </summary>
+        public const string PhotoFolder = "PhotoFolder";
+
+        /// <summary>
         /// Take relative diacritic Vietnamese characters according to input letter
         /// </summary>
         /// <param name="letter">Input letter (a ă â e ê o ô ơ u ư i y đ)</param>
