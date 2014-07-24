@@ -250,6 +250,7 @@
     <Content Include="Content\css\smartadmin-skins.css" />
     <Content Include="Content\css\smartadmin-skins.m.css" />
     <Content Include="Content\css\star.gif" />
+    <Content Include="Content\css\summernote.css" />
     <Content Include="Content\css\tablesorter.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-2.html" />
@@ -334,6 +335,7 @@
     <Content Include="Content\js\plugin\select2\select2.min.js" />
     <Content Include="Content\js\plugin\sparkline\jquery.sparkline.min.js" />
     <Content Include="Content\js\smartwidgets\jarvis.widget.min.js" />
+    <Content Include="Content\js\plugin\summernote\summernote.js" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
