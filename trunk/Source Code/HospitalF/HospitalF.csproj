@@ -224,6 +224,7 @@
     <Compile Include="Utilities\HospitalUtil.cs" />
     <Compile Include="Utilities\LocationUtil.cs" />
     <Compile Include="Utilities\LoggingUtil.cs" />
+    <Compile Include="Utilities\PhotoUtil.cs" />
     <Compile Include="Utilities\ServiceFacilityUtil.cs" />
     <Compile Include="Utilities\SpecialityUtil.cs" />
     <Compile Include="Utilities\StringUtil.cs" />
