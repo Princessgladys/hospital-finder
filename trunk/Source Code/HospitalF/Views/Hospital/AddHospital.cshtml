@@ -31,7 +31,6 @@
     </p>
 </div>
 
-<!-- widget grid -->
 <section id="widget-grid" class="">
     <!-- row -->
     <div class="row">
@@ -56,7 +55,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
-                        @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "add-hospital-form" }))
+                        @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "add-hospital-form", @enctype = "multipart/form-data" }))
                         {
                             <fieldset>
                                 <legend>Thông tin căn bản</legend>
@@ -309,7 +308,73 @@
     <!-- end row -->
 
 </section>
-<!-- end widget grid -->
+
+<div id="partial-description" style="display: none">
+    <!-- widget grid -->
+    <section id="widget-grid" class="">
+        <!-- row -->
+        <div class="row">
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                     data-widget-colorbutton="false"
+                     data-widget-editbutton="false"
+                     data-widget-togglebutton="false"
+                     data-widget-deletebutton="false"
+                     data-widget-fullscreenbutton="false"
+                     data-widget-custombutton="false"
+                     data-widget-collapsed="false"
+                     data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <h2>Thông tin bệnh viện</h2>
+                    </header>
+                    <!-- widget div-->
+                    <div>
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+                            @{
+                                string fullDescription = string.Empty;
+                                if (Model != null)
+                                {
+                                    fullDescription = Model.FullDescription;
+                                }    
+                            }
+                            <div id="summernote">@fullDescription</div>
+
+                            <div class="widget-footer smart-form">
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-primary"
+                                            id="save-button">
+                                        <i class="fa fa-check"></i> Lưu
+                                    </a>
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-success"
+                                            id="quit-button">
+                                        <i class="fa fa-times"></i> Thoát
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- WIDGET END -->
+        </div>
+        <!-- end row -->
+    </section>
+    <!-- end widget grid -->
+</div>
 
 <script type="text/javascript">
     pageSetUp();
@@ -920,7 +985,10 @@
             height: 250,
             minHeight: null,
             maxHeight: null,
-            focus: true
+            focus: true,
+            onImageUpload: function (files, editor, $editable) {
+                
+            }
         });
 
         $('#quit-button').click(function () {
@@ -959,70 +1027,3 @@
         height: auto;
     }
 </style>
-
-<div id="partial-description" style="display: none">
-    <!-- widget grid -->
-    <section id="widget-grid" class="">
-        <!-- row -->
-        <div class="row">
-            <!-- NEW WIDGET START -->
-            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
-                <!-- Widget ID (each widget will need unique ID)-->
-                <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
-                     data-widget-colorbutton="false"
-                     data-widget-editbutton="false"
-                     data-widget-togglebutton="false"
-                     data-widget-deletebutton="false"
-                     data-widget-fullscreenbutton="false"
-                     data-widget-custombutton="false"
-                     data-widget-collapsed="false"
-                     data-widget-sortable="false">
-                    <header>
-                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
-                        <h2>Thông tin bệnh viện</h2>
-                    </header>
-                    <!-- widget div-->
-                    <div>
-                        <!-- widget edit box -->
-                        <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-                        </div>
-                        <!-- end widget edit box -->
-                        <!-- widget content -->
-                        <div class="widget-body no-padding">
-                            @{
-                                string fullDescription = string.Empty;
-                                if (Model != null)
-                                {
-                                    fullDescription = Model.FullDescription;
-                                }    
-                            }
-                            <div id="summernote">@fullDescription</div>
-
-                            <div class="widget-footer smart-form">
-                                <div class="btn-group">
-                                    <button class="btn btn-sm btn-primary" type="button"
-                                            id="save-button">
-                                        <i class="fa fa-check"></i> Lưu
-                                    </button>
-                                </div>
-                                <div class="btn-group">
-                                    <button class="btn btn-sm btn-success" type="button"
-                                            id="quit-button">
-                                        <i class="fa fa-times"></i> Thoát
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end widget content -->
-                    </div>
-                    <!-- end widget div -->
-                </div>
-                <!-- end widget -->
-            </article>
-            <!-- WIDGET END -->
-        </div>
-        <!-- end row -->
-    </section>
-    <!-- end widget grid -->
-</div>
