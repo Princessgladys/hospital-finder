@@ -621,6 +621,16 @@ namespace HospitalF.Constant
         /// </summary>
         public const char VerticalBar = '|';
 
+        /// <summary>
+        /// Constant for character '('
+        /// </summary>
+        public const string OpenBracket = "(";
+
+        /// <summary>
+        /// Constant for character ')'
+        /// </summary>
+        public const string CloseBracket = ")";
+
         #endregion
 
         #region Utilities
