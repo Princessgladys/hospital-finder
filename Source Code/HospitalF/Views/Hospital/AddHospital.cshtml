@@ -166,13 +166,14 @@
                                          style="display: none;" id="validIcon">
                                     <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
                                          style="display: none;" id="invalidIcon">
+                                    <span id="address-message"></span>
                                 </section>
 
                                 @*<div class="row">
-                                    <section class="col col-12">
-                                        <div id="google-map"></div>
-                                    </section>
-                                </div>*@
+                                        <section class="col col-12">
+                                            <div id="google-map"></div>
+                                        </section>
+                                    </div>*@
                                 @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
                             </fieldset>
 
@@ -460,18 +461,6 @@
                 }
             });
         });
-
-        @*AJAX to check for duplicated hospital*@
-        $("#FullAddress").on('input', function () {
-            var cityId = $("#CityId").val();
-            var districtId = $("#DistrictID").val();
-            var wardId = $("#WardID").val();
-            var hospitalName = $("#HospitalName").val();
-            var locationAddress = $("#LocationAddress").val();
-            var streetAddress = $("#StreetAddress").val();
-
-            $("#loaderIcon").show();
-        });
     });
 
     @*Bind data for full address*@
@@ -486,20 +475,17 @@
     });
     function bindFullAddress() {
         var city = "";
-        if ($('#CityID').val() != '') {
+        if (($('#CityID').val() != null) && ($('#CityID').val() != '')) {
             city = ", " + $("#CityID option:selected").text();
         }
-
         var district = "";
-        if ($("#DistrictID").val() != '') {
+        if (($('#DistrictID').val() != null) && ($("#DistrictID").val() != '')) {
             district = ", " + $("#DistrictID option:selected").text();
         }
-
         var ward = "";
-        if ($("#WardID").val() != '') {
+        if (($('#WardID').val() != null) && ($("#WardID").val() != '')) {
             ward = ", " + $("#WardID option:selected").text();
         }
-
         var locationAddress = $("#LocationAddress").val();
         var streetAddress = $("#StreetAddress").val();
 
@@ -507,10 +493,96 @@
             ward + district + city;
 
         $("#FullAddress").val(fullAddress);
+
+        checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress);
+    }
+
+    @*Check if hospital and address information are not duplicated*@
+    function checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress) {
+        // Check if hospital is valid
+        var hospitalName = $("#HospitalName").val();
+        if ((locationAddress == "") ||
+            (streetAddress == "") || (city == "") ||
+            (district == "") || (ward == "")) {
+            $("#invalidIcon").show();
+            $("#address-message").text("Thiếu thông tin địa chỉ");
+            $("#validIcon").hide();
+            $('#FullAddress').css('background', '#fff0f0');
+            $('#FullAddress').css('border-color', '#A90329');
+            return false;
+        }
+
+        if ((locationAddress == "") &&
+            (streetAddress == "") && (city == "") &&
+            (district == "") && (ward == "")) {
+            $("#invalidIcon").hide();
+            $("#address-message").hide();
+            $("#validIcon").hide();
+            $('#FullAddress').css('background', '#fff');
+            $('#FullAddress').css('border-color', '#BDBDBD');
+            return false;
+        }
+
+        if ((locationAddress != "") &&
+            (streetAddress != "") && (city != "") &&
+            (district != "") && (ward != "")) {
+            $("#loaderIcon").show();
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("CheckValidHospitalWithAddress"))",
+                data: {
+                    "address": locationAddress + " " + streetAddress,
+                    "cityId": $('#CityID').val(),
+                    "districtId": $('#DistrictID').val(),
+                    "wardId": $('#WardID').val()
+                },
+                success: function (data) {
+                    if (data.value == 1) {
+                        $("#loaderIcon").hide();
+                        $("#validIcon").show();
+                        $("#invalidIcon").hide();
+                        $("#address-message").text("Địa chỉ phù hợp.");
+                        $('#FullAddress').css('background', '#f0fff0');
+                        $('#FullAddress').css('border-color', '#7DC27D');
+                    } else {
+                        $("#loaderIcon").hide();
+                        $("#validIcon").hide();
+                        $("#invalidIcon").show();
+                        $("#address-message").text("Địa chỉ trùng lắp với bệnh viện khác.");
+                        $('#FullAddress').css('background', '#fff0f0');
+                        $('#FullAddress').css('border-color', '#A90329');
+                        $('#FullAddress').focus();
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $("#invalidIcon").show();
+                    $("#address-message").text("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.");
+                }
+            });
+
+            return false;
+        }
     }
 
     @*Data validation*@
     $(document).ready(function () {
+        $('#confirm-button').click(function () {
+            var fullAddress = $("#FullAddress").val();
+            if (fullAddress.trim() != "") {
+                if ($("#invalidIcon").is(":visible")) {
+                    return false;
+                }
+
+                if ($("#invalidIcon").is(":hidden") && $("#validIcon").is(":hidden")) {
+                    return false;
+                }
+            } else {
+                $('#add-hospital-form').submit();
+            }
+        });
+
         $.validator.addMethod("time",
             function (value, element) {
                 var fullTime = value.split('-');
@@ -525,7 +597,7 @@
                 }
 
                 return false;
-            }, "Thời gian không phù hợp");
+            }, "Thời gian không phù hợp.");
 
         $('#add-hospital-form').validate({
             // Rules for form validation
@@ -754,11 +826,10 @@
         width: 687px;
     }
 
-    .resizeIcon
-        {
-            width: 16px;
-            height: auto;
-        }
+    .resizeIcon {
+        width: 16px;
+        height: auto;
+    }
 </style>
 
 <div id="partial-description"></div>
