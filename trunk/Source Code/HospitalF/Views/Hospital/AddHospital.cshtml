@@ -159,6 +159,15 @@
                                     </label>
                                 </section>
 
+                                <section>
+                                    <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
+                                         style="display: none;" id="loaderIcon">
+                                    <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
+                                         style="display: none;" id="validIcon">
+                                    <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
+                                         style="display: none;" id="invalidIcon">
+                                </section>
+
                                 @*<div class="row">
                                     <section class="col col-12">
                                         <div id="google-map"></div>
@@ -293,7 +302,7 @@
     pageSetUp();
 
     @*Display notification*@
-    $(document).ready(function () {
+    function displayNotification() {
         if ('@ViewBag.InsertStatus' == '') {
             return false;
         }
@@ -322,6 +331,10 @@
                 multiline: true
             });
         }
+    }
+
+    $(document).ready(function () {
+        displayNotification();
     });
 
     $(document).ready(function () {
@@ -447,6 +460,18 @@
                 }
             });
         });
+
+        @*AJAX to check for duplicated hospital*@
+        $("#FullAddress").on('input', function () {
+            var cityId = $("#CityId").val();
+            var districtId = $("#DistrictID").val();
+            var wardId = $("#WardID").val();
+            var hospitalName = $("#HospitalName").val();
+            var locationAddress = $("#LocationAddress").val();
+            var streetAddress = $("#StreetAddress").val();
+
+            $("#loaderIcon").show();
+        });
     });
 
     @*Bind data for full address*@
@@ -459,7 +484,6 @@
     $("#WardID").change(function () {
         bindFullAddress();
     });
-
     function bindFullAddress() {
         var city = "";
         if ($('#CityID').val() != '') {
@@ -729,6 +753,12 @@
         height: 300px;
         width: 687px;
     }
+
+    .resizeIcon
+        {
+            width: 16px;
+            height: auto;
+        }
 </style>
 
 <div id="partial-description"></div>
