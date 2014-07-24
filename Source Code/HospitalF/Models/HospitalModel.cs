@@ -279,10 +279,12 @@ namespace HospitalF.Models
             // Return list of dictionary words
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                result = await Task.Run(() => data.SP_INSERT_HOSPITAL(model.HospitalName, model.HospitalTypeID, model.FullAddress,
-                    model.CityID, model.DistrictID, model.WardID, model.PhoneNo, model.Fax, model.Email,
-                    model.Website, model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime, model.OrdinaryEndTime,
-                    model.Coordinate, model.IsAllowAppointment, 1, null, speciality, service, facility));
+                result = await Task.Run(() => data.SP_INSERT_HOSPITAL(model.HospitalName,
+                    model.HospitalTypeID, model.FullAddress, model.CityID, model.DistrictID,
+                    model.WardID, model.PhoneNo, model.Fax, model.Email, model.Website,
+                    model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
+                    model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment, 1,
+                    null, speciality, service, facility));
             }
             return result;
         }

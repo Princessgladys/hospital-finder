@@ -502,12 +502,6 @@ model.HospitalID = hospitalID;
                 // Prepare data
                 int result = 0;
 
-                // Address
-                string address = string.Format("{0} {1} {2} {3} {4}",
-                    model.LocationAddress, model.StreetAddress, model.WardName,
-                    model.DistrictName, model.CityName);
-                model.FullAddress = address;
-
                 // Phone number
                 string phoneNumber = model.PhoneNo;
                 if (!string.IsNullOrEmpty(model.PhoneNo2))
