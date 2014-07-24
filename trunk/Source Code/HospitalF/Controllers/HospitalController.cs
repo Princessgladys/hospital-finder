@@ -611,26 +611,11 @@ model.HospitalID = hospitalID;
 
                 #endregion
 
-                #region Add Hospital to database
-
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
                     result = await model.InsertHospitalAsync(model, speciality, service, facility);
                 }
-
-                // Check if insert process is success or not
-                if (result == 0)
-                {
-                    ViewBag.InsertStatus = 0.ToString() + Constants.Minus + model.HospitalName;
-                }
-                else
-                {
-                    ViewBag.InsertStatus = 1.ToString() + Constants.Minus + model.HospitalName;
-                    model = new HospitalModel();
-                }
-
-                #endregion
 
                 #region Cascade drop down list
 
@@ -644,6 +629,18 @@ model.HospitalID = hospitalID;
                 ViewBag.FacilityList = facilityList;
 
                 #endregion
+
+                // Check if insert process is success or not
+                if (result == 0)
+                {
+                    ViewBag.InsertStatus = 0.ToString() + Constants.Minus + model.HospitalName;
+                }
+                else
+                {
+                    ViewBag.InsertStatus = 1.ToString() + Constants.Minus + model.HospitalName;
+                    ModelState.Clear();
+                    return View();
+                }
             }
             catch (Exception exception)
             {

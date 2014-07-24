@@ -564,6 +564,28 @@
     @*Data validation*@
     $(document).ready(function () {
         $('#confirm-button').click(function () {
+            var city = "";
+            if (($('#CityID').val() != null) && ($('#CityID').val() != '')) {
+                city = ", " + $("#CityID option:selected").text();
+            }
+            var district = "";
+            if (($('#DistrictID').val() != null) && ($("#DistrictID").val() != '')) {
+                district = ", " + $("#DistrictID option:selected").text();
+            }
+            var ward = "";
+            if (($('#WardID').val() != null) && ($("#WardID").val() != '')) {
+                ward = ", " + $("#WardID option:selected").text();
+            }
+            var locationAddress = $("#LocationAddress").val();
+            var streetAddress = $("#StreetAddress").val();
+
+            if ((locationAddress == "") ||
+            (streetAddress == "") || (city == "") ||
+            (district == "") || (ward == "")) {
+                setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+                return false;
+            }
+
             var coordinate = $("#Coordinate").val();
             if (coordinate.trim() == "") {
                 setAddressNotificationMessage("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 0);
@@ -572,10 +594,6 @@
             var fullAddress = $("#FullAddress").val();
             if (fullAddress.trim() != "") {
                 if ($("#invalidIcon").is(":visible")) {
-                    return false;
-                }
-
-                if ($("#invalidIcon").is(":hidden") && $("#validIcon").is(":hidden")) {
                     return false;
                 }
             } else {
@@ -972,8 +990,14 @@
                         <!-- end widget edit box -->
                         <!-- widget content -->
                         <div class="widget-body no-padding">
-
-                            <div id="summernote"></div>
+                            @{
+                                string fullDescription = string.Empty;
+                                if (Model != null)
+                                {
+                                    fullDescription = Model.FullDescription;
+                                }    
+                            }
+                            <div id="summernote">@fullDescription</div>
 
                             <div class="widget-footer smart-form">
                                 <div class="btn-group">
