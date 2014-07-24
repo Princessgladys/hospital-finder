@@ -346,16 +346,15 @@ model.HospitalID = hospitalID;
         /// <param name="cityId">City ID</param>
         /// <param name="districtId">District ID</param>
         /// <param name="wardId">Ward ID</param>
-        /// <param name="hospitalName">Hospital name</param>
         /// <returns> 1: Not duplicated, 0: Duplicated</returns>
         public async Task<ActionResult> CheckValidHospitalWithAddress(string address,
-            int cityId, int districtId, int wardId, string hospitalName)
+            int cityId, int districtId, int wardId)
         {
             try
             {
                 HospitalModel model = new HospitalModel();
                 int result = await model.CheckValidHospitalWithAddress(address,
-                    cityId, districtId, wardId, hospitalName);
+                    cityId, districtId, wardId);
                 return Json(new { value = result }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
@@ -559,24 +558,34 @@ model.HospitalID = hospitalID;
 
                 // Speciality list
                 string speciality = string.Empty;
-                foreach (string data in model.SelectedSpecialities)
+                if (model.SelectedSpecialities.Count != 0)
                 {
-                    speciality += specialityList + Constants.VerticalBar.ToString() +data;
+                    foreach (string data in model.SelectedSpecialities)
+                    {
+                        speciality += specialityList + Constants.VerticalBar.ToString() + data;
+                    }
                 }
 
                 // Service list
                 string service = string.Empty;
-                foreach (string data in model.SelectedServices)
+                if (model.SelectedServices.Count != 0)
                 {
-                    service += specialityList + Constants.VerticalBar.ToString() + data;
+                    foreach (string data in model.SelectedServices)
+                    {
+                        service += specialityList + Constants.VerticalBar.ToString() + data;
+                    }
                 }
+                
 
                 // Facility list
                 string facility = string.Empty;
-                foreach (string data in model.SelectedFacilities)
+                if (model.SelectedFacilities.Count != 0)
                 {
-                    facility += specialityList + Constants.Minus + data;
-                }
+                    foreach (string data in model.SelectedFacilities)
+                    {
+                        facility += specialityList + Constants.Minus + data;
+                    }
+                }       
 
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
