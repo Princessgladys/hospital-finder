@@ -44,6 +44,8 @@ namespace HospitalF
                         "~/Content/css/smartadmin-production.css",
                         "~/Content/css/smartadmin-skins.css",
                         "~/Content/css/jquery.rating.css",
+                        "~/Content/css/bjqs.css",
+                        "~/Content/css/bjqs-demo.css",
                         "~/Content/css/custom-home.css",
                         "~/Content/css/custom-font.css",
                         "~/Content/css/custom-hospital.css",

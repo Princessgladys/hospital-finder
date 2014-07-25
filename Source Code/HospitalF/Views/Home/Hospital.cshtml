@@ -76,8 +76,22 @@
                         <hr />
                         <div>
                             <h5 class="txt-color-blue">Đánh giá bệnh viện</h5>
+                            <div class="alert alert-success fade in" style="display: none;">
+                                <button class="close" data-dismiss="alert">
+                                    ×
+                                </button>
+                                <i class="fa-fw fa fa-check"></i>
+                                <strong>Đã bình chọn</strong> Cám ơn bạn đã tham gia đánh giá.
+                            </div>
+                            <div class="alert alert-danger fade in" style="display: none;">
+                                <button class="close" data-dismiss="alert">
+                                    ×
+                                </button>
+                                <i class="fa-fw fa fa-times"></i>
+                                <strong>Lỗi!</strong> Vui lòng thử lại sau ít phút.
+                            </div>
                             <p class="description">
-                                Mong bạn dành chút thời gian để giúp chúng tôi đánh giá bệnh viện này.
+                                Bạn có hài lòng với dịch vụ của bệnh viện? Mong bạn dành ít phút để giúp chúng tôi đánh giá bệnh viện này.
                             </p>
                             <div class="display-inline">
                                 <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tạm Được" value="1" />
@@ -96,13 +110,16 @@
                                         data: { "id": id, "score": score },
                                         success: function (data) {
                                             $('.hover-star').rating('disable');
-                                            alert('Cám ơn bạn đã tham gia đánh giá.');
+                                            $('.alert-success').show();
+                                            $('.alert-danger').hide();
                                         },
                                         error: function (xhr, ajaxOptions, thrownError) {
-                                            alert('Vui lòng thử lại sau ít phút.');
+                                            $('.alert-success').hide();
+                                            $('.alert-danger').show();
                                         }
                                     });
                                 }
+
                                 $('.hover-star').rating({
                                     focus: function (value, link) {
                                         var tip = $('#rate-tip');
@@ -124,8 +141,34 @@
                     <section class="col-md-5">
                         <div class="image-info">
                             <h5 class="txt-color-blue">Hình ảnh</h5>
-                            <hr />
-                            <strong>Chưa có gì hết.</strong>
+                            <div id="my-slideshow">
+                                <ul class="bjqs">
+                                    <li>
+                                        <img src="~/Content/img/banner01.jpg" alt="banner01.jpg" />
+                                    </li>
+                                    <li>
+                                        <img src="~/Content/img/banner02.jpg" alt="banner02.jpg" />
+                                    </li>
+                                    <li>
+                                        <img src="~/Content/img/logo.png" alt="banner02.jpg" />
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <script type="text/javascript">
+                                $(document).ready(function () {
+                                    $('#my-slideshow').bjqs({
+                                        height: 400,
+                                        responsive: true,
+                                        usecaptions : true,
+                                        nexttext: '<span class="glyphicon glyphicon-chevron-right"></span>',
+                                        prevtext: '<span class="glyphicon glyphicon-chevron-left"></span>',
+                                        randomstart: true,
+                                        keyboardnav: true,
+                                        hoverpause: true,
+                                    });
+                                });
+                            </script>
                         </div>
                         <hr />
                         <div id="map-canvas-hospital"></div>
