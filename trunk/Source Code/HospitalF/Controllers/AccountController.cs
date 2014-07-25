@@ -137,7 +137,7 @@ namespace HospitalF.Controllers
         }
 
         /// <summary>
-        ///
+        /// POST: /Account/AddAccount
         /// </summary>
         /// <returns></returns>
         [LayoutInjecter(Constants.AdmidLayout)]
@@ -145,9 +145,31 @@ namespace HospitalF.Controllers
         [HttpPost]
         public async Task<ActionResult> AddAccount(AccountModels model)
         {
+            try
+            {
+                int result = 0;
 
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.InsertHospitalUserAsync(model);
+                }
 
-            return View();
+                // Check returned result
+                if (result == 1)
+                {
+                    return RedirectToAction(Constants.AddHospitalAction, Constants.HospitalController);
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
         }
 
         #endregion
