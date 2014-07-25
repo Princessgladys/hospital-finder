@@ -20,5 +20,10 @@ namespace HospitalF.Models
         public int SpecialityID { get; set; }
         public string SpecialityName { get; set; }
         public List<Speciality> SpecialityList { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property SelectedSpecialities
+        /// </summary>
+        public List<string> SelectedSpecialities { get; set; }
     }
 }

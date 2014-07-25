@@ -79,49 +79,49 @@ namespace HospitalF.Utilities
         }
         #endregion
 
-        #region load all facilities of hospital
-        public static async Task<List<Facility>> LoadFacilityInHospitalFacilityAsync(int hospitalID)
-        {
-            List<SP_LOAD_FACILITY_IN_HOSPITAL_FACILITYResult> result = null;
-            List<Facility> facilityList = null;
-            Facility facility = null;
-            using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                result = await Task.Run(() =>
-                    data.SP_LOAD_FACILITY_IN_HOSPITAL_FACILITY(hospitalID).ToList());
-            }
-            foreach (SP_LOAD_FACILITY_IN_HOSPITAL_FACILITYResult re in result)
-            {
-                facility = new Facility();
-                facility.Facility_ID = re.Facility_ID;
-                facility.Facility_Name = re.Facility_Name;
-                facilityList.Add(facility);
-            }
-            return facilityList;
-        }
-        #endregion
+        //#region load all facilities of hospital
+        //public static async Task<List<Facility>> LoadFacilityInHospitalFacilityAsync(int hospitalID)
+        //{
+        //    List<SP_LOAD_FACILITY_IN_HOSPITAL_FACILITYResult> result = null;
+        //    List<Facility> facilityList = null;
+        //    Facility facility = null;
+        //    using (LinqDBDataContext data = new LinqDBDataContext())
+        //    {
+        //        result = await Task.Run(() =>
+        //            data.SP_LOAD_FACILITY_IN_HOSPITAL_FACILITY(hospitalID).ToList());
+        //    }
+        //    foreach (SP_LOAD_FACILITY_IN_HOSPITAL_FACILITYResult re in result)
+        //    {
+        //        facility = new Facility();
+        //        facility.Facility_ID = re.Facility_ID;
+        //        facility.Facility_Name = re.Facility_Name;
+        //        facilityList.Add(facility);
+        //    }
+        //    return facilityList;
+        //}
+        //#endregion
 
-        #region loadd all services of hospital
-        public static async Task<List<Service>> LoadServiceInHospitalServiceAsync(int hospitalID)
-        {
-            List<SP_LOAD_SERVICE_IN_HOSPITAL_SERVICEResult> result = null;
-            List<Service> serviceList = null;
-            Service service = null;
-            using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                result = await Task.Run(() =>
-                    data.SP_LOAD_SERVICE_IN_HOSPITAL_SERVICE(hospitalID).ToList());
-            }
-            foreach (SP_LOAD_SERVICE_IN_HOSPITAL_SERVICEResult re in result)
-            {
-                service = new Service();
-                service.Service_ID = re.Service_ID;
-                service.Service_Name = re.Service_Name;
-                serviceList.Add(service);
-            }
-            return serviceList;
-        }
-        #endregion
+        //#region loadd all services of hospital
+        //public static async Task<List<Service>> LoadServiceInHospitalServiceAsync(int hospitalID)
+        //{
+        //    List<SP_LOAD_SERVICE_IN_HOSPITAL_SERVICEResult> result = null;
+        //    List<Service> serviceList = null;
+        //    Service service = null;
+        //    using (LinqDBDataContext data = new LinqDBDataContext())
+        //    {
+        //        result = await Task.Run(() =>
+        //            data.SP_LOAD_SERVICE_IN_HOSPITAL_SERVICE(hospitalID).ToList());
+        //    }
+        //    foreach (SP_LOAD_SERVICE_IN_HOSPITAL_SERVICEResult re in result)
+        //    {
+        //        service = new Service();
+        //        service.Service_ID = re.Service_ID;
+        //        service.Service_Name = re.Service_Name;
+        //        serviceList.Add(service);
+        //    }
+        //    return serviceList;
+        //}
+        //#endregion
 
         #region load type of hospital
         public static async Task<List<HospitalType>> LoadTypeInHospitalTypeAsync(int hospitalID)
