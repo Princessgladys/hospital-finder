@@ -66,7 +66,23 @@ namespace HospitalF.Models
 
         #region Method
 
-
+        /// <summary>
+        /// Add new hospital user
+        /// </summary>
+        /// <param name="model">Account Model</param>
+        /// <returns>1: Success, 0: Failed</returns>
+        public async Task<int> InsertHospitalUserAsync(AccountModels model)
+        {
+            int result = 0;
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() => data.SP_INSERT_HOSPITAL_USER(model.Email,
+                    model.SecondaryEmail, model.Password, model.FirstName, model.LastName,
+                    model.PhoneNumber, model.ConfirmedPerson));
+            }
+            return result;
+        }
 
         #endregion
 
