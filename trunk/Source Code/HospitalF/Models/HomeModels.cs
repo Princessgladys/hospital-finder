@@ -657,8 +657,8 @@ namespace HospitalF.Models
         {
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                data.SP_RATE_HOSPITAL(userId, hospitalId, score);
-                return true;
+                double result = data.SP_RATE_HOSPITAL(userId, hospitalId, score);
+                return (result > 0);
             }
         }
         #endregion
