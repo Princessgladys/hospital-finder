@@ -324,12 +324,15 @@ model.HospitalID = hospitalID;
         /// Task[ActionResult] with JSON that contains the value of:
         /// 1: Valid
         /// 0: Invalid
+        /// 2: Invalid with already manage a hospital
         /// </returns>
-        public async Task<ActionResult> CheckValidUser(string email)
+        public async Task<ActionResult> CheckValidUserWithEmail(string email)
         {
             try
             {
-                return Json(1, JsonRequestBehavior.AllowGet);
+                HospitalModel model = new HospitalModel();
+                int result = await model.CheckValidUserWithEmail(email);
+                return Json(new { value = result }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
             {

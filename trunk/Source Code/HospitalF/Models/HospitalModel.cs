@@ -224,6 +224,27 @@ namespace HospitalF.Models
         #region SonNX
 
         /// <summary>
+        /// Check if an user have been existed in database
+        /// </summary>
+        /// <param name="email">Input email</param>
+        /// <returns>
+        /// Task[ActionResult] with JSON that contains the value of:
+        /// 1: Valid
+        /// 0: Invalid
+        /// 2: Invalid with already manage a hospital
+        /// </returns>
+        public async Task<int> CheckValidUserWithEmail(string email)
+        {
+            int result = 0;
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() => data.SP_CHECK_VALID_USER_IN_CHARGED(email));
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Check if there is  similar hospital with name and address
         /// are equal with given data from user
         /// </summary>
