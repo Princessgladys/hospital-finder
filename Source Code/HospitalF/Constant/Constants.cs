@@ -180,6 +180,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string RateHospitalAction = "RateHospital";
 
+        /// <summary>
+        /// Name of AddAccount method in AccountController
+        /// </summary>
+        public const string AddAccountAction = "AddAccount";
+
         #endregion
 
         #region AccountModel
@@ -396,6 +401,16 @@ namespace HospitalF.Constant
         /// Vietnamese name of property FullName
         /// </summary>
         public const string FullName = "Họ tên";
+
+        /// <summary>
+        /// Vietnamese name of property FistName
+        /// </summary>
+        public const string FirstName = "Tên";
+
+        /// <summary>
+        /// Vietnamese name of property LastName
+        /// </summary>
+        public const string LastName = "Họ";
 
         /// <summary>
         /// Vietnames name of property Gender

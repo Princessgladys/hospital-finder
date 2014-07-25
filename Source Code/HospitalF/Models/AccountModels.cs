@@ -18,6 +18,62 @@ namespace HospitalF.Models
     /// </summary>
     public class AccountModels
     {
+        #region SonNX
+
+        #region Properties
+
+        /// <summary>
+        /// Get/set value for property Email
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Get/set value for property Password
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// Get/set value for property SecondaryEmail
+        /// </summary>
+        public string SecondaryEmail { get; set; }
+
+        /// <summary>
+        /// Get/set value for property FirstName
+        /// </summary>
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// Get/set value for property LastName
+        /// </summary>
+        public string LastName { get; set; }
+
+        /// <summary>
+        /// Get/set value for property PhoneNumber
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// Get/set value for property ConfirmedPerson
+        /// </summary>
+        public int ConfirmedPerson { get; set; }
+
+        /// <summary>
+        /// Get/set value for property HospitalID
+        /// </summary>
+        public int HospitalID { get; set; }
+
+        #endregion
+
+        #region Method
+
+
+
+        #endregion
+
+        #endregion
+
+        #region VietLP
+
         public static bool IsExistedUser(string email)
         {
 
@@ -101,5 +157,7 @@ namespace HospitalF.Models
                 return userId;
             }
         }
+
+        #endregion
     }
 }

@@ -232,7 +232,7 @@
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-envelope"></i>
-                                            @Html.TextBoxFor(m => m.Email, new { @placeholder = "Nhập địa chỉ Email bệnh viện" })
+                                            @Html.TextBoxFor(m => m.Email, new { @placeholder = "Nhập địa chỉ Email bệnh viện", @type = "email" })
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -247,7 +247,7 @@
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-male"></i>
-                                            @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm" })
+                                            @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm", @type = "email" })
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -267,12 +267,18 @@
                                         <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
                                              style="display: none;" id="invalidIconUser">
                                         <span id="user-message"></span>
-                                        <a href="ajax/modal-content/model-content-2.html"
-                                           data-toggle="modal" data-target="#remoteModal"
+                                        <a href="/Account/AddAccount"
+                                           data-toggle="modal" data-target="#addAccount"
                                            class="btn btn-primary"
                                            id="add-new-user-button" style="display: none; float: right;">
                                             Thêm mới người dùng
                                         </a>
+                                        <div class="modal fade" id="addAccount" tabindex="-1"
+                                             role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content"></div>
+                                            </div>
+                                        </div>
                                     </section>
                                 </div>
                             </fieldset>
@@ -782,6 +788,9 @@
                 Email: {
                     email: true
                 },
+                PersonInCharged: {
+                    email: true
+                },
                 Website: {
                     url: true
                 },
@@ -830,13 +839,11 @@
                 PhoneNo: {
                     required: '@string.Format(ErrorMessage.CEM001, Constants.PhoneNo)',
                     minlength: '@string.Format(ErrorMessage.CEM012, Constants.PhoneNo, 8)',
-                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.PhoneNo, 13)',
-                    digits: '@string.Format(ErrorMessage.CEM005, Constants.PhoneNo)'
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.PhoneNo, 13)'
                 },
                 PhoneNo2: {
                     minlength: '@string.Format(ErrorMessage.CEM012, Constants.AlternativePhone, 8)',
                     maxlength: '@string.Format(ErrorMessage.CEM003, Constants.AlternativePhone, 13)',
-                    digits: '@string.Format(ErrorMessage.CEM005, Constants.AlternativePhone)'
                 },
                 PhoneNo3: {
                     minlength: '@string.Format(ErrorMessage.CEM012, Constants.MobilePhone, 11)',
@@ -844,6 +851,9 @@
                     digits: '@string.Format(ErrorMessage.CEM005, Constants.MobilePhone)'
                 },
                 Email: {
+                    email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
+                },
+                PersonInCharged: {
                     email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
                 },
                 Website: {
