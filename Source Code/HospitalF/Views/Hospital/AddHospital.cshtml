@@ -25,7 +25,7 @@
     </div>
 </div>
 
-<div class="alert alert-block alert-success">
+<div class="alert alert-block alert-info">
     <h4 class="alert-heading"><i class="fa fa-check-square-o"></i> Nhập thông tin</h4>
     <p>
         Điền những thông tin cần thiết vào bản mẫu. Sau đó ấn xác nhận để tạo bệnh viện mới.
@@ -33,6 +33,22 @@
 </div>
 
 <section id="widget-grid" class="">
+    <div class="alert alert-danger fade in" style="display: none;"
+         id="error-alert">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-times"></i>
+        <strong>Lỗi!</strong> thao tác không thành công. Xin vui lòng thử lại.
+    </div>
+    <div class="alert alert-success fade in" style="display: none;"
+         id="success-alert">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Thành công</strong> Thêm mới bệnh viện thành công.
+    </div>
     <!-- row -->
     <div class="row">
         <!-- NEW WIDGET START -->
@@ -231,7 +247,7 @@
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-male"></i>
-                                            @Html.TextBoxFor(m => m.CreatedPerson, new { @placeholder = "Nhập Email của người chịu trách nhiệm" })
+                                            @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm" })
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -251,6 +267,12 @@
                                         <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
                                              style="display: none;" id="invalidIconUser">
                                         <span id="user-message"></span>
+                                        <a href="ajax/modal-content/model-content-2.html"
+                                           data-toggle="modal" data-target="#remoteModal"
+                                           class="btn btn-primary"
+                                           id="add-new-user-button" style="display: none; float: right;">
+                                            Thêm mới người dùng
+                                        </a>
                                     </section>
                                 </div>
                             </fieldset>
@@ -404,6 +426,7 @@
         var hospitalName = returnValue[1];
 
         if (status != 0) {
+            $("#success-alert").show();
             notif({
                 msg: "Thêm mới [" + hospitalName + "] thành công!",
                 type: "success",
@@ -413,6 +436,7 @@
                 multiline: true
             });
         } else {
+            $("#error-alert").show();
             notif({
                 msg: "Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.",
                 type: "error",
@@ -428,44 +452,55 @@
         displayNotification();
     });
 
+    var timeoutReference;
     $(document).ready(function () {
         @*Check if user email is existed in database*@
-        $("#CreatedPerson").change(function () {
-            var selectedItem = $(this).val();
-            var ddlDistrict = $("#DistrictID");
-            $.ajax({
-                cache: false,
-                type: "GET",
-                url: "@(Url.RouteUrl(Constants.GetDistrictByCityAction))",
-                data: { "cityId": selectedItem },
-                success: function (data) {
-                    ddlDistrict.html('');
-                    $.each(data, function (id, option) {
-                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
-                    });
-                    $('#DistrictName').val($("#DistrictID option:selected").text());
+        $("#PersonInCharged").on('input', function () {
+            var email = $(this).val();
+            $("#loaderIconUser").show();
 
-                    selectedItem = $("#DistrictID").val();
-                    var ddlWard = $("#WardID");
-                    $.ajax({
-                        cache: false,
-                        type: "GET",
-                        url: "@(Url.RouteUrl(Constants.GetWardByDistrictAction))",
-                        data: { "districtId": selectedItem },
-                        success: function (data) {
-                            ddlWard.html('');
-                            $.each(data, function (id, option) {
-                                ddlWard.append($('<option></option>').val(option.id).html(option.name));
-                            });
-                            $('#WardName').val($("#WardID option:selected").text());
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                        }
-                    });
+            if (timeoutReference) clearTimeout(timeoutReference);
+            timeoutReference = setTimeout(function () {
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.RouteUrl("CheckValidUserWithEmail"))",
+                    data: { "email": email },
+                success: function (data) {
+                    if (data.value == 1) {
+                        $("#loaderIconUser").hide();
+                        $("#validIconUser").show();
+                        $("#invalidIconUser").hide();
+                        $("#user-message").text("Người chịu trách nhiệm hợp lệ.");
+                        $('#PersonInCharged').css('background', '#f0fff0');
+                        $('#PersonInCharged').css('border-color', '#7DC27D');
+                        $("#add-new-user-button").hide();
+                    }
+                    if (data.value == 2) {
+                        $("#loaderIconUser").hide();
+                        $("#validIconUser").hide();
+                        $("#invalidIconUser").show();
+                        $("#user-message").text("Người dùng hiện đang chịu trách nhiệm một bệnh viện khác.");
+                        $('#PersonInCharged').css('background', '#fff0f0');
+                        $('#PersonInCharged').css('border-color', '#A90329');
+                        $("#add-new-user-button").show();
+                    }
+                    if (data.value == 0) {
+                        $("#loaderIconUser").hide();
+                        $("#validIconUser").hide();
+                        $("#invalidIconUser").show();
+                        $("#user-message").text("Người dùng không tồn tại trong hệ thống.");
+                        $('#PersonInCharged').css('background', '#fff0f0');
+                        $('#PersonInCharged').css('border-color', '#A90329');
+                        $("#add-new-user-button").show();
+                    }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                 }
             });
+            }, 1500);
+
+            return false;
         });
 
         @*Format textbox data*@

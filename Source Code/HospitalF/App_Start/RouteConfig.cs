@@ -83,6 +83,10 @@ namespace HospitalF
                             "hospital/checkvalidhospitalwithaddress/",
                             new { controller = "Hospital", action = "CheckValidHospitalWithAddress" },
                             new[] { "HospitalF.Controllers" });
+            routes.MapRoute("CheckValidUserWithEmail",
+                            "hospital/checkvaliduserwithemail/",
+                            new { controller = "Hospital", action = "CheckValidUserWithEmail" },
+                            new[] { "HospitalF.Controllers" });
         }
     }
 }
