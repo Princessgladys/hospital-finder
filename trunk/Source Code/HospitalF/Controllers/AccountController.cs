@@ -12,11 +12,14 @@ using HospitalF.Models;
 using HospitalF.Utilities;
 using Newtonsoft.Json.Linq;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 
 namespace HospitalF.Controllers
 {
     public class AccountController : SecurityBaseController
     {
+        #region VietLP
+
         //
         // GET: /Account/
         [HttpGet]
@@ -118,5 +121,35 @@ namespace HospitalF.Controllers
             }
         }
 
+        #endregion
+
+        #region SonNX
+
+        /// <summary>
+        /// Load paritial view Add Account
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public ActionResult AddAccount()
+        {
+            return PartialView(Constants.AddAccountAction);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> AddAccount(AccountModels model)
+        {
+
+
+            return View();
+        }
+
+        #endregion
     }
 }

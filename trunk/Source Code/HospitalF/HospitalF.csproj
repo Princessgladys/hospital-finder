@@ -487,6 +487,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\Hospital.cshtml" />
     <Content Include="Views\Hospital\AddHospital.cshtml" />
+    <Content Include="Views\Account\AddAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
