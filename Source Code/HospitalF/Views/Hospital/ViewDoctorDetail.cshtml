@@ -1,22 +1,28 @@
 ﻿@model HospitalF.Models.DoctorModels
 @using HospitalF.Constant
-@using System.Collections.Generic;
 @using HospitalF.Models;
-
-@*<link rel="stylesheet" href="~/Content/css/drap-drop.css" type="text/css" media="screen" />
+@{
+    ViewBag.Title = "Thông tin bác sĩ";
+}@*<link rel="stylesheet" href="~/Content/css/drap-drop.css" type="text/css" media="screen" />
 <script type="text/javascript" src="~/Content/js/drap-drop/script.js"></script>
 <script type="text/javascript" src="~/Content/js/drap-drop/redips-drag-min.js"></script>*@
-<link rel="stylesheet" href="~/Content/css/smartadmin-production.m.css" type="text/css" media="screen" />
 <section id="widget-grid" class="">
 
     <!-- row -->
-    <div class="row">
-
+   <div class="row">
         <!-- NEW WIDGET START -->
-        <article class="col-sm-12 col-md-12 col-lg-12">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
 
             <!-- Widget ID (each widget will need unique ID)-->
-            <div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false">
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                 data-widget-colorbutton="false"
+                 data-widget-editbutton="false"
+                 data-widget-togglebutton="false"
+                 data-widget-deletebutton="false"
+                 data-widget-fullscreenbutton="false"
+                 data-widget-custombutton="false"
+                 data-widget-collapsed="false"
+                 data-widget-sortable="false">
                 <header style="border: none; height: 40px;">
                     <span class="widget-icon" style="font-size: 180%;"><i class="fa fa-check"></i></span>
                     <h1 style="line-height: 40px; padding-left: 30px;">Thông tin bác sĩ</h1>
@@ -72,31 +78,16 @@
                                    })
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Chuyên khoa</label>
-                                    <div class="col-md-5">
-                                        @{
-                                            List<Speciality> SpecialityList = ViewBag.SpecialityList;
-                                            Speciality spe=null;
-                                            for (int i = 0; i < SpecialityList.Count(); i++)
-                                            {
-                                                spe=SpecialityList[i];
-                                                string check = "";
-                                                foreach(var item in Model.SpecialityList){
-                                                    if(item.Speciality_ID==spe.Speciality_ID){
-                                                        check = "checked";
-                                                        break;
-                                                    }
-                                                }                                
-                                        <div class="col col-5">
-                                            <label class="checkbox state-success">
-                                                <input type="checkbox" name="checkbox" value="@spe.Speciality_ID" @check><i></i>@spe.Speciality_Name</label>
-                                        </div>
-                                                }
 
-                                            }
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Danh sách chuyên ngành</label>
+                                        <div class="col-md-5">
+                                        @Html.DropDownListFor(m => m.SelectedSpecialities,
+                                        (SelectList)ViewBag.SpecialityList,
+                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                        
+                                    </div>
                                         </div>
-                                            </div>
                             </fieldset>
 
                         </form>
@@ -115,70 +106,7 @@
     </div>
 </section>
 
-@*<script type="text/javascript">
-    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+<script type="text/javascript">
     pageSetUp();
 
-</script>*@
-<style>
-    .col
-    {
-        float: left;
-        min-height: 1px;
-        padding-right: 15px;
-        padding-left: 15px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-    }
-
-    .col-1
-    {
-        width: 8.33%;
-    }
-
-    .col-2
-    {
-        width: 16.66%;
-    }
-
-    .col-3
-    {
-        width: 25%;
-    }
-
-    .col-4
-    {
-        width: 33.33%;
-    }
-
-    .col-5
-    {
-        width: 41.66%;
-    }
-
-    .col-6
-    {
-        width: 50%;
-    }
-
-    .col-8
-    {
-        width: 66.67%;
-    }
-
-    .col-9
-    {
-        width: 75%;
-    }
-
-    .col-10
-    {
-        width: 83.33%;
-    }
-
-
-    .select select
-    {
-        padding: 5px;
-    }
-</style>
+</script>

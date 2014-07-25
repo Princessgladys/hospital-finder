@@ -54,5 +54,56 @@ namespace HospitalF.Utilities
                      }));
             }
         }
+        /// <summary>
+        /// Load list of service of hospital
+        /// </summary>
+        /// <param name="hospitalID"></param>
+        /// <returns></returns>
+        public static async Task<List<ServiceEntity>> LoadServiceOfHospitalAsync(int hospitalID)
+        {
+            List<ServiceEntity> serviceList = new List<ServiceEntity>();
+            List<SP_LOAD_SERVICE_IN_HOSPITAL_SERVICEResult> result;
+            ServiceEntity service = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result= await Task.Run(() => data.SP_LOAD_SERVICE_IN_HOSPITAL_SERVICE(hospitalID).ToList());
+                foreach (SP_LOAD_SERVICE_IN_HOSPITAL_SERVICEResult r in result)
+                {
+                    service = new ServiceEntity();
+                    service.Service_ID = r.Service_ID;
+                    service.Service_Name = r.Service_Name;
+                    service.Type_ID = r.Service_Type;
+                    service.Type_Name = r.Type_Name;
+                    serviceList.Add(service);
+                }
+            }
+            return serviceList;
+        }
+
+        /// <summary>
+        /// Load list of facility of hospital
+        /// </summary>
+        /// <param name="hospitalID"></param>
+        /// <returns></returns>
+        public static async Task<List<FacilityEntity>> LoadFacilityOfHospitalAsync(int hospitalID)
+        {
+            List<FacilityEntity> facilityList = new List<FacilityEntity>();
+            List<SP_LOAD_FACILITY_IN_HOSPITAL_FACILITYResult> result;
+            FacilityEntity facility = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() => data.SP_LOAD_FACILITY_IN_HOSPITAL_FACILITY(hospitalID).ToList());
+                foreach (SP_LOAD_FACILITY_IN_HOSPITAL_FACILITYResult r in result)
+                {
+                    facility = new FacilityEntity();
+                    facility.Facility_ID = r.Facility_ID;
+                    facility.Facility_Name = r.Facility_Name;
+                    facility.Type_ID = r.Facility_Type;
+                    facility.Type_Name = r.Type_Name;
+                    facilityList.Add(facility);
+                }
+            }
+            return facilityList;
+        }
     }
 }

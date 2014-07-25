@@ -1,9 +1,9 @@
 ﻿@model HospitalF.Models.HospitalModel
 @using HospitalF.Constant
-@using System.Collections.Generic;
-@using HospitalF.Models;
+@using HospitalF.Entities;
+@using HospitalF.Models
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Thông tin bệnh viện";
 }
 
 <style>
@@ -60,10 +60,13 @@
     }
 </style>
 <script type="text/javascript">
+
+
+
     $(function () {
         $("#PhoneNo").mask("(99) 99999999");
         $("#Fax").mask("(99) 99999999");
-        $('a[rel*=leanModal]').leanModal({ top: 200, closeButton: ".modal_close" });
+
         //search doctor
         $(document).ready(function () {
             @*AJAX for cascading Doctor drop down list*@
@@ -92,33 +95,9 @@
                     window.alert('Vui lòng nhập tên bác sĩ hoặc chọn chuyên khoa');
                 }
             });
-            //$("input[type='text']").focus(function () { $(this).select(); });
-            $("#UpdateButton").click(function ()
-            {
-                var id = $("#HospitalID").val();
-                var name = $("#HospitalName").val();
-                var address = $("#Address").val();
-                var website = $("#Website").val();
-                var hospitalType = $("#HospitalTypeID").val();
-                var phoneNo = $("#PhoneNo").val();
-                var fax = $("#Fax").val();
-                var statesProgress = $("#states-loading-doctor-progress");
-                statesProgress.show();
-                $.ajax({
-                    cache: false,
-                    type: "GET",
-                    url: "@(Url.RouteUrl(Constants.HospitalBasicInforUpdateAction))",
-                    data: { id: id, name: name, address: address, website: website, hospitalType: hospitalType, phoneNo: phoneNo, fax: fax },
-                    success: function (data) {
-                        $("#BasicInfor").replaceWith(data);
-                        statesProgress.hide();
-                        $("#signup").css({ "display": "none" })
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        statesProgress.hide();
-                    }
-                })
-            });
+
+            // update doctor information
+
         });
     });
 </script>
@@ -149,88 +128,125 @@
 
                     <!-- widget content -->
                     <div class="widget-body">
-                        
-                                @{
-                                    Hospital hospital = ViewBag.HospitalObject;
-                                    }
-                        <form class="form-horizontal">
+
+                        <form class="form-horizontal" action="#">
                             <input type="hidden" value="25" />
                             <fieldset id="BasicInfor">
                                 <legend>
-                                    <span>Thông tin chung</span>
-                                    <a id="go" rel="leanModal" href="#signup" name="signup">
-                                        <button class="btn btn-primary" type="submit">
-                                            <i class="fa fa-edit"></i>
-                                            Chỉnh sửa
-                                        </button>
-                                    </a>
+                                    <span>Thông tin căn bản</span>
+                                    @Html.ActionLink("Chỉnh sửa", "HospitalBasicInforUpdate", "Hospital", new
+                               {
+                                   hospitalId = Model.HospitalID
+                               }, new { @style="float:right;"})
                                 </legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Tên bệnh viện</label>
                                     <div class="col-md-5">
-                                        <label class="control-label" style="text-align: left;">@hospital.Hospital_Name</label>
-                                        @*@Html.LabelFor(m => m.HospitalName, new
-                                   {
-                                       @class="control-label",
-                                       @style="text-align: left;"
-                                   })*@
+                                        <label class="control-label" style="text-align: left;">@Model.HospitalName</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Website</label>
                                     <div class="col-md-5">
-                                        <label class="control-label" style="text-align: left;"><a href="@hospital.Website">@hospital.Website</a></label>
+                                        <label class="control-label" style="text-align: left;"><a href="@Model.Website">@Model.Website</a></label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Loại hình dịch vụ</label>
                                     <div class="col-md-5">
-                                        <label class="control-label" style="text-align: left;">@ViewBag.HospitalTypeName</label>
-                                        @*@Html.LabelFor(m => m.TypeName, new
-                                   {
-                                       @class="control-label",
-                                       @style="text-align: left;"
-                                   })*@
+                                        <label class="control-label" style="text-align: left;">@Model.HospitalTypeName</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Địa chỉ</label>
                                     <div class="col-md-5">
-                                        <label class="control-label" style="text-align: left;">@hospital.Address</label>
-                                        @* @Html.LabelFor(m => m.Address, new
-                                   {
-                                       @class="control-label",
-                                       @style="text-align: left;"
-                                   })*@
+                                        <label class="control-label" style="text-align: left;">@Model.FullAddress</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Số điện thoại</label>
+                                    <label class="col-md-2 control-label">Số điện thoại chính</label>
                                     <div class="col-md-5">
-                                        <label class="control-label" style="text-align: left;">@hospital.Phone_Number</label>
+                                        <label class="control-label" style="text-align: left;">@Model.PhoneNo</label>
                                     </div>
                                 </div>
+                                @if (Model.PhoneNo2 != null)
+                                {
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Số điện thoại thay thế</label>
+                                        <div class="col-md-5">
+                                            <label class="control-label" style="text-align: left;">@Model.PhoneNo2</label>
+                                        </div>
+                                    </div>
+                                }@if (Model.PhoneNo3 != null)
+                                     {
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label">Số điện thoại</label>
+                                            <div class="col-md-5">
+                                                <label class="control-label" style="text-align: left;">@Model.PhoneNo3</label>
+                                            </div>
+                                        </div>
+                                     }
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">Số Fax</label>
                                     <div class="col-md-5">
-                                        <label class="control-label" style="text-align: left;">@hospital.Fax</label>
+                                        <label class="control-label" style="text-align: left;">@Model.Fax</label>
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Lịch khám ngày thường</label>
+                                    <div class="col-md-5">
+                                        <label class="control-label" style="text-align: left;">@Model.OrdinaryStartTime</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Lịch khám ngày lễ/Tết</label>
+                                    <div class="col-md-5">
+                                        <label class="control-label" style="text-align: left;">@Model.HolidayStartTime</label>
+                                    </div>
+                                </div>
+
+
+                                @{string allow = "";
+                                  string notAllow = "checked";
+                                  if (Model.IsAllowAppointment == true)
+                                  {
+                                      allow = "checked";
+                                      notAllow = "";
+                                  }
+                                }
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"></label>
+                                <div class="col-md-5">
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" class="radiobox style-0" @allow name="style-0" disabled>
+                                            <span>Cho phép đăng ký khám trực tuyến</span>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" class="radiobox style-0" @notAllow name="style-0" disabled>
+                                            <span>Không có dịch vụ đăng ký khám trực tuyến</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                    </div>
                             </fieldset>
 
                             <fieldset>
                                 <legend><span>Chuyên khoa</span>
-                                    <a href="#">
-                                        <button class="btn btn-primary" type="button">
-                                            <i class="fa fa-edit"></i>
-                                            Chỉnh sửa
-                                        </button>
-                                    </a>
+                                    @Html.ActionLink("Chỉnh sửa", "HospitalBasicInforUpdate", "Hospital", new
+                               {
+                                   @hospitalID=@Model.HospitalID,
+                                   @style="float:right;"
+                               })
 
                                 </legend>
                                 @{List<Speciality> SpecialityList = new List<Speciality>();
-                                  Speciality sp=null;
-                                  foreach(SelectListItem item in  ViewBag.SpecialityList){
+                                  Speciality sp = null;
+                                  foreach (SelectListItem item in ViewBag.SpecialityList)
+                                  {
                                       sp = new Speciality();
                                       sp.Speciality_ID = Int32.Parse(item.Value.Trim());
                                       sp.Speciality_Name = item.Text;
@@ -275,7 +291,6 @@
                                         @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
                                                 Constants.RequireSpeciality, new
                                                 {
-                                                    //@id = "select-1",
                                                     @class = "form-control",
                                                     @style = "width: 60%;"
                                                 })
@@ -297,86 +312,81 @@
                             </fieldset>
 
                             <fieldset class="demo-switcher-1">
+                                <legend><span>Cơ sơ vật chất</span>
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-edit"></i>
+                                        Chỉnh sửa
+                                    </button>
+                                </legend>
+                                @{List<FacilityEntity> FacilityList = (List<FacilityEntity>)ViewBag.FacilityList;
+                                  ServiceEntity service = null;
+                                  if (FacilityList == null || FacilityList.Count() == 0)
+                                  {
+                                    <h5>Bệnh viện hiện chưa có dịch vụ nào</h5>
+                                  }
+                                  else
+                                  {
+                                      for (int i = 0; i < FacilityList.Count; i++)
+                                      {
+                                          if (i == FacilityList.Count - 1)
+                                          {
+                                              break;
+                                          }
+                                          int tempI = i;
+                                    <div class="form-group">
+                                        @for (int j = tempI; j < tempI + 3 && j < FacilityList.Count; j++)
+                                        {
+                                            <label class="col-md-2 control-label" style="text-align: left; margin-left: 2%;">@FacilityList[j].Facility_Name</label>
+                                            if ((j + 1) == (tempI + 3))
+                                            {
+                                                i = j;
+                                            }
+                                        }
+                                    </div>
+                                      }
+                                  }
+                                }
+
+                            </fieldset>
+
+                            <fieldset>
                                 <legend>
-                                    <span>Lịch khám bệnh</span>
+                                    <span>Dịch vụ đi kèm</span>
                                     <button class="btn btn-primary" type="submit">
                                         <i class="fa fa-edit"></i>
                                         Chỉnh sửa
                                     </button>
                                 </legend>
 
-                                <fieldset class="demo-switcher-1">
-                                    <legend><span>Cơ sơ vật chất</span>
-                                        <button class="btn btn-primary" type="submit">
-                                            <i class="fa fa-edit"></i>
-                                            Chỉnh sửa
-                                        </button>
-                                    </legend>
-                                    @{List<Facility> FacilityList =(List<Facility>) ViewBag.FacilityList;
-                                      if (FacilityList == null)
+                                @{List<ServiceEntity> ServiceList = (List<ServiceEntity>)ViewBag.ServiceList;
+                                  if (ServiceList == null || ServiceList.Count() == 0)
+                                  {
+                                    <h5>Bệnh viện hiện chưa có dịch vụ nào</h5>
+                                  }
+                                  else
+                                  {
+                                      for (int i = 0; i < ServiceList.Count; i++)
                                       {
-                                        <h5>Bệnh viện hiện chưa có cơ sở vật chất nào</h5>
-                                      }
-                                      else
-                                      {
-                                          for (int i = 0; i < FacilityList.Count; i++)
+                                          if (i == ServiceList.Count - 1)
                                           {
-                                              if (i == FacilityList.Count - 1)
-                                              {
-                                                  break;
-                                              }
-                                              int tempI = i;
-                                        <div class="form-group">
-                                            @for (int j = tempI; j < tempI + 3 && j < FacilityList.Count; j++)
-                                            {
-                                                <label class="col-md-2 control-label" style="text-align: left; margin-left: 2%;">@FacilityList[j].Facility_Name</label>
-                                                if ((j + 1) == (tempI + 3))
-                                                {
-                                                    i = j;
-                                                }
-                                            }
-                                        </div>
+                                              break;
                                           }
+                                          int tempI = i;
+                                    <div class="form-group">
+                                        @for (int j = tempI; j < tempI + 3 && j < ServiceList.Count; j++)
+                                        {
+                                            <label class="col-md-2 control-label" style="text-align: left; margin-left: 2%;">@ServiceList[j].Service_Name</label>
+                                            if ((j + 1) == (tempI + 3))
+                                            {
+                                                i = j;
+                                            }
+                                        }
+                                    </div>
                                       }
-                                    }
-                                </fieldset>
+                                  }
+                                }
 
-                                <fieldset>
-                                    <legend>
-                                        <span>Dịch vụ đi kèm</span>
-                                        <button class="btn btn-primary" type="submit">
-                                            <i class="fa fa-edit"></i>
-                                            Chỉnh sửa
-                                        </button>
-                                    </legend>
-                                    @{List<Service> ServiceList =(List<Service>) ViewBag.ServiceList;
-                                      if (ServiceList == null)
-                                      {
-                                        <h5>Bệnh viện hiện chưa có dịch vụ nào</h5>
-                                      }
-                                      else
-                                      {
-                                          for (int i = 0; i < ServiceList.Count; i++)
-                                          {
-                                              if (i == ServiceList.Count - 1)
-                                              {
-                                                  break;
-                                              }
-                                              int tempI = i;
-                                        <div class="form-group">
-                                            @for (int j = tempI; j < tempI + 3 && j < ServiceList.Count; j++)
-                                            {
-                                                <label class="col-md-2 control-label" style="text-align: left; margin-left: 2%;">@ServiceList[j].Service_Name</label>
-                                                if ((j + 1) == (tempI + 3))
-                                                {
-                                                    i = j;
-                                                }
-                                            }
-                                        </div>
-                                          }
-                                      }
-                                    }
-                                </fieldset>
+                            </fieldset>
                         </form>
 
                     </div>
@@ -394,48 +404,3 @@
 </section>
 
 
-
-<script type="text/javascript" src="~/Content/js/jquery.leanModal.min.js"></script>
-<link rel="stylesheet" type="text/css" href="~/Content/css/LeanModalStyle.css" />
-<div id="signup" style="font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', sans-serif; top: 90px;">
-    <div id="signup-ct">
-        <div id="signup-header">
-            <h2>Cập nhật thông tin chung</h2>
-            <a class="modal_close" href="#"></a>
-        </div>
-        @*@using (Html.BeginForm(Constants.HospitalBasicInforUpdateAction, Constants.HospitalController,
-                FormMethod.Post))
-                {*@
-        <form action="#">
-            <input type="hidden" value="@hospital.Hospital_ID" id="HospitalID"/>
-            <div class="txt-fld">
-                <label for>Tên bệnh viện</label>
-                <input type="text" readonly id="HospitalName" value="@hospital.Hospital_Name" />
-            </div>
-            <div class="txt-fld">
-                <label for>Website</label>
-                <input type="text"  id="Website" value="@hospital.Website" />
-            </div>
-            <div class="txt-fld">
-                <label for>Loại hình dịch vụ</label>
-                @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.TypeList)
-            </div>
-            <div class="txt-fld">
-                <label for>Địa chỉ</label>
-                <input type="text" id="Address" value="@hospital.Address" />
-            </div>
-            <div class="txt-fld">
-                <label for>Số điện thoại</label>
-                <input type="text" value="@hospital.Phone_Number" id="PhoneNo" />
-            </div>
-            <div class="txt-fld">
-                <label for>Số Fax</label>
-                <input type="text" value="@hospital.Fax" id="Fax" />
-            </div>
-            <div class="btn-fld">
-                <button type="button" id="UpdateButton">Cập nhật</button>
-            </div>
-        @*}*@
-            </form>
-    </div>
-</div>

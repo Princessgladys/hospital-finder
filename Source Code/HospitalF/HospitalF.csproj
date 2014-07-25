@@ -203,7 +203,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HospitalController.cs" />
     <Compile Include="Controllers\SecurityBaseController.cs" />
+    <Compile Include="Entities\FacilityEntity.cs" />
     <Compile Include="Entities\HospitalEntity.cs" />
+    <Compile Include="Entities\ServiceEntity.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -248,6 +250,7 @@
     <Content Include="Content\css\font-awesome.m.css" />
     <Content Include="Content\css\fonts\flexslider-icon.svg" />
     <Content Include="Content\css\jquery.rating.css" />
+    <Content Include="Content\css\LeanModalStyle.css" />
     <Content Include="Content\css\lockscreen.css" />
     <Content Include="Content\css\notifIt.css" />
     <Content Include="Content\css\smartadmin-production.css" />
@@ -257,6 +260,7 @@
     <Content Include="Content\css\star.gif" />
     <Content Include="Content\css\summernote.css" />
     <Content Include="Content\css\tablesorter.css" />
+    <Content Include="Content\css\tinyscrollbar.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-2.html" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-3.html" />
@@ -293,10 +297,15 @@
     <Content Include="Content\img\hospital-icon.png" />
     <Content Include="Content\img\hospital.png" />
     <Content Include="Content\img\hue.png" />
+    <Content Include="Content\img\leanmodal\hd-bg.png" />
+    <Content Include="Content\img\leanmodal\modal_close.png" />
     <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\logo-o.png" />
     <Content Include="Content\img\logo.png" />
     <Content Include="Content\img\saturation.png" />
+    <Content Include="Content\img\scrollbar\bg-scrollbar-thumb-y.png" />
+    <Content Include="Content\img\scrollbar\bg-scrollbar-track-y.png" />
+    <Content Include="Content\img\scrollbar\bg-scrollbar-trackend-y.png" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
     <Content Include="Content\img\sort_both.png" />
@@ -482,12 +491,13 @@
     </Content>
     <Content Include="Views\Hospital\Index.cshtml" />
     <Content Include="Views\Hospital\SearchResult.cshtml" />
-    <Content Include="Views\Hospital\ViewDoctorDetail.cshtml" />
     <Content Include="Views\Hospital\HospitalList.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\Hospital.cshtml" />
     <Content Include="Views\Hospital\AddHospital.cshtml" />
     <Content Include="Views\Account\AddAccount.cshtml" />
+    <Content Include="Views\Hospital\ViewDoctorDetail.cshtml" />
+    <Content Include="Views\Hospital\HospitalBasicInforUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
