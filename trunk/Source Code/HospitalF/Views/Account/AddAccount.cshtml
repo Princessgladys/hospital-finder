@@ -7,7 +7,7 @@
     </button>
     <h4 class="modal-title">
         <img src="../Content/img/hospital-icon.png" alt="HospitalFinder"
-             style="width: 10%; height: 10%;"/>
+             style="width: 10%; height: 10%;" />
         Thêm mới người dùng
     </h4>
 </div>
@@ -23,6 +23,18 @@
                             <input type="email" name="Email" id="Email"
                                    placeholder="Nhập địa chỉ Email chính thức">
                         </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="label col col-2"></label>
+                    <div class="col col-10">
+                        <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
+                             style="display: none;" id="loaderIconEmail">
+                        <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
+                             style="display: none;" id="validIconEmail">
+                        <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
+                             style="display: none;" id="invalidIconEmail">
+                        <span id="email-message"></span>
                     </div>
                 </div>
             </section>
@@ -44,19 +56,15 @@
             <section>
                 <div class="row">
                     <label class="label col col-2">Họ</label>
-                    <div class="col col-10">
+                    <div class="col col-5">
                         <label class="input">
                             <i class="icon-append fa fa-male"></i>
                             <input name="LastName" id="LastName"
                                    placeholder="Họ">
                         </label>
                     </div>
-                </div>
-            </section>
-            <section>
-                <div class="row">
-                    <label class="label col col-2">Tên</label>
-                    <div class="col col-10">
+                    <label class="label col col-1">Tên</label>
+                    <div class="col col-4">
                         <label class="input">
                             <i class="icon-append fa fa-male"></i>
                             <input name="FirstName" id="FirstName"
@@ -92,6 +100,70 @@
 </div>
 
 <script>
+    @*Set user message notification*@
+    function setEmailNotificationMessage(message, mode) {
+        if (mode == 1) {
+            $("#loaderIconEmail").hide();
+            $("#validIconEmail").show();
+            $("#invalidIconEmail").hide();
+            $("#email-message").text(message);
+            $('#Email').css('background', '#f0fff0');
+            $('#Email').css('border-color', '#7DC27D');
+        } else {
+            $("#loaderIconEmail").hide();
+            $("#validIconEmail").hide();
+            $("#invalidIconEmail").show();
+            $("#email-message").text(message);
+            $('#Email').css('background', '#fff0f0');
+            $('#Email').css('border-color', '#A90329');
+        }
+    }
+
+    @*Check duplicated user*@
+    var timeoutReference;
+
+    $("#Email").on('input', function () {
+        $("#loaderIconEmail").show();
+        var email = $("#Email").val();
+        if (timeoutReference) clearTimeout(timeoutReference);
+        timeoutReference = setTimeout(function () {
+            if (email.trim() == "") {
+                $("#loaderIconEmail").hide();
+                $("#validIconEmail").hide();
+                $("#invalidIconEmail").hide();
+                $("#email-message").hide();
+                return false;
+            }
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("CheckValidUserWithEmail"))",
+                data: { "email": email },
+                success: function (data) {
+                    if (data.value == 0) {
+                        $("#loaderIconEmail").hide();
+                        $("#validIconEmail").hide();
+                        $("#invalidIconEmail").hide();
+                        $("#email-message").hide();
+                    }
+                    if (data.value == 1) {
+                        setEmailNotificationMessage("Email đã được sử dụng, xin vui lòng chọn địa chỉ khác.", 0);
+                    }
+                    if (data.value == 2) {
+                        setEmailNotificationMessage("Email đã được sử dụng, xin vui lòng chọn địa chỉ khác.", 0);
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                }
+            });
+        }, 1500);
+    });
+
+
+
+    @*Data validation*@
+    var email = $("Email").val();
     $("#add-user-form").validate({
         rules: {
             Email: {
@@ -99,22 +171,22 @@
                 email: true
             },
             SecondaryEmail: {
+                notEqual: "#Email",
                 required: true,
                 email: true
             },
             FirstName: {
                 required: true,
-                maxlength: 16,
+                maxlength: 16
             },
             LastName: {
                 required: true,
-                maxlength: 16,
+                maxlength: 16
             },
             PhoneNumber: {
                 required: true,
                 minlength: 8,
-                maxlength: 13,
-                phone: true
+                maxlength: 13
             }
         },
 
