@@ -24,6 +24,7 @@ CREATE PROCEDURE SP_INSERT_HOSPITAL
 	@IsAllowAppointment BIT,
 	@CreatedPerson INT,
 	@FullDescription NVARCHAR(4000),
+	@PersonInChared VARCHAR(64),
 	@SpecialityList NVARCHAR(4000),
 	@ServiceList NVARCHAR(4000),
 	@FacilityList NVARCHAR(4000)
@@ -133,7 +134,7 @@ BEGIN
 		IF (@ServiceList != '')
 		BEGIN
 			SET @RowNumber = 1
-			SET @TotalToken = 0;
+			SET @TotalToken = 0
 
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 								  FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, '|') TokenList)
@@ -172,7 +173,7 @@ BEGIN
 		IF (@FacilityList != '')
 		BEGIN
 			SET @RowNumber = 1
-			SET @TotalToken = 0;
+			SET @TotalToken = 0
 
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 								  FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, '|') TokenList)
@@ -205,7 +206,23 @@ BEGIN
 
 				SET @RowNumber += 1
 			END
-		END	
+		END
+
+		-- INSERT PERSON IN CHARGED
+		IF (@PersonInChared != '')
+		BEGIN
+			UPDATE [User]
+			SET Hospital_ID = @HospitalID
+			WHERE [User_ID] = (SELECT [User_ID]
+							   FROM [User]
+							   WHERE Email = @PersonInChared)
+
+			IF @@ROWCOUNT = 0
+			BEGIN
+				ROLLBACK TRAN T;
+				RETURN 0;
+			END
+		END
 	END
 	COMMIT TRAN T;
 
