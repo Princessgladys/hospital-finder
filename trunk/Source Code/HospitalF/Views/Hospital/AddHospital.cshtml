@@ -461,37 +461,21 @@
 
     @*Display notification*@
     function displayNotification() {
-        // Add Account
-        if ('@ViewBag.AddAccountStatus' != '') {
-            var returnValue = '@ViewBag.AddAccountStatus';
+        // Add hospital
+        if ('@ViewBag.AddHospitalStatus' == '') {
+            return false;
+        } else {
+            var returnValue = '@ViewBag.AddHospitalStatus';
             returnValue = returnValue.split('-');
             var status = returnValue[0];
-            var email = returnValue[1];
+            var hospitalName = returnValue[1];
 
             if (status != 0) {
                 $("#success-alert").show();
-                setNotification("Thêm mới người dùng [" + email + "] thành công!", 1);
+                setNotification("Thêm mới [" + hospitalName + "] thành công!", 1);
             } else {
                 $("#error-alert").show();
-                setNotification("Thêm mới người dùng [" + email + "] không thành công, xin hãy thử lại.", 3);
-            }
-        } else {
-            // Add hospital
-            if ('@ViewBag.AddHospitalStatus' == '') {
-                return false;
-            } else {
-                var returnValue = '@ViewBag.AddHospitalStatus';
-                returnValue = returnValue.split('-');
-                var status = returnValue[0];
-                var hospitalName = returnValue[1];
-
-                if (status != 0) {
-                    $("#success-alert").show();
-                    setNotification("Thêm mới [" + hospitalName + "] thành công!", 1);
-                } else {
-                    $("#error-alert").show();
-                    setNotification("Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
-                }
+                setNotification("Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
             }
         }
     }
@@ -614,6 +598,45 @@
                 setAddressNotificationMessage("Địa điểm đã được xác định", 1);
             }
         });
+
+        @*Add new hospital user*@
+        $("#add-user-button").click(function () {
+            var email = $("#Email").val();
+            var secondEmail = $("#SecondaryEmail").val();
+            var firstName = $("#FirstName").val();
+            var lastName = $("#LastName").val();
+            var phoneNumber = $("#PhoneNumber").val();
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.RouteUrl(Constants.AddAccountAction))",
+                data: {
+                    "email": email,
+                    "secondEmail": secondEmail,
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "phoneNumber": phoneNumber
+                },
+                success: function (data) {
+                    var returnValue = data.result.split('|');
+                    var status = returnValue[0];
+                    var email = returnValue[1];
+
+                    if (status != 0) {
+                        $("#success-alert").show();
+                        setNotification("Thêm mới người dùng [" + email + "] thành công!", 1);
+                    } else {
+                        $("#error-alert").show();
+                        setNotification("Thêm mới người dùng [" + email + "] không thành công, xin hãy thử lại.", 3);
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                }
+            });
+
+            return false;
+        })
     });
 
     @*Bind data for full address*@
@@ -703,7 +726,6 @@
                     setNotification("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.", 2);
                 }
             });
-
             return false;
         }
     }
