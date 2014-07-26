@@ -726,6 +726,12 @@ namespace HospitalF.Constant
         public const string NonDiacriticVietnameseCharacters = "aadeoouaaaaaaaaaaaaaaaeeeeeeeeeeiiiiiooooooooooooooouuuuuuuuuuyyyyy";
 
         /// <summary>
+        /// String that contains all alpha numberic characters,
+        /// including capital and non-capital characters
+        /// </summary>
+        public const string AllAlphaNumericCharacter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        /// <summary>
         /// Constant for search result page size
         /// </summary>
         public const int PageSize = 5;
