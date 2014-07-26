@@ -54,6 +54,7 @@ namespace HospitalF.Utilities
                      }));
             }
         }
+
         /// <summary>
         /// Load list of service of hospital
         /// </summary>

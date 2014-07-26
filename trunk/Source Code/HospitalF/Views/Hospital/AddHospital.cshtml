@@ -269,7 +269,6 @@
                                         <span id="user-message"></span>
                                         <a href="/Account/AddAccount"
                                            data-toggle="modal" data-target="#addAccount"
-                                           class="btn btn-primary"
                                            id="add-new-user-button" style="display: none; float: right;">
                                             Thêm mới người dùng
                                         </a>
@@ -474,31 +473,13 @@
                     data: { "email": email },
                 success: function (data) {
                     if (data.value == 1) {
-                        $("#loaderIconUser").hide();
-                        $("#validIconUser").show();
-                        $("#invalidIconUser").hide();
-                        $("#user-message").text("Người chịu trách nhiệm hợp lệ.");
-                        $('#PersonInCharged').css('background', '#f0fff0');
-                        $('#PersonInCharged').css('border-color', '#7DC27D');
-                        $("#add-new-user-button").hide();
+                        setUserNotificationMessage("Người chịu trách nhiệm hợp lệ.", 1);
                     }
                     if (data.value == 2) {
-                        $("#loaderIconUser").hide();
-                        $("#validIconUser").hide();
-                        $("#invalidIconUser").show();
-                        $("#user-message").text("Người dùng hiện đang chịu trách nhiệm một bệnh viện khác.");
-                        $('#PersonInCharged').css('background', '#fff0f0');
-                        $('#PersonInCharged').css('border-color', '#A90329');
-                        $("#add-new-user-button").show();
+                        setUserNotificationMessage("Người dùng hiện đang chịu trách nhiệm một bệnh viện khác.", 0);
                     }
                     if (data.value == 0) {
-                        $("#loaderIconUser").hide();
-                        $("#validIconUser").hide();
-                        $("#invalidIconUser").show();
-                        $("#user-message").text("Người dùng không tồn tại trong hệ thống.");
-                        $('#PersonInCharged').css('background', '#fff0f0');
-                        $('#PersonInCharged').css('border-color', '#A90329');
-                        $("#add-new-user-button").show();
+                        setUserNotificationMessage("Người dùng không tồn tại trong hệ thống.", 0);
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -583,6 +564,13 @@
                 }
             });
         });
+
+        @*Check if coordinate has been changed*@
+        $("#Coordinate").change(function () {
+            if ($("#address-message").text() == "Xin hãy chọn địa điểm bệnh viện trên bản đồ.") {;
+                setAddressNotificationMessage("Địa điểm đã được xác định", 1);
+            }
+        });
     });
 
     @*Bind data for full address*@
@@ -623,10 +611,24 @@
     function checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress) {
         // Check if hospital is valid
         var hospitalName = $("#HospitalName").val();
-        if ((locationAddress == "") ||
-            (streetAddress == "") || (city == "") ||
-            (district == "") || (ward == "")) {
-            setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+        if (locationAddress == "") {
+            setAddressNotificationMessage("Thiếu thông tin Địa chỉ.", 0);
+            return false;
+        }
+        if (streetAddress == "") {
+            setAddressNotificationMessage("Thiếu thông tin Tên đường.", 0);
+            return false;
+        }
+        if (city == "") {
+            setAddressNotificationMessage("Thiếu thông tin Tỉnh / thành phố.", 0);
+            return false;
+        }
+        if (district == "") {
+            setAddressNotificationMessage("Thiếu thông tin Quận / huyện.", 0);
+            return false;
+        }
+        if (district == "") {
+            setAddressNotificationMessage("Thiếu thông tin Phường / xã.", 0);
             return false;
         }
 
@@ -655,6 +657,7 @@
                 error: function (xhr, ajaxOptions, thrownError) {
                     $("#invalidIcon").show();
                     $("#address-message").text("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.");
+                    setWarningNotification("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.");
                 }
             });
 
@@ -662,6 +665,19 @@
         }
     }
 
+    @*Set warning notification*@
+    function setWarningNotification(message) {
+        notif({
+            msg: message,
+            type: "warning",
+            width: 600,
+            position: "center",
+            fade: true,
+            multiline: true
+        });
+    }
+
+    @*Set address message notification*@
     function setAddressNotificationMessage(message, mode) {
         if (mode == 1) {
             $("#loaderIcon").hide();
@@ -677,6 +693,27 @@
             $("#address-message").text(message);
             $('#FullAddress').css('background', '#fff0f0');
             $('#FullAddress').css('border-color', '#A90329');
+        }
+    }
+
+    @*Set user message notification*@
+    function setUserNotificationMessage(message, mode) {
+        if (mode == 1) {
+            $("#loaderIconUser").hide();
+            $("#validIconUser").show();
+            $("#invalidIconUser").hide();
+            $("#user-message").text(message);
+            $('#PersonInCharged').css('background', '#f0fff0');
+            $('#PersonInCharged').css('border-color', '#7DC27D');
+            $("#add-new-user-button").hide();
+        } else {
+            $("#loaderIconUser").hide();
+            $("#validIconUser").hide();
+            $("#invalidIconUser").show();
+            $("#user-message").text(message);
+            $('#PersonInCharged').css('background', '#fff0f0');
+            $('#PersonInCharged').css('border-color', '#A90329');
+            $("#add-new-user-button").show();
         }
     }
 
@@ -697,24 +734,29 @@
             }
             var locationAddress = $("#LocationAddress").val();
             var streetAddress = $("#StreetAddress").val();
+            var fullAddress = $("#FullAddress").val();
 
             if ((locationAddress == "") ||
             (streetAddress == "") || (city == "") ||
             (district == "") || (ward == "")) {
-                setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+                $("#LocationAddress").focus();
+                setWarningNotification("Thiếu thông tin địa chỉ.");
                 return false;
-            }
+            } else if ($("#address-message").text() == "Địa chỉ trùng lắp với bệnh viện khác.") {
+                    $("#LocationAddress").focus();
+                    setWarningNotification("Địa chỉ trùng lắp với bệnh viện khác.");
+                    return false;
+                }
 
             var coordinate = $("#Coordinate").val();
             if (coordinate.trim() == "") {
                 setAddressNotificationMessage("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 0);
-            }
-
-            var fullAddress = $("#FullAddress").val();
-            if (fullAddress.trim() != "") {
-                if ($("#invalidIcon").is(":visible")) {
-                    return false;
-                }
+                setWarningNotification("Xin hãy chọn địa điểm bệnh viện trên bản đồ.");
+                return false;
+            } else if ($("#invalidIconUser").is(":visible")) {
+                $("#PersonInCharged").focus();
+                setWarningNotification("Người chịu trách nhiệm không phù hợp");
+                $("#PersonInCharged").focus();
             } else {
                 $('#add-hospital-form').submit();
             }
@@ -886,14 +928,7 @@
             navigator.geolocation.getCurrentPosition(initializeMap);
         }
         else {
-            notif({
-                msg: "Trình duyệt không hỗ trợ xác định vị trí.",
-                type: "error",
-                width: 600,
-                position: "center",
-                fade: true,
-                multiline: true
-            });
+            setWarningNotification("Trình duyệt không hỗ trợ xác định vị trí.");
         }
 
         // Declare marker - Make it global so only one marker can be created
@@ -932,7 +967,7 @@
                     placeMarker(event.latLng);
                     // Get coordinate at the marker's location after clicking on map
                     var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
-                    $('#Coordinate').val(currentCoordinate);
+                    $('#Coordinate').val(currentCoordinate).trigger('change');
                 }, 300);
             });
 
@@ -947,10 +982,9 @@
 
         // Press button get location from address
         $("#button-get-loction").click(function () {
-            if ($("#validIcon").is(":visible")) {
+            if (($("#address-message").text() == "Địa chỉ phù hợp.") ||
+                ($("#address-message").text() == "Xin hãy chọn địa điểm bệnh viện trên bản đồ.")) {
                 getCoordinateFromAddress();
-            } else {
-                setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
             }
             return false;
         });
@@ -970,7 +1004,7 @@
                 // Get coordinate at the marker's location after dragging process
                 google.maps.event.addListener(marker, 'dragend', function (event) {
                     var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
-                    $('#Coordinate').val(currentCoordinate);
+                    $('#Coordinate').val(currentCoordinate).trigger('change');
                 });
             }
         }
@@ -1008,12 +1042,13 @@
                     // Set coordinate value
                     var currentCoordinate = results[0].geometry.location.lat().toFixed(6) +
                         ", " + results[0].geometry.location.lng().toFixed(6);
-                    $('#Coordinate').val(currentCoordinate);
+                    $('#Coordinate').val(currentCoordinate).trigger('change');
 
                     // Display message
                     setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
                 } else {
                     setAddressNotificationMessage("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 0);
+                    setWarningNotification("Không xác định được vị trí, hãy thử lại với địa chỉ khác.");
                 }
             });
             return false;
