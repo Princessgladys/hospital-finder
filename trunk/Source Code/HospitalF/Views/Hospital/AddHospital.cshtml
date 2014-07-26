@@ -1020,6 +1020,12 @@
 
         // Press button get location from address
         $("#button-get-loction").click(function () {
+            if ($("#FullAddress").val().trim() == "") {
+                setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+                $("#LocationAddress").focus();
+                return false;
+            }
+
             if (($("#address-message").text() == "Địa chỉ phù hợp.") ||
                 ($("#address-message").text() == "Xin hãy chọn địa điểm bệnh viện trên bản đồ.")) {
                 getCoordinateFromAddress();

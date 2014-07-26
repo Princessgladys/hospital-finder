@@ -149,6 +149,9 @@ namespace HospitalF.Controllers
             {
                 int result = 0;
 
+                // Prepare data
+                model.ConfirmedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
@@ -165,7 +168,7 @@ namespace HospitalF.Controllers
                 else
                 {
                     ViewBag.AddAccountStatus = 0.ToString() + Constants.Minus + model.Email;
-                    return View();
+                    return RedirectToAction(Constants.AddHospitalAction, Constants.HospitalController);
                 }
             }
             catch (Exception exception)

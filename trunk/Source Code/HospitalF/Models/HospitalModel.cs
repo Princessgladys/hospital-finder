@@ -332,7 +332,7 @@ namespace HospitalF.Models
                     model.WardID, model.PhoneNo, model.Fax, model.HospitalEmail, model.Website,
                     model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
                     model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment, model.CreatedPerson,
-                    model.FullDescription, speciality, service, facility));
+                    model.FullDescription, model.PersonInCharged, speciality, service, facility));
             }
             return result;
         }

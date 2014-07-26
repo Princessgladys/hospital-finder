@@ -67,6 +67,27 @@ namespace HospitalF.Models
         #region Method
 
         /// <summary>
+        /// Auto generate a random password string
+        /// </summary>
+        /// <returns>Random passwords tring</returns>
+        private string AutoGeneratePassword()
+        {
+            Random random = new Random();
+            int randomNum = 0;
+            int passwordLength = 12;
+            string password = string.Empty;
+
+            for (int n = 0; n < passwordLength; n++)
+            {
+                randomNum = random.Next(0, Constants.AllAlphaNumericCharacter.Count());
+                password += Constants.AllAlphaNumericCharacter[randomNum];
+            }
+
+            // Return password string
+            return password;
+        }
+
+        /// <summary>
         /// Add new hospital user
         /// </summary>
         /// <param name="model">Account Model</param>
@@ -78,7 +99,7 @@ namespace HospitalF.Models
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 result = await Task.Run(() => data.SP_INSERT_HOSPITAL_USER(model.Email,
-                    model.SecondaryEmail, model.Password, model.FirstName, model.LastName,
+                    model.SecondaryEmail, AutoGeneratePassword(), model.FirstName, model.LastName,
                     model.PhoneNumber, model.ConfirmedPerson));
             }
             return result;
