@@ -80,7 +80,7 @@ namespace HospitalF.Models
         /// <summary>
         /// Get/Set value for property Email
         /// </summary>
-        public string Email { get; set; }
+        public string HospitalEmail { get; set; }
 
         /// <summary>
         /// Get/Set value for property PhoneNo
@@ -329,7 +329,7 @@ namespace HospitalF.Models
             {
                 result = await Task.Run(() => data.SP_INSERT_HOSPITAL(model.HospitalName,
                     model.HospitalTypeID, model.FullAddress, model.CityID, model.DistrictID,
-                    model.WardID, model.PhoneNo, model.Fax, model.Email, model.Website,
+                    model.WardID, model.PhoneNo, model.Fax, model.HospitalEmail, model.Website,
                     model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
                     model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment, model.CreatedPerson,
                     model.FullDescription, speciality, service, facility));

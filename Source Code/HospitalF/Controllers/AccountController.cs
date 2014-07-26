@@ -158,10 +158,13 @@ namespace HospitalF.Controllers
                 // Check returned result
                 if (result == 1)
                 {
+                    ViewBag.AddAccountStatus = 1.ToString() + Constants.Minus + model.Email;
+                    ModelState.Clear();
                     return RedirectToAction(Constants.AddHospitalAction, Constants.HospitalController);
                 }
                 else
                 {
+                    ViewBag.AddAccountStatus = 0.ToString() + Constants.Minus + model.Email;
                     return View();
                 }
             }

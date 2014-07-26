@@ -317,7 +317,7 @@ namespace HospitalF.Controllers
                     }
                     oldHospital.Phone_Number = phoneNumber;
 
-                    oldHospital.Email = model.Email;
+                    oldHospital.Email = model.HospitalEmail;
                     oldHospital.Website = model.Website;
                     oldHospital.Fax = model.Fax;
                     data.SubmitChanges();
@@ -811,11 +811,11 @@ namespace HospitalF.Controllers
                 // Check if insert process is success or not
                 if (result == 0)
                 {
-                    ViewBag.InsertStatus = 0.ToString() + Constants.Minus + model.HospitalName;
+                    ViewBag.AddHospitalStatus = 0.ToString() + Constants.Minus + model.HospitalName;
                 }
                 else
                 {
-                    ViewBag.InsertStatus = 1.ToString() + Constants.Minus + model.HospitalName;
+                    ViewBag.AddHospitalStatus = 1.ToString() + Constants.Minus + model.HospitalName;
                     ModelState.Clear();
                     return View();
                 }

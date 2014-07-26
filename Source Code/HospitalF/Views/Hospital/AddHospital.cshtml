@@ -232,7 +232,7 @@
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-envelope"></i>
-                                            @Html.TextBoxFor(m => m.Email, new { @placeholder = "Nhập địa chỉ Email bệnh viện", @type = "email" })
+                                            @Html.TextBoxFor(m => m.HospitalEmail, new { @placeholder = "Nhập địa chỉ Email bệnh viện", @type = "email" })
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -240,6 +240,7 @@
                                             <i class="icon-prepend fa fa-globe"></i>
                                             @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
                                         </label>
+                                        <p class="note"><strong>Mẫu:</strong> http://www.benhvien.com</p>
                                     </section>
                                 </div>
 
@@ -340,7 +341,6 @@
         <!-- WIDGET END -->
     </div>
     <!-- end row -->
-
 </section>
 
 <div class="modal fade" id="addAccount" tabindex="-1"
@@ -385,20 +385,20 @@
                                 if (Model != null)
                                 {
                                     fullDescription = Model.FullDescription;
-                                }    
+                                }
                             }
                             <div id="summernote">@fullDescription</div>
 
                             <div class="widget-footer smart-form">
                                 <div class="btn-group">
                                     <a class="btn btn-sm btn-primary"
-                                            id="save-button">
+                                       id="save-button">
                                         <i class="fa fa-check"></i> Lưu
                                     </a>
                                 </div>
                                 <div class="btn-group">
                                     <a class="btn btn-sm btn-success"
-                                            id="quit-button">
+                                       id="quit-button">
                                         <i class="fa fa-times"></i> Thoát
                                     </a>
                                 </div>
@@ -420,37 +420,79 @@
 <script type="text/javascript">
     pageSetUp();
 
-    @*Display notification*@
-    function displayNotification() {
-        if ('@ViewBag.InsertStatus' == '') {
-            return false;
-        }
-
-        var returnValue = '@ViewBag.InsertStatus';
-        returnValue = returnValue.split('-');
-        var status = returnValue[0];
-        var hospitalName = returnValue[1];
-
-        if (status != 0) {
-            $("#success-alert").show();
+    @*Add success notification*@
+    function setNotification(message, type) {
+        // Success
+        if (type == 1) {
             notif({
-                msg: "Thêm mới [" + hospitalName + "] thành công!",
+                msg: message,
                 type: "success",
                 width: 600,
                 position: "center",
                 fade: true,
                 multiline: true
             });
-        } else {
-            $("#error-alert").show();
+        }
+
+        // Warning
+        if (type == 2) {
             notif({
-                msg: "Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.",
+                msg: message,
+                type: "warning",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Error
+        if (type == 3) {
+            notif({
+                msg: message,
                 type: "error",
                 width: 600,
                 position: "center",
                 fade: true,
                 multiline: true
             });
+        }
+    }
+
+    @*Display notification*@
+    function displayNotification() {
+        // Add Account
+        if ('@ViewBag.AddAccountStatus' != '') {
+            var returnValue = '@ViewBag.AddAccountStatus';
+            returnValue = returnValue.split('-');
+            var status = returnValue[0];
+            var email = returnValue[1];
+
+            if (status != 0) {
+                $("#success-alert").show();
+                setNotification("Thêm mới người dùng [" + email + "] thành công!", 1);
+            } else {
+                $("#error-alert").show();
+                setNotification("Thêm mới người dùng [" + email + "] không thành công, xin hãy thử lại.", 3);
+            }
+        } else {
+            // Add hospital
+            if ('@ViewBag.AddHospitalStatus' == '') {
+                return false;
+            } else {
+                var returnValue = '@ViewBag.AddHospitalStatus';
+                returnValue = returnValue.split('-');
+                var status = returnValue[0];
+                var hospitalName = returnValue[1];
+
+                if (status != 0) {
+                    $("#success-alert").show();
+                    setNotification("Thêm mới [" + hospitalName + "] thành công!", 1);
+                } else {
+                    $("#error-alert").show();
+                    setNotification("Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
+                }
+            }
         }
     }
 
@@ -472,20 +514,20 @@
                     type: "GET",
                     url: "@(Url.RouteUrl("CheckValidUserWithEmail"))",
                     data: { "email": email },
-                success: function (data) {
-                    if (data.value == 1) {
-                        setUserNotificationMessage("Người chịu trách nhiệm hợp lệ.", 1);
+                    success: function (data) {
+                        if (data.value == 1) {
+                            setUserNotificationMessage("Người chịu trách nhiệm hợp lệ.", 1);
+                        }
+                        if (data.value == 2) {
+                            setUserNotificationMessage("Người dùng hiện đang chịu trách nhiệm một bệnh viện khác.", 0);
+                        }
+                        if (data.value == 0) {
+                            setUserNotificationMessage("Người dùng không tồn tại trong hệ thống.", 0);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
                     }
-                    if (data.value == 2) {
-                        setUserNotificationMessage("Người dùng hiện đang chịu trách nhiệm một bệnh viện khác.", 0);
-                    }
-                    if (data.value == 0) {
-                        setUserNotificationMessage("Người dùng không tồn tại trong hệ thống.", 0);
-                    }
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                }
-            });
+                });
             }, 1500);
 
             return false;
@@ -658,24 +700,12 @@
                 error: function (xhr, ajaxOptions, thrownError) {
                     $("#invalidIcon").show();
                     $("#address-message").text("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.");
-                    setWarningNotification("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.");
+                    setNotification("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.", 2);
                 }
             });
 
             return false;
         }
-    }
-
-    @*Set warning notification*@
-    function setWarningNotification(message) {
-        notif({
-            msg: message,
-            type: "warning",
-            width: 600,
-            position: "center",
-            fade: true,
-            multiline: true
-        });
     }
 
     @*Set address message notification*@
@@ -741,22 +771,23 @@
             (streetAddress == "") || (city == "") ||
             (district == "") || (ward == "")) {
                 $("#LocationAddress").focus();
-                setWarningNotification("Thiếu thông tin địa chỉ.");
+                setNotification("Thiếu thông tin địa chỉ.", 2);
                 return false;
             } else if ($("#address-message").text() == "Địa chỉ trùng lắp với bệnh viện khác.") {
-                    $("#LocationAddress").focus();
-                    setWarningNotification("Địa chỉ trùng lắp với bệnh viện khác.");
-                    return false;
-                }
+                $("#LocationAddress").focus();
+                setNotification("Địa chỉ trùng lắp với bệnh viện khác.", 2);
+                return false;
+            }
 
             var coordinate = $("#Coordinate").val();
             if (coordinate.trim() == "") {
                 setAddressNotificationMessage("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 0);
-                setWarningNotification("Xin hãy chọn địa điểm bệnh viện trên bản đồ.");
+                setNotification("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 2);
+                $("google-map").focus();
                 return false;
             } else if ($("#invalidIconUser").is(":visible")) {
                 $("#PersonInCharged").focus();
-                setWarningNotification("Người chịu trách nhiệm không phù hợp");
+                setNotification("Người chịu trách nhiệm không phù hợp", 2);
                 $("#PersonInCharged").focus();
             } else {
                 $('#add-hospital-form').submit();
@@ -783,6 +814,12 @@
             function (value, element) {
                 return /^[0-9()]*$/.test(value);
             }, "Số điện thoại không phù hợp.");
+
+        $.validator.addMethod("notEqual",
+            function (value, element, param) {
+                var a = param;
+                return this.optional(element) || value != $(param).val();
+            }, "Email phụ không được trùng với Email chính.");
 
         $('#add-hospital-form').validate({
             // Rules for form validation
@@ -929,7 +966,7 @@
             navigator.geolocation.getCurrentPosition(initializeMap);
         }
         else {
-            setWarningNotification("Trình duyệt không hỗ trợ xác định vị trí.");
+            setNotification("Trình duyệt không hỗ trợ xác định vị trí.", 2);
         }
 
         // Declare marker - Make it global so only one marker can be created
@@ -1049,7 +1086,7 @@
                     setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
                 } else {
                     setAddressNotificationMessage("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 0);
-                    setWarningNotification("Không xác định được vị trí, hãy thử lại với địa chỉ khác.");
+                    setNotification("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 2);
                 }
             });
             return false;
@@ -1081,7 +1118,7 @@
             maxHeight: null,
             focus: true,
             onImageUpload: function (files, editor, $editable) {
-                
+
             }
         });
 
