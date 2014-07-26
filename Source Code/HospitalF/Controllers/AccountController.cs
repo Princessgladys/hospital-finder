@@ -139,18 +139,31 @@ namespace HospitalF.Controllers
         /// <summary>
         /// POST: /Account/AddAccount
         /// </summary>
-        /// <returns></returns>
+        /// <param name="email">Email</param>
+        /// <param name="secondEmail">Secondary email</param>
+        /// <param name="firstName">Firstname</param>
+        /// <param name="lastName">Lastname</param>
+        /// <param name="phoneNumber">Phone number</param>
+        /// <returns>AJAX result</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
         [Authorize(Roles = Constants.AdministratorRoleName)]
         [HttpPost]
-        public async Task<ActionResult> AddAccount(AccountModels model)
+        public async Task<ActionResult> AddAccount(string email, string secondEmail,
+            string firstName, string lastName, string phoneNumber)
         {
             try
             {
                 int result = 0;
 
                 // Prepare data
-                model.ConfirmedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+                AccountModels model = new AccountModels();
+                model.Email = email;
+                model.SecondaryEmail = secondEmail;
+                model.FirstName = firstName;
+                model.LastName = lastName;
+                model.PhoneNumber = phoneNumber;
+                model.ConfirmedPerson = Int32.Parse(
+                    User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
 
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
@@ -161,14 +174,13 @@ namespace HospitalF.Controllers
                 // Check returned result
                 if (result == 1)
                 {
-                    ViewBag.AddAccountStatus = 1.ToString() + Constants.Minus + model.Email;
-                    ModelState.Clear();
-                    return RedirectToAction(Constants.AddHospitalAction, Constants.HospitalController);
+                    return Json(new { result = 1.ToString() +
+                        Constants.VerticalBar + model.Email }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    ViewBag.AddAccountStatus = 0.ToString() + Constants.Minus + model.Email;
-                    return RedirectToAction(Constants.AddHospitalAction, Constants.HospitalController);
+                    return Json(new { result = 0.ToString() +
+                        Constants.VerticalBar + model.Email }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception exception)
