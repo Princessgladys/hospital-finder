@@ -14,6 +14,17 @@ AS
 BEGIN
 	IF (1 <= @Score AND @Score <= 5)
 	BEGIN
+		DECLARE @Check INT
+		SET @Check = 0
+		SELECT @Check = COUNT(r.Rating_ID)
+		FROM Rating r
+		WHERE r.Hospital_ID = @Hospital_ID AND r.Created_Person = @User_ID
+		
+		IF (@Check > 0)
+		BEGIN
+			RETURN 0
+		END
+		
 		BEGIN TRAN
 		BEGIN TRY
 			INSERT INTO Rating (Score, Hospital_ID, Created_Person)
@@ -22,15 +33,21 @@ BEGIN
 			DECLARE @Average_Score FLOAT
 			SET @Average_Score = [dbo].[FU_CALCULATE_AVERAGE_RATING] (@Hospital_ID)
 			
+			DECLARE @Rating_Count INT
+			SELECT @Rating_Count = COUNT(r.Rating_ID)
+			FROM Rating r
+			WHERE r.Hospital_ID = @Hospital_ID
+			
 			UPDATE Hospital
-			SET Rating = @Average_Score
+			SET Rating = @Average_Score, Rating_Count = @Rating_Count
 			WHERE Hospital_ID = @Hospital_ID
 						
 			COMMIT TRAN
-			RETURN @Average_Score
+			RETURN @Rating_Count
 		END TRY
 		BEGIN CATCH
 			ROLLBACK TRAN
+			RETURN -1
 		END CATCH		
 	END
 END
@@ -43,6 +60,6 @@ SELECT	'Return Value' = @return_value
 GO
 
 DECLARE	@return_value float
-EXEC	@return_value = [SP_RATE_HOSPITAL] 1, 2, 1
+EXEC	@return_value = [SP_RATE_HOSPITAL] 3, 2, 4
 SELECT	'Return Value' = @return_value
 GO
