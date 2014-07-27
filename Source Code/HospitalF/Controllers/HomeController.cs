@@ -312,7 +312,7 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.HomeLayout)]
         public async Task<ActionResult> Hospital(int id = 0)
-        {
+        {        
             try
             {
                 HospitalEntity hospital = null;
@@ -321,6 +321,7 @@ namespace HospitalF.Controllers
                     hospital = await HomeModels.LoadHospitalById(id);
                     if (hospital != null)
                     {
+                        hospital.Services = HomeModels.LoadServicesByHospitalId(id);
                         ViewBag.HospitalEntity = hospital;
                     }
                     else
@@ -347,13 +348,10 @@ namespace HospitalF.Controllers
             try
             {
                 string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
-                bool check = HomeModels.IsValidRatingAction(email, id);
-                if (check)
-                {
-                    int userId = AccountModels.LoadUserIdByEmail(email);
-                    return HomeModels.RateHospital(userId, id, score);                  
-                }
-                return false;
+
+                int userId = AccountModels.LoadUserIdByEmail(email);
+                return HomeModels.RateHospital(userId, id, score);
+
             }
             catch (Exception exception)
             {

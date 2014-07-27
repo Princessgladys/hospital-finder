@@ -25,6 +25,10 @@ namespace HospitalF.Entities
         /// Property for Type_Name attribute
         /// </summary>
         public string Type_Name { get; set; }
+        /// <summary>
+        /// Property for Is_Active attribute
+        /// </summary>
+        public bool? Is_Active { get; set; }
         #endregion
     }
 }

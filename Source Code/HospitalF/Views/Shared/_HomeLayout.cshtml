@@ -91,8 +91,14 @@
     <!-- GOOGLE API -->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi"></script>
 
-    <!-- BJQS SLIDER -->
-    <script src="../Content/js/bjqs-1.3.js"></script>
+    <!-- BOOTSTRAP IMAGE GALLERY -->
+    <script src="../Content/js/jquery.blueimp-gallery.m.js"></script>
+    <script src="../Content/js/bootstrap-image-gallery.js"></script>
+    <script src="../Content/js/bootstrap-image-gallery-demo.js"></script> 
+
+    <!-- MASONRY -->
+    <script src="../Content/js/masonry.pkgd.m.js"></script>
+    <script src="../Content/js/imagesloaded.pkgd.m.js"></script>
 </head>
 <body>
     <!-- HEADER -->
@@ -111,7 +117,7 @@
         <div class="pull-right">
             <!-- fullscreen button -->
             <div id="fullscreen" class="btn-header transparent pull-right">
-                <span><a href="javascript:void(0);" onclick="launchFullscreen(document.documentElement);" title="Full Screen"><i class="fa fa-fullscreen"></i></a></span>
+                <span><a href="javascript:void(0);" onclick="launchFullscreen(document.documentElement);" title="Full Screen"><i class="fa fa-arrows-alt"></i></a></span>
             </div>
             <!-- end fullscreen button -->
             <div id="fb-root" style="display: inline; margin-left: 20px;"></div>
@@ -146,7 +152,7 @@
             else
             {              
                 <div class="btn-header transparent pull-right">
-                    <span>Đăng nhập qua <a href="#" id="fb-login" style="color: #296191 !important;"><i class="fa fa-facebook"></i></a></span>
+                    <span>Đăng nhập qua <a href="#" class="fb-login" style="color: #296191 !important;"><i class="fa fa-facebook"></i></a></span>
                 </div>
             }
             <!-- end logout button -->
@@ -185,7 +191,7 @@
             });
         };
 
-        $('#fb-login').click(function () {
+        $('.fb-login').click(function () {
             facebookLogin();
         });
 

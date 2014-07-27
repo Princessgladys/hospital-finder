@@ -630,6 +630,7 @@ namespace HospitalF.Models
                                                      Coordinate = h.Coordinate,
                                                      Description = h.Full_Description,
                                                      Rating = h.Rating,
+                                                     Rating_Count = h.Rating_Count,
                                                      Is_Allow_Appointment = h.Is_Allow_Appointment,
                                                      Is_Active = h.Is_Active
                                                  }).SingleOrDefault());
@@ -637,29 +638,32 @@ namespace HospitalF.Models
             return hospital;
         }
 
-        public static bool IsValidRatingAction(string user, int hospitalId)
-        {
-            Rating rating = null;
-            using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                rating = (from r in data.Ratings
-                          where r.User.Email.Equals(user) && r.Hospital_ID == hospitalId
-                          select r).SingleOrDefault();
-                if (rating != null)
-                {
-                    return false;
-                }
-                return true;
-            }
-        }
-
         public static bool RateHospital(int userId, int hospitalId, int score)
         {
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                double result = data.SP_RATE_HOSPITAL(userId, hospitalId, score);
+                int result = data.SP_RATE_HOSPITAL(userId, hospitalId, score);
                 return (result > 0);
             }
+        }
+
+        public static List<ServiceEntity> LoadServicesByHospitalId(int id)
+        {
+            List<ServiceEntity> services = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                services = (from s in data.SP_LOAD_SERVICES_BY_HOSPITAL_ID(id)
+                            select new ServiceEntity()
+                            {
+                                Service_ID = s.Service_ID,
+                                Service_Name = s.Service_Name,
+                                Type_ID = s.Type_ID,
+                                Type_Name = s.Type_Name,
+                                Is_Active = s.Is_Active
+                            }).ToList<ServiceEntity>();
+            }
+            return services;
+
         }
         #endregion
     }
