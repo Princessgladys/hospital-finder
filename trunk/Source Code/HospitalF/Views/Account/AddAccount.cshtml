@@ -12,7 +12,7 @@
     </h4>
 </div>
 <div class="modal-body no-padding">
-    <form action="/Hospital/AddHospital" id="add-user-form" class="smart-form" method="post">
+    <form action="/Account/AddAccount" id="add-user-form" class="smart-form" method="post">
         <fieldset>
             <section>
                 <div class="row">
@@ -160,7 +160,44 @@
         }, 1500);
     });
 
+    @*Add new hospital user*@
+    $("#add-user-button").click(function () {
+        var email = $("#Email").val();
+        var secondEmail = $("#SecondaryEmail").val();
+        var firstName = $("#FirstName").val();
+        var lastName = $("#LastName").val();
+        var phoneNumber = $("#PhoneNumber").val();
 
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "@(Url.RouteUrl(Constants.AddAccountAction))",
+            data: {
+                "email": email,
+                "secondEmail": secondEmail,
+                "firstName": firstName,
+                "lastName": lastName,
+                "phoneNumber": phoneNumber
+            },
+            success: function (data) {
+                var returnValue = data.result.split('|');
+                var status = returnValue[0];
+                var email = returnValue[1];
+
+                if (status != 0) {
+                    $("#success-alert").show();
+                    setNotification("Thêm mới người dùng [" + email + "] thành công!", 1);
+                } else {
+                    $("#error-alert").show();
+                    setNotification("Thêm mới người dùng [" + email + "] không thành công, xin hãy thử lại.", 3);
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+
+        return false;
+    })
 
     @*Data validation*@
     var email = $("Email").val();
