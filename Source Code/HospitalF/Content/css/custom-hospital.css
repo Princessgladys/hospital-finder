@@ -12,6 +12,24 @@
 	padding: 10px;
 }
 
+.image-box
+{
+	padding: 5px;
+	overflow: hidden;
+	width: 12.5%;
+	height: auto;
+	zoom: 0;
+	position: relative;
+	display: inline-block;
+}
+
+	.image-box img
+	{
+		display: inline-block;
+		width: 100%;
+		height: auto;
+	}
+
 #map-canvas-hospital
 {
 	height: 300px;
@@ -21,7 +39,13 @@
 	padding: 0px;
 }
 
-#my-slideshow
+#service-content
 {
-	margin-bottom: 50px;
 }
+
+	#service-content ul
+	{
+		columns: 3;
+		-webkit-columns: 3;
+		-moz-columns: 3;
+	}
