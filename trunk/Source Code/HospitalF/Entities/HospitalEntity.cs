@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace HospitalF.Entities
 {
@@ -108,6 +109,21 @@ namespace HospitalF.Entities
         /// Property for Rating attribute
         /// </summary>
         public double? Rating { get; set; }
+
+        /// <summary>
+        /// Property for Rating_Count attribute
+        /// </summary>
+        public int? Rating_Count { get; set; }
+
+        /// <summary>
+        /// Property for Services attribute
+        /// </summary>
+        public List<ServiceEntity> Services { get; set; }
+
+        /// <summary>
+        /// Property for Facilities attribute
+        /// </summary>
+        public List<FacilityEntity> Facilities { get; set; }
 
         /// <summary>
         /// Property for Is_Active attribute
