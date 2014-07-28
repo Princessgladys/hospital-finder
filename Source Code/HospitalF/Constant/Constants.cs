@@ -796,6 +796,10 @@ namespace HospitalF.Constant
 
         #region Others
         /// <summary>
+        /// Value of HospitalF Facebook Admin_User_Id
+        /// </summary>
+        public const string FacebookAdminId = "100001380066365";
+        /// <summary>
         /// Value of HospitalF Facebook App_Id
         /// </summary>
         public const string FacebookAppId = "1403418919945133";

@@ -39,6 +39,14 @@
 	padding: 0px;
 }
 
+#directions-panel
+{
+	height: 100%;
+	float: right;
+	width: 100%;
+	overflow: auto;
+}
+
 #service-content
 {
 }

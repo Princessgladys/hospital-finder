@@ -3,8 +3,11 @@
 }
 @using HospitalF.Constant;
 @using HospitalF.Entities;
+@using Recaptcha.Web.Mvc;
 @{
     HospitalEntity hospital = (HospitalEntity)ViewBag.HospitalEntity;
+    Uri uri = new Uri(Request.Url.AbsoluteUri);
+    string url = uri.GetLeftPart(UriPartial.Path) + "?hospitalId=" + Request["hospitalId"];
 }
 <!-- MAIN CONTENT -->
 <div id="content-results" class="col-md-12 col-md-offset-0 well">
@@ -74,99 +77,90 @@
                         <hr />
                         <div>
                             <h5 class="txt-color-blue">Đánh giá bệnh viện</h5>
+                            @{
+                                string alertDisplayMode = "none";
+                                string successDisplayMode = "none";
+                                if (ViewBag.RateActionStatus != null)
+                                {
+                                    if ((bool)ViewBag.RateActionStatus)
+                                    {
+                                        successDisplayMode = "block";
+                                    }
+                                    else
+                                    {
+                                        alertDisplayMode = "block";
+                                    }
+                                }
+                            }
                             <div class="alert alert-info fade in" style="display: none;">
                                 <button class="close">
                                     ×
                                 </button>
                                 <i class="fa-fw fa fa-check"></i>
-                                Vui lòng <strong><a href="#" class="fb-login" style="color: #296191 !important;">đăng nhập</a></strong> để tham gia đánh giá.
+                                Vui lòng <strong><a href="#" class="fb-login" style="color: #296191 !important;">đăng nhập</a></strong> và 
+                                         <strong style="color: #296191 !important;">chọn mức đánh giá</strong> để tiến hành đánh giá.
                             </div>
-                            <div class="alert alert-success fade in" style="display: none;">
+                            <div class="alert alert-success fade in" style="display: @(successDisplayMode);">
                                 <button class="close">
                                     ×
                                 </button>
                                 <i class="fa-fw fa fa-check"></i>
                                 <strong>Đã bình chọn</strong> Cám ơn bạn đã tham gia đánh giá.
                             </div>
-                            <div class="alert alert-danger fade in" style="display: none;">
+                            <div class="alert alert-danger fade in" style="display: @(alertDisplayMode);">
                                 <button class="close">
                                     ×
                                 </button>
                                 <i class="fa-fw fa fa-times"></i>
-                                <strong>Lỗi!</strong> Vui lòng thử lại sau ít phút.
+                                <strong>Lỗi!</strong> @(ViewBag.RateActionMessage)
                             </div>
-                            <p class="description">
-                                Bạn có hài lòng với dịch vụ của bệnh viện? Mong bạn dành ít phút để giúp chúng tôi đánh giá bệnh viện này.
-                            </p>
-                            <div class="display-inline">
-                                <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tạm Được" value="1" />
-                                <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Được" value="2"/>
-                                <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tốt" value="3"/>
-                                <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Rất Tốt" value="4"/>
-                                <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tuyệt Vời" value="5"/>
-                            </div>
-                            <strong id="rate-tip"></strong>
-                            <script type="text/javascript">
-                                $(document).ready(function () {
-                                    $('.close').click(function () {
-                                        $(this).parent().hide();
-                                    });
-                                    function rate(id, score) {
-                                        $.ajax({
-                                            cache: false,
-                                            type: "GET",
-                                            url: "@(Url.Action(Constants.RateHospitalAction, Constants.HomeController))",
-                                            data: { "id": id, "score": score },
-                                            success: function (data) {
-                                                if (data == "True") {
-                                                    $('.hover-star').rating('disable');
-                                                    $('.alert-info').hide();
-                                                    $('.alert-success').show();
-                                                    $('.alert-danger').hide();
-                                                } else {
-                                                    $('.alert-info').hide();
-                                                    $('.alert-success').hide();
-                                                    $('.alert-danger').show();
-                                                }
-                                            },
-                                            error: function (xhr, ajaxOptions, thrownError) {
-                                                $('.alert-info').hide();
-                                                $('.alert-success').hide();
-                                                $('.alert-danger').show();
-                                            }
-                                        });
-                                    }
+                            @using (Html.BeginForm(Constants.RateHospitalAction, Constants.HomeController, FormMethod.Post, new { @onsubmit = "return checkVoteForm()" }))
+                            {
+                                <fieldset>
+                                    <legend>Bạn có hài lòng với dịch vụ của bệnh viện? Mong bạn dành ít phút để giúp chúng tôi đánh giá bệnh viện này.</legend>
+                                    <div class="display-inline">
+                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tạm Được" value="1" />
+                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Được" value="2"/>
+                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tốt" value="3"/>
+                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Rất Tốt" value="4"/>
+                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tuyệt Vời" value="5"/>
+                                    </div>
+                                    <strong id="rate-tip"></strong>
+                                    <input id="hospital-id" type="hidden" name="id" value="@(hospital.Hospital_ID)" />
+                                    <input id="score" type="hidden" name="score" value="0" />
+                                    <br />
+                                    @Html.Recaptcha(language: "vi")
+                                </fieldset>
+                                <footer>
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-check"></i>&nbsp;Bình Chọn
+                                    </button>
+                                </footer>
+                            }
 
-                                    $('.hover-star').rating({
-                                        focus: function (value, link) {
-                                            var tip = $('#rate-tip');
-                                            tip[0].data = tip[0].data || tip.html();
-                                            tip.html(link.title || 'value: ' + value);
-                                        },
-                                        blur: function (value, link) {
-                                            var tip = $('#rate-tip');
-                                            $('#hover-test').html(tip[0].data || '');
-                                        },
-                                        callback: function (value, link) {
-                                            var user = '@(User.Identity.Name.Split(Char.Parse(Constants.Minus))[0])';
-                                            if (user) {
-                                                rate('@(hospital.Hospital_ID)', value);
-                                            } else {
-                                                $('.alert-info').show();
-                                                $('.alert-success').hide();
-                                                $('.alert-danger').hide();
-                                            }
-                                        }
-                                    });
-                                });
-
-                            </script>
                         </div>
                     </section>
                     <section class="col-md-5">
                         <h5 class="txt-color-blue">Vị trí</h5>
                         <hr />
                         <div id="map-canvas-hospital"></div>
+                        <hr />
+                        <form id="directions-form">
+                            <fieldset>
+                                <legend><i class="fa fa-lg fa-location-arrow"></i>&nbsp;Tìm đường đi đến @(hospital.Hospital_Name)</legend>
+
+                                <div class="input-group hidden-mobile">
+                                    <input class="form-control" type="text" placeholder="Địa điểm xuất phát..." id="origin">
+                                    <div class="input-group-btn">
+                                        <button id="btn-direction" type="button" class="btn btn-info">
+                                            &nbsp;&nbsp;&nbsp;<i class="fa fa-fw fa-search fa-lg"></i>&nbsp;&nbsp;&nbsp;
+                                        </button>
+                                    </div>
+                                </div>
+                                <p class="note"><strong>Ví dụ:</strong> Công viên phần mềm Quang Trung, Quận 12, Hồ Chí Minh...</p>
+                            </fieldset>
+                        </form>
+                        <div id="directions-panel"></div>
                     </section>
                 </div>
             </div>
@@ -307,13 +301,245 @@
         </div>
         <div class="col-md-12">
             <hr />
-            <div class="fb-comments" data-href="@(Request.Url)" data-colorscheme="light" data-numposts="10" data-width="100%">
+            <div class="fb-comments" data-href="@(url)" data-colorscheme="light" data-numposts="10" data-width="100%">
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        /*
+<script>
+    $(document).ready(function () {
+        // GOOGLE - API
+
+        // Google map
+        var map;
+        // List of windows that show detailed information of hospital on map
+        var infowindow = new google.maps.InfoWindow();
+
+        function toggleBounce(marker) {
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(null);
+            } else {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        }
+
+        // Create marker of hospital on map
+        function createMarker(latlng, html) {
+            // Add markers to the map
+
+            // Marker sizes are expressed as a Size of X,Y
+            // where the origin of the image (0,0) is located
+            // in the top left of the image.
+
+            // Origins, anchor positions and coordinates of the marker
+            // increase in the X direction to the right and in
+            // the Y direction down.
+            var image = {
+                url: '../Content/img/hospital-2.png',
+                // This marker is 20 pixels wide by 32 pixels tall.
+                size: new google.maps.Size(32, 37),
+                // The origin for this image is 0,0.
+                origin: new google.maps.Point(0, 0),
+                // The anchor for this image is the base of the flagpole at 0,32.
+                anchor: new google.maps.Point(0, 32)
+            };
+            // Shapes define the clickable region of the icon.
+            // The type defines an HTML &lt;area&gt; element 'poly' which
+            // traces out a polygon as a series of X,Y points. The final
+            // coordinate closes the poly by connecting to the first
+            // coordinate.
+            var shape = {
+                coords: [1, 1, 1, 37, 32, 37, 32, 1],
+                type: 'poly'
+            };
+
+            var contentString = html;
+            var marker;
+
+            marker = new google.maps.Marker({
+                position: latlng,
+                map: map,
+                draggable: false,
+                optimized: false,
+                animation: google.maps.Animation.DROP,
+                icon: image,
+                shape: shape,
+                zIndex: Math.round(latlng.lat() * -100000) << 5
+            });
+
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.setContent(contentString);
+                infowindow.open(map, marker);
+                map.panTo(marker.getPosition());
+            });
+
+            google.maps.event.addListener(marker, 'mouseover', function () {
+                toggleBounce(marker);
+            });
+
+            google.maps.event.addListener(marker, 'mouseout', function () {
+                toggleBounce(marker);
+            });
+
+        }
+        // ------------------------------------------------------------------------
+
+        function initializeMap() {
+            var latlng = null;
+            // Get coordinate of position
+            postionLongitude = '@(hospital.Coordinate.Split(',')[0].Trim())';
+            postionLatitude = '@(hospital.Coordinate.Split(',')[1].Trim())';
+            latlng = new google.maps.LatLng(postionLongitude, postionLatitude);
+
+            // Draw the map
+            var options = {
+                zoom: 13,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false
+            };
+
+            map = new google.maps.Map(document.getElementById("map-canvas-hospital"), options);
+
+            google.maps.event.addListener(map, 'click', function () {
+                infowindow.close();
+            });
+
+            // Create marker on map with info window
+            var contentString = '<div style="width: 300px;">' +
+                                '<table class="table">' +
+                                '<thead>' +
+                                '<tr class="info">' +
+                                '<th><h5>' + '@(hospital.Hospital_Name)' + '</h5></th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody>' +
+                        '<tr>' +
+                        '<td><i class="fa fa-lg fa-location-arrow"></i>&nbsp;' + '@(hospital.Address)' + '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td><i class="fa fa-lg fa-mobile"></i>&nbsp;' + '@(hospital.Phone_Number)' + '</td>' +
+                        '</tr>' +
+                        '</tbody>' +
+                        '</table>' +
+                        '</div>';
+            createMarker(latlng, contentString);
+
+            // ------------------------------------------------------------------------
+        }
+
+        // Initialize map when page load 
+        google.maps.event.addDomListener(window, 'load', initializeMap);
+
+        // ------------------------------------------------------------------------
+
+        function calcRoute() {
+            var _resultPanel = $('#directions-panel');
+            var userlocation = document.getElementById("origin").value;
+            if (!userlocation) {
+                _resultPanel.html('<div><p><strong>Vui lòng nhập địa điểm xuất phát.<strong></p></div>');
+            } else {
+                var rendererOptions = {
+                    suppressMarkers: true
+                };
+
+                var directionsService = new google.maps.DirectionsService();
+                var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+
+                var request = {
+                    origin: userlocation,
+                    destination: '@(hospital.Address)',
+                    unitSystem: google.maps.UnitSystem.METRIC,
+                    provideRouteAlternatives: true,
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
+
+                directionsService.route(request, function (response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        _resultPanel.empty();
+                        // change start and end icons on map
+                        var marker = new google.maps.Marker({
+                            position: response.routes[0].legs[0].start_location,
+                            map: map,
+                            draggable: false,
+                            optimized: false,
+                            animation: google.maps.Animation.DROP
+                        });
+
+                        google.maps.event.addListener(marker, 'click', function () {
+                            map.panTo(marker.getPosition());
+                        });
+
+                        google.maps.event.addListener(marker, 'mouseover', function () {
+                            toggleBounce(marker);
+                        });
+
+                        google.maps.event.addListener(marker, 'mouseout', function () {
+                            toggleBounce(marker);
+                        });
+
+                        directionsDisplay.setMap(map);
+                        directionsDisplay.setDirections(response);
+                        directionsDisplay.setPanel(document.getElementById('directions-panel'));
+                    } else {
+
+                    }
+                });
+            }
+        }
+
+        $('#btn-direction').click(function () {
+            calcRoute();
+        });
+
+        $('#directions-form').submit(function (event) {
+            event.preventDefault();
+            calcRoute();
+        });
+    });
+
+
+
+    function checkVoteForm() {
+        var check = $('#score').val() > 0;
+        if (!check) {
+            $('.alert-info').show();
+            $('.alert-success').hide();
+            $('.alert-danger').hide();
+        }
+        return check;
+    }
+
+    $(document).ready(function () {
+        $('.close').click(function () {
+            $(this).parent().hide();
+        });
+        $('.hover-star').rating({
+            focus: function (value, link) {
+                var tip = $('#rate-tip');
+                tip[0].data = tip[0].data || tip.html();
+                tip.html(link.title || 'value: ' + value);
+            },
+            blur: function (value, link) {
+                var tip = $('#rate-tip');
+                $('#hover-test').html(tip[0].data || '');
+            },
+            callback: function (value, link) {
+                var user = '@(User.Identity.Name.Split(Char.Parse(Constants.Minus))[0])';
+                if (!user) {
+                    $('.alert-info').show();
+                    $('.alert-success').hide();
+                    $('.alert-danger').hide();
+                } else {
+                    $('#score').val(value);
+                }
+            }
+        });
+    });
+</script>
+@*
+    <script type="text/javascript">
         $(window).load(function () {
             $('a[data-toggle=tab]').on('shown.bs.tab', function (e) {
                 $(window).trigger("resize");
@@ -331,133 +557,57 @@
                 });
             });
         });
-        */
-       
         $(document).ready(function () {
-            // GOOGLE - API
+            $('.close').click(function () {
+                $(this).parent().hide();
+            });
+            function rate(id, score) {
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.Action(Constants.RateHospitalAction, Constants.HomeController))",
+                     data: { "id": id, "score": score },
+                     success: function (data) {
+                         if (data == "True") {
+                             $('.hover-star').rating('disable');
+                             $('.alert-info').hide();
+                             $('.alert-success').show();
+                             $('.alert-danger').hide();
+                         } else {
+                             $('.alert-info').hide();
+                             $('.alert-success').hide();
+                             $('.alert-danger').show();
+                         }
+                     },
+                     error: function (xhr, ajaxOptions, thrownError) {
+                         $('.alert-info').hide();
+                         $('.alert-success').hide();
+                         $('.alert-danger').show();
+                     }
+                 });
+             }
 
-            // Google map
-            var map;
-            // List of windows that show detailed information of hospital on map
-            var infowindow = new google.maps.InfoWindow();
-
-            function toggleBounce(marker) {
-                if (marker.getAnimation() != null) {
-                    marker.setAnimation(null);
-                } else {
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                }
-            }
-
-            // Create marker of hospital on map
-            function createMarker(latlng, html) {
-                // Add markers to the map
-
-                // Marker sizes are expressed as a Size of X,Y
-                // where the origin of the image (0,0) is located
-                // in the top left of the image.
-
-                // Origins, anchor positions and coordinates of the marker
-                // increase in the X direction to the right and in
-                // the Y direction down.
-                var image = {
-                    url: '../Content/img/hospital-2.png',
-                    // This marker is 20 pixels wide by 32 pixels tall.
-                    size: new google.maps.Size(32, 37),
-                    // The origin for this image is 0,0.
-                    origin: new google.maps.Point(0, 0),
-                    // The anchor for this image is the base of the flagpole at 0,32.
-                    anchor: new google.maps.Point(0, 32)
-                };
-                // Shapes define the clickable region of the icon.
-                // The type defines an HTML &lt;area&gt; element 'poly' which
-                // traces out a polygon as a series of X,Y points. The final
-                // coordinate closes the poly by connecting to the first
-                // coordinate.
-                var shape = {
-                    coords: [1, 1, 1, 37, 32, 37, 32, 1],
-                    type: 'poly'
-                };
-
-                var contentString = html;
-                var marker;
-
-                marker = new google.maps.Marker({
-                    position: latlng,
-                    map: map,
-                    draggable: false,
-                    optimized: false,
-                    animation: google.maps.Animation.DROP,
-                    icon: image,
-                    shape: shape,
-                    zIndex: Math.round(latlng.lat() * -100000) << 5
-                });
-
-                google.maps.event.addListener(marker, 'click', function () {
-                    infowindow.setContent(contentString);
-                    infowindow.open(map, marker);
-                    map.panTo(marker.getPosition());
-                });
-
-                google.maps.event.addListener(marker, 'mouseover', function () {
-                    toggleBounce(marker);
-                });
-
-                google.maps.event.addListener(marker, 'mouseout', function () {
-                    toggleBounce(marker);
-                });
-
-            }
-            // ------------------------------------------------------------------------
-
-            function initializeMap() {
-                var latlng = null;
-                // Get coordinate of position
-                postionLongitude = '@(hospital.Coordinate.Split(',')[0].Trim())';
-                postionLatitude = '@(hospital.Coordinate.Split(',')[1].Trim())';
-                latlng = new google.maps.LatLng(postionLongitude, postionLatitude);
-
-                // Draw the map
-                var options = {
-                    zoom: 13,
-                    center: latlng,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    mapTypeControl: false
-                };
-
-                map = new google.maps.Map(document.getElementById("map-canvas-hospital"), options);
-
-                google.maps.event.addListener(map, 'click', function () {
-                    infowindow.close();
-                });
-
-                // Create marker on map with info window
-                var contentString = '<div style="width: 300px;">' +
-                                    '<table class="table">' +
-                                    '<thead>' +
-                                    '<tr class="info">' +
-                                    '<th><h5>' + '@(hospital.Hospital_Name)' + '</h5></th>' +
-                        '</tr>' +
-                        '</thead>' +
-                        '<tbody>' +
-                        '<tr>' +
-                        '<td><i class="fa fa-lg fa-location-arrow"></i>&nbsp;' + '@(hospital.Address)' + '</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '<td><i class="fa fa-lg fa-mobile"></i>&nbsp;' + '@(hospital.Phone_Number)' + '</td>' +
-                        '</tr>' +
-                        '</tbody>' +
-                        '</table>' +
-                        '</div>';
-                createMarker(latlng, contentString);
-
-                // ------------------------------------------------------------------------
-            }
-
-            // Initialize map when page load 
-            google.maps.event.addDomListener(window, 'load', initializeMap);
-
-            // ------------------------------------------------------------------------
-        });
-
+             $('.hover-star').rating({
+                 focus: function (value, link) {
+                     var tip = $('#rate-tip');
+                     tip[0].data = tip[0].data || tip.html();
+                     tip.html(link.title || 'value: ' + value);
+                 },
+                 blur: function (value, link) {
+                     var tip = $('#rate-tip');
+                     $('#hover-test').html(tip[0].data || '');
+                 },
+                 callback: function (value, link) {
+                     var user = '@(User.Identity.Name.Split(Char.Parse(Constants.Minus))[0])';
+                                            if (user) {
+                                                rate('@(hospital.Hospital_ID)', value);
+                                            } else {
+                                                $('.alert-info').show();
+                                                $('.alert-success').hide();
+                                                $('.alert-danger').hide();
+                                            }
+                                        }
+                                    });
+         });
     </script>
+    *@
