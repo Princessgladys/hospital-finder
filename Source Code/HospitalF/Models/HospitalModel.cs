@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using HospitalF.Constant;
 
 namespace HospitalF.Models
 {
@@ -156,6 +157,11 @@ namespace HospitalF.Models
         /// Get/Set value for property PersonInCharged
         /// </summary>
         public string PersonInCharged { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property SelectedPersonInCharged
+        /// </summary>
+        public List<string> SelectedPersonInCharged { get; set; }
 
         /// <summary>
         /// Get/Set value for property CreatedPerson
@@ -317,13 +323,100 @@ namespace HospitalF.Models
         /// Insert new hospital
         /// </summary>
         /// <param name="model">Hospital model</param>
-        /// <param name="speciality">Speciality list</param>
-        /// <param name="service">Service list</param>
-        /// <param name="facility">Facility list</param>
         /// <returns></returns>
-        public async Task<int> InsertHospitalAsync(HospitalModel model, string speciality, string service, string facility)
+        public async Task<int> InsertHospitalAsync(HospitalModel model)
         {
             int result = 0;
+
+            #region Prepare data
+
+            // Full address
+            model.FullAddress = string.Format("{0} {1}, {2}, {3}, {4}",
+                model.LocationAddress, model.StreetAddress, model.WardName,
+                model.DistrictName, model.CityName);
+
+            // Phone number
+            string phoneNumber = model.PhoneNo;
+            if (!string.IsNullOrEmpty(model.PhoneNo2))
+            {
+                phoneNumber += Constants.Slash + model.PhoneNo2;
+            }
+            if (!string.IsNullOrEmpty(model.PhoneNo3))
+            {
+                phoneNumber += Constants.Slash + model.PhoneNo3;
+            }
+            model.PhoneNo = phoneNumber;
+
+            // Holiday time
+            string[] holidayTime = model.HolidayStartTime.Split(char.Parse(Constants.Minus));
+            string holidayStartTime = holidayTime[0].Trim();
+            model.HolidayStartTime = holidayStartTime;
+            string holidayEndTime = holidayTime[1].Trim();
+            model.HolidayEndTime = holidayEndTime;
+
+            // Ordinary time
+            string[] OrdinaryTime = model.OrdinaryStartTime.Split(char.Parse(Constants.Minus));
+            string ordinaryStartTime = OrdinaryTime[0].Trim();
+            model.OrdinaryStartTime = ordinaryStartTime;
+            string ordinaryEndTime = OrdinaryTime[1].Trim();
+            model.OrdinaryEndTime = ordinaryEndTime;
+
+            // Speciality list
+            string speciality = string.Empty;
+            if ((model.SelectedSpecialities != null) && (model.SelectedSpecialities.Count != 0))
+            {
+                for (int n = 0; n < model.SelectedSpecialities.Count; n++)
+                {
+                    if (n == (model.SelectedSpecialities.Count - 1))
+                    {
+                        speciality += model.SelectedSpecialities[n];
+                    }
+                    else
+                    {
+                        speciality += model.SelectedSpecialities[n] +
+                            Constants.VerticalBar.ToString();
+                    }
+                }
+            }
+
+            // Service list
+            string service = string.Empty;
+            if ((model.SelectedServices != null) && (model.SelectedServices.Count != 0))
+            {
+                for (int n = 0; n < model.SelectedServices.Count; n++)
+                {
+                    if (n == (model.SelectedServices.Count - 1))
+                    {
+                        service += model.SelectedServices[n];
+                    }
+                    else
+                    {
+                        service += model.SelectedServices[n] +
+                            Constants.VerticalBar.ToString();
+                    }
+                }
+            }
+
+            // Facility list
+            string facility = string.Empty;
+            if ((model.SelectedFacilities != null) && (model.SelectedFacilities.Count != 0))
+            {
+                for (int n = 0; n < model.SelectedFacilities.Count; n++)
+                {
+                    if (n == (model.SelectedFacilities.Count - 1))
+                    {
+                        facility += model.SelectedFacilities[n];
+                    }
+                    else
+                    {
+                        facility += model.SelectedFacilities[n] +
+                            Constants.VerticalBar.ToString();
+                    }
+                }
+            }
+
+            #endregion
+
             // Return list of dictionary words
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
@@ -335,6 +428,123 @@ namespace HospitalF.Models
                     model.FullDescription, model.PersonInCharged, speciality, service, facility));
             }
             return result;
+        }
+
+        /// <summary>
+        /// Load specific hospital in database
+        /// </summary>
+        /// <param name="hospitalId">Hospital ID</param>
+        /// <returns></returns>
+        public async Task<HospitalModel> LoadSpecificHospital(int hospitalId)
+        {
+            // Create new Hospital model to store data that returned from database
+            HospitalModel model = new HospitalModel();
+
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                #region Load single hospital data
+
+                model = await Task.Run(() =>
+                    (from h in data.SP_LOAD_SPECIFIC_HOSPITAL(hospitalId)
+                     select new HospitalModel()
+                     {
+                         HospitalID = h.Hospital_ID,
+                         HospitalName = h.Hospital_Name,
+                         HospitalTypeID = h.Hospital_Type.Value,
+                         FullAddress = h.Address,
+                         WardID = h.Ward_ID.Value,
+                         DistrictID = h.District_ID.Value,
+                         CityID = h.City_ID.Value,
+                         PhoneNo = h.Phone_Number,
+                         Fax = h.Fax,
+                         HospitalEmail = h.Email,
+                         Website = h.Website,
+                         OrdinaryStartTime = h.Ordinary_Start_Time + Constants.Minus + h.OrDinary_End_Time,
+                         HolidayStartTime = h.Holiday_Start_Time + Constants.Minus + h.Holiday_End_Time,
+                         Coordinate = h.Coordinate,
+                         ShortDescription = h.Short_Description,
+                         FullDescription = h.Full_Description,
+                         IsAllowAppointment = h.Is_Allow_Appointment.Value,
+                         IsActive = h.Is_Active.Value,
+                         CreatedPerson = h.Created_Person.Value,
+                         CityName = h.City_Name,
+                         DistrictName = h.District_Name,
+                         WardName = h.Ward_Name
+                     }).SingleOrDefault());
+
+                #endregion
+
+                #region Load list of persons in charged
+
+                model.SelectedPersonInCharged = await Task.Run(() =>
+                    (from u in data.Users
+                     where u.Hospital_ID.Equals(hospitalId)
+                     select u.User_ID.ToString()).ToList());
+
+                #endregion
+
+                #region Load list of specialities
+
+                model.SelectedSpecialities = await Task.Run(() =>
+                    (from hs in data.Hospital_Specialities
+                     where hs.Hospital_ID.Equals(hospitalId)
+                     select hs.Speciality_ID.ToString()).ToList());
+
+                #endregion
+
+                #region Load list of services
+
+                model.SelectedServices = await Task.Run(() =>
+                    (from hs in data.Hospital_Services
+                     where hs.Hospital_ID.Equals(hospitalId)
+                     select hs.Service_ID.ToString()).ToList());
+
+                #endregion
+
+                #region Load list of facilities
+
+                model.SelectedFacilities = await Task.Run(() =>
+                    (from hf in data.Hospital_Facilities
+                     where hf.Hospital_ID.Equals(hospitalId)
+                     select hf.Facility_ID.ToString()).ToList());
+
+                #endregion
+
+                #region Arrange data
+
+                // Address
+                string[] addressList = model.FullAddress.Split(Char.Parse(Constants.Comma));
+                model.WardName = addressList[1];
+                model.DistrictName = addressList[2];
+                model.CityName = addressList[3];
+                string[] detailAddress = addressList[0].Split(Char.Parse(Constants.WhiteSpace));
+                model.LocationAddress = detailAddress[0];
+                for (int n = 1; n < detailAddress.Count(); n++)
+                {
+                    model.StreetAddress = detailAddress[0][n] + Constants.WhiteSpace;
+                }
+                model.StreetAddress = model.StreetAddress.Trim();
+
+                // Phone number
+                string[] phoneNumberList = model.PhoneNo.Split(Char.Parse(Constants.Slash));
+                int phoneNumberQuantity = phoneNumberList.Count();
+                if (phoneNumberQuantity == 2)
+                {
+                    model.PhoneNo = phoneNumberList[0];
+                    model.PhoneNo2 = phoneNumberList[1];
+                }
+                if (phoneNumberQuantity == 3)
+                {
+                    model.PhoneNo = phoneNumberList[0];
+                    model.PhoneNo2 = phoneNumberList[1];
+                    model.PhoneNo3 = phoneNumberList[2];
+                }
+
+                #endregion
+            }
+
+            // Return HospitalModel
+            return model;
         }
 
         #endregion
