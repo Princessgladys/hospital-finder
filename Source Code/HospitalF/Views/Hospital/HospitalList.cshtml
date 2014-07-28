@@ -136,7 +136,7 @@
                                                     <td>
                                                         @Html.ActionLink(@hospital.Hospital_Name,
                                                             Constants.UpdateHospitalAction, Constants.HospitalController,
-                                                            new { id = @hospital.Hospital_ID }, null)
+                                                            new { hospitalId = @hospital.Hospital_ID }, null)
                                                     </td>
                                                     <td>@hospital.Address</td>
                                                     <td>@hospital.Type_Name</td>

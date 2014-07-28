@@ -450,23 +450,25 @@ namespace HospitalF.Models
                      {
                          HospitalID = h.Hospital_ID,
                          HospitalName = h.Hospital_Name,
-                         HospitalTypeID = h.Hospital_Type.Value,
+                         HospitalTypeID = (h.Hospital_Type != null) ? h.Hospital_Type.Value : 0,
                          FullAddress = h.Address,
-                         WardID = h.Ward_ID.Value,
-                         DistrictID = h.District_ID.Value,
-                         CityID = h.City_ID.Value,
+                         WardID = (h.Ward_ID != null) ? h.Ward_ID.Value : 0,
+                         DistrictID = (h.District_ID != null) ? h.District_ID.Value : 0,
+                         CityID = (h.City_ID != null) ? h.City_ID.Value : 0,
                          PhoneNo = h.Phone_Number,
                          Fax = h.Fax,
                          HospitalEmail = h.Email,
                          Website = h.Website,
-                         OrdinaryStartTime = h.Ordinary_Start_Time + Constants.Minus + h.OrDinary_End_Time,
-                         HolidayStartTime = h.Holiday_Start_Time + Constants.Minus + h.Holiday_End_Time,
+                         OrdinaryStartTime = h.Ordinary_Start_Time.Value.Hours.ToString() + ":" +
+                            h.Ordinary_Start_Time.Value.Minutes.ToString() + ":" +
+                            h.OrDinary_End_Time.Value.Hours.ToString() + ":" + h.OrDinary_End_Time.Value.Minutes.ToString(),
+                         HolidayStartTime = h.Holiday_Start_Time.ToString() + h.Holiday_End_Time.ToString(),
                          Coordinate = h.Coordinate,
                          ShortDescription = h.Short_Description,
                          FullDescription = h.Full_Description,
-                         IsAllowAppointment = h.Is_Allow_Appointment.Value,
-                         IsActive = h.Is_Active.Value,
-                         CreatedPerson = h.Created_Person.Value,
+                         IsAllowAppointment = (h.Is_Allow_Appointment != null) ? h.Is_Allow_Appointment.Value : false,
+                         IsActive = (h.Is_Active != null) ? h.Is_Active.Value : false,
+                         CreatedPerson = (h.Created_Person != null) ? h.Created_Person.Value : 0,
                          CityName = h.City_Name,
                          DistrictName = h.District_Name,
                          WardName = h.Ward_Name
@@ -521,7 +523,7 @@ namespace HospitalF.Models
                 model.LocationAddress = detailAddress[0];
                 for (int n = 1; n < detailAddress.Count(); n++)
                 {
-                    model.StreetAddress = detailAddress[0][n] + Constants.WhiteSpace;
+                    model.StreetAddress += detailAddress[n] + Constants.WhiteSpace;
                 }
                 model.StreetAddress = model.StreetAddress.Trim();
 
