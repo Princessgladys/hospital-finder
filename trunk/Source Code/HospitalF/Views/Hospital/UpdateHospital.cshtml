@@ -380,14 +380,8 @@
                         <!-- end widget edit box -->
                         <!-- widget content -->
                         <div class="widget-body no-padding">
-                            @{
-                                string fullDescription = string.Empty;
-                                if (Model != null)
-                                {
-                                    fullDescription = Model.FullDescription;
-                                }
-                            }
-                            <div id="summernote">@fullDescription</div>
+
+                            <div id="summernote">@Html.Raw(Model.FullDescription)</div>
 
                             <div class="widget-footer smart-form">
                                 <div class="btn-group">
