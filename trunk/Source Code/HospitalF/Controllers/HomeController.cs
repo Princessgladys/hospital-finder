@@ -322,6 +322,7 @@ namespace HospitalF.Controllers
                     if (hospital != null)
                     {
                         hospital.Services = HomeModels.LoadServicesByHospitalId(id);
+                        hospital.Facilities = HomeModels.LoadFacillitiesByHospitalId(id);
                         ViewBag.HospitalEntity = hospital;
                     }
                     else
