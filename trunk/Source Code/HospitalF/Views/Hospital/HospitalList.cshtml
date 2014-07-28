@@ -135,7 +135,7 @@
                                                     <td hidden>@hospital.Is_Active</td>
                                                     <td>
                                                         @Html.ActionLink(@hospital.Hospital_Name,
-                                                            "HospitalDetail", Constants.HospitalController,
+                                                            Constants.UpdateHospitalAction, Constants.HospitalController,
                                                             new { id = @hospital.Hospital_ID }, null)
                                                     </td>
                                                     <td>@hospital.Address</td>
