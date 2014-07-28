@@ -511,6 +511,7 @@
     <Content Include="Views\Account\AddAccount.cshtml" />
     <Content Include="Views\Hospital\ViewDoctorDetail.cshtml" />
     <Content Include="Views\Hospital\HospitalBasicInforUpdate.cshtml" />
+    <Content Include="Views\Hospital\UpdateHospital.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
