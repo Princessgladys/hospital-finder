@@ -14,6 +14,8 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using PagedList;
 using System.Collections.Specialized;
+using Recaptcha.Web;
+using Recaptcha.Web.Mvc;
 
 namespace HospitalF.Controllers
 {
@@ -233,11 +235,15 @@ namespace HospitalF.Controllers
                             // Json.Net is really helpful if you have to deal
                             // with Json from .Net http://json.codeplex.com/
                             JObject geoJsonObject = JObject.Parse(geoJsonResult);
-                            lat = geoJsonObject["results"].First["geometry"]["location"].Value<double>("lat");
-                            lng = geoJsonObject["results"].First["geometry"]["location"].Value<double>("lng");
+                            if (geoJsonObject.Value<string>("status").Equals("OK"))
+                            {
+                                lat = geoJsonObject["results"].First["geometry"]["location"].Value<double>("lat");
+                                lng = geoJsonObject["results"].First["geometry"]["location"].Value<double>("lng");
+                            }
                         }
 
                     }
+
                     hospitalList = await model.LocationSearchHospital(lat, lng, model.Radius * 1000);
                     pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
                     string distanceMatrixUrl = string.Concat("http://maps.googleapis.com/maps/api/distancematrix/json?origins=", lat, ",", lng, "&destinations=");
@@ -249,15 +255,17 @@ namespace HospitalF.Controllers
                     }
                     string dMatrixJsonResult = client.DownloadString(distanceMatrixUrl);
                     JObject dMatrixJsonObject = JObject.Parse(dMatrixJsonResult);
-
-                    index = 0;
-                    foreach (HospitalEntity hospital in pagedHospitalList)
+                    if (dMatrixJsonObject.Value<string>("status").Equals("OK"))
                     {
-                        hospital.Distance = dMatrixJsonObject["rows"].First["elements"].ElementAt(index++)["distance"].Value<double>("value");
-                    }
+                        index = 0;
+                        foreach (HospitalEntity hospital in pagedHospitalList)
+                        {
+                            hospital.Distance = dMatrixJsonObject["rows"].First["elements"].ElementAt(index++)["distance"].Value<double>("value");
+                        }
 
-                    ViewBag.Position = lat + ", " + lng;
-                    ViewBag.Radius = model.Radius * 1000;
+                        ViewBag.Position = lat + ", " + lng;
+                        ViewBag.Radius = model.Radius * 1000;
+                    }                   
                 }
 
                 // Transfer list of hospitals to Search Result page
@@ -311,18 +319,20 @@ namespace HospitalF.Controllers
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> Hospital(int id = 0)
-        {        
+        public async Task<ActionResult> Hospital(int hospitalId = 0)
+        {
             try
             {
                 HospitalEntity hospital = null;
-                if (id > 0)
+                if (hospitalId > 0)
                 {
-                    hospital = await HomeModels.LoadHospitalById(id);
+                    hospital = await HomeModels.LoadHospitalById(hospitalId);
                     if (hospital != null)
                     {
-                        hospital.Services = HomeModels.LoadServicesByHospitalId(id);
-                        hospital.Facilities = HomeModels.LoadFacillitiesByHospitalId(id);
+                        hospital.Services = HomeModels.LoadServicesByHospitalId(hospitalId);
+                        hospital.Facilities = HomeModels.LoadFacillitiesByHospitalId(hospitalId);
+                        ViewBag.RateActionStatus = TempData["RateActionStatus"];
+                        ViewBag.RateActionMessage = TempData["RateActionMessage"];
                         ViewBag.HospitalEntity = hospital;
                     }
                     else
@@ -344,20 +354,47 @@ namespace HospitalF.Controllers
             return View();
         }
 
-        public bool RateHospital(int id = 0, int score = 0)
+        [HttpPost]
+        public ActionResult RateHospital(int id = 0, int score = 0)
         {
             try
             {
+                RecaptchaVerificationHelper recaptchaHelper = this.GetRecaptchaVerificationHelper();
+
+                if (String.IsNullOrEmpty(recaptchaHelper.Response))
+                {
+                    TempData["RateActionStatus"] = false;
+                    TempData["RateActionMessage"] = "Vui lòng nhập mã bảo mật bên dưới.";
+                    return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = id, redirect = "yes" });
+                }
+
+                RecaptchaVerificationResult recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
+
+                if (recaptchaResult != RecaptchaVerificationResult.Success)
+                {
+                    TempData["RateActionStatus"] = false;
+                    TempData["RateActionMessage"] = "Vui lòng nhập lại mã bảo mật bên dưới.";
+                    return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = id, redirect = "yes" });
+                }
+
                 string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
 
                 int userId = AccountModels.LoadUserIdByEmail(email);
-                return HomeModels.RateHospital(userId, id, score);
+
+                bool check = HomeModels.RateHospital(userId, id, score);
+                if (!check)
+                {
+                    TempData["RateActionStatus"] = false;
+                    TempData["RateActionMessage"] = "Vui lòng thử lại sau ít phút.";
+                }
+                TempData["RateActionStatus"] = true;
+                return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = id, redirect = "yes" });
 
             }
             catch (Exception exception)
             {
                 LoggingUtil.LogException(exception);
-                return false;
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
     }
