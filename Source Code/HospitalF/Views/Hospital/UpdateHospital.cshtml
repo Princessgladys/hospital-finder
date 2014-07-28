@@ -466,16 +466,28 @@
 
             if (status != 0) {
                 $("#success-alert").show();
-                setNotification("Thêm mới [" + hospitalName + "] thành công!", 1);
+                setNotification("Thông tin của [" + hospitalName + "] được cập nhật thành công!", 1);
             } else {
                 $("#error-alert").show();
-                setNotification("Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
+                setNotification("không cập nhật được thông tin của [" + hospitalName + "], xin vui lòng thử lại sau.", 3);
             }
+        }
+    }
+
+    @**Load value for multi select drop down list*@
+    function setValueForMultiSelectDropdown() {
+        var selectedSpecialities = [1,2];
+        i = 0, size = selectedSpecialities.length, // index and array size declared here to avoid overhead
+        $options = $('#SelectedSpecialities option');
+
+        for (i; i < size; i++) {
+            $options.filter('[value="' + selectedSpecialities[i] + '"]').prop('selected', true);
         }
     }
 
     $(document).ready(function () {
         displayNotification();
+        setValueForMultiSelectDropdown();
     });
 
     var timeoutReference;
@@ -965,8 +977,9 @@
         // Display current location
         function initializeMap(position) {
             // Get current latitude and longitude
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
+            var coordinate = '@Model.Coordinate';
+            var latitude = coordinate.split(',')[0].trim();
+            var longitude = coordinate.split(',')[1].trim();
             var currentLocation = new google.maps.LatLng(latitude, longitude);
             geocoder = new google.maps.Geocoder();
 
@@ -982,6 +995,13 @@
             map = new google.maps.Map(
                 document.getElementById("google-map"), mapOptions
             );
+
+            marker = new google.maps.Marker({
+                position: currentLocation,
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
 
             // Allow create marker on click event after 300ms
             google.maps.event.addListener(map, 'click', function (event) {
