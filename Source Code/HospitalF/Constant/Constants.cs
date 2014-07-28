@@ -185,6 +185,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string AddAccountAction = "AddAccount";
 
+        /// <summary>
+        /// Name of UpdateHospitalAction method in HospitalController
+        /// </summary>
+        public const string UpdateHospitalAction = "UpdateHospital";
+
         #endregion
 
         #region AccountModel
