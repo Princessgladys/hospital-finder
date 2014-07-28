@@ -645,6 +645,11 @@ namespace HospitalF.Constant
         /// Constant for character ')'
         /// </summary>
         public const string CloseBracket = ")";
+        
+        /// <summary>
+        /// Constant for character ','
+        /// </summary>
+        public const string Comma = ",";
 
         #endregion
 

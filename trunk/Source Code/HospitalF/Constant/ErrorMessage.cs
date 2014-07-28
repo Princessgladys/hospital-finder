@@ -52,6 +52,11 @@
         /// </summary>
         public const string CEM012 = "{0} phải có ít nhất {1} ký tự.";
 
+        /// <summary>
+        /// No white space is allow
+        /// </summary>
+        public const string CEM013 = "{0} không được chứa khoảng trắng.";
+
         #endregion
 
         #region Server Error Messages
