@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using HospitalF.Constant;
+using System.Text.RegularExpressions;
 
 namespace HospitalF.Models
 {
@@ -459,10 +460,14 @@ namespace HospitalF.Models
                          Fax = h.Fax,
                          HospitalEmail = h.Email,
                          Website = h.Website,
-                         OrdinaryStartTime = h.Ordinary_Start_Time.Value.Hours.ToString() + ":" +
-                            h.Ordinary_Start_Time.Value.Minutes.ToString() + ":" +
-                            h.OrDinary_End_Time.Value.Hours.ToString() + ":" + h.OrDinary_End_Time.Value.Minutes.ToString(),
-                         HolidayStartTime = h.Holiday_Start_Time.ToString() + h.Holiday_End_Time.ToString(),
+                         OrdinaryStartTime = h.Ordinary_Start_Time.Value.Hours.ToString(Constants.Format2Digit) +
+                            h.Ordinary_Start_Time.Value.Minutes.ToString(Constants.Format2Digit) +
+                            h.OrDinary_End_Time.Value.Hours.ToString(Constants.Format2Digit) +
+                            h.OrDinary_End_Time.Value.Minutes.ToString(Constants.Format2Digit),
+                         HolidayStartTime = h.Holiday_Start_Time.Value.Hours.ToString(Constants.Format2Digit) +
+                            h.Holiday_Start_Time.Value.Minutes.ToString(Constants.Format2Digit) +
+                            h.Holiday_End_Time.Value.Hours.ToString(Constants.Format2Digit) +
+                            h.Holiday_End_Time.Value.Minutes.ToString(Constants.Format2Digit),
                          Coordinate = h.Coordinate,
                          ShortDescription = h.Short_Description,
                          FullDescription = h.Full_Description,
@@ -533,7 +538,17 @@ namespace HospitalF.Models
                 if (phoneNumberQuantity == 2)
                 {
                     model.PhoneNo = phoneNumberList[0];
-                    model.PhoneNo2 = phoneNumberList[1];
+                    if (phoneNumberList[1].Contains(Constants.OpenBracket) ||
+                        phoneNumberList[1].Contains(Constants.CloseBracket) ||
+                        (phoneNumberList[1].Length <= 8))
+                    {
+                        model.PhoneNo2 = phoneNumberList[1];
+                    }
+                    else
+                    {
+                        model.PhoneNo3 = phoneNumberList[1];
+                    }
+                    
                 }
                 if (phoneNumberQuantity == 3)
                 {
