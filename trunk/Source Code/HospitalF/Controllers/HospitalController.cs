@@ -744,7 +744,7 @@ namespace HospitalF.Controllers
             try
             {
                 //  Load hospital in database
-                model = await model.LoadSpecificHospital(hospitalID);
+                model = await model.LoadSpecificHospital(hospitalId);
 
                 #region cascading dropdownlist
 

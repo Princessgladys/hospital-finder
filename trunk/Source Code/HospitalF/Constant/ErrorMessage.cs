@@ -55,7 +55,7 @@
         /// <summary>
         /// No white space is allow
         /// </summary>
-        public const string CEM013 = "{0} không được chứa khoảng trắng.";
+        public const string CEM013 = "{0} không được chứa khoảng trắng và ký tự đặc biệt.";
 
         #endregion
 
