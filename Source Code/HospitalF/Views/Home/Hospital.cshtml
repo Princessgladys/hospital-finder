@@ -75,21 +75,21 @@
                         <div>
                             <h5 class="txt-color-blue">Đánh giá bệnh viện</h5>
                             <div class="alert alert-info fade in" style="display: none;">
-                                <button class="close" data-dismiss="alert">
+                                <button class="close">
                                     ×
                                 </button>
                                 <i class="fa-fw fa fa-check"></i>
                                 Vui lòng <strong><a href="#" class="fb-login" style="color: #296191 !important;">đăng nhập</a></strong> để tham gia đánh giá.
                             </div>
                             <div class="alert alert-success fade in" style="display: none;">
-                                <button class="close" data-dismiss="alert">
+                                <button class="close">
                                     ×
                                 </button>
                                 <i class="fa-fw fa fa-check"></i>
                                 <strong>Đã bình chọn</strong> Cám ơn bạn đã tham gia đánh giá.
                             </div>
                             <div class="alert alert-danger fade in" style="display: none;">
-                                <button class="close" data-dismiss="alert">
+                                <button class="close">
                                     ×
                                 </button>
                                 <i class="fa-fw fa fa-times"></i>
@@ -107,46 +107,57 @@
                             </div>
                             <strong id="rate-tip"></strong>
                             <script type="text/javascript">
-                                function rate(id, score) {
-                                    $.ajax({
-                                        cache: false,
-                                        type: "GET",
-                                        url: "@(Url.Action(Constants.RateHospitalAction, Constants.HomeController))",
-                                        data: { "id": id, "score": score },
-                                        success: function (data) {
-                                            if (data == "True") {
-                                                $('.hover-star').rating('disable');
-                                                $('.alert-success').show();
-                                                $('.alert-danger').hide();
-                                            } else {
+                                $(document).ready(function () {
+                                    $('.close').click(function () {
+                                        $(this).parent().hide();
+                                    });
+                                    function rate(id, score) {
+                                        $.ajax({
+                                            cache: false,
+                                            type: "GET",
+                                            url: "@(Url.Action(Constants.RateHospitalAction, Constants.HomeController))",
+                                            data: { "id": id, "score": score },
+                                            success: function (data) {
+                                                if (data == "True") {
+                                                    $('.hover-star').rating('disable');
+                                                    $('.alert-info').hide();
+                                                    $('.alert-success').show();
+                                                    $('.alert-danger').hide();
+                                                } else {
+                                                    $('.alert-info').hide();
+                                                    $('.alert-success').hide();
+                                                    $('.alert-danger').show();
+                                                }
+                                            },
+                                            error: function (xhr, ajaxOptions, thrownError) {
+                                                $('.alert-info').hide();
+                                                $('.alert-success').hide();
                                                 $('.alert-danger').show();
                                             }
+                                        });
+                                    }
+
+                                    $('.hover-star').rating({
+                                        focus: function (value, link) {
+                                            var tip = $('#rate-tip');
+                                            tip[0].data = tip[0].data || tip.html();
+                                            tip.html(link.title || 'value: ' + value);
                                         },
-                                        error: function (xhr, ajaxOptions, thrownError) {
-                                            $('.alert-success').hide();
-                                            $('.alert-danger').show();
+                                        blur: function (value, link) {
+                                            var tip = $('#rate-tip');
+                                            $('#hover-test').html(tip[0].data || '');
+                                        },
+                                        callback: function (value, link) {
+                                            var user = '@(User.Identity.Name.Split(Char.Parse(Constants.Minus))[0])';
+                                            if (user) {
+                                                rate('@(hospital.Hospital_ID)', value);
+                                            } else {
+                                                $('.alert-info').show();
+                                                $('.alert-success').hide();
+                                                $('.alert-danger').hide();
+                                            }
                                         }
                                     });
-                                }
-
-                                $('.hover-star').rating({
-                                    focus: function (value, link) {
-                                        var tip = $('#rate-tip');
-                                        tip[0].data = tip[0].data || tip.html();
-                                        tip.html(link.title || 'value: ' + value);
-                                    },
-                                    blur: function (value, link) {
-                                        var tip = $('#rate-tip');
-                                        $('#hover-test').html(tip[0].data || '');
-                                    },
-                                    callback: function (value, link) {
-                                        var user = '@(User.Identity.Name.Split(Char.Parse(Constants.Minus))[0])';
-                                        if (user) {
-                                            rate('@(hospital.Hospital_ID)', value);
-                                        } else {
-                                            $('.alert-info').show();
-                                        }
-                                    }
                                 });
 
                             </script>
@@ -183,11 +194,11 @@
                                     {
                                         if (service.Is_Active == true)
                                         {
-                                            <li><i class="fa fa-lg fa-check txt-color-green"></i>&nbsp;@(service.Service_Name)</li>
+                                    <li><i class="fa fa-lg fa-check txt-color-green"></i>&nbsp;@(service.Service_Name)</li>
                                         }
                                         else
                                         {
-                                            <li><i class="fa fa-lg fa-times txt-color-red"></i>&nbsp;@(service.Service_Name)</li>
+                                    <li><i class="fa fa-lg fa-times txt-color-red"></i>&nbsp;@(service.Service_Name)</li>
                                         }
                                     }
                                 }
@@ -198,25 +209,36 @@
                     <div id="facility-content" class="col-md-12">
                         <h5 class="txt-color-blue">Tiện nghi hỗ trợ</h5>
                         <hr />
-                        <table class="table table-bordered table-striped">
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        @{
+                            var facilityTypeList = (from f in hospital.Facilities
+                                                    group f.Type_Name by f.Type_ID into ff
+                                                    select new
+                                                    {
+                                                        Type_ID = ff.Key,
+                                                        Type_Name = ff.ToList().First()
+                                                    });
+                        }
+                        @foreach (var facilityType in facilityTypeList)
+                        {       
+                            <h5>@(facilityType.Type_Name)</h5>
+                            <ul>
+                                @foreach (FacilityEntity facility in hospital.Facilities)
+                                {
+                                    if (facility.Type_ID == facilityType.Type_ID)
+                                    {
+                                        if (facility.Is_Active == true)
+                                        {
+                                    <li><i class="fa fa-lg fa-check txt-color-green"></i>&nbsp;@(facility.Facility_Name)</li>
+                                        }
+                                        else
+                                        {
+                                    <li><i class="fa fa-lg fa-times txt-color-red"></i>&nbsp;@(facility.Facility_Name)</li>
+                                        }
+                                    }
+                                }
+                            </ul>
+                            <br />
+                        }
                     </div>
                 </div>
             </div>
@@ -247,27 +269,6 @@
                                 <img src="~/Content/img/background_1.jpg"></a>
                         </div>
                     </div>
-                    <script type="text/javascript">
-                        /*
-                        $(window).load(function () {
-                            $('a[data-toggle=tab]').on('shown.bs.tab', function (e) {
-                                $(window).trigger("resize");
-                            });
-                            $(window).resize(function () {
-                                $container = $('.image-gallery');
-                                $coloumn = $container.width() / 8;
-                                $container.imagesLoaded(function () {
-                                    $container.masonry({
-                                        columnWidth: $coloumn,
-                                        gutter: 0,
-                                        itemSelector: '.image-box',
-                                        isFitWidth: true
-                                    });
-                                });
-                            });
-                        });
-                        */
-                    </script>
                     <div id="blueimp-gallery" class="blueimp-gallery">
                         <!-- The container for the modal slides -->
                         <div class="slides"></div>
@@ -312,127 +313,151 @@
     </div>
 
     <script>
-        // GOOGLE - API
+        /*
+        $(window).load(function () {
+            $('a[data-toggle=tab]').on('shown.bs.tab', function (e) {
+                $(window).trigger("resize");
+            });
+            $(window).resize(function () {
+                $container = $('.image-gallery');
+                $coloumn = $container.width() / 8;
+                $container.imagesLoaded(function () {
+                    $container.masonry({
+                        columnWidth: $coloumn,
+                        gutter: 0,
+                        itemSelector: '.image-box',
+                        isFitWidth: true
+                    });
+                });
+            });
+        });
+        */
+       
+        $(document).ready(function () {
+            // GOOGLE - API
 
-        // Google map
-        var map;
-        // List of windows that show detailed information of hospital on map
-        var infowindow = new google.maps.InfoWindow();
+            // Google map
+            var map;
+            // List of windows that show detailed information of hospital on map
+            var infowindow = new google.maps.InfoWindow();
 
-        function toggleBounce(marker) {
-            if (marker.getAnimation() != null) {
-                marker.setAnimation(null);
-            } else {
-                marker.setAnimation(google.maps.Animation.BOUNCE);
+            function toggleBounce(marker) {
+                if (marker.getAnimation() != null) {
+                    marker.setAnimation(null);
+                } else {
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                }
             }
-        }
 
-        // Create marker of hospital on map
-        function createMarker(latlng, html) {
-            // Add markers to the map
+            // Create marker of hospital on map
+            function createMarker(latlng, html) {
+                // Add markers to the map
 
-            // Marker sizes are expressed as a Size of X,Y
-            // where the origin of the image (0,0) is located
-            // in the top left of the image.
+                // Marker sizes are expressed as a Size of X,Y
+                // where the origin of the image (0,0) is located
+                // in the top left of the image.
 
-            // Origins, anchor positions and coordinates of the marker
-            // increase in the X direction to the right and in
-            // the Y direction down.
-            var image = {
-                url: '../Content/img/hospital-2.png',
-                // This marker is 20 pixels wide by 32 pixels tall.
-                size: new google.maps.Size(32, 37),
-                // The origin for this image is 0,0.
-                origin: new google.maps.Point(0, 0),
-                // The anchor for this image is the base of the flagpole at 0,32.
-                anchor: new google.maps.Point(0, 32)
-            };
-            // Shapes define the clickable region of the icon.
-            // The type defines an HTML &lt;area&gt; element 'poly' which
-            // traces out a polygon as a series of X,Y points. The final
-            // coordinate closes the poly by connecting to the first
-            // coordinate.
-            var shape = {
-                coords: [1, 1, 1, 37, 32, 37, 32, 1],
-                type: 'poly'
-            };
+                // Origins, anchor positions and coordinates of the marker
+                // increase in the X direction to the right and in
+                // the Y direction down.
+                var image = {
+                    url: '../Content/img/hospital-2.png',
+                    // This marker is 20 pixels wide by 32 pixels tall.
+                    size: new google.maps.Size(32, 37),
+                    // The origin for this image is 0,0.
+                    origin: new google.maps.Point(0, 0),
+                    // The anchor for this image is the base of the flagpole at 0,32.
+                    anchor: new google.maps.Point(0, 32)
+                };
+                // Shapes define the clickable region of the icon.
+                // The type defines an HTML &lt;area&gt; element 'poly' which
+                // traces out a polygon as a series of X,Y points. The final
+                // coordinate closes the poly by connecting to the first
+                // coordinate.
+                var shape = {
+                    coords: [1, 1, 1, 37, 32, 37, 32, 1],
+                    type: 'poly'
+                };
 
-            var contentString = html;
-            var marker;
+                var contentString = html;
+                var marker;
 
-            marker = new google.maps.Marker({
-                position: latlng,
-                map: map,
-                draggable: false,
-                optimized: false,
-                animation: google.maps.Animation.DROP,
-                icon: image,
-                shape: shape,
-                zIndex: Math.round(latlng.lat() * -100000) << 5
-            });
+                marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map,
+                    draggable: false,
+                    optimized: false,
+                    animation: google.maps.Animation.DROP,
+                    icon: image,
+                    shape: shape,
+                    zIndex: Math.round(latlng.lat() * -100000) << 5
+                });
 
-            google.maps.event.addListener(marker, 'click', function () {
-                infowindow.setContent(contentString);
-                infowindow.open(map, marker);
-                map.panTo(marker.getPosition());
-            });
+                google.maps.event.addListener(marker, 'click', function () {
+                    infowindow.setContent(contentString);
+                    infowindow.open(map, marker);
+                    map.panTo(marker.getPosition());
+                });
 
-            google.maps.event.addListener(marker, 'mouseover', function () {
-                toggleBounce(marker);
-            });
+                google.maps.event.addListener(marker, 'mouseover', function () {
+                    toggleBounce(marker);
+                });
 
-            google.maps.event.addListener(marker, 'mouseout', function () {
-                toggleBounce(marker);
-            });
+                google.maps.event.addListener(marker, 'mouseout', function () {
+                    toggleBounce(marker);
+                });
 
-        }
-        // ------------------------------------------------------------------------
+            }
+            // ------------------------------------------------------------------------
 
-        function initializeMap() {
-            var latlng = null;
-            // Get coordinate of position
-            postionLongitude = '@(hospital.Coordinate.Split(',')[0].Trim())';
-            postionLatitude = '@(hospital.Coordinate.Split(',')[1].Trim())';
-            latlng = new google.maps.LatLng(postionLongitude, postionLatitude);
+            function initializeMap() {
+                var latlng = null;
+                // Get coordinate of position
+                postionLongitude = '@(hospital.Coordinate.Split(',')[0].Trim())';
+                postionLatitude = '@(hospital.Coordinate.Split(',')[1].Trim())';
+                latlng = new google.maps.LatLng(postionLongitude, postionLatitude);
 
-            // Draw the map
-            var options = {
-                zoom: 13,
-                center: latlng,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControl: false
-            };
+                // Draw the map
+                var options = {
+                    zoom: 13,
+                    center: latlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl: false
+                };
 
-            map = new google.maps.Map(document.getElementById("map-canvas-hospital"), options);
+                map = new google.maps.Map(document.getElementById("map-canvas-hospital"), options);
 
-            google.maps.event.addListener(map, 'click', function () {
-                infowindow.close();
-            });
+                google.maps.event.addListener(map, 'click', function () {
+                    infowindow.close();
+                });
 
-            // Create marker on map with info window
-            var contentString = '<div style="width: 300px;">' +
-                                '<table class="table">' +
-                                '<thead>' +
-                                '<tr class="info">' +
-                                '<th>' + '@(hospital.Hospital_Name)' + '</th>' +
+                // Create marker on map with info window
+                var contentString = '<div style="width: 300px;">' +
+                                    '<table class="table">' +
+                                    '<thead>' +
+                                    '<tr class="info">' +
+                                    '<th><h5>' + '@(hospital.Hospital_Name)' + '</h5></th>' +
                         '</tr>' +
                         '</thead>' +
                         '<tbody>' +
                         '<tr>' +
-                        '<td><i class="fa fa-location-arrow"></i>&nbsp;' + '@(hospital.Address)' + '</td>' +
+                        '<td><i class="fa fa-lg fa-location-arrow"></i>&nbsp;' + '@(hospital.Address)' + '</td>' +
                         '</tr>' +
                         '<tr>' +
-                        '<td><i class="fa fa-mobile"></i>&nbsp;' + '@(hospital.Phone_Number)' + '</td>' +
+                        '<td><i class="fa fa-lg fa-mobile"></i>&nbsp;' + '@(hospital.Phone_Number)' + '</td>' +
                         '</tr>' +
                         '</tbody>' +
                         '</table>' +
                         '</div>';
-            createMarker(latlng, contentString);
+                createMarker(latlng, contentString);
+
+                // ------------------------------------------------------------------------
+            }
+
+            // Initialize map when page load 
+            google.maps.event.addDomListener(window, 'load', initializeMap);
 
             // ------------------------------------------------------------------------
-        }
+        });
 
-        // Initialize map when page load 
-        google.maps.event.addDomListener(window, 'load', initializeMap);
-        // ------------------------------------------------------------------------
     </script>

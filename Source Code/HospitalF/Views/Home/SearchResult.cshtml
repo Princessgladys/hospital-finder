@@ -118,7 +118,10 @@
                                 <p class="note truncate">Chưa có đánh giá</p>
                             }
                         </div>
-                        <strong>@(hospital.Rating)</strong>
+                        @if (hospital.Rating != null)
+                        {
+                            <strong>@(Math.Round((double)hospital.Rating, 1))</strong>
+                        }
                     </div>
                     <div style="width: 100%" class="hospital-record-description">
                         <p class="description truncate">
@@ -226,210 +229,213 @@
         });
     });
 
-    // GOOGLE - API
 
-    // Google map
-    var map;
-    // Copy list of google markers
-    var markers = [];
-    // Copy list of content string of inforwindow
-    var contentStringList = [];
-    // List of windows that show detailed information of hospital on map
-    var infowindow = new google.maps.InfoWindow();
-    // Parse JSON hospital list to javascript object
-    var hospitalList = JSON && JSON.parse('@Html.Raw(ViewBag.JsonHospitalList)') || $.parseJSON('@Html.Raw(ViewBag.JsonHospitalList)');
-    // Position
-    var position = '@(ViewBag.Position)';
-    // Radius
-    var radius = @(ViewBag.Radius != null ? ViewBag.Radius : 0);
+    $(document).ready(function () {
+        // GOOGLE - API
+
+        // Google map
+        var map;
+        // Copy list of google markers
+        var markers = [];
+        // Copy list of content string of inforwindow
+        var contentStringList = [];
+        // List of windows that show detailed information of hospital on map
+        var infowindow = new google.maps.InfoWindow();
+        // Parse JSON hospital list to javascript object
+        var hospitalList = JSON && JSON.parse('@Html.Raw(ViewBag.JsonHospitalList)') || $.parseJSON('@Html.Raw(ViewBag.JsonHospitalList)');
+        // Position
+        var position = '@(ViewBag.Position)';
+        // Radius
+        var radius = @(ViewBag.Radius != null ? ViewBag.Radius : 0);
  
 
-    function panToMarker(coordinate) {
-        lat = coordinate.split(',')[0];
-        lng = coordinate.split(',')[1].trim();
-        map.panTo(new google.maps.LatLng(lat, lng));
-    }
-
-    function toggleBounce(marker) {
-
-        if (marker.getAnimation() != null) {
-            marker.setAnimation(null);
-        } else {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
+        function panToMarker(coordinate) {
+            lat = coordinate.split(',')[0];
+            lng = coordinate.split(',')[1].trim();
+            map.panTo(new google.maps.LatLng(lat, lng));
         }
-    }
 
-    function clearToogleBounce() {
-        for (var i; i < markers.length; i++) {
-            markers[i].setAnimation(null);
+        function toggleBounce(marker) {
+
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(null);
+            } else {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
         }
-    }
 
-    function onClickHospitalRecord(record, marker, contentString) {
-        $(".hospital-record").attr("style", "");
-        record.attr("style", "background-color: #d9edf7");
-        map.panTo(marker.getPosition());
-        infowindow.setContent(contentString);
-        infowindow.open(map, marker);
-    }
-
-    // Create marker of hospital on map
-    function createMarker(latlng, html, markerType) {
-        // Add markers to the map
-
-        // Marker sizes are expressed as a Size of X,Y
-        // where the origin of the image (0,0) is located
-        // in the top left of the image.
-
-        // Origins, anchor positions and coordinates of the marker
-        // increase in the X direction to the right and in
-        // the Y direction down.
-        var image = {
-            url: '../Content/img/hospital-2.png',
-            // This marker is 20 pixels wide by 32 pixels tall.
-            size: new google.maps.Size(32, 37),
-            // The origin for this image is 0,0.
-            origin: new google.maps.Point(0, 0),
-            // The anchor for this image is the base of the flagpole at 0,32.
-            anchor: new google.maps.Point(0, 32)
-        };
-        // Shapes define the clickable region of the icon.
-        // The type defines an HTML &lt;area&gt; element 'poly' which
-        // traces out a polygon as a series of X,Y points. The final
-        // coordinate closes the poly by connecting to the first
-        // coordinate.
-        var shape = {
-            coords: [1, 1, 1, 37, 32, 37, 32, 1],
-            type: 'poly'
-        };
-
-        var contentString = html;
-        var marker;
-        if (markerType == 0) {
-            marker = new google.maps.Marker({
-                position: latlng,
-                map: map,
-                draggable: false,
-                optimized: false,
-                animation: google.maps.Animation.BOUNCE,
-                zIndex: Math.round(latlng.lat() * -100000) << 5
-            });
-        } else {
-            marker = new google.maps.Marker({
-                position: latlng,
-                map: map,
-                draggable: false,
-                optimized: false,
-                animation: google.maps.Animation.DROP,
-                icon: image,
-                shape: shape,
-                zIndex: Math.round(latlng.lat() * -100000) << 5
-            });
+        function clearToogleBounce() {
+            for (var i; i < markers.length; i++) {
+                markers[i].setAnimation(null);
+            }
         }
-        markers.push(marker);
-        google.maps.event.addListener(marker, 'click', function () {
+
+        function onClickHospitalRecord(record, marker, contentString) {
+            $(".hospital-record").attr("style", "");
+            record.attr("style", "background-color: #d9edf7");
+            map.panTo(marker.getPosition());
             infowindow.setContent(contentString);
             infowindow.open(map, marker);
-            map.panTo(marker.getPosition());
-        });
+        }
 
-        google.maps.event.addListener(marker, 'mouseover', function () {
-            toggleBounce(marker);
-        });
+        // Create marker of hospital on map
+        function createMarker(latlng, html, markerType) {
+            // Add markers to the map
 
-        google.maps.event.addListener(marker, 'mouseout', function () {
-            toggleBounce(marker);
-        });
+            // Marker sizes are expressed as a Size of X,Y
+            // where the origin of the image (0,0) is located
+            // in the top left of the image.
 
-    }
-    // ------------------------------------------------------------------------
-
-    function initializeMap() {
-        if (hospitalList.length > 0) {
-            var latlng = null;
-            if (position) {
-                // Get coordinate of position
-                postionLongitude = position.split(',')[0];
-                postionLatitude = position.split(',')[1].trim();
-                latlng = new google.maps.LatLng(postionLongitude, postionLatitude);
-            }
-            // Draw the map
-            var options = {
-                zoom: 10,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControl: false
+            // Origins, anchor positions and coordinates of the marker
+            // increase in the X direction to the right and in
+            // the Y direction down.
+            var image = {
+                url: '../Content/img/hospital-2.png',
+                // This marker is 20 pixels wide by 32 pixels tall.
+                size: new google.maps.Size(32, 37),
+                // The origin for this image is 0,0.
+                origin: new google.maps.Point(0, 0),
+                // The anchor for this image is the base of the flagpole at 0,32.
+                anchor: new google.maps.Point(0, 32)
+            };
+            // Shapes define the clickable region of the icon.
+            // The type defines an HTML &lt;area&gt; element 'poly' which
+            // traces out a polygon as a series of X,Y points. The final
+            // coordinate closes the poly by connecting to the first
+            // coordinate.
+            var shape = {
+                coords: [1, 1, 1, 37, 32, 37, 32, 1],
+                type: 'poly'
             };
 
-            map = new google.maps.Map(document.getElementById("map-canvas"), options);
-
-            google.maps.event.addListener(map, 'click', function () {
-                infowindow.close();
-            });
-            // ------------------------------------------------------------------------
-            if (position) {
-                // Draw circle to show the radius from input position
-                var circleOptions = {
-                    strokeColor: '#2c699d',
-                    strokeOpacity: 0.5,
-                    strokeWeight: 2,
-                    fillColor: '#3276b1',
-                    fillOpacity: 0.1,
+            var contentString = html;
+            var marker;
+            if (markerType == 0) {
+                marker = new google.maps.Marker({
+                    position: latlng,
                     map: map,
-                    center: latlng,
-                    radius: isNaN(radius) ? 0 : radius
+                    draggable: false,
+                    optimized: false,
+                    animation: google.maps.Animation.BOUNCE,
+                    zIndex: Math.round(latlng.lat() * -100000) << 5
+                });
+            } else {
+                marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map,
+                    draggable: false,
+                    optimized: false,
+                    animation: google.maps.Animation.DROP,
+                    icon: image,
+                    shape: shape,
+                    zIndex: Math.round(latlng.lat() * -100000) << 5
+                });
+            }
+            markers.push(marker);
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.setContent(contentString);
+                infowindow.open(map, marker);
+                map.panTo(marker.getPosition());
+            });
+
+            google.maps.event.addListener(marker, 'mouseover', function () {
+                toggleBounce(marker);
+            });
+
+            google.maps.event.addListener(marker, 'mouseout', function () {
+                toggleBounce(marker);
+            });
+
+        }
+        // ------------------------------------------------------------------------
+
+        function initializeMap() {
+            if (hospitalList.length > 0) {
+                var latlng = null;
+                if (position) {
+                    // Get coordinate of position
+                    postionLongitude = position.split(',')[0];
+                    postionLatitude = position.split(',')[1].trim();
+                    latlng = new google.maps.LatLng(postionLongitude, postionLatitude);
+                }
+                // Draw the map
+                var options = {
+                    zoom: 10,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl: false
                 };
 
-                var circle = new google.maps.Circle(circleOptions);
+                map = new google.maps.Map(document.getElementById("map-canvas"), options);
 
-                google.maps.event.addListener(circle, 'click', (function () {
+                google.maps.event.addListener(map, 'click', function () {
                     infowindow.close();
-                }));
-            }
-            // ------------------------------------------------------------------------
-
-            // Fit map for user can view all marker on map with highest zoom level
-            var myBounds = new google.maps.LatLngBounds();
-            // Create marker on map with info window
-            for (i = 0; i < hospitalList.length; i++) {
-                var coordinate = hospitalList[i].Coordinate;
-                var longitude = (hospitalList[i].Coordinate.split(',')[0]).trim();
-                var latitude = (hospitalList[i].Coordinate.split(',')[1]).trim();
-                myBounds.extend(new google.maps.LatLng(longitude, latitude));
-                var contentString = '<div style="width: 300px;">' +
-                                    '<table class="table">' +
-                                    '<thead>' +
-                                    '<tr class="info">' +
-                                    '<th>' + hospitalList[i].Hospital_Name + '</th>' +
-                                    '</tr>' +
-                                    '</thead>' +
-                                    '<tbody>' +
-                                    '<tr>' +
-                                    '<td><i class="fa fa-location-arrow"></i>&nbsp;' + hospitalList[i].Address + '</td>' +
-                                    '</tr>' +
-                                    '<tr>' +
-                                    '<td><i class="fa fa-mobile"></i>&nbsp;' + hospitalList[i].Phone_Number + '</td>' +
-                                    '</tr>' +
-                                    '</tbody>' +
-                                    '</table>' +
-                                    '</div>';
-                contentStringList.push(contentString);
-                createMarker(new google.maps.LatLng(longitude, latitude), contentString, 1);
-            }
-            $(".hospital-record").each(function (index) {
-                $(this).click(function () {
-                    onClickHospitalRecord($(this), markers[index], contentStringList[index]);
                 });
-            });
-            if (position) {
-                myBounds.extend(latlng);
-                createMarker(new google.maps.LatLng(postionLongitude, postionLatitude), "Vị trí hiện tại", 0);
-            }
-            map.fitBounds(myBounds);
-            // ------------------------------------------------------------------------
-        }
-    }
+                // ------------------------------------------------------------------------
+                if (position) {
+                    // Draw circle to show the radius from input position
+                    var circleOptions = {
+                        strokeColor: '#2c699d',
+                        strokeOpacity: 0.5,
+                        strokeWeight: 2,
+                        fillColor: '#3276b1',
+                        fillOpacity: 0.1,
+                        map: map,
+                        center: latlng,
+                        radius: isNaN(radius) ? 0 : radius
+                    };
 
-    // Initialize map when page load 
-    google.maps.event.addDomListener(window, 'load', initializeMap);
-    // ------------------------------------------------------------------------
+                    var circle = new google.maps.Circle(circleOptions);
+
+                    google.maps.event.addListener(circle, 'click', (function () {
+                        infowindow.close();
+                    }));
+                }
+                // ------------------------------------------------------------------------
+
+                // Fit map for user can view all marker on map with highest zoom level
+                var myBounds = new google.maps.LatLngBounds();
+                // Create marker on map with info window
+                for (i = 0; i < hospitalList.length; i++) {
+                    var coordinate = hospitalList[i].Coordinate;
+                    var longitude = (hospitalList[i].Coordinate.split(',')[0]).trim();
+                    var latitude = (hospitalList[i].Coordinate.split(',')[1]).trim();
+                    myBounds.extend(new google.maps.LatLng(longitude, latitude));
+                    var contentString = '<div style="width: 300px;">' +
+                                        '<table class="table">' +
+                                        '<thead>' +
+                                        '<tr class="info">' +
+                                        '<th><h5>' + hospitalList[i].Hospital_Name + '</h5></th>' +
+                                        '</tr>' +
+                                        '</thead>' +
+                                        '<tbody>' +
+                                        '<tr>' +
+                                        '<td><i class="fa fa-lg fa-location-arrow"></i>&nbsp;' + hospitalList[i].Address + '</td>' +
+                                        '</tr>' +
+                                        '<tr>' +
+                                        '<td><i class="fa fa-lg fa-mobile"></i>&nbsp;' + hospitalList[i].Phone_Number + '</td>' +
+                                        '</tr>' +
+                                        '</tbody>' +
+                                        '</table>' +
+                                        '</div>';
+                    contentStringList.push(contentString);
+                    createMarker(new google.maps.LatLng(longitude, latitude), contentString, 1);
+                }
+                $(".hospital-record").each(function (index) {
+                    $(this).click(function () {
+                        onClickHospitalRecord($(this), markers[index], contentStringList[index]);
+                    });
+                });
+                if (position) {
+                    myBounds.extend(latlng);
+                    createMarker(new google.maps.LatLng(postionLongitude, postionLatitude), "Vị trí hiện tại", 0);
+                }
+                map.fitBounds(myBounds);
+                // ------------------------------------------------------------------------
+            }
+        }
+
+        // Initialize map when page load 
+        google.maps.event.addDomListener(window, 'load', initializeMap);
+        // ------------------------------------------------------------------------
+    });
 </script>
