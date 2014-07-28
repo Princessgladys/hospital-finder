@@ -20,15 +20,19 @@ BEGIN
 		FROM Rating r
 		WHERE r.Hospital_ID = @Hospital_ID AND r.Created_Person = @User_ID
 		
-		IF (@Check > 0)
-		BEGIN
-			RETURN 0
-		END
-		
 		BEGIN TRAN
 		BEGIN TRY
-			INSERT INTO Rating (Score, Hospital_ID, Created_Person)
-			VALUES (@Score, @Hospital_ID, @User_ID)
+			IF (@Check > 0)
+				BEGIN
+					UPDATE Rating
+					SET Score = @Score
+					WHERE Hospital_ID = @Hospital_ID AND Created_Person = @User_ID
+				END
+			ELSE
+				BEGIN
+					INSERT INTO Rating (Score, Hospital_ID, Created_Person)
+					VALUES (@Score, @Hospital_ID, @User_ID)
+				END
 			
 			DECLARE @Average_Score FLOAT
 			SET @Average_Score = [dbo].[FU_CALCULATE_AVERAGE_RATING] (@Hospital_ID)
@@ -60,6 +64,6 @@ SELECT	'Return Value' = @return_value
 GO
 
 DECLARE	@return_value float
-EXEC	@return_value = [SP_RATE_HOSPITAL] 3, 2, 4
+EXEC	@return_value = [SP_RATE_HOSPITAL] 3, 20, 1
 SELECT	'Return Value' = @return_value
 GO
