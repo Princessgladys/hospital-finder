@@ -573,6 +573,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string VietnamesePhoneNumberRegex = @"/^[0-9()]*$/";
 
+        /// <summary>
+        /// Regular expression to detech HTML tag in a string
+        /// </summary>
+        public const string RemoveHtmlRegex = @"<[^>]+>|&nbsp;";
+
         #endregion
 
         #region Constant value in database
@@ -755,6 +760,11 @@ namespace HospitalF.Constant
         /// Constant for PhotoFolder key in appSettings section of Web.config
         /// </summary>
         public const string PhotoFolder = "PhotoFolder";
+
+        /// <summary>
+        /// Format time with 2 digit
+        /// </summary>
+        public const string Format2Digit = "d2";
 
         /// <summary>
         /// Take relative diacritic Vietnamese characters according to input letter
