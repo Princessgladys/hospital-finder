@@ -14,6 +14,36 @@ namespace HospitalF.Utilities
     public class ServiceFacilityUtil
     {
         /// <summary>
+        /// Load service type in database
+        /// </summary>
+        /// <returns>List[ServiceType] that contains a list of services</returns>
+        public static async Task<List<ServiceType>> LoadServiceTypeAsync()
+        {
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from s in data.ServiceTypes
+                     select s).ToList());
+            }
+        }
+
+        /// <summary>
+        /// Load facility type in database
+        /// </summary>
+        /// <returns>List[FacilityType] that contains a list of services</returns>
+        public static async Task<List<FacilityType>> LoadFacilityTypeAsync()
+        {
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from f in data.FacilityTypes
+                     select f).ToList());
+            }
+        }
+
+        /// <summary>
         /// Load a list of services in database
         /// </summary>
         /// <returns>List[Service] that contains a list of services</returns>
@@ -23,7 +53,7 @@ namespace HospitalF.Utilities
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
-                    (from s in data.SP_TAKE_SERVICE_AND_TYPE().ToList()
+                    (from s in data.SP_TAKE_SERVICE_AND_TYPE(null, 0, true).ToList()
                      select new GroupedSelectListItem
                      {
                          GroupKey = s.Type_ID.ToString(),
@@ -44,7 +74,7 @@ namespace HospitalF.Utilities
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
-                    (from f in data.SP_TAKE_FACILITY_AND_TYPE().ToList()
+                    (from f in data.SP_TAKE_FACILITY_AND_TYPE(null, 0, true).ToList()
                      select new GroupedSelectListItem
                      {
                          GroupKey = f.Type_ID.ToString(),
