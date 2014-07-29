@@ -1,0 +1,278 @@
+﻿@using HospitalF.Constant
+@using PagedList.Mvc
+@using PagedList;
+@using HospitalF.Models
+
+@model IPagedList<SP_TAKE_SERVICE_AND_TYPEResult>
+
+@{
+    ViewBag.Title = "Loại hình dịch vụ";
+}
+
+@using (Html.BeginForm("DisplayServiceList", Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
+{
+    <div class="row">
+        <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-table fa-fw "></i>
+                Danh sách dịch vụ
+            </h1>
+        </div>
+    </div>
+
+    <label class="select">
+        @Html.DropDownList("TypeID", (SelectList)ViewBag.ServiceTypeList,
+                "Tất cả loại dịch vụ", new { @class = "form-control" })
+        <i></i>
+    </label>
+
+    <label class="select">
+        <select class="form-control" id="IsActive" name="IsActive">
+            @{
+                bool isActive = (bool)ViewBag.CurrentStatus;
+                if (isActive)
+                {
+                    <option value="true" selected>Đang hoạt động</option>
+                            <option value="false">Ngưng hoạt động</option>
+                }
+                else
+                {
+                    <option value="true">Đang hoạt động</option>
+                            <option value="false" selected>Ngưng hoạt động</option>
+                }
+            }
+        </select>
+        <i></i>
+    </label>
+
+    <div class="well">
+        <div class="input-group">
+            @Html.TextBox("ServiceName", null, new
+            {
+                @placeholder = "Tìm kiếm tên dịch vụ",
+                @class = "form-control",
+                @id = "service-name-search"
+            })
+            <div class="input-group-btn">
+                <button class="btn btn-default btn-primary" type="submit"
+                        value="@Constants.NormalSearchForm" name="@Constants.Button"
+                        id="normal-search-button">
+                    <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                 data-widget-colorbutton="false"
+                 data-widget-editbutton="false"
+                 data-widget-togglebutton="false"
+                 data-widget-deletebutton="false"
+                 data-widget-fullscreenbutton="false"
+                 data-widget-custombutton="false"
+                 data-widget-collapsed="false"
+                 data-widget-sortable="false">
+
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                    <h2>Danh sách</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <p>Chọn thông tin phụ hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> bệnh viện trong hệ thống</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered tablesorter" id="service-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên dịch vụ</th>
+                                        <th>Loại</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    @{
+                                        if (Model.Count == 0)
+                                        {
+                                            <tr>
+                                                <td colspan="5">Không có dữ liệu</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            foreach (var service in Model)
+                                            {
+                                                <tr>
+                                                    <td hidden>@service.Service_ID</td>
+                                                    <td hidden>@service.Service_Name</td>
+                                                    <td hidden>@service.Is_Active</td>
+                                                    <td>
+                                                        @Html.ActionLink(@service.Service_Name,
+                                                            Constants.UpdateHospitalAction, Constants.HospitalController,
+                                                            new { hospitalId = @service.Service_ID }, null)
+                                                    </td>
+                                                    <td>@service.Type_Name</td>
+                                                    <td>@(@service.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
+                                                    <td>
+                                                        <a href="" class="btn btn-sm btn-success btn-next">
+                                                            @(service.Is_Active.Value ? "Ngừng" : "Kích hoạt")
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="paging">
+                            @{
+                                if (Model.Count != 0)
+                                {
+                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
+                                        ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                                }
+                            }
+                        </div>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+
+    @*Sort table*@
+    $(document).ready(function () {
+        $("#service-table").tablesorter();
+    });
+
+    @*AJAX for cascading District drop down list*@
+    $(document).ready(function () {
+        $("#CityID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlDistrict = $("#DistrictID");
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("GetDistrictByCity-Hospital"))",
+                data: { "cityId": selectedItem },
+                success: function (data) {
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    },
+                error: function (xhr, ajaxOptions, thrownError) {
+                }
+            });
+        });
+    });
+
+    @*Update hospital status*@
+    $(document).ready(function () {
+        $('#service-table .btn').on('click', function () {
+            var row = $(this).closest('tr');
+            var columns = row.find('td');
+            var valueInRow = "";
+            $.each(columns, function (i, item) {
+                valueInRow = valueInRow + item.innerHTML + '|';
+            });
+            var argument = valueInRow.split('|');
+            var hospitalId = argument[0];
+            var hospitalName = argument[1];
+            var status = argument[2];
+            var confirmMessage = "";
+            if (status == "True") {
+                confirmMessage = "Bạn có muốn ngừng [" + hospitalName + "] hay không?"
+            } else {
+                confirmMessage = "Bạn có muốn kích hoạt [" + hospitalName + "] hay không?"
+            }
+
+            if (confirm(confirmMessage)) {
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
+                    data: {
+                        "hospitalId": hospitalId
+                    },
+                    success: function (data) {
+                        if (data.value == 1) {
+                            if (status == "True") {
+                                notif({
+                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
+                                    type: "success",
+                                    width: 600,
+                                    position: "center",
+                                    fade: true,
+                                    multiline: true
+                                });
+                            } else {
+                                notif({
+                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
+                                    type: "success",
+                                    width: 600,
+                                    position: "center",
+                                    fade: true,
+                                    multiline: true
+                                });
+                            }
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        notif({
+                            msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
+                            type: "error",
+                            width: 600,
+                            position: "center",
+                            fade: true,
+                            multiline: true
+                        });
+                    }
+                });
+            } else {
+                return false;
+            }
+
+            var numOfVisibleRows = $('#table-body').children('tr').length;
+            if ((numOfVisibleRows - 1) == 0) {
+                row.replaceWith('<tr><td colspan="5">Không có dữ liệu</td></tr>');
+                $('#paging').hide();
+            } else {
+                row.css("background-color", "#275b89");
+                row.fadeOut(400, function () {
+                    row.remove();
+                });
+            }
+            $('#service-table').trigger('update');
+
+            //return false;
+        });
+    });
+
+</script>
+

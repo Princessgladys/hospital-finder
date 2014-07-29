@@ -290,7 +290,7 @@ namespace HospitalF.Controllers
             // Load list of hospital types
 
             hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
-            SelectList typeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+            SelectList typeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
             HospitalModel.HospitalTypeID = (int)hospital.Hospital_Type;
             ViewBag.HospitalTypeList = typeList;
             return View(HospitalModel);
@@ -747,7 +747,7 @@ namespace HospitalF.Controllers
 
                 // Load list of hospital types
                 hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
-                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
 
                 // Load list of status
                 ViewBag.CurrentStatus = true;
@@ -777,7 +777,7 @@ namespace HospitalF.Controllers
             {
                 // Cacading again drop down list
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
                 ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
                 ViewBag.CurrentStatus = model.IsActive;
 
@@ -838,7 +838,7 @@ namespace HospitalF.Controllers
 
                 // Load list of hospital types
                 hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
-                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
 
                 //Load list of specialities
                 specialityList = await SpecialityUtil.LoadSpecialityAsync();
@@ -944,7 +944,7 @@ namespace HospitalF.Controllers
 
                 // Load list of hospital types
                 hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
-                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
 
                 //Load list of specialities
                 model.SpecialityList = await SpecialityUtil.LoadSpecialityAsync();
@@ -1018,7 +1018,7 @@ namespace HospitalF.Controllers
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
                 ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
                 ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
-                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
 
                 //Load list of specialities
                 model.SpecialityList = await SpecialityUtil.LoadSpecialityAsync();
@@ -1091,7 +1091,7 @@ namespace HospitalF.Controllers
             ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
             ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
             ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
-            ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+            ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
             ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
             ViewBag.ServiceList = serviceList;
             ViewBag.FacilityList = facilityList;
