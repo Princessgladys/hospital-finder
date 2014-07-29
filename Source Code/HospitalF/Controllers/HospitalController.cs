@@ -765,18 +765,128 @@ namespace HospitalF.Controllers
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
 
                 //Load list of specialities
-                specialityList = await SpecialityUtil.LoadSpecialityAsync();
-                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+                model.SpecialityList = await SpecialityUtil.LoadSpecialityAsync();
+                //ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
 
                 //Load list of services
                 serviceList = await ServiceFacilityUtil.LoadServiceAsync();
+                foreach (var service in serviceList)
+                {
+                    foreach (var selectValue in model.SelectedServices)
+                    {
+                        if (service.Value.Equals(selectValue))
+                        {
+                            service.Selected = true;
+                        }
+                    }
+                }
                 ViewBag.ServiceList = serviceList;
 
                 // Load list of facilitites
                 facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
+                foreach (var facility in facilityList)
+                {
+                    foreach (var selectValue in model.SelectedFacilities)
+                    {
+                        if (facility.Value.Equals(selectValue))
+                        {
+                            facility.Selected = true;
+                        }
+                    }
+                }
                 ViewBag.FacilityList = facilityList;
 
                 #endregion
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// POST: /Hospital/UpdateHospital
+        /// </summary>
+        /// <param name="model">Hospital Model</param>
+        /// <param name="files">Photo files</param>
+        /// <returns>Task[ActionResult]</returns>
+        [HttpPost]
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [ValidateInput(false)]
+        public async Task<ActionResult> UpdateHospital(HospitalModel model, List<HttpPostedFileBase> file)
+        {
+            try
+            {
+                // Prepare data
+                int result = 0;
+                model.CreatedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.UpdateHospitalAsync(model);
+                }
+
+                #region cascading dropdownlist
+
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+                ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+                ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+
+                //Load list of specialities
+                model.SpecialityList = await SpecialityUtil.LoadSpecialityAsync();
+                //ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+
+                //Load list of services
+                serviceList = await ServiceFacilityUtil.LoadServiceAsync();
+                if (model.SelectedServices != null)
+                {
+                    foreach (var service in serviceList)
+                    {
+                        foreach (var selectValue in model.SelectedServices)
+                        {
+                            if (service.Value.Equals(selectValue))
+                            {
+                                service.Selected = true;
+                            }
+                        }
+                    }
+                }
+                ViewBag.ServiceList = serviceList;
+
+                // Load list of facilitites
+                facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
+                if (model.SelectedFacilities != null)
+                {
+                    foreach (var facility in facilityList)
+                    {
+                        foreach (var selectValue in model.SelectedFacilities)
+                        {
+                            if (facility.Value.Equals(selectValue))
+                            {
+                                facility.Selected = true;
+                            }
+                        }
+                    }
+                }
+                ViewBag.FacilityList = facilityList;
+
+                #endregion
+
+                // Check if insert process is success or not
+                if (result == 0)
+                {
+                    ViewBag.UpdateHospitalStatus = 0.ToString() + Constants.Minus + model.HospitalName;
+                }
+                else
+                {
+                    ViewBag.UpdateHospitalStatus = 1.ToString() + Constants.Minus + model.HospitalName;
+                }
             }
             catch (Exception exception)
             {
