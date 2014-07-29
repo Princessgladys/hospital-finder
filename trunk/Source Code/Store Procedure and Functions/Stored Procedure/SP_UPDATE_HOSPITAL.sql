@@ -57,4 +57,198 @@ BEGIN
 			RETURN 0;
 		END
 	END
+
+	-- SELECT HOSPITAL ID
+	DECLARE @HospitalID INT = (SELECT TOP 1 Hospital_ID
+								FROM Hospital
+								ORDER BY Hospital_ID DESC)
+
+	-- UPDATE SPECIALITY TABLE
+	IF (@SpecialityList != '')
+	BEGIN
+		DECLARE @RowNumber INT = 1
+		DECLARE @TotalToken  INT = 0;
+		DECLARE @Token VARCHAR(4)
+
+		SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
+							  FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, '|') TokenList)
+
+		WHILE (@RowNumber <= @TotalToken)
+		BEGIN
+			SELECT @Token = (SELECT TokenList.Token
+							 FROM (SELECT ROW_NUMBER()
+								 OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+								 FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, '|') TokenList) AS TokenList
+							 WHERE RowNumber = @RowNumber)
+
+			IF (EXISTS(SELECT hs.Hospital_ID
+					   FROM Hospital_Speciality hs
+					   WHERE hs.Speciality_ID = @Token AND
+							 hs.Hospital_ID = @HospitalID))
+			BEGIN
+				-- CHECK STATUS OF SPECIALITY IN HOSPITAL
+				IF (EXISTS(SELECT hs.Hospital_ID
+						   FROM Hospital_Speciality hs
+						   WHERE hs.Speciality_ID = @Token AND
+								 hs.Hospital_ID = @HospitalID AND
+								 hs.Is_Active = 'False'))
+				BEGIN
+					UPDATE Hospital_Speciality
+					SET Is_Active = 'True'
+					WHERE Speciality_ID = @Token AND
+						  Hospital_ID = @HospitalID
+				END
+			END
+			ELSE
+			BEGIN
+				-- INSERT NEW SPECIALITY
+				INSERT INTO Hospital_Speciality
+				(
+					Hospital_ID,
+					Speciality_ID,
+					Is_Main_Speciality,
+					Is_Active
+				)
+				VALUES
+				(
+					@HospitalID,
+					@Token,
+					'False',
+					'True'
+				)
+			END
+
+			IF @@ROWCOUNT = 0
+			BEGIN
+				ROLLBACK TRAN T;
+				RETURN 0;
+			END
+
+			SET @RowNumber += 1
+		END
+	END
+
+	-- UPDATE SERVICE TABLE
+	IF (@ServiceList != '')
+	BEGIN
+		SET @RowNumber = 1
+		SET @TotalToken = 0
+
+		SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
+								FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, '|') TokenList)
+
+		WHILE (@RowNumber <= @TotalToken)
+		BEGIN
+			SELECT @Token = (SELECT TokenList.Token
+							 FROM (SELECT ROW_NUMBER()
+								 OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+								 FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, '|') TokenList) AS TokenList
+							 WHERE RowNumber = @RowNumber)
+
+			IF (EXISTS(SELECT hs.Hospital_ID
+					   FROM Hospital_Service hs
+					   WHERE hs.Service_ID = @Token AND
+							 hs.Hospital_ID = @HospitalID))
+			BEGIN
+				-- CHECK STATUS OF SERVICE IN HOSPITAL
+				IF (EXISTS(SELECT hs.Hospital_ID
+						   FROM Hospital_Service hs
+						   WHERE hs.Service_ID = @Token AND
+								 hs.Hospital_ID = @HospitalID AND
+								 hs.Is_Active = 'False'))
+				BEGIN
+					UPDATE Hospital_Service
+					SET Is_Active = 'True'
+					WHERE Service_ID = @Token AND
+						  Hospital_ID = @HospitalID
+				END
+			END
+			ELSE
+			BEGIN
+				-- INSERT NEW SERVICE
+				INSERT INTO Hospital_Service
+				(
+					Hospital_ID,
+					Service_ID,
+					Is_Active
+				)
+				VALUES
+				(
+					@HospitalID,
+					@Token,
+					'True'
+				)
+			END
+
+			IF @@ROWCOUNT = 0
+			BEGIN
+				ROLLBACK TRAN T;
+				RETURN 0;
+			END
+
+			SET @RowNumber += 1
+		END
+	END
+
+	-- UPDATE FACILITY TABLE
+	IF (@FacilityList != '')
+	BEGIN
+		SET @RowNumber = 1
+		SET @TotalToken = 0
+
+		SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
+								FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, '|') TokenList)
+
+		WHILE (@RowNumber <= @TotalToken)
+		BEGIN
+			SELECT @Token = (SELECT TokenList.Token
+							 FROM (SELECT ROW_NUMBER()
+								 OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+								 FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, '|') TokenList) AS TokenList
+							 WHERE RowNumber = @RowNumber)
+
+			IF (EXISTS(SELECT hs.Hospital_ID
+					   FROM Hospital_Facility hs
+					   WHERE hs.Facility_ID = @Token AND
+							 hs.Hospital_ID = @HospitalID))
+			BEGIN
+				-- CHECK STATUS OF SERVICE IN HOSPITAL
+				IF (EXISTS(SELECT hs.Hospital_ID
+						   FROM Hospital_Facility hs
+						   WHERE hs.Facility_ID = @Token AND
+								 hs.Hospital_ID = @HospitalID AND
+								 hs.Is_Active = 'False'))
+				BEGIN
+					UPDATE Hospital_Facility
+					SET Is_Active = 'True'
+					WHERE Facility_ID = @Token AND
+						  Hospital_ID = @HospitalID
+				END
+			END
+			ELSE
+			BEGIN
+				-- INSERT NEW SERVICE
+				INSERT INTO Hospital_Facility
+				(
+					Hospital_ID,
+					Facility_ID,
+					Is_Active
+				)
+				VALUES
+				(
+					@HospitalID,
+					@Token,
+					'True'
+				)
+			END
+
+			IF @@ROWCOUNT = 0
+			BEGIN
+				ROLLBACK TRAN T;
+				RETURN 0;
+			END
+
+			SET @RowNumber += 1
+		END
+	END
 END
