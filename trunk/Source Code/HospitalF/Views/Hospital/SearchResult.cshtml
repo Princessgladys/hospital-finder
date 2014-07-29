@@ -102,7 +102,7 @@
                             <tr>
                                 <th style="width: 9%">Hình ảnh</th>
                                 <th style="width: 15%">Họ tên</th>
-                                <th style="width: 33%">Chứng chỉ/Bằng cấp</th>
+                                <th style="width: 33%">Chứng chỉ/ Bằng cấp</th>
                                 <th style="width: 33%">Kinh nghiệm</th>
                                 <th style="width: 10%;">Lịch làm việc</th>
                             </tr>
@@ -124,9 +124,9 @@
 
                                     </td>
                                     <td style="width: 150px;">
-                                        @Html.ActionLink(fullname, Constants.ViewDoctorDetailAction, Constants.HospitalController, new
+                                        @Html.ActionLink(fullname, Constants.UpdateDoctorAction, Constants.DoctorController, new
                                    {
-                                       id=@doctor.Doctor_ID
+                                       id=@doctor.Doctor_ID,hospitalID=ViewBag.Hospital
                                    },null)</td>
                                     <td>@doctor.Degree</td>
                                     <td>@doctor.Experience</td>

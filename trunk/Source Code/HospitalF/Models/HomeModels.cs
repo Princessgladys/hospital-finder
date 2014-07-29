@@ -671,14 +671,14 @@ namespace HospitalF.Models
             List<FacilityEntity> services = null;
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                services = (from f in data.SP_LOAD_FACILITIES_BY_HOSPITAL_ID(id)
+                services = (from f in data.SP_LOAD_FACILITY_IN_HOSPITAL_FACILITY(id)
                             select new FacilityEntity()
                             {
                                 Facility_ID = f.Facility_ID,
                                 Facility_Name = f.Facility_Name,
-                                Type_ID = f.Type_ID,
-                                Type_Name = f.Type_Name,
-                                Is_Active = f.Is_Active
+                                Type_ID = f.Facility_Type,
+                                Type_Name = f.Type_Name
+                                //Is_Active = f.Is_Active
                             }).ToList<FacilityEntity>();
             }
             return services;

@@ -202,6 +202,7 @@
     <Compile Include="Constant\ErrorMessage.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
+    <Compile Include="Controllers\DoctorController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HospitalController.cs" />
@@ -257,7 +258,6 @@
     <Content Include="Content\css\font-awesome.m.css" />
     <Content Include="Content\css\fonts\flexslider-icon.svg" />
     <Content Include="Content\css\jquery.rating.css" />
-    <Content Include="Content\css\LeanModalStyle.css" />
     <Content Include="Content\css\lockscreen.css" />
     <Content Include="Content\css\notifIt.css" />
     <Content Include="Content\css\smartadmin-production.css" />
@@ -265,9 +265,9 @@
     <Content Include="Content\css\smartadmin-skins.css" />
     <Content Include="Content\css\smartadmin-skins.m.css" />
     <Content Include="Content\css\star.gif" />
+    <Content Include="Content\css\leanModel.css" />
     <Content Include="Content\css\summernote.css" />
     <Content Include="Content\css\tablesorter.css" />
-    <Content Include="Content\css\tinyscrollbar.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-2.html" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-3.html" />
@@ -338,8 +338,10 @@
     <Content Include="Content\js\custom.js" />
     <Content Include="Content\js\demo.js" />
     <Content Include="Content\js\imagesloaded.pkgd.m.js" />
+    <Content Include="Content\js\jquery-1.11.0.min.js" />
     <Content Include="Content\js\jquery.blueimp-gallery.m.js" />
     <Content Include="Content\js\jquery.flexslider.js" />
+    <Content Include="Content\js\jquery.leanModal.min.js" />
     <Content Include="Content\js\jquery.MetaData.js" />
     <Content Include="Content\js\jquery.rating.js" />
     <Content Include="Content\js\jquery.rating.pack.js" />
@@ -440,14 +442,14 @@
     <Content Include="Content\img\favicon\Thumbs.db" />
     <Content Include="Content\img\flags\Thumbs.db" />
     <Content Include="Content\img\splash\Thumbs.db" />
+    <Content Include="Content\css\fonts\flexslider-icon.eot" />
+    <Content Include="Content\css\fonts\flexslider-icon.ttf" />
+    <Content Include="Content\css\fonts\flexslider-icon.woff" />
     <Content Include="Models\LinqDB.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>LinqDB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Content\css\fonts\flexslider-icon.eot" />
-    <Content Include="Content\css\fonts\flexslider-icon.ttf" />
-    <Content Include="Content\css\fonts\flexslider-icon.woff" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="RecaptchaNet.ReadMe.txt" />
     <Content Include="Scripts\jquery-1.8.2.js" />
@@ -513,9 +515,11 @@
     <Content Include="Views\Home\Hospital.cshtml" />
     <Content Include="Views\Hospital\AddHospital.cshtml" />
     <Content Include="Views\Account\AddAccount.cshtml" />
-    <Content Include="Views\Hospital\ViewDoctorDetail.cshtml" />
     <Content Include="Views\Hospital\HospitalBasicInforUpdate.cshtml" />
     <Content Include="Views\Hospital\UpdateHospital.cshtml" />
+    <Content Include="Views\Doctor\Index.cshtml" />
+    <Content Include="Views\Hospital\SpecialityServiceFacilityUpdate.cshtml" />
+    <Content Include="Views\Doctor\UpdateDoctor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
