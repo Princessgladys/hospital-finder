@@ -174,7 +174,7 @@ namespace HospitalF.Controllers
                     hospitalTypeList = await Task.Run(() => (from ht in data.HospitalTypes
                                                              select ht).ToList());
                 }
-                ViewBag.HospitalTypes = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
+                ViewBag.HospitalTypes = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
 
                 // Indicate which button is clicked
                 var button = Request[Constants.Button];

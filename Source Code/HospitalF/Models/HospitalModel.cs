@@ -8,6 +8,9 @@ using System.Text.RegularExpressions;
 
 namespace HospitalF.Models
 {
+    /// <summary>
+    /// Class define bussiness method for HospitalModel
+    /// </summary>
     public class HospitalModel
     {
         #region AnhDTH

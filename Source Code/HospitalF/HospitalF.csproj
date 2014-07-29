@@ -203,6 +203,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\DoctorController.cs" />
+    <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HospitalController.cs" />
@@ -214,6 +215,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppointmentModels.cs" />
+    <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\DoctorModels.cs" />
     <Compile Include="Models\HomeModels.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -232,6 +234,7 @@
     <Compile Include="Utilities\LoggingUtil.cs" />
     <Compile Include="Utilities\PhotoUtil.cs" />
     <Compile Include="Utilities\ServiceFacilityUtil.cs" />
+    <Compile Include="Utilities\SMSUtil.cs" />
     <Compile Include="Utilities\SpecialityUtil.cs" />
     <Compile Include="Utilities\StringUtil.cs" />
   </ItemGroup>
@@ -520,6 +523,7 @@
     <Content Include="Views\Doctor\Index.cshtml" />
     <Content Include="Views\Hospital\SpecialityServiceFacilityUpdate.cshtml" />
     <Content Include="Views\Doctor\UpdateDoctor.cshtml" />
+    <Content Include="Views\Data\ServiceList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

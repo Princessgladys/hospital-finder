@@ -70,6 +70,11 @@ namespace HospitalF.Constant
         public const string AccountController = "Account";
 
         /// <summary>
+        /// Name of DataController
+        /// </summary>
+        public const string DataController = "Data";
+
+        /// <summary>
         /// Name of CreateAppointmentAction
         /// </summary>
         public const string CreateAppointmentAction = "CreateAppointment";
@@ -290,14 +295,14 @@ namespace HospitalF.Constant
         #region Property English Name
 
         // <summary>
-        /// English name of property HospitalTypeID
+        /// English name of property TypeID
         /// </summary>
-        public const string HospitalTypeID = "Type_ID";
+        public const string TypeID = "Type_ID";
 
         /// <summary>
-        /// English name of property HospitalTypeName
+        /// English name of property TypeName
         /// </summary>
-        public const string HospitalTypeName = "Type_Name";
+        public const string TypeName = "Type_Name";
 
         /// <summary>
         /// English name of property CityID
