@@ -30,10 +30,33 @@ namespace HospitalF.Controllers
 
         public static int hospitalID = 68;
         public Hospital hospital = null;
-        public static HospitalModel model = null;
-        public static DoctorModels DoctorModel = null;
+        public static HospitalModel HospitalModel = null;
 
         #region load location
+        /// <summary>
+        /// Hospital/Loadcity
+        /// </summary>
+        /// <returns>Task<List<City>></returns>
+        public async Task<List<City>> LoadCity()
+        {
+            List<City> list = await LocationUtil.LoadCityAsync();
+            City city = null;
+            List<City> result = new List<City>();
+            foreach (City c in list)
+            {
+                city = new City();
+                city.City_ID = c.City_ID;
+                city.City_Name = c.Type + Constants.WhiteSpace + c.City_Name;
+                result.Add(city);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Hospital/LoadDistrict
+        /// </summary>
+        /// <param name="cityID">cityID</param>
+        /// <returns>Task<List<District>></returns>
         public async Task<List<District>> LoadDistrict(int cityID)
         {
             List<District> list = await LocationUtil.LoadDistrictInCityAsync(cityID);
@@ -48,6 +71,11 @@ namespace HospitalF.Controllers
             }
             return result;
         }
+        /// <summary>
+        /// Hospital/LoadWard
+        /// </summary>
+        /// <param name="districtID">districtID</param>
+        /// <returns>Task<List<Ward>></returns>
         public async Task<List<Ward>> LoadWard(int districtID)
         {
             List<Ward> list = await LocationUtil.LoadWardInDistrictAsync(districtID);
@@ -69,49 +97,49 @@ namespace HospitalF.Controllers
         [LayoutInjecter(Constants.HospitalUserLayout)]
         public async Task<ActionResult> Index()
         {
-            model = new HospitalModel();
+            HospitalModel = new HospitalModel();
             hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
             hospitalTypeList = await HospitalUtil.LoadTypeInHospitalTypeAsync(hospitalID);
 
             //assign value for model attributes
-            model.HospitalID = hospitalID;
-            model.HospitalName = hospital.Hospital_Name;
-            model.FullAddress = hospital.Address;
-            model.Website = hospital.Website;
-            model.PhoneNo = hospital.Phone_Number;
-            model.Fax = hospital.Fax;
-            model.HospitalTypeName = model.LoadHospitalTypeInList((int)hospital.Hospital_Type, hospitalTypeList);
+            HospitalModel.HospitalID = hospitalID;
+            HospitalModel.HospitalName = hospital.Hospital_Name;
+            HospitalModel.FullAddress = hospital.Address;
+            HospitalModel.Website = hospital.Website;
+            HospitalModel.PhoneNo = hospital.Phone_Number;
+            HospitalModel.Fax = hospital.Fax;
+            HospitalModel.HospitalTypeName = HospitalModel.LoadHospitalTypeInList((int)hospital.Hospital_Type, hospitalTypeList);
             DateTime start;
             DateTime end;
             if (hospital.Ordinary_Start_Time == null && hospital.Ordinary_End_Time == null)
             {
                 //startTime = new TimeSpan(0, 0, 0);
-                model.OrdinaryStartTime = null;
+                HospitalModel.OrdinaryStartTime = null;
             }
             else
             {
                 start = DateTime.Today + (TimeSpan)hospital.Ordinary_Start_Time;
                 end = DateTime.Today + (TimeSpan)hospital.Ordinary_End_Time;
-                model.OrdinaryStartTime = start.ToString("HH:mm") + " - " + end.ToString("HH:mm");
+                HospitalModel.OrdinaryStartTime = start.ToString("HH:mm") + " - " + end.ToString("HH:mm");
             }
             if (hospital.Holiday_Start_Time == null && hospital.Holiday_End_Time == null)
             {
                 //startTime = new TimeSpan(0, 0, 0);
-                model.HolidayStartTime = null;
+                HospitalModel.HolidayStartTime = null;
             }
             else
             {
                 start = DateTime.Today + (TimeSpan)hospital.Holiday_Start_Time;
                 end = DateTime.Today + (TimeSpan)hospital.Holiday_End_Time;
-                model.HolidayStartTime = start.ToString("HH:mm") + " - " + end.ToString("HH:mm");
+                HospitalModel.HolidayStartTime = start.ToString("HH:mm") + " - " + end.ToString("HH:mm");
             }
             if (hospital.Is_Allow_Appointment == null)
             {
-                model.IsAllowAppointment = false;
+                HospitalModel.IsAllowAppointment = false;
             }
             else
             {
-                model.IsAllowAppointment = true;
+                HospitalModel.IsAllowAppointment = true;
             }
 
             //load speciality of hospital
@@ -124,7 +152,7 @@ namespace HospitalF.Controllers
             //load service of hospital
             ViewBag.ServiceList = await ServiceFacilityUtil.LoadServiceOfHospitalAsync(hospitalID);
 
-            return View(model);
+            return View(HospitalModel);
         }
 
         #region search doctor
@@ -134,6 +162,7 @@ namespace HospitalF.Controllers
             {
                 int tempSpecialityID, tempHospitalID;
                 doctorList = new List<Doctor>();
+                ViewBag.Hospital = Int32.Parse(HospitalID);
                 if (SpecialityID == "")
                 {
                     SpecialityID = "0";
@@ -156,6 +185,7 @@ namespace HospitalF.Controllers
         #endregion
 
         #region update hospital basic information
+
         /// <summary>
         /// Get/Hospital/HospitalBasicInforUpdate
         /// </summary>
@@ -166,16 +196,17 @@ namespace HospitalF.Controllers
         public async Task<ActionResult> HospitalBasicInforUpdate(int hospitalId)
         {
             //int temphospitaID=Int32.Parse(hospitalId);
-            model = new HospitalModel();
+            HospitalModel = new HospitalModel();
             hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalId);
 
             //assign value for model attributes
-            model.HospitalID = hospitalId;
-            model.HospitalName = hospital.Hospital_Name;
-            model.FullAddress = hospital.Address;
-            model.Website = hospital.Website;
-            model.PhoneNo = hospital.Phone_Number;
-            model.Fax = hospital.Fax;
+            HospitalModel.HospitalID = hospitalId;
+            HospitalModel.HospitalName = hospital.Hospital_Name;
+            HospitalModel.FullAddress = hospital.Address;
+            HospitalModel.HospitalEmail = hospital.Email;
+            HospitalModel.Website = hospital.Website;
+            HospitalModel.PhoneNo = hospital.Phone_Number;
+            HospitalModel.Fax = hospital.Fax;
 
             TimeSpan startTime;
             TimeSpan endTime;
@@ -185,7 +216,7 @@ namespace HospitalF.Controllers
             if (hospital.Ordinary_Start_Time == null && hospital.Ordinary_End_Time == null)
             {
                 //startTime = new TimeSpan(0, 0, 0);
-                model.OrdinaryStartTime = null;
+                HospitalModel.OrdinaryStartTime = null;
             }
             else
             {
@@ -195,12 +226,12 @@ namespace HospitalF.Controllers
 
                 start = DateTime.Today + startTime;
                 end = DateTime.Today + endTime;
-                model.OrdinaryStartTime = start.ToString("HH:mm") + Constants.Minus + end.ToString("HH:mm");
+                HospitalModel.OrdinaryStartTime = start.ToString("HH:mm") + Constants.Minus + end.ToString("HH:mm");
             }
             // holiday time
             if (hospital.Holiday_Start_Time == null && hospital.Holiday_End_Time == null)
             {
-                model.HolidayStartTime = null;
+                HospitalModel.HolidayStartTime = null;
             }
             else
             {
@@ -208,59 +239,61 @@ namespace HospitalF.Controllers
                 endTime = (TimeSpan)hospital.Holiday_End_Time;
                 start = DateTime.Today + startTime;
                 end = DateTime.Today + endTime;
-                model.HolidayStartTime = start.ToString("HH:mm") + Constants.Minus + end.ToString("HH:mm");
+                HospitalModel.HolidayStartTime = start.ToString("HH:mm") + Constants.Minus + end.ToString("HH:mm");
             }
             //is allow appointment
             if (hospital.Is_Allow_Appointment == null)
             {
-                model.IsAllowAppointment = false;
+                HospitalModel.IsAllowAppointment = false;
             }
             else
             {
-                model.IsAllowAppointment = true;
+                HospitalModel.IsAllowAppointment = true;
             }
 
             // Load list of cities
-            cityList = await LocationUtil.LoadCityAsync();
-            model.CityID = (int)hospital.City_ID;
-            SelectList cList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-            foreach (SelectListItem item in cList)
-            {
-                item.Selected = item.Value.Contains(hospital.City_ID.ToString());
-            }
-            ViewBag.CityList = cList;
+            cityList = await LoadCity();
+            HospitalModel.CityID = (int)hospital.City_ID;
+            //foreach (City c in cityList)
+            //{
+            //    if (c.City_ID == hospital.City_ID)
+            //    {
+            //        model.CityName = c.City_Name;
+            //    }
+            //}
+            ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
 
             // Load list of districts
-            //districtList = new List<District>();
-            districtList = await LoadDistrict(model.CityID);
-            model.DistrictID = (int)hospital.District_ID;
-            SelectList dList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
-            foreach (SelectListItem item in dList)
-            {
-                item.Selected = item.Value.Contains(hospital.District_ID.ToString());
-            }
-            ViewBag.DistrictList = dList;
+            districtList = await LoadDistrict(HospitalModel.CityID);
+            HospitalModel.DistrictID = (int)hospital.District_ID;
+            //foreach (District d in districtList)
+            //{
+            //    if (d.District_ID == hospital.District_ID)
+            //    {
+            //        model.DistrictName = d.District_Name;
+            //    }
+            //}
+            ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
 
             // Load list of districts
             //wardList = new List<Ward>();
-            wardList = await LoadWard(model.DistrictID);
-            model.WardID = (int)hospital.Ward_ID;
-            SelectList wList = new SelectList(wardList, Constants.WardID, Constants.WardName);
-            foreach (SelectListItem item in wList)
-            {
-                item.Selected = item.Value.Contains(hospital.Ward_ID.ToString());
-            }
-            ViewBag.WardList = wList;
+            wardList = await LoadWard(HospitalModel.DistrictID);
+            HospitalModel.WardID = (int)hospital.Ward_ID;
+            //foreach (Ward w in wardList)
+            //{
+            //    if (w.Ward_ID == hospital.Ward_ID)
+            //    {
+            //        model.WardName = w.Ward_Name;
+            //    }
+            //}
+            ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
             // Load list of hospital types
 
             hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
             SelectList typeList = new SelectList(hospitalTypeList, Constants.HospitalTypeID, Constants.HospitalTypeName);
-            foreach (SelectListItem item in typeList)
-            {
-                item.Selected = item.Value.Contains(hospital.Hospital_Type.ToString());
-            }
+            HospitalModel.HospitalTypeID = (int)hospital.Hospital_Type;
             ViewBag.HospitalTypeList = typeList;
-            return View(model);
+            return View(HospitalModel);
         }
 
         /// <summary>
@@ -279,11 +312,20 @@ namespace HospitalF.Controllers
                         from h in data.Hospitals
                         where h.Hospital_ID == model.HospitalID
                         select h).FirstOrDefault());
-                    oldHospital.Address = model.FullAddress == null ? oldHospital.Address : model.FullAddress;
+                    //full address
+                    if (model.StreetAddress != null)
+                    {
+                        model.FullAddress = string.Format("{0} {1}, {2}, {3}, {4}",
+                        model.LocationAddress, model.StreetAddress, model.WardName,
+                        model.DistrictName, model.CityName);
+                        oldHospital.Address = model.FullAddress;
+                    }
+
                     oldHospital.City_ID = model.CityID;
                     oldHospital.Ward_ID = model.WardID;
                     oldHospital.District_ID = model.DistrictID;
                     oldHospital.Hospital_Type = model.HospitalTypeID;
+                    oldHospital.Is_Allow_Appointment = model.IsAllowAppointment;
 
                     // Holiday time
                     string[] holidayTime = model.HolidayStartTime.Split(char.Parse(Constants.Minus));
@@ -332,51 +374,191 @@ namespace HospitalF.Controllers
         }
         #endregion
 
-        #region update doctor information
-        public async Task<ActionResult> ViewDoctorDetail(string DoctorID)
+        #region update speciality-service-facility
+
+        /// <summary>
+        /// Get/SpecialityServiceFacilityUpdate
+        /// </summary>
+        /// <param name="hospitalID">hospitalID</param>
+        /// <returns>Task<ActionResult></returns>
+        [LayoutInjecter(Constants.HospitalUserLayout)]
+        public async Task<ActionResult> SpecialityServiceFacilityUpdate(int hospitalID)
         {
-            int tempDoctorID;
-            Doctor doctor = null;
+            HospitalModel = new HospitalModel();
+            //Load list of specialities
+            List<Speciality> specialitySelectList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
+            List<String> selectList = new List<string>();
+            foreach (Speciality sp in specialitySelectList)
+            {
+                selectList.Add(sp.Speciality_ID.ToString());
+            }
+            specialityList = await SpecialityUtil.LoadSpecialityAsync();
+            MultiSelectList list = new MultiSelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName, selectList);
+            foreach (var speciality in list)
+            {
+                foreach (var selectValue in selectList)
+                {
+                    if (speciality.Value.Equals(selectValue))
+                    {
+                        speciality.Selected = true;
+                    }
+                }
+            }
+
+            ViewBag.SpecialityList = list;
+            HospitalModel.SelectedSpecialities = selectList;
+
+            //Load list of services
+            serviceList = await ServiceFacilityUtil.LoadServiceAsync();
+            List<ServiceEntity> serviceSelectList = await ServiceFacilityUtil.LoadServiceOfHospitalAsync(hospitalID);
+            selectList = new List<string>();
+            foreach (ServiceEntity se in serviceSelectList)
+            {
+                selectList.Add(se.Service_ID.ToString());
+            }
+            ViewBag.ServiceList = serviceList;
+            HospitalModel.SelectedServices = selectList;
+
+            // Load list of facilitites
+            facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
+            List<FacilityEntity> facilitySelectList = await ServiceFacilityUtil.LoadFacilityOfHospitalAsync(hospitalID);
+            selectList = new List<string>();
+            foreach (FacilityEntity fe in facilitySelectList)
+            {
+                selectList.Add(fe.Facility_ID.ToString());
+            }
+            HospitalModel.SelectedFacilities = selectList;
+            ViewBag.FacilityList = facilityList;
+            return View(HospitalModel);
+        }
+
+        /// <summary>
+        /// Post/SpecialityServiceFacilityUpdate
+        /// </summary>
+        /// <param name="model">HospitalModel</param>
+        /// <returns>Task<ActionResult></returns>
+        [HttpPost]
+        [LayoutInjecter(Constants.HospitalUserLayout)]
+        public async Task<ActionResult> SpecialityServiceFacilityUpdate(HospitalModel model)
+        {
             try
             {
-                if (!string.IsNullOrEmpty(DoctorID) && Int32.TryParse(DoctorID, out tempDoctorID))
+                string speciality = string.Empty;
+                int result = 0;
+                List<Speciality> specialityList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(model.HospitalID);
+                string selectedvalue;
+                bool flag = false;
+                if ((model.SelectedSpecialities != null) && (model.SelectedSpecialities.Count != 0))
                 {
-                    using (LinqDBDataContext data = new LinqDBDataContext())
+                    for (int n = 0; n < model.SelectedSpecialities.Count; n++)
                     {
-                        doctor = await Task.Run(() => (
-                            from d in data.Doctors
-                            where d.Doctor_ID == tempDoctorID
-                            select d).FirstOrDefault());
-                        ViewBag.Doctor = doctor;
-                        ViewBag.Photo = HospitalModel.LoadPhotoByPhotoID((int)doctor.Photo_ID);
-                        //get all speciality of doctor
-                        specialityList = await SpecialityUtil.LoadSpecialityAsync();
-                        ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-
-                        //get photo file path
-                        Photo photo = await Task.Run(() => (
-                            from p in data.Photos
-                            where p.Photo_ID == doctor.Photo_ID
-                            select p).SingleOrDefault());
-                        DoctorModel = new DoctorModels();
-                        DoctorModel.DoctorID = doctor.Doctor_ID;
-                        DoctorModel.FirstName = doctor.First_Name;
-                        DoctorModel.LastName = doctor.Last_Name;
-                        DoctorModel.Fullname = DoctorModel.LastName + " " + DoctorModel.FirstName;
-                        DoctorModel.Degree = doctor.Degree;
-                        DoctorModel.Experience = doctor.Experience;
-                        DoctorModel.Gender = doctor.Gender == true ? 1 : 0;
-                        DoctorModel.PhotoFilePath = photo.File_Path;
+                        selectedvalue = model.SelectedSpecialities[n];
+                        for (int index = 0; index < specialityList.Count; index++)
+                        {
+                            if (specialityList[index].Speciality_ID == Int32.Parse(selectedvalue))
+                            {
+                                flag = true;
+                            }
+                        }
+                        if (flag == false)
+                        {
+                            if (n == (model.SelectedSpecialities.Count - 1))
+                            {
+                                speciality += selectedvalue;
+                            }
+                            else
+                            {
+                                speciality += selectedvalue +
+                                    Constants.VerticalBar.ToString();
+                            }
+                        }
                     }
+                }
+
+                // Service list
+                string service = string.Empty;
+                flag = false;
+                List<ServiceEntity> serviceList = await ServiceFacilityUtil.LoadServiceOfHospitalAsync(model.HospitalID);
+                if ((model.SelectedServices != null) && (model.SelectedServices.Count != 0))
+                {
+                    for (int n = 0; n < model.SelectedServices.Count; n++)
+                    {
+                        selectedvalue = model.SelectedServices[n];
+                        for (int index = 0; index < serviceList.Count; index++)
+                        {
+                            if (serviceList[index].Service_ID == Int32.Parse(selectedvalue))
+                            {
+                                flag = true;
+                            }
+                        }
+                        if (flag == false)
+                        {
+                            if (n == (model.SelectedServices.Count - 1))
+                            {
+                                service += model.SelectedServices[n];
+                            }
+                            else
+                            {
+                                service += model.SelectedServices[n] +
+                                    Constants.VerticalBar.ToString();
+                            }
+                        }
+                    }
+                }
+                // Facility list
+                string facility = string.Empty;
+                flag = false;
+                List<FacilityEntity> facilityList = await ServiceFacilityUtil.LoadFacilityOfHospitalAsync(model.HospitalID);
+                if ((model.SelectedFacilities != null) && (model.SelectedFacilities.Count != 0))
+                {
+                    for (int n = 0; n < model.SelectedFacilities.Count; n++)
+                    {
+                        selectedvalue = model.SelectedFacilities[n];
+                        for (int index = 0; index < facilityList.Count; index++)
+                        {
+                            if (facilityList[index].Facility_ID == Int32.Parse(selectedvalue))
+                            {
+                                flag = true;
+                            }
+                        }
+                        if (flag == false)
+                        {
+                            if (n == (model.SelectedFacilities.Count - 1))
+                            {
+                                facility += model.SelectedFacilities[n];
+                            }
+                            else
+                            {
+                                facility += model.SelectedFacilities[n] +
+                                    Constants.VerticalBar.ToString();
+                            }
+                        }
+
+                    }
+                }
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = data.SP_UPDATE_SPECIALITY_SERVICE_FACILITY(model.HospitalID, speciality, service, facility);
+                }
+                if (result != 0)
+                {
+                    //ViewBag.AddHospitalStatus = 0.ToString() + Constants.Minus + model.HospitalName;
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.AddHospitalStatus = 1.ToString() + Constants.Minus + model.HospitalName;
+                    ModelState.Clear();
+                    return View();
                 }
             }
             catch (Exception ex)
             {
                 LoggingUtil.LogException(ex);
-                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+                return RedirectToAction(Constants.SystemFailureHospitalUserAction, Constants.ErrorController);
             }
-            return View();
         }
+
         #endregion
 
         #endregion

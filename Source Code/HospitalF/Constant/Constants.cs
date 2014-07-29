@@ -60,6 +60,11 @@ namespace HospitalF.Constant
         public const string HospitalController = "Hospital";
 
         /// <summary>
+        /// Name of Doctor controller
+        /// </summary>
+        public const string DoctorController = "Doctor";
+
+        /// <summary>
         /// Name of AccountController
         /// </summary>
         public const string AccountController = "Account";
@@ -80,9 +85,9 @@ namespace HospitalF.Constant
         public const string SearchDoctorAction = "SearchDoctor";
 
         /// <summary>
-        /// Name of ViewDoctorDetailAction
+        /// Name of UpdateDoctorAction
         /// </summary>
-        public const string ViewDoctorDetailAction = "ViewDoctorDetail";
+        public const string UpdateDoctorAction = "UpdateDoctor";
 
         /// <summary>
         /// Name of GetWorkingDayAction
@@ -98,6 +103,11 @@ namespace HospitalF.Constant
         /// Name of HospitalBasicInforUpdate action
         /// </summary>
         public const string HospitalBasicInforUpdateAction = "HospitalBasicInforUpdate";
+
+        /// <summary>
+        /// Name of SpecialityServiceFacilityUpdate action
+        /// </summary>
+        public const string SpecialityServiceFacilityUpdateAction = "SpecialityServiceFacilityUpdate";
 
         /// <summary>
         /// <summary>
