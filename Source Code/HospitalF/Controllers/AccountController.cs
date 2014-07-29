@@ -63,7 +63,7 @@ namespace HospitalF.Controllers
                 else
                 {
                     TempData["ErrorMesage"] = "Sai thông tin đăng nhập";
-                    return RedirectToAction(Constants.IndexAction, Constants.AccountController);
+                    return RedirectToAction(Constants.LoginAction, Constants.AccountController);
                 }
             }
             catch (Exception exception)
