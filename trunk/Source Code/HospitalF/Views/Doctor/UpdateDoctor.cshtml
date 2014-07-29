@@ -1,0 +1,167 @@
+﻿@model HospitalF.Models.DoctorModels
+@using HospitalF.Constant;
+
+@{
+    ViewBag.Title = "Cập nhật thông tin bác sĩ";
+}
+
+<section id="widget-grid" class="">
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-2" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+                <!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Cập nhật thông tin bác sĩ</h2>
+
+                </header>
+
+                <!-- widget div-->
+                <div>
+
+                    <!-- widget content -->
+                    <div class="widget-body">
+
+                        <form class="">
+
+                            <fieldset>
+                                <legend>Thông tin cơ bản</legend>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label><strong>Họ tên:</strong></label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(m => m.Fullname, new { @type = "text", @disable = "disable", @class = "label-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="col-sm-12">
+                                        <label>Ngày làm việc</label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(m => m.Fullname, new { @type = "text", @disable="disable", @class = "label-control" })
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label><strong>Chứng chỉ/ Bằng cấp</strong></label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="form-group">
+                                            <div class="input-group" style="width: 100%;">
+                                                @Html.TextAreaFor(m => m.Degree, new
+                                           {
+                                               @style = "margin: 0px; width: 477px; height: 104px;",
+                                               @rows = "5",
+                                               @cols = "30",
+                                           })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label><strong>Kinh nghiệm</strong></label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="form-group">
+                                            <div class="input-group" style="width: 100%;">
+                                                @Html.TextAreaFor(m => m.Experience, new
+                                           {
+                                               @style = "margin: 0px; width: 477px; height: 104px;",
+                                               @rows = "5",
+                                               @cols = "30",
+                                           })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="row">
+                                    <div class="col-sm-12">
+                                        <label><strong>Ảnh đại diện</strong></label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="form-group">
+                                            <div class="input-group" style="width: 100%;">
+                                               @Html.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Chuyên khoa</legend>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label><strong>Danh sách chuyên ngành</strong></label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="form-group">
+                                            <div class="input-group" style="width: 100%;">
+                                                @Html.DropDownListFor(m => m.SelectedSpecialities,
+                                                (SelectList)ViewBag.SpecialityList,
+                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <footer>
+                                <button id="Cancel" class="btn" type="reset" onclick="parent.history.back();
+            return false;">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Hủy
+                                </button>
+                                @Html.TextBoxFor(m => m.DoctorID, new {@type="hidden"})
+                                <button class="btn btn-primary" type="submit" id="confirm-button">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Xác nhận
+                                </button>
+                                </footer>
+
+                        </form>
+
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+
+        </article>
+        <!-- END COL -->
+    </div>
+
+    <!-- END ROW -->
+
+</section>
+<script type="text/javascript">
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+    pageSetUp();
+</script>
