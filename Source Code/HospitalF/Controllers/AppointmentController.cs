@@ -56,15 +56,12 @@ namespace HospitalF.Controllers
         {
             ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
             ViewBag.DoctorList = new SelectList(doctorList, Constants.DoctorID, Constants.DoctorName);
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            else
-            {
+            
                 TimeSpan EndTime;
+                string confirmCode="";
                 try
                 {
+                    confirmCode="AaBbCcDd";
                     EndTime = TimeSpan.Parse(model.StartTime).Add(new TimeSpan(0,15,0));
                     Appointment app = new Appointment();
                     app.Patient_Full_Name = model.FullName;
@@ -75,7 +72,7 @@ namespace HospitalF.Controllers
                     app.In_Charge_Doctor = model.DoctorID;
                     //app.Hospital.Hospital_ID = model.hospitalID;
                     //app.Confirm_Code = AppointmentModels.CreateConfirmCode();
-                    app.Confirm_Code = "AaBbCcDd";
+                    app.Confirm_Code = confirmCode;
                     app.Start_Time = TimeSpan.Parse(model.StartTime);
                     app.End_Time = EndTime;
                     app.Appointment_Date = model.AppDate;
@@ -87,6 +84,7 @@ namespace HospitalF.Controllers
                     }
                     else
                     {
+                        SMSUtil.SendSMS(model.PhoneNo, confirmCode);
                         return View("Confirm");
                     }
                 }
@@ -95,7 +93,6 @@ namespace HospitalF.Controllers
                     LoggingUtil.LogException(exception);
                     return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
                 }
-            }
         }
 
         /// <summary>
