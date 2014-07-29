@@ -85,15 +85,17 @@ BEGIN
 			RETURN 0;
 		END
 
+		-- SELECT HOSPITAL ID
+		DECLARE @HospitalID INT = (SELECT TOP 1 Hospital_ID
+								   FROM Hospital
+								   ORDER BY Hospital_ID DESC)
+
 		-- INSERT TO HOSPITAL_SPECIALITY TABLE
 		IF (@SpecialityList != '')
 		BEGIN
 			DECLARE @RowNumber INT = 1
-			DECLARE @TotalToken  INT = 0;
-			DECLARE @Token VARCHAR(4)
-			DECLARE @HospitalID INT = (SELECT TOP 1 Hospital_ID
-									   FROM Hospital
-									   ORDER BY Hospital_ID DESC)
+			DECLARE @TotalToken  INT = 0
+			DECLARE @Token VARCHAR(4)		
 
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 								  FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, '|') TokenList)
