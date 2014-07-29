@@ -588,6 +588,7 @@
                     $.each(data, function (id, option) {
                         ddlWard.append($('<option></option>').val(option.id).html(option.name));
                     });
+                    $('#DistrictName').val($("#DistrictID option:selected").text());
                     $('#WardName').val($("#WardID option:selected").text());
                     bindFullAddress();
                 },
@@ -613,6 +614,7 @@
     });
     $("#WardID").change(function () {
         bindFullAddress();
+        $('#WardName').val($("#WardID option:selected").text());
     });
     function bindFullAddress() {
         var city = "";
