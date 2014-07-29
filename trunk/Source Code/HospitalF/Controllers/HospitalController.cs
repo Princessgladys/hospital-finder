@@ -936,11 +936,23 @@ namespace HospitalF.Controllers
 
                 // Load list of districts
                 districtList = await LocationUtil.LoadDistrictInCityAsync(model.CityID);
-                ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+                var districtResult = (from d in districtList
+                              select new
+                              {
+                                  District_ID = d.District_ID,
+                                  District_Name = d.Type + Constants.WhiteSpace + d.District_Name
+                              });
+                ViewBag.DistrictList = new SelectList(districtResult, Constants.DistrictID, Constants.DistrictName);
 
                 // Load list of districts
                 wardList = await LocationUtil.LoadWardInDistrictAsync(model.DistrictID);
-                ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
+                var wardResult = (from w in wardList
+                                      select new
+                                      {
+                                          Ward_ID = w.Ward_ID,
+                                          Ward_Name = w.Type + Constants.WhiteSpace + w.Ward_Name
+                                      });
+                ViewBag.WardList = new SelectList(wardResult, Constants.WardID, Constants.WardName);
 
                 // Load list of hospital types
                 hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();

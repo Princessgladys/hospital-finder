@@ -993,6 +993,12 @@
             google.maps.event.addListener(map, 'dblclick', function (event) {
                 clearTimeout(update_timeout);
             });
+
+            // Get coordinate at the marker's location after dragging process
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                $('#Coordinate').val(currentCoordinate).trigger('change');
+            });
         }
 
         // Load initial options on loading event
@@ -1023,12 +1029,6 @@
                     map: map,
                     draggable: true,
                     animation: google.maps.Animation.DROP
-                });
-
-                // Get coordinate at the marker's location after dragging process
-                google.maps.event.addListener(marker, 'dragend', function (event) {
-                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
-                    $('#Coordinate').val(currentCoordinate).trigger('change');
                 });
             }
         }
