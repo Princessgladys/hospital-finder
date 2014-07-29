@@ -76,7 +76,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
-                        @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "add-hospital-form", @enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm(Constants.UpdateHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "add-hospital-form", @enctype = "multipart/form-data" }))
                         {
                             @Html.TextBoxFor(m => m.HospitalID, new { @type = "hidden" })
                             <fieldset>
@@ -281,9 +281,46 @@
                                 <div class="row">
                                     <div class="form-group">
                                         <label><strong>Danh sách chuyên ngành</strong></label>
-                                        @Html.DropDownListFor(m => m.SelectedSpecialities,
-                                            (SelectList)ViewBag.SpecialityList,
-                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                        <select class="select2 select2-offscreen" id="SelectedSpecialities" multiple="multiple" name="SelectedSpecialities" style="width:100%" tabindex="-1">
+                                            @{
+                                                if (Model.SelectedSpecialities.Count() == 0)
+                                                {
+                                                    foreach (var speciality in Model.SpecialityList)
+                                                    {
+                                                        <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
+                                                    }
+                                                }
+                                                else if (Model.SpecialityList.Count() == Model.SelectedSpecialities.Count())
+                                                {
+                                                    foreach (var speciality in Model.SpecialityList)
+                                                    {
+                                                        <option value="@speciality.Speciality_ID" selected="selected">@speciality.Speciality_Name</option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    int isInserted = 0;
+
+                                                    foreach (var speciality in Model.SpecialityList)
+                                                    {
+                                                        isInserted = 0;
+                                                        foreach (var value in Model.SelectedSpecialities)
+                                                        {
+                                                            if (speciality.Speciality_ID.ToString().Equals(value))
+                                                            {
+                                                                <option value="@speciality.Speciality_ID" selected="selected">@speciality.Speciality_Name</option>
+                                                                isInserted = 1;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (isInserted == 0)
+                                                        {
+                                                            <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
+                                                        }  
+                                                    }
+                                                }
+                                            }
+                                        </select>
                                         <div class="note">
                                             <strong>Chỉ dẫn:</strong> Danh sách chuyên ngành góp phần gia tăng việc tìm kiếm bệnh viện
                                         </div>
@@ -455,10 +492,10 @@
     @*Display notification*@
     function displayNotification() {
         // Add hospital
-        if ('@ViewBag.AddHospitalStatus' == '') {
+        if ('@ViewBag.UpdateHospitalStatus' == '') {
             return false;
         } else {
-            var returnValue = '@ViewBag.AddHospitalStatus';
+            var returnValue = '@ViewBag.UpdateHospitalStatus';
             returnValue = returnValue.split('-');
             var status = returnValue[0];
             var hospitalName = returnValue[1];
@@ -475,7 +512,7 @@
 
     @**Load value for multi select drop down list*@
     function setValueForMultiSelectDropdown() {
-        var selectedSpecialities = [1,2];
+        var selectedSpecialities = [1, 2];
         i = 0, size = selectedSpecialities.length, // index and array size declared here to avoid overhead
         $options = $('#SelectedSpecialities option');
 
@@ -742,10 +779,10 @@
                 return false;
             }, "Thời gian không phù hợp.");
 
-        $.validator.addMethod("noSpace",
+        $.validator.addMethod("locationAddress",
             function (value, element) {
-                return /^[a-zA-Z0-9]*$/.test(value);
-            }, "Giá trị không được chứa khoảng trắng.");
+                return /^[a-zA-Z0-9/]*$/.test(value);
+            }, "Giá trị không được chứa khoảng trắng và ký tự đặc biệt.");
 
         $.validator.addMethod("phone",
             function (value, element) {
@@ -772,7 +809,7 @@
                 LocationAddress: {
                     required: true,
                     maxlength: 10,
-                    noSpace: true
+                    locationAddress: true
                 },
                 StreetAddress: {
                     required: true,
@@ -837,7 +874,7 @@
                 LocationAddress: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.LocationAddress)',
                     maxlength: '@string.Format(ErrorMessage.CEM003, Constants.LocationAddress, 10)',
-                    noSpace: '@string.Format(ErrorMessage.CEM013, Constants.LocationAddress)'
+                    locationAddress: '@string.Format(ErrorMessage.CEM013, Constants.LocationAddress)'
                 },
                 StreetAddress: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.StreetAddress)',
@@ -1063,10 +1100,7 @@
             height: 250,
             minHeight: null,
             maxHeight: null,
-            focus: true,
-            onImageUpload: function (files, editor, $editable) {
-
-            }
+            focus: true
         });
 
         $('#quit-button').click(function () {
