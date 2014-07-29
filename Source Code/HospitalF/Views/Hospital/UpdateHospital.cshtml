@@ -2,7 +2,7 @@
 @using HospitalF.Constant
 
 @{
-    ViewBag.Title = "UpdateHospital";
+    ViewBag.Title = "Cập nhật thông tin bệnh viện";
 }
 
 <link href="~/Content/css/summernote.css" rel="stylesheet" />
@@ -47,10 +47,10 @@
             ×
         </button>
         <i class="fa-fw fa fa-check"></i>
-        <strong>Thành công</strong> Thêm mới bệnh viện thành công.
+        <strong>Thành công</strong> Cập nhật thông tin bệnh viện thành công.
     </div>
     <!-- row -->
-    <div class="row">
+    <div class="row" id="main-content">
         <!-- NEW WIDGET START -->
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
             <!-- Widget ID (each widget will need unique ID)-->
@@ -66,6 +66,10 @@
                 <header>
                     <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
                     <h2>Thông tin bệnh viện</h2>
+                    <a href="" class="btn btn-sm btn-success btn-next"
+                       style="float:right;" id="change-status-button">
+                        @(Model.IsActive ? "Ngừng hoạt động" : "Kích hoạt")
+                    </a>
                 </header>
                 <!-- widget div-->
                 <div>
@@ -74,6 +78,7 @@
                     <div class="widget-body">
                         @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "add-hospital-form", @enctype = "multipart/form-data" }))
                         {
+                            @Html.TextBoxFor(m => m.HospitalID, new { @type = "hidden" })
                             <fieldset>
                                 <legend>Thông tin căn bản</legend>
                                 <div class="row">
@@ -245,12 +250,6 @@
                                 </div>
 
                                 <div class="row">
-                                    <section class="col col-6">
-                                        <label class="input">
-                                            <i class="icon-prepend fa fa-male"></i>
-                                            @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm", @type = "email" })
-                                        </label>
-                                    </section>
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-fax"></i>
@@ -492,37 +491,6 @@
 
     var timeoutReference;
     $(document).ready(function () {
-        @*Check if user email is existed in database*@
-        $("#PersonInCharged").on('input', function () {
-            var email = $(this).val();
-            $("#loaderIconUser").show();
-
-            if (timeoutReference) clearTimeout(timeoutReference);
-            timeoutReference = setTimeout(function () {
-                $.ajax({
-                    cache: false,
-                    type: "GET",
-                    url: "@(Url.RouteUrl("CheckValidUserWithEmail"))",
-                    data: { "email": email },
-                    success: function (data) {
-                        if (data.value == 1) {
-                            setUserNotificationMessage("Người chịu trách nhiệm hợp lệ.", 1);
-                        }
-                        if (data.value == 2) {
-                            setUserNotificationMessage("Người dùng hiện đang chịu trách nhiệm một bệnh viện khác.", 0);
-                        }
-                        if (data.value == 0) {
-                            setUserNotificationMessage("Người dùng không tồn tại trong hệ thống.", 0);
-                        }
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                    }
-                });
-            }, 1500);
-
-            return false;
-        });
-
         @*Format textbox data*@
         $(function ($) {
             $('#OrdinaryTime').mask('99:99 - 99:99', { placeholder: "x" });
@@ -716,27 +684,6 @@
         }
     }
 
-    @*Set user message notification*@
-    function setUserNotificationMessage(message, mode) {
-        if (mode == 1) {
-            $("#loaderIconUser").hide();
-            $("#validIconUser").show();
-            $("#invalidIconUser").hide();
-            $("#user-message").text(message);
-            $('#PersonInCharged').css('background', '#f0fff0');
-            $('#PersonInCharged').css('border-color', '#7DC27D');
-            $("#add-new-user-button").hide();
-        } else {
-            $("#loaderIconUser").hide();
-            $("#validIconUser").hide();
-            $("#invalidIconUser").show();
-            $("#user-message").text(message);
-            $('#PersonInCharged').css('background', '#fff0f0');
-            $('#PersonInCharged').css('border-color', '#A90329');
-            $("#add-new-user-button").show();
-        }
-    }
-
     @*Data validation*@
     $(document).ready(function () {
         $('#confirm-button').click(function () {
@@ -774,10 +721,6 @@
                 setNotification("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 2);
                 $("google-map").focus();
                 return false;
-            } else if ($("#invalidIconUser").is(":visible")) {
-                $("#PersonInCharged").focus();
-                setNotification("Người chịu trách nhiệm không phù hợp", 2);
-                $("#PersonInCharged").focus();
             } else {
                 $('#add-hospital-form').submit();
             }
@@ -863,9 +806,6 @@
                 Email: {
                     email: true
                 },
-                PersonInCharged: {
-                    email: true
-                },
                 Website: {
                     url: true
                 },
@@ -927,9 +867,6 @@
                     digits: '@string.Format(ErrorMessage.CEM005, Constants.MobilePhone)'
                 },
                 Email: {
-                    email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
-                },
-                PersonInCharged: {
                     email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
                 },
                 Website: {
@@ -1155,6 +1092,72 @@
         });
     });
 
+    @*Change status button*@
+    $(document).ready(function () {
+        $('#change-status-button').on('click', function () {
+
+            var hospitalId = '@Model.HospitalID';
+            var hospitalName = $("#HospitalName").val();
+            var status = '@Model.IsActive';
+            var confirmMessage = "";
+            if (status == "True") {
+                confirmMessage = "Bạn có muốn ngừng [" + hospitalName + "] hay không?"
+            } else {
+                confirmMessage = "Bạn có muốn kích hoạt [" + hospitalName + "] hay không?"
+            }
+
+            if (confirm(confirmMessage)) {
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
+                    data: {
+                        "hospitalId": hospitalId
+                    },
+                    success: function (data) {
+                        if (data.value == 1) {
+                            if (status == "True") {
+                                notif({
+                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
+                                    type: "success",
+                                    width: 600,
+                                    position: "center",
+                                    fade: true,
+                                    multiline: true
+                                });
+                                $("#main-content").hide();
+                                $("#success-alert").show();
+                            } else {
+                                notif({
+                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
+                                    type: "success",
+                                    width: 600,
+                                    position: "center",
+                                    fade: true,
+                                    multiline: true
+                                });
+                            }
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        notif({
+                            msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
+                            type: "error",
+                            width: 600,
+                            position: "center",
+                            fade: true,
+                            multiline: true
+                        });
+                    }
+                });
+            } else {
+                return false;
+            }
+            return false;
+        });
+    });
 </script>
 
 <style>
