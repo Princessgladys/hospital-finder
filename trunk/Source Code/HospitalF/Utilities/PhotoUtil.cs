@@ -6,6 +6,7 @@ using System.Web;
 using HospitalF.Models;
 using HospitalF.Constant;
 using System.IO;
+using System.Web.Configuration;
 
 namespace HospitalF.Utilities
 {
@@ -18,11 +19,9 @@ namespace HospitalF.Utilities
         /// Save picture to folder in database
         /// </summary>
         /// <param name="file">Picture file</param>
-        /// <param name="action">Current action - method</param>
-        /// <param name="filePath">File path</param>
         /// <param name="userId">User ID</param>
         /// <returns>File name</returns>
-        public static string SaveImageToServer(HttpPostedFileBase file, string action, string filePath, int userId)
+        public static string SaveImageToServer(HttpPostedFileBase file, int userId)
         {
             // Check if input file is null
             if (file == null)
@@ -30,10 +29,14 @@ namespace HospitalF.Utilities
                 return null;
             }
 
+            // Read configutation detail from Web.config
+            string photoLocation = WebConfigurationManager.
+                AppSettings[Constants.PhotoFolder];
+
             // Handle name of picture to avoid duplicated
-            var fileName = HandlePictureFileName(file, filePath, userId);
+            var fileName = HandlePictureFileName(file, photoLocation, userId);
             // Save the picture to the PersonalPicture folder which located on server
-            var path = Path.Combine(filePath, fileName);
+            var path = Path.Combine(photoLocation, fileName);
             file.SaveAs(path);
 
             // Return file name
@@ -62,7 +65,7 @@ namespace HospitalF.Utilities
             string extension = Path.GetExtension(file.FileName);
 
             // Set file
-            fileName = String.Format("{0}{1}{2}", userId, Constants.Minus, fileNameWithoutExtension);
+            fileName = userId + Constants.Minus + fileNameWithoutExtension;
             // Check if new name is duplicated
             fullPath = string.Format("{0}{1}{2}{3}{4}{5}{6}", filePath, Constants.DoubleReverseSlash,
                 fileName, Constants.OpenBracket, count, Constants.CloseBracket, extension);
