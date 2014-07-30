@@ -905,6 +905,17 @@ namespace HospitalF.Controllers
                 int result = 0;
                 model.CreatedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
 
+                // Add image to server
+                foreach (HttpPostedFileBase image in file)
+                {
+                    //Save file content goes here
+                    if (image != null && image.ContentLength > 0)
+                    {
+                        PhotoUtil.SaveImageToServer(image,
+                            Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]));
+                    }
+                }
+
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
