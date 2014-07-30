@@ -450,8 +450,18 @@
       <LastGenOutput>LinqDB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Scripts\dropzone\css\basic.css" />
+    <Content Include="Scripts\dropzone\css\dropzone.css" />
+    <Content Include="Scripts\dropzone\css\stylus\dropzone.styl" />
+    <Content Include="Scripts\dropzone\css\stylus\basic.styl" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="RecaptchaNet.ReadMe.txt" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
+    <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
+    <Content Include="Scripts\dropzone\dropzone.js" />
+    <Content Include="Scripts\dropzone\dropzone.min.js" />
+    <Content Include="Scripts\dropzone\images\spritemap%402x.png" />
+    <Content Include="Scripts\dropzone\images\spritemap.png" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -466,23 +476,6 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\smartadmin\app.js" />
-    <Content Include="Scripts\smartadmin\bootstrap\bootstrap.min.js" />
-    <Content Include="Scripts\smartadmin\custom.js" />
-    <Content Include="Scripts\smartadmin\demo.js" />
-    <Content Include="Scripts\smartadmin\libs\jquery-2.0.2.min.js" />
-    <Content Include="Scripts\smartadmin\libs\jquery-ui-1.10.3.min.js" />
-    <Content Include="Scripts\smartadmin\notification\SmartNotification.min.js" />
-    <Content Include="Scripts\smartadmin\plugin\bootstrap-slider\bootstrap-slider.min.js" />
-    <Content Include="Scripts\smartadmin\plugin\easy-pie-chart\jquery.easy-pie-chart.min.js" />
-    <Content Include="Scripts\smartadmin\plugin\fastclick\fastclick.js" />
-    <Content Include="Scripts\smartadmin\plugin\jquery-validate\jquery.validate.min.js" />
-    <Content Include="Scripts\smartadmin\plugin\masked-input\jquery.maskedinput.min.js" />
-    <Content Include="Scripts\smartadmin\plugin\msie-fix\jquery.mb.browser.min.js" />
-    <Content Include="Scripts\smartadmin\plugin\pace\pace.min.js" />
-    <Content Include="Scripts\smartadmin\plugin\select2\select2.min.js" />
-    <Content Include="Scripts\smartadmin\plugin\sparkline\jquery.sparkline.min.js" />
-    <Content Include="Scripts\smartadmin\smartwidgets\jarvis.widget.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
