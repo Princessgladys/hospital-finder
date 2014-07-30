@@ -11,6 +11,7 @@ using HospitalF.Models;
 using HospitalF.Utilities;
 using HospitalF.Entities;
 using System.Collections.Specialized;
+using System.IO;
 
 namespace HospitalF.Controllers
 {
@@ -719,6 +720,31 @@ namespace HospitalF.Controllers
             {
                 LoggingUtil.LogException(exception);
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        public ActionResult SaveUploadFile()
+        {
+            bool isSavedSuccessfully = true;
+            string fName = "";
+            foreach (string fileName in Request.Files)
+            {
+                HttpPostedFileBase file = Request.Files[fileName];
+                //Save file content goes here
+                fName = file.FileName;
+                if (file != null && file.ContentLength > 0)
+                {
+                    PhotoUtil.SaveImageToServer(file, Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]));
+                }
+            }
+
+            if (isSavedSuccessfully)
+            {
+                return Json(new { Message = fName });
+            }
+            else
+            {
+                return Json(new { Message = "Error in saving file" });
             }
         }
 
