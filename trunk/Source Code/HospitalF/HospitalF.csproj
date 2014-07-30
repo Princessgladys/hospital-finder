@@ -363,7 +363,6 @@
     <Content Include="Content\js\plugin\datatables\jquery.tablesorter.js" />
     <Content Include="Content\js\plugin\datatables\media\js\TableTools.min.js" />
     <Content Include="Content\js\plugin\datatables\ZeroClipboard.js" />
-    <Content Include="Content\js\plugin\dropzone\dropzone.js" />
     <Content Include="Content\js\plugin\easy-pie-chart\jquery.easy-pie-chart.min.js" />
     <Content Include="Content\js\plugin\fastclick\fastclick.js" />
     <Content Include="Content\js\plugin\jquery-validate\jquery.validate.min.js" />
