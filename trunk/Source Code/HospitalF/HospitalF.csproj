@@ -241,8 +241,6 @@
   <ItemGroup>
     <Content Include="App_Data\vi_VN.aff" />
     <Content Include="App_Data\vi_VN.dic" />
-    <Content Include="Content\css\asc.gif" />
-    <Content Include="Content\css\bg.gif" />
     <Content Include="Content\css\bjqs-demo.css" />
     <Content Include="Content\css\bjqs.css" />
     <Content Include="Content\css\blueimp-gallery.m.css" />
@@ -255,22 +253,23 @@
     <Content Include="Content\css\custom-search-result.css" />
     <Content Include="Content\css\delete.gif" />
     <Content Include="Content\css\demo.css" />
-    <Content Include="Content\css\desc.gif" />
     <Content Include="Content\css\error.css" />
     <Content Include="Content\css\flexslider.css" />
     <Content Include="Content\css\font-awesome.m.css" />
     <Content Include="Content\css\fonts\flexslider-icon.svg" />
     <Content Include="Content\css\jquery.rating.css" />
     <Content Include="Content\css\lockscreen.css" />
-    <Content Include="Content\css\notifIt.css" />
+    <Content Include="Content\css\notification\notifIt.css" />
     <Content Include="Content\css\smartadmin-production.css" />
     <Content Include="Content\css\smartadmin-production.m.css" />
     <Content Include="Content\css\smartadmin-skins.css" />
     <Content Include="Content\css\smartadmin-skins.m.css" />
     <Content Include="Content\css\star.gif" />
-    <Content Include="Content\css\leanModel.css" />
-    <Content Include="Content\css\summernote.css" />
-    <Content Include="Content\css\tablesorter.css" />
+    <Content Include="Content\css\summernote\summernote.css" />
+    <Content Include="Content\css\tablesorter\asc.gif" />
+    <Content Include="Content\css\tablesorter\bg.gif" />
+    <Content Include="Content\css\tablesorter\desc.gif" />
+    <Content Include="Content\css\tablesorter\tablesorter.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-2.html" />
     <Content Include="Content\fonts\fontawesome-webfont1fc6-3.html" />
@@ -341,7 +340,6 @@
     <Content Include="Content\js\custom.js" />
     <Content Include="Content\js\demo.js" />
     <Content Include="Content\js\imagesloaded.pkgd.m.js" />
-    <Content Include="Content\js\jquery-1.11.0.min.js" />
     <Content Include="Content\js\jquery.blueimp-gallery.m.js" />
     <Content Include="Content\js\jquery.flexslider.js" />
     <Content Include="Content\js\jquery.leanModal.min.js" />
