@@ -101,6 +101,19 @@ BEGIN
 						WHERE Speciality_ID = @Token AND
 							  Hospital_ID = @HospitalID
 					END
+
+					-- CHECK STATUS OF SPECIALITY IN HOSPITAL
+					IF (EXISTS(SELECT hs.Hospital_ID
+							   FROM Hospital_Speciality hs
+							   WHERE hs.Speciality_ID = @Token AND
+									 hs.Hospital_ID = @HospitalID AND
+									 hs.Is_Active = 'True'))
+					BEGIN
+						UPDATE Hospital_Speciality
+						SET Is_Active = 'False'
+						WHERE Speciality_ID = @Token AND
+							  Hospital_ID = @HospitalID
+					END
 				END
 				ELSE
 				BEGIN
@@ -159,6 +172,18 @@ BEGIN
 						WHERE Service_ID = @Token AND
 							  Hospital_ID = @HospitalID
 					END
+
+					IF (EXISTS(SELECT hs.Hospital_ID
+							   FROM Hospital_Service hs
+							   WHERE hs.Service_ID = @Token AND
+									 hs.Hospital_ID = @HospitalID AND
+									 hs.Is_Active = 'True'))
+					BEGIN
+						UPDATE Hospital_Service
+						SET Is_Active = 'False'
+						WHERE Service_ID = @Token AND
+							  Hospital_ID = @HospitalID
+					END
 				END
 				ELSE
 				BEGIN
@@ -212,6 +237,18 @@ BEGIN
 					BEGIN
 						UPDATE Hospital_Facility
 						SET Is_Active = 'True'
+						WHERE Facility_ID = @Token AND
+							  Hospital_ID = @HospitalID
+					END
+
+					IF (EXISTS(SELECT hs.Hospital_ID
+							   FROM Hospital_Facility hs
+							   WHERE hs.Facility_ID = @Token AND
+									 hs.Hospital_ID = @HospitalID AND
+									 hs.Is_Active = 'True'))
+					BEGIN
+						UPDATE Hospital_Facility
+						SET Is_Active = 'False'
 						WHERE Facility_ID = @Token AND
 							  Hospital_ID = @HospitalID
 					END
