@@ -9,7 +9,7 @@
     ViewBag.Title = "Loại hình dịch vụ";
 }
 
-@using (Html.BeginForm("DisplayServiceList", Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
+@using (Html.BeginForm(Constants.DisplayServiceAction, Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
 {
     <div class="row">
         <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
@@ -27,7 +27,7 @@
     </label>
 
     <label class="select">
-        <select class="form-control" id="IsActive" name="IsActive">
+        <select class="form-control" id="Type" name="IsActive">
             @{
                 bool isActive = (bool)ViewBag.CurrentStatus;
                 if (isActive)
@@ -42,6 +42,7 @@
                 }
             }
         </select>
+
         <i></i>
     </label>
 
@@ -144,7 +145,7 @@
                             @{
                                 if (Model.Count != 0)
                                 {
-                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayHospitalListAction + "?" +
+                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayServiceAction + "?" +
                                         ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
                                 }
                             }

@@ -9,6 +9,7 @@ using HospitalF.Constant;
 using HospitalF.Models;
 using HospitalF.Utilities;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 
 namespace HospitalF.Controllers
 {
@@ -18,15 +19,17 @@ namespace HospitalF.Controllers
         public static List<ServiceType> serviceTypeList = null;
         public static List<FacilityType> facilityTypeList = null;
 
+        #region Service
+
         /// <summary>
         /// GET: /Data/ServiceList
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
         [Authorize(Roles = Constants.AdministratorRoleName)]
-        public async Task<ActionResult> ServiceList()
+        public async Task<ActionResult> ServiceList(DataModel model, int? page)
         {
-            IPagedList<SP_LOAD_HOSPITAL_LISTResult> pagedHospitalList = null;
+            IPagedList<SP_TAKE_SERVICE_AND_TYPEResult> pagedServiceList = null;
 
             try
             {
@@ -37,9 +40,33 @@ namespace HospitalF.Controllers
                 // Load list of status
                 ViewBag.CurrentStatus = true;
 
-                // Declare new hospital list
-                pagedHospitalList = new
-                    List<SP_LOAD_HOSPITAL_LISTResult>().ToPagedList(1, Constants.PageSize);
+                // Check if page parameter is null
+                if (page == null)
+                {
+                    page = 1;
+                }
+
+                // Load list of service
+                List<SP_TAKE_SERVICE_AND_TYPEResult> serviceListlList =
+                    new List<SP_TAKE_SERVICE_AND_TYPEResult>();
+                if (model.ServiceName == null)
+                {
+                    serviceListlList = await model.LoadListOfService(null, 0, true);
+                }
+                else
+                {
+                    serviceListlList =  await model.LoadListOfService(
+                        model.ServiceName.Trim(), model.TypeID, model.IsActive);
+                }
+
+                // Handle query string
+                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
+                queryString.Remove(Constants.PageUrlRewriting);
+                ViewBag.Query = queryString.ToString();
+
+                // Return value to view
+                pagedServiceList = serviceListlList.ToPagedList(page.Value, Constants.PageSize);
+                return View(pagedServiceList);
             }
             catch (Exception exception)
             {
@@ -47,27 +74,9 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
 
-            return View(pagedHospitalList);
+
         }
 
-        /// <summary>
-        /// GET: /Data/DisplayServiceList
-        /// </summary>
-        /// <returns>Task[ActionResult]</returns>
-        [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles = Constants.AdministratorRoleName)]
-        public async Task<ActionResult> DisplayServiceList(DataModel model, int? page)
-        {
-            // Cacading again drop down list
-            ViewBag.ServiceTypeList = new SelectList(serviceTypeList, Constants.TypeID, Constants.TypeName);
-
-            // Check if page parameter is null
-            if (page == null)
-            {
-                page = 1;
-            }
-
-            return View();
-        }
+        #endregion
     }
 }

@@ -817,7 +817,7 @@ namespace HospitalF.Controllers
 
                 // Load list of hospital
                 List<SP_LOAD_HOSPITAL_LISTResult> hospitalList =
-                    await model.LoadListOfHospital(model.HospitalName,
+                    await model.LoadListOfHospital(model.HospitalName.Trim(),
                     model.CityID, model.DistrictID, model.HospitalTypeID,
                     model.IsActive);
 
