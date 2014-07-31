@@ -723,10 +723,22 @@ namespace HospitalF.Controllers
             }
         }
 
+        /// <summary>
+        /// Save uploaded pictures
+        /// </summary>
+        /// <returns></returns>
         public ActionResult SaveUploadFile()
         {
-            bool isSavedSuccessfully = true;
-            string fName = "";
+            // Check if session is alreadt existed
+            if (Session[Constants.FileInSession] != null)
+            {
+                return Json(new { value = string.Empty });
+            }
+
+            // Add file to server and add list of file to session
+            List<string> filePath = new List<string>();
+            string fName = string.Empty;
+
             foreach (string fileName in Request.Files)
             {
                 HttpPostedFileBase file = Request.Files[fileName];
@@ -734,18 +746,14 @@ namespace HospitalF.Controllers
                 fName = file.FileName;
                 if (file != null && file.ContentLength > 0)
                 {
-                    PhotoUtil.SaveImageToServer(file, Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]));
+                    filePath.Add(PhotoUtil.SaveImageToServer(file,
+                        Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2])));
                 }
             }
 
-            if (isSavedSuccessfully)
-            {
-                return Json(new { Message = fName });
-            }
-            else
-            {
-                return Json(new { Message = "Error in saving file" });
-            }
+            // Add to session and return
+            Session.Add(Constants.FileInSession, filePath);
+            return Json(new { Message = fName });
         }
 
         #endregion
@@ -905,15 +913,27 @@ namespace HospitalF.Controllers
                 int result = 0;
                 model.CreatedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
 
-                // Add image to server
-                foreach (HttpPostedFileBase image in file)
+                // Take file path from session
+                List<string> filePath = new List<string>();
+                if (Session[Constants.FileInSession] != null)
                 {
-                    //Save file content goes here
-                    if (image != null && image.ContentLength > 0)
+                    filePath = (List<string>)Session[Constants.FileInSession];
+                    for (int n = 0; n < filePath.Count; n++)
                     {
-                        PhotoUtil.SaveImageToServer(image,
-                            Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]));
+                        if (n == (filePath.Count - 1))
+                        {
+                            model.PhotoFilesPath += filePath[n];
+                        }
+                        else
+                        {
+                            model.PhotoFilesPath += filePath[n] +
+                                Constants.VerticalBar.ToString();
+                        }
                     }
+                }
+                else
+                {
+                    model.PhotoFilesPath = string.Empty;
                 }
 
                 // Return list of dictionary words

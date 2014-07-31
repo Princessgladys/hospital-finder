@@ -535,7 +535,10 @@ namespace HospitalF.Constant
         /// </summary>
         public const string ServiceID = "Service_ID";
 
-
+        /// <summary>
+        /// Constant to store file in session
+        /// </summary>
+        public const string FileInSession = "SessionFiles";
 
         #endregion
 
