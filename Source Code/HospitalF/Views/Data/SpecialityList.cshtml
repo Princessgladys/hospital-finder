@@ -40,6 +40,11 @@
         <i></i>
     </label>
 
+    <a href="/Data/AddSpeciality" class="btn btn-sm btn-success btn-next"
+       id="add-button" data-toggle="modal" data-target="#addSpeciality">
+        Thêm chuyên ngành
+    </a>
+    
     <div class="well">
         <div class="input-group">
             @Html.TextBox("IsPostBack", true, new { @type = "hidden" })
@@ -59,6 +64,30 @@
         </div>
     </div>
 }
+
+<div class="alert alert-danger fade in" style="display: none;"
+     id="error-alert">
+    <button class="close" data-dismiss="alert">
+        ×
+    </button>
+    <i class="fa-fw fa fa-times"></i>
+    <strong>Lỗi!</strong> thao tác không thành công. Xin vui lòng thử lại.
+</div>
+<div class="alert alert-success fade in" style="display: none;"
+     id="success-alert">
+    <button class="close" data-dismiss="alert">
+        ×
+    </button>
+    <i class="fa-fw fa fa-check"></i>
+    <strong>Thành công</strong> thao tác thành công.
+</div>
+
+<div class="modal fade" id="addSpeciality" tabindex="-1"
+     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
 
 <!-- widget grid -->
 <section id="widget-grid" class="">
@@ -157,9 +186,42 @@
 
 <script type="text/javascript">
 
+    @*Display notification*@
+    function displayNotification() {
+        // Add hospital
+        if ('@ViewBag.AddStatus' == '') {
+            return false;
+        } else {
+            var status = '@ViewBag.AddStatus';
+
+            if (status != '0') {
+                $("#success-alert").show();
+                notif({
+                    msg: "Thêm mới chuyên ngành thành công",
+                    type: "success",
+                    width: 600,
+                    position: "center",
+                    fade: true,
+                    multiline: true
+                });
+            } else {
+                $("#error-alert").show();
+                notif({
+                    msg: "Thêm mới chuyên ngành không thành công, xin hãy thử lại.",
+                    type: "error",
+                    width: 600,
+                    position: "center",
+                    fade: true,
+                    multiline: true
+                });
+            }
+        }
+    }
+
     @*Sort table*@
     $(document).ready(function () {
         $("#speciality-table").tablesorter();
+        displayNotification();
     });
 
     @*Update service status*@
