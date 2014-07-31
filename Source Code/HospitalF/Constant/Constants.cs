@@ -235,6 +235,21 @@ namespace HospitalF.Constant
         /// </summary>
         public const string UpdateFacilityAction = "UpdateFacility";
 
+        /// <summary>
+        /// Name of SpecialityList method in DataController
+        /// </summary>
+        public const string DisplaySpecialityAction = "SpecialityList";
+
+        /// <summary>
+        /// Name of ChangeSpecialityStatus method in DataController
+        /// </summary>
+        public const string ChangeSpecialityStatusAction = "ChangeSpecialityStatus";
+
+        /// <summary>
+        /// Name of UpdateSpeciality method in DataController
+        /// </summary>
+        public const string UpdateSpecialityAction = "UpdateSpeciality";
+
         #endregion
 
         #region AccountModel

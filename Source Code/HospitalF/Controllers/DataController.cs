@@ -182,5 +182,82 @@ namespace HospitalF.Controllers
         }
 
         #endregion
+
+        #region Speciality
+
+        /// <summary>
+        /// GET: /Data/ChangeSpecialityStatus
+        /// </summary>
+        /// <param name="SpecialityId">Speciality ID</param>
+        /// <returns>
+        /// Task[ActionResult] with JSON contains value
+        /// indicating update process is successful or not
+        /// 1: Successful
+        /// 0: Failed
+        /// </returns>
+        public async Task<ActionResult> ChangeSpecialityStatus(int SpecialityId)
+        {
+            try
+            {
+                DataModel model = new DataModel();
+                int result = await model.ChangeSpecialityStatusAsync(SpecialityId);
+                return Json(new { value = result }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// GET: /Data/SpecialityList
+        /// </summary>
+        /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> SpecialityList(DataModel model, int? page)
+        {
+            IPagedList<SP_TAKE_SPECIALITY_AND_TYPEResult> pagedFacilityList = null;
+
+            try
+            {
+                // Check if page parameter is null
+                if (page == null)
+                {
+                    page = 1;
+                }
+
+                // Load list of service
+                List<SP_TAKE_SPECIALITY_AND_TYPEResult> specialityList =
+                    new List<SP_TAKE_SPECIALITY_AND_TYPEResult>();
+                if (model.IsPostBack == false)
+                {
+                    specialityList = await model.LoadListOfSpeciality(null, true);
+                    ViewBag.CurrentStatus = true;
+                }
+                else
+                {
+                    specialityList = await model.LoadListOfSpeciality(model.SpecialityName, model.IsActive);
+                    ViewBag.CurrentStatus = model.IsActive;
+                }
+
+                // Handle query string
+                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
+                queryString.Remove(Constants.PageUrlRewriting);
+                ViewBag.Query = queryString.ToString();
+
+                // Return value to view
+                pagedFacilityList = specialityList.ToPagedList(page.Value, Constants.PageSize);
+                return View(pagedFacilityList);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        #endregion
     }
 }

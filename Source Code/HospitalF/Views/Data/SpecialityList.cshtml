@@ -3,28 +3,22 @@
 @using PagedList;
 @using HospitalF.Models
 
-@model IPagedList<SP_TAKE_FACILITY_AND_TYPEResult>
+@model IPagedList<SP_TAKE_SPECIALITY_AND_TYPEResult>
 
 @{
     ViewBag.Title = "Loại hình dịch vụ";
 }
 
-@using (Html.BeginForm(Constants.DisplayFacilityAction, Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
+@using (Html.BeginForm(Constants.DisplaySpecialityAction, Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
 {
     <div class="row">
         <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
             <h1 class="page-title txt-color-blueDark">
                 <i class="fa fa-table fa-fw "></i>
-                Danh sách cơ sở vật chất
+                Danh sách chuyên ngành
             </h1>
         </div>
     </div>
-
-    <label class="select">
-        @Html.DropDownList("TypeID", (SelectList)ViewBag.FacilityTypeList,
-                "Tất cả cơ sở vật chất", new { @class = "form-control" })
-        <i></i>
-    </label>
 
     <label class="select">
         <select class="form-control" id="Type" name="IsActive">
@@ -32,13 +26,13 @@
                 bool isActive = (bool)ViewBag.CurrentStatus;
                 if (isActive)
                 {
-                    <option value="true" selected>Đang hoạt động</option>
-                            <option value="false">Ngưng hoạt động</option>
+                    <option value="true" selected>Đang lưu hành</option>
+                            <option value="false">Ngưng lưu hành</option>
                 }
                 else
                 {
-                    <option value="true">Đang hoạt động</option>
-                            <option value="false" selected>Ngưng hoạt động</option>
+                    <option value="true">Đang lưu hành</option>
+                            <option value="false" selected>Ngưng lưu hành</option>
                 }
             }
         </select>
@@ -49,11 +43,11 @@
     <div class="well">
         <div class="input-group">
             @Html.TextBox("IsPostBack", true, new { @type = "hidden" })
-            @Html.TextBox("FacilityName", null, new
+            @Html.TextBox("SpecialityName", null, new
             {
-                @placeholder = "Tìm kiếm tên cơ sở vật chất",
+                @placeholder = "Tìm kiếm tên chuyên ngành",
                 @class = "form-control",
-                @id = "facility-name-search"
+                @id = "service-name-search"
             })
             <div class="input-group-btn">
                 <button class="btn btn-default btn-primary" type="submit"
@@ -96,13 +90,12 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
-                        <p>Chọn thông tin phụ hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> cơ sở vật chật trong hệ thống</p>
+                        <p>Chọn thông tin phù hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> chuyên ngành trong hệ thống</p>
                         <div class="table-responsive">
-                            <table class="table table-bordered tablesorter" id="facility-table">
+                            <table class="table table-bordered tablesorter" id="speciality-table">
                                 <thead>
                                     <tr>
-                                        <th>Tên cơ sở vật chất</th>
-                                        <th>Loại</th>
+                                        <th>Tên chuyên ngành</th>
                                         <th>Trạng thái</th>
                                         <th>Hành động</th>
                                     </tr>
@@ -117,22 +110,21 @@
                                         }
                                         else
                                         {
-                                            foreach (var facility in Model)
+                                            foreach (var speciality in Model)
                                             {
                                                 <tr>
-                                                    <td hidden>@facility.Facility_ID</td>
-                                                    <td hidden>@facility.Facility_Name</td>
-                                                    <td hidden>@facility.Is_Active</td>
+                                                    <td hidden>@speciality.Speciality_ID</td>
+                                                    <td hidden>@speciality.Speciality_Name</td>
+                                                    <td hidden>@speciality.Is_Active</td>
                                                     <td>
-                                                        @Html.ActionLink(@facility.Facility_Name,
-                                                            Constants.UpdateServiceAction, Constants.DataController,
-                                                            new { facilityId = @facility.Facility_ID }, null)
+                                                        @Html.ActionLink(@speciality.Speciality_Name,
+                                                            Constants.UpdateSpecialityAction, Constants.DataController,
+                                                            new { specialityId = @speciality.Speciality_ID }, null)
                                                     </td>
-                                                    <td>@facility.Type_Name</td>
-                                                    <td>@(@facility.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
+                                                    <td>@(@speciality.Is_Active.Value ? "Đang lưu hành" : "Ngưng hoạt động")</td>
                                                     <td>
                                                         <a href="" class="btn btn-sm btn-success btn-next">
-                                                            @(facility.Is_Active.Value ? "Ngừng" : "Kích hoạt")
+                                                            @(speciality.Is_Active.Value ? "Ngừng" : "Lưu hành")
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -146,7 +138,7 @@
                             @{
                                 if (Model.Count != 0)
                                 {
-                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayFacilityAction + "?" +
+                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplaySpecialityAction + "?" +
                                         ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
                                 }
                             }
@@ -167,12 +159,12 @@
 
     @*Sort table*@
     $(document).ready(function () {
-        $("#facility-table").tablesorter();
+        $("#speciality-table").tablesorter();
     });
 
     @*Update service status*@
     $(document).ready(function () {
-        $('#facility-table .btn').on('click', function () {
+        $('#speciality-table .btn').on('click', function () {
             var row = $(this).closest('tr');
             var columns = row.find('td');
             var valueInRow = "";
@@ -180,29 +172,29 @@
                 valueInRow = valueInRow + item.innerHTML + '|';
             });
             var argument = valueInRow.split('|');
-            var facilityId = argument[0];
-            var facilityName = argument[1];
+            var specialityId = argument[0];
+            var specialityName = argument[1];
             var status = argument[2];
             var confirmMessage = "";
             if (status == "True") {
-                confirmMessage = "Bạn có muốn xóa tiện ích [" + facilityName + "] hay không?"
+                confirmMessage = "Bạn có muốn ngừng chuyên ngành [" + specialityName + "] hay không?"
             } else {
-                confirmMessage = "Bạn có muốn xóa tiện ích [" + facilityName + "] hay không?"
+                confirmMessage = "Bạn có muốn lưu hành chuyên ngành [" + specialityName + "] hay không?"
             }
 
             if (confirm(confirmMessage)) {
                 $.ajax({
                     cache: false,
                     type: "GET",
-                    url: "@(Url.RouteUrl(Constants.ChangeFacilityStatusAction))",
+                    url: "@(Url.RouteUrl(Constants.ChangeSpecialityStatusAction))",
                     data: {
-                        "facilityId": facilityId
+                        "specialityId": specialityId
                     },
                     success: function (data) {
                         if (data.value == 1) {
                             if (status == "True") {
                                 notif({
-                                    msg: "Tiện ích [" + facilityName + "] đã ngừng hoạt động",
+                                    msg: "Chuyên ngành [" + specialityName + "] đã ngừng hoạt động",
                                     type: "success",
                                     width: 600,
                                     position: "center",
@@ -211,7 +203,7 @@
                                 });
                             } else {
                                 notif({
-                                    msg: "Tiện ích [" + facilityName + "] đã hoạt động trở lại",
+                                    msg: "Chuyên ngành [" + specialityName + "] đã được lưu hành trở lại",
                                     type: "success",
                                     width: 600,
                                     position: "center",
@@ -225,7 +217,7 @@
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         notif({
-                            msg: "Không thể thay đổi trạng thái của tiện ích [" + facilityName + "]",
+                            msg: "Không thể thay đổi trạng thái của chuyên ngành [" + specialityName + "]",
                             type: "error",
                             width: 600,
                             position: "center",
@@ -255,4 +247,3 @@
     });
 
 </script>
-
