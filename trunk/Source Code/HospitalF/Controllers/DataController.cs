@@ -24,7 +24,7 @@ namespace HospitalF.Controllers
         /// <summary>
         /// GET: /Data/ChangeServiceStatus
         /// </summary>
-        /// <param name="hospitalId">Hosptal ID</param>
+        /// <param name="hospitalId">Service ID</param>
         /// <returns>
         /// Task[ActionResult] with JSON contains value
         /// indicating update process is successful or not
@@ -69,16 +69,16 @@ namespace HospitalF.Controllers
                 }
 
                 // Load list of service
-                List<SP_TAKE_SERVICE_AND_TYPEResult> serviceListlList =
+                List<SP_TAKE_SERVICE_AND_TYPEResult> serviceList =
                     new List<SP_TAKE_SERVICE_AND_TYPEResult>();
                 if (model.IsPostBack == false)
                 {
-                    serviceListlList = await model.LoadListOfService(null, 0, true);
+                    serviceList = await model.LoadListOfService(null, 0, true);
                     ViewBag.CurrentStatus = true;
                 }
                 else
                 {
-                    serviceListlList =  await model.LoadListOfService(
+                    serviceList =  await model.LoadListOfService(
                         model.ServiceName, model.TypeID, model.IsActive);
                     ViewBag.CurrentStatus = model.IsActive;
                 }
@@ -89,7 +89,7 @@ namespace HospitalF.Controllers
                 ViewBag.Query = queryString.ToString();
 
                 // Return value to view
-                pagedServiceList = serviceListlList.ToPagedList(page.Value, Constants.PageSize);
+                pagedServiceList = serviceList.ToPagedList(page.Value, Constants.PageSize);
                 return View(pagedServiceList);
             }
             catch (Exception exception)
@@ -97,8 +97,88 @@ namespace HospitalF.Controllers
                 LoggingUtil.LogException(exception);
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
+        }
 
+        #endregion
 
+        #region Facility
+
+        /// <summary>
+        /// GET: /Data/ChangeFacilityStatus
+        /// </summary>
+        /// <param name="facilityId">Facility ID</param>
+        /// <returns>
+        /// Task[ActionResult] with JSON contains value
+        /// indicating update process is successful or not
+        /// 1: Successful
+        /// 0: Failed
+        /// </returns>
+        public async Task<ActionResult> ChangeFacilityStatus(int facilityId)
+        {
+            try
+            {
+                DataModel model = new DataModel();
+                int result = await model.ChangeFacilityStatusAsync(facilityId);
+                return Json(new { value = result }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// GET: /Data/FacilityList
+        /// </summary>
+        /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> FacilityList(DataModel model, int? page)
+        {
+            IPagedList<SP_TAKE_FACILITY_AND_TYPEResult> pagedFacilityList = null;
+
+            try
+            {
+                // Load list of service type
+                facilityTypeList = await ServiceFacilityUtil.LoadFacilityTypeAsync();
+                ViewBag.FacilityTypeList = new SelectList(facilityTypeList, Constants.TypeID, Constants.TypeName);
+
+                // Check if page parameter is null
+                if (page == null)
+                {
+                    page = 1;
+                }
+
+                // Load list of service
+                List<SP_TAKE_FACILITY_AND_TYPEResult> facilityList =
+                    new List<SP_TAKE_FACILITY_AND_TYPEResult>();
+                if (model.IsPostBack == false)
+                {
+                    facilityList = await model.LoadListOfFacility(null, 0, true);
+                    ViewBag.CurrentStatus = true;
+                }
+                else
+                {
+                    facilityList = await model.LoadListOfFacility(
+                        model.FacilityName, model.TypeID, model.IsActive);
+                    ViewBag.CurrentStatus = model.IsActive;
+                }
+
+                // Handle query string
+                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
+                queryString.Remove(Constants.PageUrlRewriting);
+                ViewBag.Query = queryString.ToString();
+
+                // Return value to view
+                pagedFacilityList = facilityList.ToPagedList(page.Value, Constants.PageSize);
+                return View(pagedFacilityList);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
         }
 
         #endregion
