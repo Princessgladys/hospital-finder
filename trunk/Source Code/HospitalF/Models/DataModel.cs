@@ -155,6 +155,46 @@ namespace HospitalF.Models
 
         #endregion
 
+        #region Speciality
+
+        /// <summary>
+        /// Change status of a specific speciality
+        /// </summary>
+        /// <param name="specialityId">Speciality ID</param>
+        /// <returns>1: Successful. 0: Failed</returns>
+        public async Task<int> ChangeSpecialityStatusAsync(int specialityId)
+        {
+            int result = 0;
+
+            // Change service status
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() =>
+                    data.SP_CHANGE_SPECIALITY_STATUS(specialityId));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Load list of speciality base on input conditions
+        /// </summary>
+        /// <param name="specialityName">Speciality name</param>
+        /// <param name="isActive">Status</param>
+        /// <returns></returns>
+        public async Task<List<SP_TAKE_SPECIALITY_AND_TYPEResult>> LoadListOfSpeciality(
+            string specialityName, bool isActive)
+        {
+            // Search for suitable hospitals in database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_TAKE_SPECIALITY_AND_TYPE(specialityName, isActive).ToList());
+            }
+        }
+
+        #endregion
+
         #endregion
     }
 }

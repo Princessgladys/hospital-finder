@@ -515,6 +515,7 @@
     <Content Include="Views\Doctor\UpdateDoctor.cshtml" />
     <Content Include="Views\Data\ServiceList.cshtml" />
     <Content Include="Views\Data\FacilityList.cshtml" />
+    <Content Include="Views\Data\SpecialityList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
