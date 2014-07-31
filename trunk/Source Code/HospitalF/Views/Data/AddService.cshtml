@@ -12,7 +12,7 @@
     </h4>
 </div>
 <div class="modal-body no-padding">
-    <form action="/Data/AddService" id="add-user-form" class="smart-form" method="post">
+    <form action="/Data/AddService" id="add-form" class="smart-form" method="post">
         <fieldset>
             <section>
                 <div class="row">
@@ -54,38 +54,8 @@
 </div>
 
 <script>
-    @*Add new hospital user*@
-    $("#add-button").click(function () {
-        var serviceName = $("#ServiceName").val();
-        var typeId = $("#TypeID").val();
-        var typeName = $("#TypeID option:selected").text()
-
-        $.ajax({
-            cache: false,
-            type: "POST",
-            url: "@(Url.RouteUrl(Constants.AddServiceAction))",
-            data: {
-                "serviceName": serviceName,
-                "typeId": secondEmail
-            },
-            success: function (data) {
-                if (data.result != 0) {
-                    setNotification("Thêm mới dịch vụ [" + typeName + "] thành công!", 1);
-                } else {
-                    setNotification("Thêm mới dịch vụ [" + typeName + "] không thành công, xin hãy thử lại.", 3);
-                }
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                setNotification("Thêm mới dịch vụ [" + typeName + "] không thành công, xin hãy thử lại.", 3);
-            }
-        });
-
-        return false;
-    })
-
     @*Data validation*@
-    var email = $("Email").val();
-    $("#add-user-form").validate({
+    $("#add-form").validate({
         rules: {
             ServiceName: {
                 required: true,
