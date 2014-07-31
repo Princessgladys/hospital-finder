@@ -68,7 +68,27 @@ namespace HospitalF.Models
 
         #region Method
 
-        
+        #region Service
+
+        /// <summary>
+        /// Load list of service base on input conditions
+        /// </summary>
+        /// <param name="serviceName">Service name</param>
+        /// <param name="serviceType">Service type</param>
+        /// <param name="isActive">Status</param>
+        /// <returns></returns>
+        public async Task<List<SP_TAKE_SERVICE_AND_TYPEResult>> LoadListOfService(
+            string serviceName, int serviceType, bool isActive)
+        {
+            // Search for suitable hospitals in database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_TAKE_SERVICE_AND_TYPE(serviceName, serviceType, isActive).ToList());
+            }
+        }
+
+        #endregion
 
         #endregion
     }
