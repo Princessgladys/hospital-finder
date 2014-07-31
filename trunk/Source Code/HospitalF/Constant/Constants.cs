@@ -607,9 +607,14 @@ namespace HospitalF.Constant
         #region DataModel
 
         /// <summary>
-        /// Temporary value after handling data
+        /// Store temporary value after inserting data
         /// </summary>
-        public const string ProcessData = "ProcesstData";
+        public const string ProcessInsertData = "ProcessInserttData";
+
+        /// <summary>
+        /// Store temporary value after updating data
+        /// </summary>
+        public const string ProcessUpdateData = "ProcessUpdateData";
 
         #endregion
 

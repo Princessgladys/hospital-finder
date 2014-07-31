@@ -89,9 +89,15 @@ namespace HospitalF.Controllers
                 ViewBag.Query = queryString.ToString();
 
                 // Pass value of previous adding service to view (if any)
-                if (TempData[Constants.ProcessData] != null)
+                if (TempData[Constants.ProcessInsertData] != null)
                 {
-                    ViewBag.AddStatus = (int)TempData[Constants.ProcessData];
+                    ViewBag.AddStatus = (int)TempData[Constants.ProcessInsertData];
+                }
+
+                // Pass value of previous updating service to view (if any)
+                if (TempData[Constants.ProcessUpdateData] != null)
+                {
+                    ViewBag.UpdateStatus = (int)TempData[Constants.ProcessUpdateData];
                 }
 
                 // Return value to view
@@ -151,7 +157,74 @@ namespace HospitalF.Controllers
                 }
 
                 // Return result
-                TempData[Constants.ProcessData] = result;
+                TempData[Constants.ProcessInsertData] = result;
+                return RedirectToAction(Constants.DisplayServiceAction, Constants.DataController, model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Load paritial view Update Service
+        /// </summary>
+        /// <param name="serviceId">Service ID</param>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> UpdateService(int serviceId)
+        {
+            try
+            {
+                // Load service information
+                DataModel model = new DataModel();
+                Service service = await model.LoadSerivceById(serviceId);
+                if (service != null)
+                {
+                    model.ServiceName = service.Service_Name;
+                    model.TypeID = service.Service_Type.Value;
+                    model.ServiceID = serviceId;
+                }
+
+                // Load list of service type
+                serviceTypeList = await ServiceFacilityUtil.LoadServiceTypeAsync();
+                ViewBag.ServiceTypeList = new SelectList(serviceTypeList, Constants.TypeID, Constants.TypeName);
+
+                return PartialView(Constants.UpdateServiceAction, model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Update Service
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> UpdateService(DataModel model)
+        {
+            try
+            {
+                // Prepare data
+                int result = 0;
+                model.IsPostBack = true;
+                model.IsActive = true;
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.UpdateService(model);
+                }
+
+                // Return result
+                TempData[Constants.ProcessUpdateData] = result;
                 return RedirectToAction(Constants.DisplayServiceAction, Constants.DataController, model);
             }
             catch (Exception exception)
@@ -233,9 +306,9 @@ namespace HospitalF.Controllers
                 ViewBag.Query = queryString.ToString();
 
                 // Pass value of previous adding facility to view (if any)
-                if (TempData[Constants.ProcessData] != null)
+                if (TempData[Constants.ProcessInsertData] != null)
                 {
-                    ViewBag.AddStatus = (int)TempData[Constants.ProcessData];
+                    ViewBag.AddStatus = (int)TempData[Constants.ProcessInsertData];
                 }
 
                 // Return value to view
@@ -295,7 +368,7 @@ namespace HospitalF.Controllers
                 }
 
                 // Return result
-                TempData[Constants.ProcessData] = result;
+                TempData[Constants.ProcessInsertData] = result;
                 return RedirectToAction(Constants.DisplayFacilityAction, Constants.DataController, model);
             }
             catch (Exception exception)
@@ -372,9 +445,9 @@ namespace HospitalF.Controllers
                 ViewBag.Query = queryString.ToString();
 
                 // Pass value of previous adding facility to view (if any)
-                if (TempData[Constants.ProcessData] != null)
+                if (TempData[Constants.ProcessInsertData] != null)
                 {
-                    ViewBag.AddStatus = (int)TempData[Constants.ProcessData];
+                    ViewBag.AddStatus = (int)TempData[Constants.ProcessInsertData];
                 }
 
                 // Return value to view
@@ -422,7 +495,7 @@ namespace HospitalF.Controllers
                 }
 
                 // Return result
-                TempData[Constants.ProcessData] = result;
+                TempData[Constants.ProcessInsertData] = result;
                 return RedirectToAction(Constants.DisplaySpecialityAction, Constants.DataController, model);
             }
             catch (Exception exception)
