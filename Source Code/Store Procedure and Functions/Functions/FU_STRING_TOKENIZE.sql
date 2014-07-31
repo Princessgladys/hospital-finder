@@ -13,24 +13,22 @@ RETURNS @TokenList TABLE (ID INT PRIMARY KEY,
 						  Token NVARCHAR(MAX))
 AS
 BEGIN
-	DECLARE @Token NVARCHAR(32)
-	DECLARE @Position INT
+	DECLARE @Start INT
+	DECLARE @End INT
 	DECLARE @Id INT = 1
+    SELECT @Start = 1, @End = CHARINDEX(@Delimeter, @InputStr) 
 
-	WHILE CHARINDEX(@Delimeter, @InputStr) > 0
-	BEGIN
-		SELECT @Position = CHARINDEX(@Delimeter, @InputStr)
-		SELECT @Token = SUBSTRING(@InputStr, 1, @Position - 1)
+    WHILE @Start < LEN(@InputStr) + 1
+	BEGIN 
+        IF @End = 0  
+            SET @End = LEN(@InputStr) + 1
+       
+        INSERT INTO @TokenList
+        SELECT @Id, (SUBSTRING(@InputStr, @Start, @End - @Start))
 
-		INSERT INTO @TokenList 
-		SELECT @Id, @Token
-
-		SELECT @InputStr = SUBSTRING(@InputStr, @Position + 1, LEN(@InputStr) - @Position)
-		SET @Id += 1
-	END
-
-	INSERT INTO @TokenList 
-	SELECT @Id, @InputStr
-
-	RETURN
+        SET @Start = @End + 1 
+        SET @End = CHARINDEX(@Delimeter, @InputStr, @Start)
+        SET @Id += 1
+    END 
+    RETURN 
 END
