@@ -135,16 +135,13 @@ namespace HospitalF.Controllers
         [LayoutInjecter(Constants.AdmidLayout)]
         [Authorize(Roles = Constants.AdministratorRoleName)]
         [HttpPost]
-        public async Task<ActionResult> AddService(string serviceName, int typeId)
+        public async Task<ActionResult> AddService(DataModel model)
         {
             try
             {
                 // Prepare data
                 int result = 0;
-                DataModel model = new DataModel();
                 model.IsPostBack = true;
-                model.ServiceName = serviceName;
-                model.TypeID = typeId;
                 model.IsActive = true;
 
                 // Return list of dictionary words
