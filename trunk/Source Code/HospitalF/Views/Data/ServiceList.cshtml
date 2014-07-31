@@ -19,7 +19,7 @@
             </h1>
         </div>
     </div>
-
+    
     <label class="select">
         @Html.DropDownList("TypeID", (SelectList)ViewBag.ServiceTypeList,
                 "Tất cả loại dịch vụ", new { @class = "form-control" })
@@ -46,6 +46,11 @@
         <i></i>
     </label>
 
+    <a href="/Data/AddService" class="btn btn-sm btn-success btn-next"
+       id="add-button" data-toggle="modal" data-target="#addService">
+        Thêm dịch vụ
+    </a>
+
     <div class="well">
         <div class="input-group">
             @Html.TextBox("IsPostBack", true, new { @type = "hidden" })
@@ -65,6 +70,30 @@
         </div>
     </div>
 }
+
+<div class="alert alert-danger fade in" style="display: none;"
+     id="error-alert">
+    <button class="close" data-dismiss="alert">
+        ×
+    </button>
+    <i class="fa-fw fa fa-times"></i>
+    <strong>Lỗi!</strong> thao tác không thành công. Xin vui lòng thử lại.
+</div>
+<div class="alert alert-success fade in" style="display: none;"
+     id="success-alert">
+    <button class="close" data-dismiss="alert">
+        ×
+    </button>
+    <i class="fa-fw fa fa-check"></i>
+    <strong>Thành công</strong> Thêm mới dịch vụ thành công.
+</div>
+
+<div class="modal fade" id="addService" tabindex="-1"
+     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
 
 <!-- widget grid -->
 <section id="widget-grid" class="">
@@ -165,9 +194,42 @@
 
 <script type="text/javascript">
 
+    @*Display notification*@
+    function displayNotification() {
+        // Add hospital
+        if ('@ViewBag.AddStatus' == '') {
+            return false;
+        } else {
+            var status = '@ViewBag.AddStatus';
+
+            if (status != '0') {
+                $("#success-alert").show();
+                notif({
+                msg: "Thêm mới dịch vụ thành công",
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+            } else {
+                $("#error-alert").show();
+                notif({
+                    msg: "Thêm mới dịch vụ không thành công, xin hãy thử lại.",
+                    type: "error",
+                    width: 600,
+                    position: "center",
+                    fade: true,
+                    multiline: true
+                });
+            }
+        }
+    }
+
     @*Sort table*@
     $(document).ready(function () {
         $("#service-table").tablesorter();
+        displayNotification();
     });
 
     @*Update service status*@

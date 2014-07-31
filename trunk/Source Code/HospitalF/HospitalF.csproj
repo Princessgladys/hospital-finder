@@ -508,7 +508,6 @@
     <Content Include="Views\Home\Hospital.cshtml" />
     <Content Include="Views\Hospital\AddHospital.cshtml" />
     <Content Include="Views\Account\AddAccount.cshtml" />
-    <Content Include="Views\Hospital\HospitalBasicInforUpdate.cshtml" />
     <Content Include="Views\Hospital\UpdateHospital.cshtml" />
     <Content Include="Views\Doctor\Index.cshtml" />
     <Content Include="Views\Hospital\SpecialityServiceFacilityUpdate.cshtml" />
@@ -516,6 +515,7 @@
     <Content Include="Views\Data\ServiceList.cshtml" />
     <Content Include="Views\Data\FacilityList.cshtml" />
     <Content Include="Views\Data\SpecialityList.cshtml" />
+    <Content Include="Views\Data\AddService.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

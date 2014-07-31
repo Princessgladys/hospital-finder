@@ -221,6 +221,11 @@ namespace HospitalF.Constant
         public const string UpdateServiceAction = "UpdateService";
 
         /// <summary>
+        /// Name of AddService method in DataController
+        /// </summary>
+        public const string AddServiceAction = "AddService";
+
+        /// <summary>
         /// Name of FacilityList method in DataController
         /// </summary>
         public const string DisplayFacilityAction = "FacilityList";
@@ -236,6 +241,11 @@ namespace HospitalF.Constant
         public const string UpdateFacilityAction = "UpdateFacility";
 
         /// <summary>
+        /// Name of AddFacility method in DataController
+        /// </summary>
+        public const string AddFacilityAction = "AddFacility";
+
+        /// <summary>
         /// Name of SpecialityList method in DataController
         /// </summary>
         public const string DisplaySpecialityAction = "SpecialityList";
@@ -249,6 +259,11 @@ namespace HospitalF.Constant
         /// Name of UpdateSpeciality method in DataController
         /// </summary>
         public const string UpdateSpecialityAction = "UpdateSpeciality";
+
+        /// <summary>
+        /// Name of AddSpeciality method in DataController
+        /// </summary>
+        public const string AddSpeciality = "AddSpeciality";
 
         #endregion
 
@@ -586,6 +601,15 @@ namespace HospitalF.Constant
         public const string FileInSession = "SessionFiles";
 
         #endregion
+
+        #endregion
+
+        #region DataModel
+
+        /// <summary>
+        /// Temporary value after handling data
+        /// </summary>
+        public const string ProcessData = "ProcesstData";
 
         #endregion
 

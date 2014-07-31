@@ -112,6 +112,21 @@ namespace HospitalF.Models
             }
         }
 
+        /// <summary>
+        /// Add new service
+        /// </summary>
+        /// <param name="model">DataModel</param>
+        /// <returns>1: Successful, 0: Failed</returns>
+        public async Task<int> AddService(DataModel model)
+        {
+            // Insert new service to database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_INSERT_SERVICE(model.ServiceName, model.TypeID));
+            }
+        }
+
         #endregion
 
         #region Facility
