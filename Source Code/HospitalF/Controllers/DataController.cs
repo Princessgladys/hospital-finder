@@ -88,9 +88,74 @@ namespace HospitalF.Controllers
                 queryString.Remove(Constants.PageUrlRewriting);
                 ViewBag.Query = queryString.ToString();
 
+                // Pass value of previous adding service to view (if any)
+                if (TempData[Constants.ProcessData] != null)
+                {
+                    ViewBag.AddStatus = (int)TempData[Constants.ProcessData];
+                }
+
                 // Return value to view
                 pagedServiceList = serviceList.ToPagedList(page.Value, Constants.PageSize);
                 return View(pagedServiceList);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Load paritial view Add Service
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> AddService()
+        {
+            try
+            {
+                // Load list of service type
+                serviceTypeList = await ServiceFacilityUtil.LoadServiceTypeAsync();
+                ViewBag.ServiceTypeList = new SelectList(serviceTypeList, Constants.TypeID, Constants.TypeName);
+
+                return PartialView(Constants.AddServiceAction);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Load paritial view Add Service
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> AddService(string serviceName, int typeId)
+        {
+            try
+            {
+                // Prepare data
+                int result = 0;
+                DataModel model = new DataModel();
+                model.IsPostBack = true;
+                model.ServiceName = serviceName;
+                model.TypeID = typeId;
+                model.IsActive = true;
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.AddService(model);
+                }
+
+                // Return result
+                TempData[Constants.ProcessData] = result;
+                return RedirectToAction(Constants.DisplayServiceAction, Constants.DataController, model);
             }
             catch (Exception exception)
             {
