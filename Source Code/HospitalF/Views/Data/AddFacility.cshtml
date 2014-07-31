@@ -12,29 +12,29 @@
     </h4>
 </div>
 <div class="modal-body no-padding">
-    @using (Html.BeginForm(Constants.AddServiceAction, Constants.DataController, FormMethod.Post, new { @id="add-form", @class = "smart-form" }))
+    @using (Html.BeginForm(Constants.AddFacilityAction, Constants.DataController, FormMethod.Post, new { @id="add-form", @class = "smart-form" }))
     {
         <fieldset>
             <section>
                 <div class="row">
-                    <label class="label col col-2">Tên dịch vụ</label>
+                    <label class="label col col-2">Tên</label>
                     <div class="col col-10">
                         <label class="input">
-                            <i class="icon-append fa fa-cloud-upload"></i>
-                            @Html.TextBoxFor(m => m.ServiceName, new { @placeholder = "Tên dịch vụ" })
-                            <b class="tooltip tooltip-top-right"><i class="fa fa-cloud-upload txt-color-teal"></i> Xin nhập Tên dịch vụ</b>
+                            <i class="icon-append fa fa-building"></i>
+                            @Html.TextBoxFor(m => m.FacilityName, new { @placeholder = "Tên cơ sở vật chất" })
+                            <b class="tooltip tooltip-top-right"><i class="fa fa-building txt-color-teal"></i> Xin nhập Tên cơ sở vật chật</b>
                         </label>
                     </div>
                 </div>
             </section>
             <section>
                 <div class="row">
-                    <label class="label col col-2">Loại dịch vụ</label>
+                    <label class="label col col-2">Loại </label>
                     <div class="col col-10">
                         <label class="select">
                             <i></i>
-                            @Html.DropDownListFor(m => m.TypeID, (SelectList)ViewBag.ServiceTypeList,
-                            "-- Chọn loại dịch vụ -- ", new { @class = "form-control" })
+                            @Html.DropDownListFor(m => m.TypeID, (SelectList)ViewBag.FacilityTypeList,
+                                "-- Chọn loại cơ sở vật chất -- ", new { @class = "form-control" })
                             @Html.TextBoxFor(m => m.TypeName, new { @type = "hidden" })
                         </label>
                     </div>
@@ -58,7 +58,7 @@
     @*Data validation*@
     $("#add-form").validate({
         rules: {
-            ServiceName: {
+            FacilityName: {
                 required: true,
                 minlength: 3,
                 maxlength: 64,
@@ -69,13 +69,13 @@
         },
 
         messages: {
-            ServiceName: {
-                required: '@string.Format(ErrorMessage.CEM001, "Tên dịch vụ")',
-                minlength: '@string.Format(ErrorMessage.CEM012, "Tên dịch vụ", 3)',
-                maxlength: '@string.Format(ErrorMessage.CEM003, "Tên dịch vụ", 64)'
+            FacilityName: {
+                required: '@string.Format(ErrorMessage.CEM001, "Tên cơ sở vật chất")',
+                minlength: '@string.Format(ErrorMessage.CEM012, "Tên cơ sở vật chất", 3)',
+                maxlength: '@string.Format(ErrorMessage.CEM003, "Tên cơ sở vật chất", 64)'
             },
             TypeID: {
-                required: '@string.Format(ErrorMessage.CEM011, "Loại dịch vụ")',
+                required: '@string.Format(ErrorMessage.CEM011, "Loại cơ sở vật chất")',
             }
         },
 

@@ -168,6 +168,21 @@ namespace HospitalF.Models
             }
         }
 
+        /// <summary>
+        /// Add new facility
+        /// </summary>
+        /// <param name="model">DataModel</param>
+        /// <returns>1: Successful, 0: Failed</returns>
+        public async Task<int> AddFacility(DataModel model)
+        {
+            // Insert new service to database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_INSERT_FACILITY(model.FacilityName, model.TypeID));
+            }
+        }
+
         #endregion
 
         #region Speciality
@@ -205,6 +220,21 @@ namespace HospitalF.Models
             {
                 return await Task.Run(() =>
                     data.SP_TAKE_SPECIALITY_AND_TYPE(specialityName, isActive).ToList());
+            }
+        }
+
+        /// <summary>
+        /// Add new speciality
+        /// </summary>
+        /// <param name="model">DataModel</param>
+        /// <returns>1: Successful, 0: Failed</returns>
+        public async Task<int> AddSpeciality(DataModel model)
+        {
+            // Insert new service to database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_INSERT_SPECIALITY(model.SpecialityName));
             }
         }
 
