@@ -22,6 +22,31 @@ namespace HospitalF.Controllers
         #region Service
 
         /// <summary>
+        /// GET: /Data/ChangeServiceStatus
+        /// </summary>
+        /// <param name="hospitalId">Hosptal ID</param>
+        /// <returns>
+        /// Task[ActionResult] with JSON contains value
+        /// indicating update process is successful or not
+        /// 1: Successful
+        /// 0: Failed
+        /// </returns>
+        public async Task<ActionResult> ChangeServiceStatus(int serviceId)
+        {
+            try
+            {
+                DataModel model = new DataModel();
+                int result = await model.ChangeServiceStatusAsync(serviceId);
+                return Json(new { value = result }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
         /// GET: /Data/ServiceList
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
@@ -37,9 +62,6 @@ namespace HospitalF.Controllers
                 serviceTypeList = await ServiceFacilityUtil.LoadServiceTypeAsync();
                 ViewBag.ServiceTypeList = new SelectList(serviceTypeList, Constants.TypeID, Constants.TypeName);
 
-                // Load list of status
-                ViewBag.CurrentStatus = true;
-
                 // Check if page parameter is null
                 if (page == null)
                 {
@@ -49,14 +71,16 @@ namespace HospitalF.Controllers
                 // Load list of service
                 List<SP_TAKE_SERVICE_AND_TYPEResult> serviceListlList =
                     new List<SP_TAKE_SERVICE_AND_TYPEResult>();
-                if (model.ServiceName == null)
+                if (model.IsPostBack == false)
                 {
                     serviceListlList = await model.LoadListOfService(null, 0, true);
+                    ViewBag.CurrentStatus = true;
                 }
                 else
                 {
                     serviceListlList =  await model.LoadListOfService(
-                        model.ServiceName.Trim(), model.TypeID, model.IsActive);
+                        model.ServiceName, model.TypeID, model.IsActive);
+                    ViewBag.CurrentStatus = model.IsActive;
                 }
 
                 // Handle query string

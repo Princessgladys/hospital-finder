@@ -48,6 +48,7 @@
 
     <div class="well">
         <div class="input-group">
+            @Html.TextBox("IsPostBack", true, new { @type = "hidden" })
             @Html.TextBox("ServiceName", null, new
             {
                 @placeholder = "Tìm kiếm tên dịch vụ",
@@ -124,8 +125,8 @@
                                                     <td hidden>@service.Is_Active</td>
                                                     <td>
                                                         @Html.ActionLink(@service.Service_Name,
-                                                            Constants.UpdateHospitalAction, Constants.HospitalController,
-                                                            new { hospitalId = @service.Service_ID }, null)
+                                                            Constants.UpdatServiceAction, Constants.DataController,
+                                                            new { serviceId = @service.Service_ID }, null)
                                                     </td>
                                                     <td>@service.Type_Name</td>
                                                     <td>@(@service.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
@@ -169,29 +170,7 @@
         $("#service-table").tablesorter();
     });
 
-    @*AJAX for cascading District drop down list*@
-    $(document).ready(function () {
-        $("#CityID").change(function () {
-            var selectedItem = $(this).val();
-            var ddlDistrict = $("#DistrictID");
-            $.ajax({
-                cache: false,
-                type: "GET",
-                url: "@(Url.RouteUrl("GetDistrictByCity-Hospital"))",
-                data: { "cityId": selectedItem },
-                success: function (data) {
-                    ddlDistrict.html('');
-                    $.each(data, function (id, option) {
-                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
-                    });
-                    },
-                error: function (xhr, ajaxOptions, thrownError) {
-                }
-            });
-        });
-    });
-
-    @*Update hospital status*@
+    @*Update service status*@
     $(document).ready(function () {
         $('#service-table .btn').on('click', function () {
             var row = $(this).closest('tr');
@@ -201,29 +180,29 @@
                 valueInRow = valueInRow + item.innerHTML + '|';
             });
             var argument = valueInRow.split('|');
-            var hospitalId = argument[0];
-            var hospitalName = argument[1];
+            var serviceId = argument[0];
+            var serviceName = argument[1];
             var status = argument[2];
             var confirmMessage = "";
             if (status == "True") {
-                confirmMessage = "Bạn có muốn ngừng [" + hospitalName + "] hay không?"
+                confirmMessage = "Bạn có muốn ngừng dịch vụ [" + serviceName + "] hay không?"
             } else {
-                confirmMessage = "Bạn có muốn kích hoạt [" + hospitalName + "] hay không?"
+                confirmMessage = "Bạn có muốn kích hoạt dịch vụ [" + serviceName + "] hay không?"
             }
 
             if (confirm(confirmMessage)) {
                 $.ajax({
                     cache: false,
                     type: "GET",
-                    url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
+                    url: "@(Url.RouteUrl(Constants.ChangeServiceStatusAction))",
                     data: {
-                        "hospitalId": hospitalId
+                        "serviceId": serviceId
                     },
                     success: function (data) {
                         if (data.value == 1) {
                             if (status == "True") {
                                 notif({
-                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
+                                    msg: "Dịch vụ [" + serviceName + "] đã ngừng hoạt động",
                                     type: "success",
                                     width: 600,
                                     position: "center",
@@ -232,7 +211,7 @@
                                 });
                             } else {
                                 notif({
-                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
+                                    msg: "Dịch vụ [" + serviceName + "] đã hoạt động trở lại",
                                     type: "success",
                                     width: 600,
                                     position: "center",
@@ -246,7 +225,7 @@
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         notif({
-                            msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
+                            msg: "Không thể thay đổi trạng thái của dịch vụ [" + serviceName + "]",
                             type: "error",
                             width: 600,
                             position: "center",

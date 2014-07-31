@@ -210,6 +210,16 @@ namespace HospitalF.Constant
         /// </summary>
         public const string DisplayServiceAction = "ServiceList";
 
+        /// <summary>
+        /// Name of ChangeServiceStatus method in DataController
+        /// </summary>
+        public const string ChangeServiceStatusAction = "ChangeServiceStatus";
+
+        /// <summary>
+        /// Name of UpdateService method in DataController
+        /// </summary>
+        public const string UpdatServiceAction = "UpdateService";
+
         #endregion
 
         #region AccountModel
