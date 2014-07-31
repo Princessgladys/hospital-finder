@@ -25,6 +25,7 @@ CREATE PROCEDURE SP_INSERT_HOSPITAL
 	@CreatedPerson INT,
 	@FullDescription NVARCHAR(4000),
 	@PersonInChared VARCHAR(64),
+	@PhotoList NVARCHAR(4000),
 	@SpecialityList NVARCHAR(4000),
 	@ServiceList NVARCHAR(4000),
 	@FacilityList NVARCHAR(4000)
@@ -223,6 +224,53 @@ BEGIN
 			BEGIN
 				ROLLBACK TRAN T;
 				RETURN 0;
+			END
+		END
+
+		-- INSERT TO PHOTO TABLE
+		IF (@PhotoList != '')
+		BEGIN
+		UPDATE [User]
+			SET @RowNumber = 1
+			SET @TotalToken = 0
+
+			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
+								  FROM [dbo].[FU_STRING_TOKENIZE] (@PhotoList, '|') TokenList)
+
+			WHILE (@RowNumber <= @TotalToken)
+			BEGIN
+				SELECT @Token = (SELECT TokenList.Token
+								 FROM (SELECT ROW_NUMBER()
+									   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+									   FROM [dbo].[FU_STRING_TOKENIZE] (@PhotoList, '|') TokenList) AS TokenList
+								 WHERE RowNumber = @RowNumber)
+
+				INSERT INTO Photo
+				(
+					File_Path,
+					Add_Date,
+					Target_Type,
+					Target_ID,
+					Uploaded_Person,
+					Is_Active
+				)
+				VALUES
+				(
+					@Token,
+					GETDATE(),
+					1,
+					@HospitalID,
+					@CreatedPerson,
+					'True'
+				)
+
+				IF @@ROWCOUNT = 0
+				BEGIN
+					ROLLBACK TRAN T;
+					RETURN 0;
+				END
+
+				SET @RowNumber += 1
 			END
 		END
 	END
