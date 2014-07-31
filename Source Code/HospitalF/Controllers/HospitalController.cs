@@ -729,12 +729,6 @@ namespace HospitalF.Controllers
         /// <returns></returns>
         public ActionResult SaveUploadFile()
         {
-            // Check if session is alreadt existed
-            if (Session[Constants.FileInSession] != null)
-            {
-                return Json(new { value = string.Empty });
-            }
-
             // Add file to server and add list of file to session
             List<string> filePath = new List<string>();
             string fName = string.Empty;

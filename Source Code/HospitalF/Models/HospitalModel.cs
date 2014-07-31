@@ -187,6 +187,11 @@ namespace HospitalF.Models
         /// </summary>
         public List<string> SelectedFacilities { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property PhotoFilesPath
+        /// </summary>
+        public string PhotoFilesPath { get; set; }
+
         public List<Speciality> SpecialityList { get; set; }
         public List<Service> ServiceList { get; set; }
         public List<Facility> FacilityList { get; set; }
@@ -428,8 +433,9 @@ namespace HospitalF.Models
                     model.HospitalTypeID, model.FullAddress, model.CityID, model.DistrictID,
                     model.WardID, model.PhoneNo, model.Fax, model.HospitalEmail, model.Website,
                     model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
-                    model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment, model.CreatedPerson,
-                    model.FullDescription, model.PersonInCharged, speciality, service, facility));
+                    model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment,
+                    model.CreatedPerson, model.FullDescription, model.PersonInCharged,
+                    model.PhotoFilesPath, speciality, service, facility));
             }
             return result;
         }

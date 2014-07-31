@@ -785,6 +785,11 @@ namespace HospitalF.Constant
         public const string Format2Digit = "d2";
 
         /// <summary>
+        /// Location of images folder
+        /// </summary>
+        public const string ImagesFolder = "Images";
+
+        /// <summary>
         /// Take relative diacritic Vietnamese characters according to input letter
         /// </summary>
         /// <param name="letter">Input letter (a ă â e ê o ô ơ u ư i y đ)</param>
