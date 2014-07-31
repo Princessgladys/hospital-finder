@@ -114,6 +114,47 @@ namespace HospitalF.Models
 
         #endregion
 
+        #region Facility
+
+        /// <summary>
+        /// Change status of a specific facility
+        /// </summary>
+        /// <param name="facilityId">Facility ID</param>
+        /// <returns>1: Successful. 0: Failed</returns>
+        public async Task<int> ChangeFacilityStatusAsync(int facilityId)
+        {
+            int result = 0;
+
+            // Change service status
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() =>
+                    data.SP_CHANGE_FACILITY_STATUS(facilityId));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Load list of facility base on input conditions
+        /// </summary>
+        /// <param name="facilityName">Facility name</param>
+        /// <param name="facilityType">Facility type</param>
+        /// <param name="isActive">Status</param>
+        /// <returns></returns>
+        public async Task<List<SP_TAKE_FACILITY_AND_TYPEResult>> LoadListOfFacility(
+            string facilityName, int facilityType, bool isActive)
+        {
+            // Search for suitable hospitals in database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_TAKE_FACILITY_AND_TYPE(facilityName, facilityType, isActive).ToList());
+            }
+        }
+
+        #endregion
+
         #endregion
     }
 }

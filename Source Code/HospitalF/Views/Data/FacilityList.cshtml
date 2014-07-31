@@ -3,13 +3,13 @@
 @using PagedList;
 @using HospitalF.Models
 
-@model IPagedList<SP_TAKE_SERVICE_AND_TYPEResult>
+@model IPagedList<SP_TAKE_FACILITY_AND_TYPEResult>
 
 @{
     ViewBag.Title = "Loại hình dịch vụ";
 }
 
-@using (Html.BeginForm(Constants.DisplayServiceAction, Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
+@using (Html.BeginForm(Constants.DisplayFacilityAction, Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
 {
     <div class="row">
         <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
@@ -21,8 +21,8 @@
     </div>
 
     <label class="select">
-        @Html.DropDownList("TypeID", (SelectList)ViewBag.ServiceTypeList,
-                "Tất cả loại dịch vụ", new { @class = "form-control" })
+        @Html.DropDownList("TypeID", (SelectList)ViewBag.FacilityTypeList,
+                "Tất cả cơ sở vật chất", new { @class = "form-control" })
         <i></i>
     </label>
 
@@ -49,11 +49,11 @@
     <div class="well">
         <div class="input-group">
             @Html.TextBox("IsPostBack", true, new { @type = "hidden" })
-            @Html.TextBox("ServiceName", null, new
+            @Html.TextBox("FacilityName", null, new
             {
-                @placeholder = "Tìm kiếm tên dịch vụ",
+                @placeholder = "Tìm kiếm tên cơ sở vật chất",
                 @class = "form-control",
-                @id = "service-name-search"
+                @id = "facility-name-search"
             })
             <div class="input-group-btn">
                 <button class="btn btn-default btn-primary" type="submit"
@@ -96,12 +96,12 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
-                        <p>Chọn thông tin phù hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> dịch vụ trong hệ thống</p>
+                        <p>Chọn thông tin phụ hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> cơ sở vật chật trong hệ thống</p>
                         <div class="table-responsive">
-                            <table class="table table-bordered tablesorter" id="service-table">
+                            <table class="table table-bordered tablesorter" id="facility-table">
                                 <thead>
                                     <tr>
-                                        <th>Tên dịch vụ</th>
+                                        <th>Tên cơ sở vật chất</th>
                                         <th>Loại</th>
                                         <th>Trạng thái</th>
                                         <th>Hành động</th>
@@ -117,22 +117,22 @@
                                         }
                                         else
                                         {
-                                            foreach (var service in Model)
+                                            foreach (var facility in Model)
                                             {
                                                 <tr>
-                                                    <td hidden>@service.Service_ID</td>
-                                                    <td hidden>@service.Service_Name</td>
-                                                    <td hidden>@service.Is_Active</td>
+                                                    <td hidden>@facility.Facility_ID</td>
+                                                    <td hidden>@facility.Facility_Name</td>
+                                                    <td hidden>@facility.Is_Active</td>
                                                     <td>
-                                                        @Html.ActionLink(@service.Service_Name,
+                                                        @Html.ActionLink(@facility.Facility_Name,
                                                             Constants.UpdateServiceAction, Constants.DataController,
-                                                            new { serviceId = @service.Service_ID }, null)
+                                                            new { facilityId = @facility.Facility_ID }, null)
                                                     </td>
-                                                    <td>@service.Type_Name</td>
-                                                    <td>@(@service.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
+                                                    <td>@facility.Type_Name</td>
+                                                    <td>@(@facility.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
                                                     <td>
                                                         <a href="" class="btn btn-sm btn-success btn-next">
-                                                            @(service.Is_Active.Value ? "Ngừng" : "Kích hoạt")
+                                                            @(facility.Is_Active.Value ? "Ngừng" : "Kích hoạt")
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -146,7 +146,7 @@
                             @{
                                 if (Model.Count != 0)
                                 {
-                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayServiceAction + "?" +
+                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayFacilityAction + "?" +
                                         ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
                                 }
                             }
@@ -167,12 +167,12 @@
 
     @*Sort table*@
     $(document).ready(function () {
-        $("#service-table").tablesorter();
+        $("#facility-table").tablesorter();
     });
 
     @*Update service status*@
     $(document).ready(function () {
-        $('#service-table .btn').on('click', function () {
+        $('#facility-table .btn').on('click', function () {
             var row = $(this).closest('tr');
             var columns = row.find('td');
             var valueInRow = "";
@@ -180,29 +180,29 @@
                 valueInRow = valueInRow + item.innerHTML + '|';
             });
             var argument = valueInRow.split('|');
-            var serviceId = argument[0];
-            var serviceName = argument[1];
+            var facilityId = argument[0];
+            var facilityName = argument[1];
             var status = argument[2];
             var confirmMessage = "";
             if (status == "True") {
-                confirmMessage = "Bạn có muốn ngừng dịch vụ [" + serviceName + "] hay không?"
+                confirmMessage = "Bạn có muốn xóa tiện ích [" + facilityName + "] hay không?"
             } else {
-                confirmMessage = "Bạn có muốn kích hoạt dịch vụ [" + serviceName + "] hay không?"
+                confirmMessage = "Bạn có muốn xóa tiện ích [" + facilityName + "] hay không?"
             }
 
             if (confirm(confirmMessage)) {
                 $.ajax({
                     cache: false,
                     type: "GET",
-                    url: "@(Url.RouteUrl(Constants.ChangeServiceStatusAction))",
+                    url: "@(Url.RouteUrl(Constants.ChangeFacilityStatusAction))",
                     data: {
-                        "serviceId": serviceId
+                        "facilityId": facilityId
                     },
                     success: function (data) {
                         if (data.value == 1) {
                             if (status == "True") {
                                 notif({
-                                    msg: "Dịch vụ [" + serviceName + "] đã ngừng hoạt động",
+                                    msg: "Tiện ích [" + facilityName + "] đã ngừng hoạt động",
                                     type: "success",
                                     width: 600,
                                     position: "center",
@@ -211,7 +211,7 @@
                                 });
                             } else {
                                 notif({
-                                    msg: "Dịch vụ [" + serviceName + "] đã hoạt động trở lại",
+                                    msg: "Tiện ích [" + facilityName + "] đã hoạt động trở lại",
                                     type: "success",
                                     width: 600,
                                     position: "center",
@@ -225,7 +225,7 @@
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         notif({
-                            msg: "Không thể thay đổi trạng thái của dịch vụ [" + serviceName + "]",
+                            msg: "Không thể thay đổi trạng thái của tiện ích [" + facilityName + "]",
                             type: "error",
                             width: 600,
                             position: "center",

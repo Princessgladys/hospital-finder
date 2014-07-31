@@ -101,6 +101,11 @@ namespace HospitalF
                             "data/changeservicestatus/",
                             new { controller = "Data", action = "ChangeServiceStatus" },
                             new[] { "HospitalF.Controllers" });
+
+            routes.MapRoute("ChangeFacilityStatus",
+                            "data/changefacilitystatus/",
+                            new { controller = "Data", action = "ChangeFacilityStatus" },
+                            new[] { "HospitalF.Controllers" });
         }
     }
 }
