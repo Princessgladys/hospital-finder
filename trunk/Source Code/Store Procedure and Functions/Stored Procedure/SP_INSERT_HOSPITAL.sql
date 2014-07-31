@@ -96,7 +96,7 @@ BEGIN
 		BEGIN
 			DECLARE @RowNumber INT = 1
 			DECLARE @TotalToken  INT = 0
-			DECLARE @Token VARCHAR(4)		
+			DECLARE @Token NVARCHAR(MAX)		
 
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 								  FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, '|') TokenList)
