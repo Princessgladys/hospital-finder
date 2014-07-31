@@ -263,7 +263,7 @@ namespace HospitalF.Constant
         /// <summary>
         /// Name of AddSpeciality method in DataController
         /// </summary>
-        public const string AddSpeciality = "AddSpeciality";
+        public const string AddSpecialityAction = "AddSpeciality";
 
         #endregion
 
