@@ -131,7 +131,7 @@ namespace HospitalF.Models
         /// Load service by ID
         /// </summary>
         /// <param name="serviceId">Service ID</param>
-        /// <returns></returns>
+        /// <returns>Service</returns>
         public async Task<Service> LoadSerivceById(int serviceId)
         {
             // Change service status
@@ -215,6 +215,38 @@ namespace HospitalF.Models
             }
         }
 
+        /// <summary>
+        /// Load facility by ID
+        /// </summary>
+        /// <param name="facilityId">Facility ID</param>
+        /// <returns>Facility</returns>
+        public async Task<Facility> LoadFacilityById(int facilityId)
+        {
+            // Change service status
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from f in data.Facilities
+                     where f.Facility_ID.Equals(facilityId)
+                     select f).SingleOrDefault());
+            }
+        }
+
+        /// <summary>
+        /// Update facility
+        /// </summary>
+        /// <param name="model">DataModel</param>
+        /// <returns>1: Successful, 0: Failed</returns>
+        public async Task<int> UpdateFacility(DataModel model)
+        {
+            // Update service information
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_UDATE_FACILITY(model.FacilityID, model.FacilityName, model.TypeID));
+            }
+        }
+
         #endregion
 
         #region Speciality
@@ -267,6 +299,38 @@ namespace HospitalF.Models
             {
                 return await Task.Run(() =>
                     data.SP_INSERT_SPECIALITY(model.SpecialityName));
+            }
+        }
+
+        /// <summary>
+        /// Load speciality by ID
+        /// </summary>
+        /// <param name="specialityId">Speciality ID</param>
+        /// <returns>Speciality</returns>
+        public async Task<Speciality> LoadSpecialityById(int specialityId)
+        {
+            // Change service status
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from s in data.Specialities
+                     where s.Speciality_ID.Equals(specialityId)
+                     select s).SingleOrDefault());
+            }
+        }
+
+        /// <summary>
+        /// Update speciality
+        /// </summary>
+        /// <param name="model">DataModel</param>
+        /// <returns>1: Successful, 0: Failed</returns>
+        public async Task<int> UpdateSpeciality(DataModel model)
+        {
+            // Update service information
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_UDATE_SPECIALITY(model.SpecialityID, model.SpecialityName));
             }
         }
 

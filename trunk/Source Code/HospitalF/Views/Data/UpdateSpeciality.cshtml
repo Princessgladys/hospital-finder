@@ -1,0 +1,68 @@
+﻿@model HospitalF.Models.DataModel
+@using HospitalF.Constant
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        &times;
+    </button>
+    <h4 class="modal-title">
+        <img src="../Content/img/hospital-icon.png" alt="HospitalFinder"
+             style="width: 10%; height: 10%;" />
+        Chỉnh sửa chuyên ngành
+    </h4>
+</div>
+<div class="modal-body no-padding">
+    @using (Html.BeginForm(Constants.UpdateSpecialityAction, Constants.DataController, FormMethod.Post, new { @id = "update-form", @class = "smart-form" }))
+    {
+        @Html.TextBoxFor(m => m.SpecialityID, new { @type = "hidden" })
+        <fieldset>
+            <section>
+                <div class="row">
+                    <label class="label col col-2">Tên dịch vụ</label>
+                    <div class="col col-10">
+                        <label class="input">
+                            <i class="icon-append fa fa-briefcase"></i>
+                            @Html.TextBoxFor(m => m.SpecialityName, new { @placeholder = "Tên chuyên ngành" })
+                            <b class="tooltip tooltip-top-right"><i class="fa fa-briefcase txt-color-teal"></i> Xin nhập Tên chuyên ngành</b>
+                        </label>
+                    </div>
+                </div>
+            </section>
+        </fieldset>
+
+        <footer>
+            <button type="button" class="btn" data-dismiss="modal">
+                <i class="fa fa-times"></i> Thoát
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-save" id="add-button"></i>&nbsp;
+                Cập nhật
+            </button>
+        </footer>
+    }
+</div>
+
+<script>
+    @*Data validation*@
+    $("#update-form").validate({
+        rules: {
+            SpecialityName: {
+                required: true,
+                minlength: 6,
+                maxlength: 64,
+            }
+        },
+
+        messages: {
+            SpecialityName: {
+                required: '@string.Format(ErrorMessage.CEM001, "Tên chuyên ngành")',
+                minlength: '@string.Format(ErrorMessage.CEM012, "Tên chuyên ngành", 3)',
+                maxlength: '@string.Format(ErrorMessage.CEM003, "Tên chuyên ngành", 64)'
+            }
+        },
+
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent());
+        }
+    });
+</script>

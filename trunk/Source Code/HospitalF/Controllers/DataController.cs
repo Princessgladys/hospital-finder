@@ -311,6 +311,12 @@ namespace HospitalF.Controllers
                     ViewBag.AddStatus = (int)TempData[Constants.ProcessInsertData];
                 }
 
+                // Pass value of previous updating service to view (if any)
+                if (TempData[Constants.ProcessUpdateData] != null)
+                {
+                    ViewBag.UpdateStatus = (int)TempData[Constants.ProcessUpdateData];
+                }
+
                 // Return value to view
                 pagedFacilityList = facilityList.ToPagedList(page.Value, Constants.PageSize);
                 return View(pagedFacilityList);
@@ -369,6 +375,73 @@ namespace HospitalF.Controllers
 
                 // Return result
                 TempData[Constants.ProcessInsertData] = result;
+                return RedirectToAction(Constants.DisplayFacilityAction, Constants.DataController, model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Load paritial view Update Facility
+        /// </summary>
+        /// <param name="facilityId">Facility ID</param>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> UpdateFacility(int facilityId)
+        {
+            try
+            {
+                // Load service information
+                DataModel model = new DataModel();
+                Facility facility = await model.LoadFacilityById(facilityId);
+                if (facility != null)
+                {
+                    model.FacilityName = facility.Facility_Name;
+                    model.TypeID = facility.Facility_Type.Value;
+                    model.FacilityID = facilityId;
+                }
+
+                // Load list of service type
+                facilityTypeList = await ServiceFacilityUtil.LoadFacilityTypeAsync();
+                ViewBag.FacilityTypeList = new SelectList(facilityTypeList, Constants.TypeID, Constants.TypeName);
+
+                return PartialView(Constants.UpdateFacilityAction, model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Update Facility
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> UpdateFacility(DataModel model)
+        {
+            try
+            {
+                // Prepare data
+                int result = 0;
+                model.IsPostBack = true;
+                model.IsActive = true;
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.UpdateFacility(model);
+                }
+
+                // Return result
+                TempData[Constants.ProcessUpdateData] = result;
                 return RedirectToAction(Constants.DisplayFacilityAction, Constants.DataController, model);
             }
             catch (Exception exception)
@@ -450,6 +523,12 @@ namespace HospitalF.Controllers
                     ViewBag.AddStatus = (int)TempData[Constants.ProcessInsertData];
                 }
 
+                // Pass value of previous updating service to view (if any)
+                if (TempData[Constants.ProcessUpdateData] != null)
+                {
+                    ViewBag.UpdateStatus = (int)TempData[Constants.ProcessUpdateData];
+                }
+
                 // Return value to view
                 pagedFacilityList = specialityList.ToPagedList(page.Value, Constants.PageSize);
                 return View(pagedFacilityList);
@@ -496,6 +575,68 @@ namespace HospitalF.Controllers
 
                 // Return result
                 TempData[Constants.ProcessInsertData] = result;
+                return RedirectToAction(Constants.DisplaySpecialityAction, Constants.DataController, model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Load paritial view Update Speciality
+        /// </summary>
+        /// <param name="specialityId">Speciality ID</param>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> UpdateSpeciality(int specialityId)
+        {
+            try
+            {
+                // Load service information
+                DataModel model = new DataModel();
+                Speciality speciality = await model.LoadSpecialityById(specialityId);
+                if (speciality != null)
+                {
+                    model.SpecialityName = speciality.Speciality_Name;
+                    model.SpecialityID = specialityId;
+                }
+
+                return PartialView(Constants.UpdateSpecialityAction, model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Update Speciality
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> UpdateSpeciality(DataModel model)
+        {
+            try
+            {
+                // Prepare data
+                int result = 0;
+                model.IsPostBack = true;
+                model.IsActive = true;
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.UpdateSpeciality(model);
+                }
+
+                // Return result
+                TempData[Constants.ProcessUpdateData] = result;
                 return RedirectToAction(Constants.DisplaySpecialityAction, Constants.DataController, model);
             }
             catch (Exception exception)
