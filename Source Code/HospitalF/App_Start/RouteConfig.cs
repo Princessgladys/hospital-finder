@@ -94,7 +94,12 @@ namespace HospitalF
 
             routes.MapRoute("AddAccount",
                             "account/addcccount/",
-                            new { controller = "account", action = "AddAccount" },
+                            new { controller = "Account", action = "AddAccount" },
+                            new[] { "HospitalF.Controllers" });
+
+            routes.MapRoute("ChangeServiceStatus",
+                            "data/changeservicestatus/",
+                            new { controller = "Data", action = "ChangeServiceStatus" },
                             new[] { "HospitalF.Controllers" });
         }
     }

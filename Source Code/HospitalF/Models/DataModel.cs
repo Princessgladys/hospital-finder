@@ -64,11 +64,35 @@ namespace HospitalF.Models
         /// </summary>
         public bool IsActive { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property IsActive
+        /// </summary>
+        public bool IsPostBack { get; set; }
+
         #endregion
 
         #region Method
 
         #region Service
+
+        /// <summary>
+        /// Change status of a specific service
+        /// </summary>
+        /// <param name="serviceId">Service ID</param>
+        /// <returns>1: Successful. 0: Failed</returns>
+        public async Task<int> ChangeServiceStatusAsync(int serviceId)
+        {
+            int result = 0;
+
+            // Change service status
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() =>
+                    data.SP_CHANGE_SERVICE_STATUS(serviceId));
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Load list of service base on input conditions
