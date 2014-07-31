@@ -95,6 +95,13 @@
     </div>
 </div>
 
+<div class="modal fade" id="updateService" tabindex="-1"
+     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
 <!-- widget grid -->
 <section id="widget-grid" class="">
     <!-- row -->
@@ -153,9 +160,10 @@
                                                     <td hidden>@service.Service_Name</td>
                                                     <td hidden>@service.Is_Active</td>
                                                     <td>
-                                                        @Html.ActionLink(@service.Service_Name,
-                                                            Constants.UpdateServiceAction, Constants.DataController,
-                                                            new { serviceId = @service.Service_ID }, null)
+                                                        <a href="/Data/UpdateService?serviceId=@service.Service_ID"
+                                                           id="update-button" data-toggle="modal" data-target="#updateService">
+                                                            @service.Service_Name
+                                                        </a>
                                                     </td>
                                                     <td>@service.Type_Name</td>
                                                     <td>@(@service.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
@@ -195,7 +203,7 @@
 <script type="text/javascript">
 
     @*Display notification*@
-    function displayNotification() {
+    function displayAddNotification() {
         // Add hospital
         if ('@ViewBag.AddStatus' == '') {
             return false;
@@ -226,10 +234,43 @@
         }
     }
 
+    @*Display notification*@
+    function displayUpdateNotification() {
+        // Update hospital
+        if ('@ViewBag.UpdateStatus' == '') {
+            return false;
+        } else {
+            var status = '@ViewBag.UpdateStatus';
+
+            if (status != '0') {
+                $("#success-alert").show();
+                notif({
+                    msg: "Chỉnh sửa dịch vụ thành công",
+                    type: "success",
+                    width: 600,
+                    position: "center",
+                    fade: true,
+                    multiline: true
+                });
+            } else {
+                $("#error-alert").show();
+                notif({
+                    msg: "Chỉnh sửa dịch vụ không thành công, xin hãy thử lại.",
+                    type: "error",
+                    width: 600,
+                    position: "center",
+                    fade: true,
+                    multiline: true
+                });
+            }
+        }
+    }
+
     @*Sort table*@
     $(document).ready(function () {
         $("#service-table").tablesorter();
-        displayNotification();
+        displayAddNotification();
+        displayUpdateNotification();
     });
 
     @*Update service status*@

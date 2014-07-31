@@ -518,6 +518,7 @@
     <Content Include="Views\Data\AddService.cshtml" />
     <Content Include="Views\Data\AddFacility.cshtml" />
     <Content Include="Views\Data\AddSpeciality.cshtml" />
+    <Content Include="Views\Data\UpdateService.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

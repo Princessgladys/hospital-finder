@@ -127,6 +127,38 @@ namespace HospitalF.Models
             }
         }
 
+        /// <summary>
+        /// Load service by ID
+        /// </summary>
+        /// <param name="serviceId">Service ID</param>
+        /// <returns></returns>
+        public async Task<Service> LoadSerivceById(int serviceId)
+        {
+            // Change service status
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    (from s in data.Services
+                     where s.Service_ID.Equals(serviceId)
+                     select s).SingleOrDefault());
+            }
+        }
+
+        /// <summary>
+        /// Update service
+        /// </summary>
+        /// <param name="model">DataModel</param>
+        /// <returns>1: Successful, 0: Failed</returns>
+        public async Task<int> UpdateService(DataModel model)
+        {
+            // Update service information
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_UDATE_SERVICE(model.ServiceID, model.ServiceName, model.TypeID));
+            }
+        }
+
         #endregion
 
         #region Facility

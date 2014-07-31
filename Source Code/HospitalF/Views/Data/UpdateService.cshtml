@@ -8,12 +8,13 @@
     <h4 class="modal-title">
         <img src="../Content/img/hospital-icon.png" alt="HospitalFinder"
              style="width: 10%; height: 10%;" />
-        Thêm mới dịch vụ
+        Cập nhật thông tin dịch vụ
     </h4>
 </div>
 <div class="modal-body no-padding">
-    @using (Html.BeginForm(Constants.AddServiceAction, Constants.DataController, FormMethod.Post, new { @id="add-form", @class = "smart-form" }))
+    @using (Html.BeginForm(Constants.UpdateServiceAction, Constants.DataController, FormMethod.Post, new { @id = "update-form", @class = "smart-form" }))
     {
+        @Html.TextBoxFor(m => m.ServiceID, new { @type = "hidden" })
         <fieldset>
             <section>
                 <div class="row">
@@ -48,7 +49,7 @@
             </button>
             <button type="submit" class="btn btn-primary">
                 <i class="fa fa-save" id="add-button"></i>&nbsp;
-                Xác nhận
+                Cập nhật
             </button>
         </footer>
     }
@@ -56,7 +57,7 @@
 
 <script>
     @*Data validation*@
-    $("#add-form").validate({
+    $("#update-form").validate({
         rules: {
             ServiceName: {
                 required: true,
