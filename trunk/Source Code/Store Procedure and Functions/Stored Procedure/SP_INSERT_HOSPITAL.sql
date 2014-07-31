@@ -32,7 +32,7 @@ CREATE PROCEDURE SP_INSERT_HOSPITAL
 AS
 BEGIN
 	BEGIN TRANSACTION T
-
+	BEGIN TRY
 	-- INSERT TO HOSPITAL TABLE
 	BEGIN
 		INSERT INTO Hospital
@@ -230,7 +230,6 @@ BEGIN
 		-- INSERT TO PHOTO TABLE
 		IF (@PhotoList != '')
 		BEGIN
-		UPDATE [User]
 			SET @RowNumber = 1
 			SET @TotalToken = 0
 
@@ -249,8 +248,7 @@ BEGIN
 				(
 					File_Path,
 					Add_Date,
-					Target_Type,
-					Target_ID,
+					Hospital_ID,
 					Uploaded_Person,
 					Is_Active
 				)
@@ -258,7 +256,6 @@ BEGIN
 				(
 					@Token,
 					GETDATE(),
-					1,
 					@HospitalID,
 					@CreatedPerson,
 					'True'
@@ -277,4 +274,9 @@ BEGIN
 	COMMIT TRAN T;
 
 	RETURN 1;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN T
+		RETURN 0;
+	END CATCH
 END
