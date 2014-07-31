@@ -40,7 +40,7 @@ namespace HospitalF.Utilities
             file.SaveAs(path);
 
             // Return file name
-            return fileName;
+            return photoLocation + Constants.DoubleReverseSlash + fileName;
         }
 
         /// <summary>

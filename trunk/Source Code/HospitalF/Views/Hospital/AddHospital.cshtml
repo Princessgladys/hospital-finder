@@ -743,7 +743,7 @@
 
     @*Data validation*@
     $(document).ready(function () {
-        $('#confirm-button').click(function () {
+        $('#confirm-button').click(function (e) {
             var city = "";
             if (($('#CityID').val() != null) && ($('#CityID').val() != '')) {
                 city = ", " + $("#CityID option:selected").text();
@@ -784,8 +784,12 @@
                 $("#PersonInCharged").focus();
             } else {
                 var dz = Dropzone.forElement("#my-awesome-dropzone");
+                if (dz.getQueuedFiles().length > 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dz.processQueue();
+                }
                 $("#FullDescription").val($('#summernote').code());
-                dz.processQueue(dz);
                 $('#addHospitalForm').submit();
             }
         });
@@ -1163,7 +1167,7 @@
     @*Drop zone*@
     $(document).ready(function () {
         $("div#my-awesome-dropzone").dropzone({
-            url: "@Url.Action("AddHospital")",
+            url: "@Url.Action("SaveUploadFile")",
             previewsContainer: ".dropzone-previews",
             maxFiles: 10,
             parallelUploads: 10,
