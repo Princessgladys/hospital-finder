@@ -129,7 +129,7 @@ namespace HospitalF.Controllers
         }
 
         /// <summary>
-        /// Load paritial view Add Service
+        /// Add new Service
         /// </summary>
         /// <returns>ActionResult</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
@@ -232,9 +232,71 @@ namespace HospitalF.Controllers
                 queryString.Remove(Constants.PageUrlRewriting);
                 ViewBag.Query = queryString.ToString();
 
+                // Pass value of previous adding facility to view (if any)
+                if (TempData[Constants.ProcessData] != null)
+                {
+                    ViewBag.AddStatus = (int)TempData[Constants.ProcessData];
+                }
+
                 // Return value to view
                 pagedFacilityList = facilityList.ToPagedList(page.Value, Constants.PageSize);
                 return View(pagedFacilityList);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Load paritial view Add Facility
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> AddFacility()
+        {
+            try
+            {
+                // Load list of service type
+                facilityTypeList = await ServiceFacilityUtil.LoadFacilityTypeAsync();
+                ViewBag.FacilityTypeList = new SelectList(facilityTypeList, Constants.TypeID, Constants.TypeName);
+
+                return PartialView(Constants.AddFacilityAction);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Add new Facility
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> AddFacility(DataModel model)
+        {
+            try
+            {
+                // Prepare data
+                int result = 0;
+                model.IsPostBack = true;
+                model.IsActive = true;
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.AddFacility(model);
+                }
+
+                // Return result
+                TempData[Constants.ProcessData] = result;
+                return RedirectToAction(Constants.DisplayFacilityAction, Constants.DataController, model);
             }
             catch (Exception exception)
             {

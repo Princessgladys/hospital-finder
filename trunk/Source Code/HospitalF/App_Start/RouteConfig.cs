@@ -116,6 +116,16 @@ namespace HospitalF
                             "data/addservice/",
                             new { controller = "Data", action = "AddService" },
                             new[] { "HospitalF.Controllers" });
+
+            routes.MapRoute("AddFacility",
+                            "data/addfacility/",
+                            new { controller = "Data", action = "AddFacility" },
+                            new[] { "HospitalF.Controllers" });
+
+            routes.MapRoute("AddSpeciality",
+                            "data/addspeciality/",
+                            new { controller = "Data", action = "AddSpeciality" },
+                            new[] { "HospitalF.Controllers" });
         }
     }
 }
