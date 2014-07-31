@@ -5,11 +5,12 @@
     ViewBag.Title = "Cập nhật thông tin bệnh viện";
 }
 
-<link href="~/Content/css/summernote.css" rel="stylesheet" />
+<link href="~/Content/css/summernote/summernote.css" rel="stylesheet" />
 <script src="~/Content/js/plugin/summernote/summernote.js"></script>
 <script src="~/Content/js/plugin/summernote/summernote-vi-VN.js"></script>
-<script src="~/Content/js/plugin/dropzone/dropzone.js"></script>
-
+<script src="~/Scripts/dropzone/dropzone.js"></script>
+<link href="~/Scripts/dropzone/css/basic.css" rel="stylesheet" />
+<link href="~/Scripts/dropzone/css/dropzone.css" rel="stylesheet" />
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
 
 <div class="row">
@@ -283,42 +284,42 @@
                                         <label><strong>Danh sách chuyên ngành</strong></label>
                                         <select class="select2 select2-offscreen" id="SelectedSpecialities" multiple="multiple" name="SelectedSpecialities" style="width:100%" tabindex="-1">
                                             @{
-                                                if (Model.SelectedSpecialities.Count() == 0)
-                                                {
-                                                    foreach (var speciality in Model.SpecialityList)
-                                                    {
-                                                        <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
-                                                    }
-                                                }
-                                                else if (Model.SpecialityList.Count() == Model.SelectedSpecialities.Count())
-                                                {
-                                                    foreach (var speciality in Model.SpecialityList)
-                                                    {
-                                                        <option value="@speciality.Speciality_ID" selected="selected">@speciality.Speciality_Name</option>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    int isInserted = 0;
+                            if (Model.SelectedSpecialities.Count() == 0)
+                            {
+                                foreach (var speciality in Model.SpecialityList)
+                                {
+                                    <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
+                                }
+                            }
+                            else if (Model.SpecialityList.Count() == Model.SelectedSpecialities.Count())
+                            {
+                                foreach (var speciality in Model.SpecialityList)
+                                {
+                                    <option value="@speciality.Speciality_ID" selected="selected">@speciality.Speciality_Name</option>
+                                }
+                            }
+                            else
+                            {
+                                int isInserted = 0;
 
-                                                    foreach (var speciality in Model.SpecialityList)
-                                                    {
-                                                        isInserted = 0;
-                                                        foreach (var value in Model.SelectedSpecialities)
-                                                        {
-                                                            if (speciality.Speciality_ID.ToString().Equals(value))
-                                                            {
-                                                                <option value="@speciality.Speciality_ID" selected="selected">@speciality.Speciality_Name</option>
-                                                                isInserted = 1;
-                                                                break;
-                                                            }
-                                                        }
-                                                        if (isInserted == 0)
-                                                        {
-                                                            <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
-                                                        }  
-                                                    }
-                                                }
+                                foreach (var speciality in Model.SpecialityList)
+                                {
+                                    isInserted = 0;
+                                    foreach (var value in Model.SelectedSpecialities)
+                                    {
+                                        if (speciality.Speciality_ID.ToString().Equals(value))
+                                        {
+                                            <option value="@speciality.Speciality_ID" selected="selected">@speciality.Speciality_Name</option>
+                                            isInserted = 1;
+                                            break;
+                                        }
+                                    }
+                                    if (isInserted == 0)
+                                    {
+                                        <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
+                                    }
+                                }
+                            }
                                             }
                                         </select>
                                         <div class="note">
@@ -349,7 +350,7 @@
                                 </div>
                             </fieldset>
 
-                            <fieldset></fieldset>
+                            <div class="dropzone dropzone-previews" id="my-awesome-dropzone"></div>
 
                             <footer>
                                 <button class="btn" type="reset">
@@ -510,20 +511,8 @@
         }
     }
 
-    @**Load value for multi select drop down list*@
-    function setValueForMultiSelectDropdown() {
-        var selectedSpecialities = [1, 2];
-        i = 0, size = selectedSpecialities.length, // index and array size declared here to avoid overhead
-        $options = $('#SelectedSpecialities option');
-
-        for (i; i < size; i++) {
-            $options.filter('[value="' + selectedSpecialities[i] + '"]').prop('selected', true);
-        }
-    }
-
     $(document).ready(function () {
         displayNotification();
-        setValueForMultiSelectDropdown();
     });
 
     var timeoutReference;
@@ -760,8 +749,19 @@
                 setNotification("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 2);
                 $("google-map").focus();
                 return false;
+            } else if ($("#invalidIconUser").is(":visible")) {
+                $("#PersonInCharged").focus();
+                setNotification("Người chịu trách nhiệm không phù hợp", 2);
+                $("#PersonInCharged").focus();
             } else {
-                $('#add-hospital-form').submit();
+                var dz = Dropzone.forElement("#my-awesome-dropzone");
+                if (dz.getQueuedFiles().length > 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dz.processQueue();
+                }
+                $("#FullDescription").val($('#summernote').code());
+                $('#addHospitalForm').submit();
             }
         });
 
@@ -851,7 +851,7 @@
                 Fax: {
                     minlength: 8,
                     maxlength: 16,
-                    digits: true
+                    phone: true
                 },
                 OrdinaryStartTime: {
                     required: true,
@@ -914,7 +914,7 @@
                 Fax: {
                     minlength: '@string.Format(ErrorMessage.CEM012, Constants.Fax, 8)',
                     maxlength: '@string.Format(ErrorMessage.CEM003, Constants.Fax, 16)',
-                    digits: '@string.Format(ErrorMessage.CEM005, Constants.Fax)'
+                    phone: '@string.Format(ErrorMessage.CEM005, Constants.Fax)'
                 },
                 OrdinaryStartTime: {
                     required: '@string.Format(ErrorMessage.CEM001, Constants.OrdinaryTime)'
@@ -1030,6 +1030,12 @@
                     draggable: true,
                     animation: google.maps.Animation.DROP
                 });
+
+                // Get coordinate at the marker's location after dragging process
+                google.maps.event.addListener(marker, 'dragend', function (event) {
+                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                    $('#Coordinate').val(currentCoordinate).trigger('change');
+                });
             }
         }
 
@@ -1061,6 +1067,12 @@
                         position: results[0].geometry.location,
                         draggable: true,
                         animation: google.maps.Animation.DROP
+                    });
+
+                    // Get coordinate at the marker's location after dragging process
+                    google.maps.event.addListener(marker, 'dragend', function (event) {
+                        var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                        $('#Coordinate').val(currentCoordinate).trigger('change');
                     });
 
                     // Set coordinate value
@@ -1099,7 +1111,7 @@
     $(document).ready(function () {
         $('#summernote').summernote({
             lang: 'vi-VN',
-            height: 250,
+            height: 400,
             minHeight: null,
             maxHeight: null,
             focus: true
@@ -1194,6 +1206,29 @@
             return false;
         });
     });
+
+    @*Drop zone*@
+    $(document).ready(function () {
+        $("div#my-awesome-dropzone").dropzone({
+            url: "@Url.Action("SaveUploadFile")",
+            previewsContainer: ".dropzone-previews",
+            maxFiles: 10,
+            parallelUploads: 10,
+            maxfilesexceeded: function (file) {
+                setNotification("Không thể tải nhiều hơn 10 hình.", 2);
+            },
+            maxFilesize: 5,
+            acceptedFiles: "image/jpeg,image/png,image/jpg,image/gif",
+            uploadMultiple: true,
+            addRemoveLinks: true,
+            autoProcessQueue: false,
+            init: function () {
+                this.on("complete", function (data) {
+                    var res = eval('(' + data.xhr.responseText + ')');
+                });
+            }
+        });
+    });
 </script>
 
 <style>
@@ -1205,5 +1240,14 @@
     .resizeIcon {
         width: 16px;
         height: auto;
+    }
+
+    #dropZone {
+        background: gray;
+        border: black dashed 3px;
+        width: 200px;
+        padding: 50px;
+        text-align: center;
+        color: white;
     }
 </style>
