@@ -18,7 +18,7 @@ BEGIN
 						N' ht.[Type_Name], h.Is_Active'
 	
 	DECLARE @ChildWherePHrase NVARCHAR(512) = N'WHERE ht.[Type_ID] = h.Hospital_Type'
-	SET @ChildWherePHrase += CASE WHEN @HospitalName IS NOT NULL
+	SET @ChildWherePHrase += CASE WHEN (@HospitalName IS NOT NULL OR @HospitalName != '')
 							 THEN N' AND h.Hospital_Name LIKE N''%'' + @HospitalName + N''%'''
 							 ELSE ''
 							 END;
