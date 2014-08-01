@@ -471,6 +471,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string AdvancedSearchForm = "advanced-search-form";
 
+        // <summary>
+        /// Constant for filter search result
+        /// </summary>
+        public const string FilterForm = "filter-form";
+
         #endregion
 
         #region AppointmentModel
@@ -821,6 +826,11 @@ namespace HospitalF.Constant
         /// Constant for every button's name
         /// </summary>
         public const string Button = "button";
+
+        /// <summary>
+        /// Constant for every FilterButton's name
+        /// </summary>
+        public const string FilterButton = "filterButton";
 
         /// <summary>
         /// Constant for diaritic Vietnamese character

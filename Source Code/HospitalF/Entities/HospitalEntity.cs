@@ -36,14 +36,39 @@ namespace HospitalF.Entities
         public int? Ward_ID { get; set; }
 
         /// <summary>
+        /// Property for Ward_Name attribute
+        /// <summary>
+        public string Ward_Name { get; set; }
+
+        /// <summary>
         /// Property for District_ID attribute
         /// <summary>
         public int? District_ID { get; set; }
 
         /// <summary>
+        /// Property for District_Name attribute
+        /// <summary>
+        public string District_Name { get; set; }
+
+        /// <summary>
         /// Property for City_ID attribute
         /// <summary>
         public int? City_ID { get; set; }
+
+        /// <summary>
+        /// Property for City_Name attribute
+        /// <summary>
+        public string City_Name { get; set; }
+
+        /// <summary>
+        /// Property for Speciality_ID attribute
+        /// <summary>
+        public int? Speciality_ID { get; set; }
+
+        /// <summary>
+        /// Property for Speciality_Name attribute
+        /// <summary>
+        public string Speciality_Name { get; set; }
 
         /// <summary>
         /// Property for Phone_Number attribute

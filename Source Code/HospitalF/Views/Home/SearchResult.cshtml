@@ -2,6 +2,7 @@
 @using HospitalF.Entities;
 @using PagedList.Mvc;
 @using PagedList;
+@model HospitalF.Models.HomeModels
 
 @{
     IPagedList<HospitalEntity> hospitalList = (IPagedList<HospitalEntity>)ViewBag.HospitalList;
@@ -13,9 +14,8 @@
     <div class="col-md-8">
         @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal", @id = Constants.NormalSearchForm }))
         {
-
             <div class="input-group">
-                @Html.TextBox("SearchValue1", null, new { @class = "form-control", placeholder = "Nhập thông tin tìm kiếm..." })
+                @Html.TextBox("SearchValue", null, new { @class = "form-control", placeholder = "Nhập thông tin tìm kiếm..." })
                 <div class="input-group-btn">
                     <button class="btn btn-default btn-primary" type="submit"
                             value="@Constants.NormalSearchForm" name="@Constants.Button"
@@ -26,61 +26,120 @@
             </div>
             <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
         }
-    </div>
-    <div class="col-md-12">
-        @using (Html.BeginForm(Constants.FilterResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal" }))
+        @if (hospitalList.TotalItemCount == 0)
         {
-            <fieldset>
-                @if (!string.IsNullOrEmpty(suggestionSentence))
-                {
-                    suggestionSentence = suggestionSentence.Trim();
-                    <p>
-                        Có phải bạn muốn tìm <i>
-                            @Html.ActionLink(suggestionSentence,
+            <div class="col-md-12">
+                <p><strong>Không có kết quả tìm kiếm với từ khóa</strong> <span style="color: blue">@(ViewBag.SearchValue)</span></p>
+
+                <ul>
+                    <li>Xin bạn chắc chắn rằng tất cả các từ đều đúng chính tả.</li>
+                    <li>Hãy thử những từ khóa khác.</li>
+                </ul>
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(suggestionSentence))
+        {
+            suggestionSentence = suggestionSentence.Trim();
+            <p>
+                Có phải bạn muốn tìm <i>
+                    @Html.ActionLink(suggestionSentence,
                                 Constants.SearchResultAction, Constants.HomeController,
                                 new { SearchValue = suggestionSentence }, null)
-                        </i>
-                    </p>
-                }
-                @if (hospitalList.TotalItemCount == 0)
-                {
-                    <p>Không có kết quả tìm kiếm với từ khóa <span style="color: blue">@ViewBag.SearchValue</span></p>
-                }
-                else
-                {
-                    <div class="row" id="filter-bar">
-                        <div class="form-group col-md-4">
-                            <label class="control-label col-md-4" for="prepend">Đánh Giá</label>
-                            <div class="col-md-8">
-                                <div class="icon-addon addon-sm">
-                                    <select class="form-control">
-                                        <option>Cao Nhất</option>
-                                        <option>Thấp Nhât</option>
-                                    </select>
-                                    <label class="glyphicon glyphicon-sort" title="Đánh Giá"></label>
-                                </div>
-                            </div>
-                        </div>
+                </i>
+            </p>
+        }
+    </div>
 
 
-                        <div class="form-group col-md-4">
-                            <label class="control-label col-md-4" for="prepend">Loại</label>
-                            <div class="col-md-8">
-                                <div class="icon-addon addon-sm">
-                                    @Html.DropDownList("HospitalType", (SelectList)ViewBag.HospitalTypes, "Tất Cả", new { @class = "form-control" })
-                                    <label class="glyphicon glyphicon-list-alt" title="Loại Bệnh Viện"></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-primary pull-right" type="submit">
-                                <i class="fa fa-refresh"></i>&nbsp;
-                            Cập Nhật
-                            </button>
-                        </div>
-                    </div>
-                }
+
+    <div class="col-md-12">
+        @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = ViewBag.SearchType }))
+        {
+            string button = ViewBag.SearchType;
+            if (Constants.LocationSearchForm.Equals(button))
+            {
+            <fieldset>
+                <legend>Nhập thông tin vị trí</legend>
+                <div class="row">
+                    <label class="label col col-2">Tìm theo</label>
+                    <section class="col col-4">
+                        <label class="select">
+                            @Html.DropDownListFor(m => m.LocationType, (SelectList)ViewBag.LocationTypeList, new { @class = "form-control"}) 
+                            <i></i>
+                        </label>
+                    </section>
+                    <label class="label col col-2" id="CurrentLocationLabel">Vị trí cần tìm</label>
+                    <section class="col col-4" id="CurrentLocationSection">
+                        <label class="input">
+                            <i class="icon-append fa fa-location-arrow"></i>
+                            @Html.TextBoxFor(m => m.Position, new { @class = "form-control", @placeholder = "Vị trí cần tìm...", })
+                            @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
+                            <b class="tooltip tooltip-top-right">Nhập vị trí cần tìm</b>
+                        </label>
+                    </section>
+                    <label class="label col col-2">Bán kính</label>
+                    <section class="col col-4">
+                        <label class="select">
+                            @Html.DropDownListFor(m => m.Radius, (SelectList)ViewBag.RadiusList, new { @class = "form-control"}) 
+                            <i></i>
+                        </label>
+                    </section>
+                </div>
             </fieldset>
+            }
+            else if (Constants.AdvancedSearchForm.Equals(button))
+            {
+            <fieldset>
+                <legend>Nhập thông tin bệnh viện</legend>
+                <div class="row">
+                    <label class="label col col-2">Tỉnh / Thành phố</label>
+                    <section class="col col-4">
+                        <label class="select">
+                            @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
+                                                Constants.RequireCity, new { @class = "form-control" })
+                            <i></i>
+                        </label>
+                    </section>
+                    <label class="label col col-2">Quận / Huyện</label>
+                    <section class="col col-4">
+                        <label class="select">
+                            @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
+                                                Constants.RequireDistrict, new { @class = "form-control" })
+                            <i></i>
+                        </label>
+                    </section>
+                </div>
+                <div class="row">
+                    <label class="label col col-2">Chuyên khoa</label>
+                    <section class="col col-4">
+                        <label class="select">
+                            @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
+                                                Constants.RequireSpeciality, new { @class = "form-control" })
+                            <i></i>
+                        </label>
+                    </section>
+                    <label class="label col col-2">Triệu chứng</label>
+                    <section class="col col-4">
+                        <label class="input">
+                            <i class="icon-append fa fa-plus-square"></i>
+                            @Html.TextBoxFor(m => m.DiseaseName, new
+                                       {
+                                           @class = "form-control",
+                                           @placeholder = "Triệu chứng...",
+                                           @id = "disease-tag"
+                                       })
+                            <b class="tooltip tooltip-top-right">Nhập triệu chứng bệnh</b>
+                        </label>
+                    </section>
+                </div>
+            </fieldset>
+            }
+            
+            <footer>
+                <button class="btn btn-default btn-primary" type="submit" value="@(ViewBag.SearchType)" name="@(Constants.Button)">
+                    <i class="fa fa-search"></i>&nbsp;Tìm kiếm
+                </button>
+            </footer>
         }
     </div>
 
@@ -94,7 +153,7 @@
                 {
                 <div class="search-results clearfix smart-form hospital-record">
 
-                    <h5 class="truncate"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="/Home/Hospital?id=@(hospital.Hospital_ID)">@(hospital.Hospital_Name)</a></h5>
+                    <h5 class="truncate"><i class="fa fa-plus-square txt-color-blue"></i>&nbsp;<a href="/Home/Hospital?hospitalId=@(hospital.Hospital_ID)">@(hospital.Hospital_Name)</a></h5>
 
                     <div style="width: 100%">
                         <div class="display-inline">
@@ -154,15 +213,6 @@
                     <br>
                 </div>
             }
-            else
-            {
-                <ul>
-                    <li>Xin bạn chắc chắn rằng tất cả các từ đều đúng chính tả.</li>
-                    <li>Hãy thử những từ khóa khác.</li>
-                </ul>
-            }
-
-
         </div>
 
         @if (hospitalList.TotalItemCount > 0)
@@ -229,10 +279,34 @@
         });
     });
 
+    @*AJAX for cascading District drop down list*@
+    $(document).ready(function () {
+        $("#CityID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlDistrict = $("#DistrictID");
+            var statesProgress = $("#states-loading-district-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetDistrictByCityAction))",
+                data: { "cityId": selectedItem },
+                success: function (data) {
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
+    });
 
     $(document).ready(function () {
         // GOOGLE - API
-
         // Google map
         var map;
         // Copy list of google markers
@@ -244,9 +318,9 @@
         // Parse JSON hospital list to javascript object
         var hospitalList = JSON && JSON.parse('@Html.Raw(ViewBag.JsonHospitalList)') || $.parseJSON('@Html.Raw(ViewBag.JsonHospitalList)');
         // Position
-        var position = '@(ViewBag.Position)';
+        var position = '@(Model.Coordinate)';
         // Radius
-        var radius = @(ViewBag.Radius != null ? ViewBag.Radius : 0);
+        var radius = @(Model.Radius != null ? Model.Radius * 1000 : 0);
  
 
         function panToMarker(coordinate) {
@@ -439,3 +513,269 @@
         // ------------------------------------------------------------------------
     });
 </script>
+
+<script type="text/javascript">
+        @*AJAX for auto completing basic search value textbox*@
+    $(document).ready(function () {
+        $("#sentece-tag").on('input', function () {
+            var statesProgress = $("#states-loading-search-progress");
+            var availableTags = new Array();
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.LoadSuggestSentenceAction))",
+                success: function (data) {
+                    $.each(data, function (id, option) {
+                        availableTags.push(option);
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+            $("#sentece-tag").autocomplete({
+                source: function (request, response) {
+                    var results = $.ui.autocomplete.filter(availableTags, request.term);
+                    response(results.slice(0, 5));
+                }
+            });
+        });
+    });
+
+    @*AJAX for auto completing Disease textbox*@
+    $(document).ready(function () {
+        $("#SpecialityID").change(function () {
+            var selectedItem = $(this).val();
+            var statesProgress = $("#states-loading-disease-progress");
+            var availableTags = new Array();
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetDeseaseBySpecialityAction))",
+                data: { "specialityId": selectedItem },
+                success: function (data) {
+                    $.each(data, function (id, option) {
+                        availableTags.push(option.name);
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+            //$("#disease-tag").autocomplete({
+            //    source: function (request, response) {
+            //        var results = $.ui.autocomplete.filter(availableTags, request.term);
+            //        response(results.slice(0, 5));
+            //    }
+            //});
+            $("#disease-tag").autocomplete({
+                source: availableTags
+            });
+        });
+    });
+
+    @*AJAX for cascading District drop down list*@
+    $(document).ready(function () {
+        $("#CityID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlDistrict = $("#DistrictID");
+            var statesProgress = $("#states-loading-district-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetDistrictByCityAction))",
+                data: { "cityId": selectedItem },
+                success: function (data) {
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    statesProgress.hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    statesProgress.hide();
+                }
+            });
+        });
+    });
+
+    @*Location type text changed*@
+    $(document).ready(function () {
+        var selectedLocationTypeItem = $('#LocationType').val();
+        if (selectedLocationTypeItem == 1) {
+            $("#CurrentLocationSection").hide();
+            $("#CurrentLocationLabel").hide();
+            getCurrentPosition();
+        } else {
+            $("#CurrentLocationSection").show();
+            $("#CurrentLocationLabel").show();
+        }
+
+        function setPosition(position) {
+            var currentLat = position.coords.latitude;
+            var currentLng = position.coords.longitude;
+            $("#Coordinate").val(currentLat + ", " + currentLng);
+        }
+
+        function getCurrentPosition() {
+            // Try HTML5 geolocation
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(setPosition, function () {
+                    console.log("Browser does not support geolocation...");
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                return false;
+            }
+        }
+
+        function getLatLong(address) {
+            var geo = new google.maps.Geocoder;
+
+            geo.geocode({ 'address': address }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    return results[0].geometry.location;
+                } else {
+                    console.log("Geocode was not successful for the following reason: " + status);
+                }
+
+            });
+
+        }
+
+        $('#location-search-form button').click(function (event) {
+            if ($("#LocationType").val() == 1) {
+                var object;
+                $.when(getCurrentPosition()).done(function () {
+                    $('#location-search-form').submit();
+                });
+            }
+        });
+
+        $("#LocationType").change(function () {
+            var selectedItem = $(this).val();
+            if (selectedItem == 1) {
+                $("#CurrentLocationSection").hide();
+                $("#CurrentLocationLabel").hide();
+                getCurrentPosition();
+            } else {
+                $("#CurrentLocationSection").show();
+                $("#CurrentLocationLabel").show();
+            }
+        });
+    });
+
+    @*Data validation*@
+    $(document).ready(function () {
+        $('#normal-search-button').click(function () {
+            var searchValue = $('#sentece-tag').val().trim();
+            if (searchValue != "") {
+                $('#normal-search-form').submit();
+            }
+            else {
+                return false;
+            }
+        });
+
+        $('#normal-search-form').validate({
+            // Rules for form validation
+            rules: {
+                SearchValue: {
+                    maxlength: 100
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                SearchValue: {
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.SearchValue, 100)'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+
+        $('#location-search-form').validate({
+            // Rules for form validation
+            rules: {
+                Position: {
+                    required: true
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                Position: {
+                    required: '@string.Format(ErrorMessage.CEM001, "vị trí")'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+
+        $('#advanced-search-form').validate({
+            // Rules for form validation
+            rules: {
+                CityID: {
+                    required: true
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                CityID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.City)'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
+</script>
+@*
+<div class="row" id="filter-bar">
+    <div class="form-group col-md-4">
+        <label class="control-label col-md-4" for="prepend">Đánh Giá</label>
+        <div class="col-md-8">
+            <div class="icon-addon addon-sm">
+                <select class="form-control">
+                    <option>Cao Nhất</option>
+                    <option>Thấp Nhât</option>
+                </select>
+                <label class="glyphicon glyphicon-sort" title="Đánh Giá"></label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group col-md-4">
+        <label class="control-label col-md-4" for="prepend">Loại</label>
+        <div class="col-md-8">
+            <div class="icon-addon addon-sm">
+                @Html.DropDownList("HospitalType", (SelectList)ViewBag.HospitalTypes, "Tất Cả", new { @class = "form-control" })
+                <label class="glyphicon glyphicon-list-alt" title="Loại Bệnh Viện"></label>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-primary pull-right" type="submit">
+            <i class="fa fa-refresh"></i>&nbsp;
+                            Cập Nhật
+        </button>
+    </div>
+</div>
+*@
