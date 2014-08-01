@@ -616,6 +616,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string ProcessUpdateData = "ProcessUpdateData";
 
+        /// <summary>
+        /// Store temporary value after updating status
+        /// </summary>
+        public const string ProcessStatusData = "ProcessStatusData";
+
         #endregion
 
         #region Regular Expression
