@@ -18,8 +18,7 @@
         <h1 class="page-title txt-color-blueDark">
             <i class="fa fa-pencil-square-o fa-fw "></i>
             Thêm mới bệnh viện
-            <span>
-                >
+            <span>>
                 Nhập liệu
             </span>
         </h1>
@@ -27,7 +26,7 @@
 </div>
 
 <div class="alert alert-block alert-info">
-    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i> Nhập thông tin</h4>
+    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>Nhập thông tin</h4>
     <p>
         Điền những thông tin cần thiết vào bản mẫu. Sau đó ấn xác nhận để tạo bệnh viện mới.
     </p>
@@ -35,7 +34,7 @@
 
 <section id="widget-grid" class="">
     <div class="alert alert-danger fade in" style="display: none;"
-         id="error-alert">
+        id="error-alert">
         <button class="close" data-dismiss="alert">
             ×
         </button>
@@ -43,7 +42,7 @@
         <strong>Lỗi!</strong> thao tác không thành công. Xin vui lòng thử lại.
     </div>
     <div class="alert alert-success fade in" style="display: none;"
-         id="success-alert">
+        id="success-alert">
         <button class="close" data-dismiss="alert">
             ×
         </button>
@@ -56,16 +55,16 @@
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
             <!-- Widget ID (each widget will need unique ID)-->
             <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
-                 data-widget-colorbutton="false"
-                 data-widget-editbutton="false"
-                 data-widget-togglebutton="false"
-                 data-widget-deletebutton="false"
-                 data-widget-fullscreenbutton="false"
-                 data-widget-custombutton="false"
-                 data-widget-collapsed="false"
-                 data-widget-sortable="false">
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="false"
+                data-widget-sortable="false">
                 <header>
-                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
                     @*<h2>Thông tin bệnh viện</h2>*@
                 </header>
                 <!-- widget div-->
@@ -82,7 +81,7 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-home"></i>
                                             @Html.TextBoxFor(m => m.HospitalName, new { @placeholder = "Tên bệnh viện" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-home txt-color-teal"></i> Xin nhập Tên bệnh viện</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-home txt-color-teal"></i>Xin nhập Tên bệnh viện</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -100,7 +99,7 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.OrdinaryStartTime, new { @placeholder = "Giờ khám ngày thường", @id = "OrdinaryTime" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i> Xin nhập Giờ khám ngày thường</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>Xin nhập Giờ khám ngày thường</b>
                                         </label>
                                         <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
                                     </section>
@@ -108,7 +107,7 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.HolidayStartTime, new { @placeholder = "Giờ khám ngày lễ và cuối tuần", @id = "HolidayTime" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i> Xin nhập Giờ khám ngày lễ và cuối tuần</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>Xin nhập Giờ khám ngày lễ và cuối tuần</b>
                                         </label>
                                         <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
                                     </section>
@@ -138,14 +137,14 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-building"></i>
                                             @Html.TextBoxFor(m => m.LocationAddress, new { @placeholder = "Số địa chỉ" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-building txt-color-teal"></i> Xin nhập Số địa chỉ</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-building txt-color-teal"></i>Xin nhập Số địa chỉ</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-truck"></i>
                                             @Html.TextBoxFor(m => m.StreetAddress, new { @placeholder = "Tên đường" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-truck txt-color-teal"></i> Xin nhập Tên đường</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-truck txt-color-teal"></i>Xin nhập Tên đường</b>
                                         </label>
                                     </section>
                                 </div>
@@ -187,23 +186,22 @@
                                 <div class="row">
                                     <section class="col col-8">
                                         <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
-                                             style="display: none;" id="loaderIcon">
+                                            style="display: none;" id="loaderIcon">
                                         <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
-                                             style="display: none;" id="validIcon">
+                                            style="display: none;" id="validIcon">
                                         <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
-                                             style="display: none;" id="invalidIcon">
+                                            style="display: none;" id="invalidIcon">
                                         <span id="address-message"></span>
                                     </section>
                                     <section class="col col-4">
                                         <a href="" class="btn btn-sm btn-success btn-next"
-                                           id="button-get-loction" style="float: right;">
-                                            Lấy địa điểm từ địa chỉ
+                                            id="button-get-loction" style="float: right;">Lấy tọa độ từ địa chỉ
                                         </a>
                                     </section>
                                 </div>
 
                                 <div class="row">
-                                    <section class="col col-12">
+                                    <section class="col col-md-12">
                                         <div id="google-map"></div>
                                     </section>
                                 </div>
@@ -217,7 +215,7 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Số điện thoại chính" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i> Xin nhập Số điện thoại bàn chính của bệnh viện</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Xin nhập Số điện thoại bàn chính của bệnh viện</b>
                                         </label>
                                         <p class="note"><strong>Lưu ý:</strong> Không nhập khoảng trắng.</p>
                                     </section>
@@ -225,14 +223,14 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo2, new { @placeholder = "Số thay thế (nếu có)" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i> Nhập Số điện thoại bàn phụ (nếu có)</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Nhập Số điện thoại bàn phụ (nếu có)</b>
                                         </label>
                                     </section>
                                     <section class="col col-4">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo3, new { @placeholder = "Số di động (nếu có)" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i> Nhập Số di động (nếu có)</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Nhập Số di động (nếu có)</b>
                                         </label>
                                     </section>
                                 </div>
@@ -242,14 +240,14 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-envelope"></i>
                                             @Html.TextBoxFor(m => m.HospitalEmail, new { @placeholder = "Email bệnh viện", @type = "email" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-envelope txt-color-teal"></i> Xin nhập địa chỉ Email của bệnh viện</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-envelope txt-color-teal"></i>Xin nhập địa chỉ Email của bệnh viện</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-prepend fa fa-globe"></i>
                                             @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-globe txt-color-teal"></i> Nhập địa chỉ Website của bệnh viện. Ví dụ: http://www.benhvien.com</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-globe txt-color-teal"></i>Nhập địa chỉ Website của bệnh viện. Ví dụ: http://www.benhvien.com</b>
                                         </label>
                                     </section>
                                 </div>
@@ -259,7 +257,7 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-male"></i>
                                             @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm", @type = "email" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-male txt-color-teal"></i> Xin nhập Email của người chịu trách nhiệm</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-male txt-color-teal"></i>Xin nhập Email của người chịu trách nhiệm</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -274,16 +272,15 @@
                                 <div class="row">
                                     <section class="col col-8">
                                         <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
-                                             style="display: none;" id="loaderIconUser">
+                                            style="display: none;" id="loaderIconUser">
                                         <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
-                                             style="display: none;" id="validIconUser">
+                                            style="display: none;" id="validIconUser">
                                         <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
-                                             style="display: none;" id="invalidIconUser">
+                                            style="display: none;" id="invalidIconUser">
                                         <span id="user-message"></span>
                                         <a href="/Account/AddAccount"
-                                           data-toggle="modal" data-target="#addAccount"
-                                           id="add-new-user-button" style="display: none; float: right;">
-                                            Thêm mới người dùng
+                                            data-toggle="modal" data-target="#addAccount"
+                                            id="add-new-user-button" style="display: none; float: right;">Thêm mới người dùng
                                         </a>
                                     </section>
                                 </div>
@@ -356,7 +353,7 @@
 </section>
 
 <div class="modal fade" id="addAccount" tabindex="-1"
-     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content"></div>
     </div>
@@ -371,16 +368,16 @@
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
                 <!-- Widget ID (each widget will need unique ID)-->
                 <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
-                     data-widget-colorbutton="false"
-                     data-widget-editbutton="false"
-                     data-widget-togglebutton="false"
-                     data-widget-deletebutton="false"
-                     data-widget-fullscreenbutton="false"
-                     data-widget-custombutton="false"
-                     data-widget-collapsed="false"
-                     data-widget-sortable="false">
+                    data-widget-colorbutton="false"
+                    data-widget-editbutton="false"
+                    data-widget-togglebutton="false"
+                    data-widget-deletebutton="false"
+                    data-widget-fullscreenbutton="false"
+                    data-widget-custombutton="false"
+                    data-widget-collapsed="false"
+                    data-widget-sortable="false">
                     <header>
-                        <span class="widget-icon"> <i class="fa fa-pencil"></i> </span>
+                        <span class="widget-icon"><i class="fa fa-pencil"></i></span>
                         @*<h2>Thông tin bệnh viện</h2>*@
                     </header>
                     <!-- widget div-->
@@ -398,14 +395,14 @@
                             <div class="widget-footer smart-form">
                                 <div class="btn-group">
                                     <a class="btn btn-sm btn-primary"
-                                       id="save-button">
-                                        <i class="fa fa-check"></i> Lưu
+                                        id="save-button">
+                                        <i class="fa fa-check"></i>Lưu
                                     </a>
                                 </div>
                                 <div class="btn-group">
                                     <a class="btn btn-sm btn-success"
-                                       id="quit-button">
-                                        <i class="fa fa-times"></i> Thoát
+                                        id="quit-button">
+                                        <i class="fa fa-times"></i>Thoát
                                     </a>
                                 </div>
                             </div>
@@ -984,17 +981,13 @@
         var geocoder;
 
         // Display current location
-        function initializeMap(position) {
-            // Get current latitude and longitude
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            var currentLocation = new google.maps.LatLng(latitude, longitude);
-            geocoder = new google.maps.Geocoder();
+        function initializeMap() {
 
+            geocoder = new google.maps.Geocoder();
             // Initial map options
             var mapOptions = {
                 zoom: 11,
-                center: currentLocation,
+                center: new google.maps.LatLng('10.762622', '106.660172'),
                 mapTypeControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
@@ -1184,21 +1177,24 @@
             }
         });
     });
-    
+
 </script>
 
 <style>
-    #google-map {
-        height: 300px;
-        width: 687px;
+    #google-map
+    {
+        height: 400px;
+        width: 100%;
     }
 
-    .resizeIcon {
+    .resizeIcon
+    {
         width: 16px;
         height: auto;
     }
 
-    #dropZone {
+    #dropZone
+    {
         background: gray;
         border: black dashed 3px;
         width: 200px;
