@@ -37,6 +37,7 @@ namespace HospitalF.Controllers
             {
                 DataModel model = new DataModel();
                 int result = await model.ChangeServiceStatusAsync(serviceId);
+                TempData[Constants.ProcessStatusData] = result;
                 return Json(new { value = result }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
@@ -98,6 +99,12 @@ namespace HospitalF.Controllers
                 if (TempData[Constants.ProcessUpdateData] != null)
                 {
                     ViewBag.UpdateStatus = (int)TempData[Constants.ProcessUpdateData];
+                }
+
+                // Pass value of previous updating service status to view (if any)
+                if (TempData[Constants.ProcessStatusData] != null)
+                {
+                    ViewBag.ChangeStatus = (int)TempData[Constants.ProcessStatusData];
                 }
 
                 // Return value to view
