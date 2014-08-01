@@ -482,7 +482,7 @@ namespace HospitalF.Models
             {
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_NORMAL_SEARCH_HOSPITAL(whatPhrase.Trim().ToLower(),
-                         cityId, districtName.ToLower())
+                         cityId, (districtName != null ? districtName.ToLower() : null))
                      select new HospitalEntity()
                      {
                          Hospital_ID = h.Hospital_ID,
