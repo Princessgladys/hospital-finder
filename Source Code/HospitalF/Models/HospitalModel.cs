@@ -452,7 +452,7 @@ namespace HospitalF.Models
 
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                /*
+                
                 #region Load single hospital data
                 
                 model = await Task.Run(() =>
@@ -490,7 +490,7 @@ namespace HospitalF.Models
                      }).SingleOrDefault());
 
                 #endregion
-                */
+                
                 #region Load list of persons in charged
 
                 model.SelectedPersonInCharged = await Task.Run(() =>
