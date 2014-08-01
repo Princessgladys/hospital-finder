@@ -194,6 +194,44 @@
 
 <script type="text/javascript">
 
+    function setNotification(message, type) {
+        // Success
+        if (type == 1) {
+            notif({
+                msg: message,
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Warning
+        if (type == 2) {
+            notif({
+                msg: message,
+                type: "warning",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Error
+        if (type == 3) {
+            notif({
+                msg: message,
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+    }
+
     @*Display notification*@
     function displayAddNotification() {
         // Add hospital
@@ -204,24 +242,10 @@
 
             if (status != '0') {
                 $("#success-alert").show();
-                notif({
-                    msg: "Thêm mới chuyên ngành thành công",
-                    type: "success",
-                    width: 600,
-                    position: "center",
-                    fade: true,
-                    multiline: true
-                });
+                setNotification("Thêm mới chuyên ngành thành công", 1);
             } else {
                 $("#error-alert").show();
-                notif({
-                    msg: "Thêm mới chuyên ngành không thành công, xin hãy thử lại.",
-                    type: "error",
-                    width: 600,
-                    position: "center",
-                    fade: true,
-                    multiline: true
-                });
+                setNotification("Thêm mới chuyên ngành không thành công, xin hãy thử lại.", 3);
             }
         }
     }
@@ -236,24 +260,28 @@
 
             if (status != '0') {
                 $("#success-alert").show();
-                notif({
-                    msg: "Chỉnh sửa chuyên ngành thành công",
-                    type: "success",
-                    width: 600,
-                    position: "center",
-                    fade: true,
-                    multiline: true
-                });
+                setNotification("Chỉnh sửa chuyên ngành thành công", 1);
             } else {
                 $("#error-alert").show();
-                notif({
-                    msg: "Chỉnh sửa chuyên ngành không thành công, xin hãy thử lại.",
-                    type: "error",
-                    width: 600,
-                    position: "center",
-                    fade: true,
-                    multiline: true
-                });
+                setNotification("Chỉnh sửa chuyên ngành không thành công, xin hãy thử lại.", 3);
+            }
+        }
+    }
+
+     @*Display notification*@
+    function displayStatusNotification() {
+        // Change status
+        if ('@ViewBag.ChangeStatus' == '') {
+            return false;
+        } else {
+            var status = '@ViewBag.ChangeStatus';
+
+            if (status != '0') {
+                $("#success-alert").show();
+                setNotification("Thay đổi trạng thái thành công", 1);
+            } else {
+                $("#error-alert").show();
+                setNotification("Thay đổi trạng thái không thành công, xin hãy thử lại.", 3);
             }
         }
     }
@@ -263,6 +291,7 @@
         $("#speciality-table").tablesorter();
         displayAddNotification();
         displayUpdateNotification();
+        displayStatusNotification();
     });
 
     @*Update service status*@

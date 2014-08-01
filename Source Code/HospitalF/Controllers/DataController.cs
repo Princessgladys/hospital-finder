@@ -69,6 +69,8 @@ namespace HospitalF.Controllers
                     page = 1;
                 }
 
+                #region Load data
+
                 // Load list of service
                 List<SP_TAKE_SERVICE_AND_TYPEResult> serviceList =
                     new List<SP_TAKE_SERVICE_AND_TYPEResult>();
@@ -84,10 +86,9 @@ namespace HospitalF.Controllers
                     ViewBag.CurrentStatus = model.IsActive;
                 }
 
-                // Handle query string
-                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
-                queryString.Remove(Constants.PageUrlRewriting);
-                ViewBag.Query = queryString.ToString();
+                #endregion
+
+                #region Display notification
 
                 // Pass value of previous adding service to view (if any)
                 if (TempData[Constants.ProcessInsertData] != null)
@@ -106,6 +107,13 @@ namespace HospitalF.Controllers
                 {
                     ViewBag.ChangeStatus = (int)TempData[Constants.ProcessStatusData];
                 }
+
+                #endregion
+
+                // Handle query string
+                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
+                queryString.Remove(Constants.PageUrlRewriting);
+                ViewBag.Query = queryString.ToString();
 
                 // Return value to view
                 pagedServiceList = serviceList.ToPagedList(page.Value, Constants.PageSize);
@@ -261,6 +269,7 @@ namespace HospitalF.Controllers
             {
                 DataModel model = new DataModel();
                 int result = await model.ChangeFacilityStatusAsync(facilityId);
+                TempData[Constants.ProcessStatusData] = result;
                 return Json(new { value = result }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
@@ -292,6 +301,8 @@ namespace HospitalF.Controllers
                     page = 1;
                 }
 
+                #region Load data
+
                 // Load list of service
                 List<SP_TAKE_FACILITY_AND_TYPEResult> facilityList =
                     new List<SP_TAKE_FACILITY_AND_TYPEResult>();
@@ -307,10 +318,9 @@ namespace HospitalF.Controllers
                     ViewBag.CurrentStatus = model.IsActive;
                 }
 
-                // Handle query string
-                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
-                queryString.Remove(Constants.PageUrlRewriting);
-                ViewBag.Query = queryString.ToString();
+                #endregion
+
+                #region Display notification
 
                 // Pass value of previous adding facility to view (if any)
                 if (TempData[Constants.ProcessInsertData] != null)
@@ -323,6 +333,19 @@ namespace HospitalF.Controllers
                 {
                     ViewBag.UpdateStatus = (int)TempData[Constants.ProcessUpdateData];
                 }
+
+                // Pass value of previous updating service status to view (if any)
+                if (TempData[Constants.ProcessStatusData] != null)
+                {
+                    ViewBag.ChangeStatus = (int)TempData[Constants.ProcessStatusData];
+                }
+
+                #endregion
+
+                // Handle query string
+                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
+                queryString.Remove(Constants.PageUrlRewriting);
+                ViewBag.Query = queryString.ToString();   
 
                 // Return value to view
                 pagedFacilityList = facilityList.ToPagedList(page.Value, Constants.PageSize);
@@ -478,6 +501,7 @@ namespace HospitalF.Controllers
             {
                 DataModel model = new DataModel();
                 int result = await model.ChangeSpecialityStatusAsync(SpecialityId);
+                TempData[Constants.ProcessStatusData] = result;
                 return Json(new { value = result }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
@@ -505,6 +529,8 @@ namespace HospitalF.Controllers
                     page = 1;
                 }
 
+                #region Load data
+
                 // Load list of service
                 List<SP_TAKE_SPECIALITY_AND_TYPEResult> specialityList =
                     new List<SP_TAKE_SPECIALITY_AND_TYPEResult>();
@@ -519,10 +545,9 @@ namespace HospitalF.Controllers
                     ViewBag.CurrentStatus = model.IsActive;
                 }
 
-                // Handle query string
-                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
-                queryString.Remove(Constants.PageUrlRewriting);
-                ViewBag.Query = queryString.ToString();
+                #endregion
+
+                #region Display notification
 
                 // Pass value of previous adding facility to view (if any)
                 if (TempData[Constants.ProcessInsertData] != null)
@@ -535,6 +560,19 @@ namespace HospitalF.Controllers
                 {
                     ViewBag.UpdateStatus = (int)TempData[Constants.ProcessUpdateData];
                 }
+
+                // Pass value of previous updating service status to view (if any)
+                if (TempData[Constants.ProcessStatusData] != null)
+                {
+                    ViewBag.ChangeStatus = (int)TempData[Constants.ProcessStatusData];
+                }
+
+                #endregion
+
+                // Handle query string
+                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
+                queryString.Remove(Constants.PageUrlRewriting);
+                ViewBag.Query = queryString.ToString();
 
                 // Return value to view
                 pagedFacilityList = specialityList.ToPagedList(page.Value, Constants.PageSize);
