@@ -144,6 +144,25 @@ namespace HospitalF.Controllers
                 // Load list of disease
                 diseaseList = new List<Disease>();
                 ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
+
+                List<SelectListItem> locationTypeListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "2", Text = "Nhập vị trí"},
+                                                                    new SelectListItem {Value = "1", Text = "Vị trí hiện tại", }
+                                                                };
+                ViewBag.LocationTypeList = new SelectList(locationTypeListItem, "Value", "Text", 2);
+                List<SelectListItem> radiusListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "0.3", Text = "300 mét"},
+                                                                    new SelectListItem {Value = "0.5", Text = "500 mét"},
+                                                                    new SelectListItem {Value = "1", Text = "1 km"},
+                                                                    new SelectListItem {Value = "3", Text = "3 km"},
+                                                                    new SelectListItem {Value = "5", Text = "5 km"},
+                                                                    new SelectListItem {Value = "10", Text = "10 km"},
+                                                                    new SelectListItem {Value = "15", Text = "15 km"},
+                                                                    new SelectListItem {Value = "20", Text = "20 km"}
+                                                                };
+                ViewBag.RadiusList = new SelectList(radiusListItem, "Value", "Text", 0.3);
             }
             catch (Exception exception)
             {
@@ -167,21 +186,13 @@ namespace HospitalF.Controllers
             IPagedList<HospitalEntity> pagedHospitalList = null;
             try
             {
-                // Load hospital types from database
-                List<HospitalType> hospitalTypeList = null;
-                using (LinqDBDataContext data = new LinqDBDataContext())
-                {
-                    hospitalTypeList = await Task.Run(() => (from ht in data.HospitalTypes
-                                                             select ht).ToList());
-                }
-                ViewBag.HospitalTypes = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
-
                 // Indicate which button is clicked
-                var button = Request[Constants.Button];
+                string button = Request[Constants.Button];
 
                 // Normal search form
-                if ((button == null) || Constants.NormalSearchForm.Equals(button))
+                if ((string.IsNullOrEmpty(button)) || Constants.NormalSearchForm.Equals(button))
                 {
+                    ViewBag.SearchValue = model.SearchValue;
                     // Check if input search query is null or empty
                     if (!string.IsNullOrEmpty(model.SearchValue))
                     {
@@ -203,35 +214,75 @@ namespace HospitalF.Controllers
                 // Advanced search form
                 if (Constants.AdvancedSearchForm.Equals(button))
                 {
-                    // Search hospitals
+                    // Load list of cities
+                    cityList = await LocationUtil.LoadCityAsync();
+                    ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+                    // Load list of districts
+                    districtList = new List<District>();
+                    ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+                    // Load list of specialities
+                    specialityList = await SpecialityUtil.LoadSpecialityAsync();
+                    ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+                    // Load list of disease
+                    diseaseList = new List<Disease>();
+                    ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
+
+                    ViewBag.DiseaseName = model.DiseaseName;
                     hospitalList = await model.AdvancedSearchHospital(model.CityID, model.DistrictID,
                         model.SpecialityID, model.DiseaseName);
                     pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
+
+                    ViewBag.SearchType = Constants.AdvancedSearchForm;
                 }
 
                 // Location search form
                 if (Constants.LocationSearchForm.Equals(button))
                 {
+                    ViewBag.SearchType = Constants.LocationSearchForm;
+                    List<SelectListItem> locationTypeListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "2", Text = "Nhập vị trí"},
+                                                                    new SelectListItem {Value = "1", Text = "Vị trí hiện tại", }
+                                                                };
+                    ViewBag.LocationTypeList = new SelectList(locationTypeListItem, "Value", "Text", 2);
+                    List<SelectListItem> radiusListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "0.3", Text = "300 mét"},
+                                                                    new SelectListItem {Value = "0.5", Text = "500 mét"},
+                                                                    new SelectListItem {Value = "1", Text = "1 km"},
+                                                                    new SelectListItem {Value = "3", Text = "3 km"},
+                                                                    new SelectListItem {Value = "5", Text = "5 km"},
+                                                                    new SelectListItem {Value = "10", Text = "10 km"},
+                                                                    new SelectListItem {Value = "15", Text = "15 km"},
+                                                                    new SelectListItem {Value = "20", Text = "20 km"}
+                                                                };
+                    ViewBag.RadiusList = new SelectList(radiusListItem, "Value", "Text", 0.3);
+
                     // Search hospitals
                     double lat = 0;
                     double lng = 0;
                     WebClient client = new WebClient();
-                    if ("1".Equals(Request["LocationType"]))
+                    string coordinate = model.Coordinate;
+                    string position = model.Position;
+                    double radius = model.Radius;
+
+                    if (model.LocationType == 1)
                     {
-                        if (model.Coordinate != null)
+                        if (coordinate != null)
                         {
-                            if (model.Coordinate.Split(',').Length > 1)
+                            if (coordinate.Split(',').Length > 1)
                             {
-                                double.TryParse(model.Coordinate.Split(',')[0], out lat);
-                                double.TryParse(model.Coordinate.Split(',')[1], out lng);
+                                double.TryParse(coordinate.Split(',')[0], out lat);
+                                double.TryParse(coordinate.Split(',')[1], out lng);
                             }
                         }
                     }
-                    else if ("2".Equals(Request["LocationType"]))
+                    else if (model.LocationType == 2)
                     {
-                        if (!string.IsNullOrEmpty(model.Position))
+
+                        if (!string.IsNullOrEmpty(position))
                         {
-                            string geoJsonResult = client.DownloadString(string.Concat("http://maps.googleapis.com/maps/api/geocode/json?address=", model.Position));
+                            string geoJsonResult = client.DownloadString(string.Concat("http://maps.googleapis.com/maps/api/geocode/json?address=", position));
                             // Json.Net is really helpful if you have to deal
                             // with Json from .Net http://json.codeplex.com/
                             JObject geoJsonObject = JObject.Parse(geoJsonResult);
@@ -244,7 +295,7 @@ namespace HospitalF.Controllers
 
                     }
 
-                    hospitalList = await model.LocationSearchHospital(lat, lng, model.Radius * 1000);
+                    hospitalList = await HomeModels.LocationSearchHospital(lat, lng, radius * 1000);
                     pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
                     string distanceMatrixUrl = string.Concat("http://maps.googleapis.com/maps/api/distancematrix/json?origins=", lat, ",", lng, "&destinations=");
                     int index = 0;
@@ -263,9 +314,9 @@ namespace HospitalF.Controllers
                             hospital.Distance = dMatrixJsonObject["rows"].First["elements"].ElementAt(index++)["distance"].Value<double>("value");
                         }
 
-                        ViewBag.Position = lat + ", " + lng;
-                        ViewBag.Radius = model.Radius * 1000;
-                    }                   
+                        model.Coordinate = lat + ", " + lng;
+                    }
+
                 }
 
                 // Transfer list of hospitals to Search Result page
@@ -289,7 +340,7 @@ namespace HospitalF.Controllers
             }
 
             // Move to result page
-            return View();
+            return View(model);
         }
 
         /// <summary>
@@ -299,17 +350,33 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [HttpGet]
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> FilterResult(HomeModels model, FormCollection form)
+        public async Task<ActionResult> FilterResult(int searchType = 2, int page = 1)
         {
             try
             {
-
+                if (searchType == 1)
+                {
+                }
+                else if (searchType == 2)
+                {
+                    List<HospitalEntity> hospitalList = await HomeModels.LocationSearchHospital(10.8525022, 106.6226, 16000);
+                    List<HospitalEntity> filteredHospitalList = (from h in hospitalList
+                                                                 orderby h.Rating descending
+                                                                 select h).ToList<HospitalEntity>();
+                    IPagedList<HospitalEntity> pagedHospitalList = filteredHospitalList.ToPagedList(page, Constants.PageSize);
+                    ViewBag.HospitalList = pagedHospitalList;
+                    ViewBag.JsonHospitalList = JsonConvert.SerializeObject(pagedHospitalList);
+                }
+                else if (searchType == 3)
+                {
+                }
+                return View(Constants.SearchResultAction);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                Response.Write(ErrorMessage.SEM001);
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
-            return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
         }
 
         #endregion
@@ -359,22 +426,35 @@ namespace HospitalF.Controllers
         {
             try
             {
-                RecaptchaVerificationHelper recaptchaHelper = this.GetRecaptchaVerificationHelper();
-
-                if (String.IsNullOrEmpty(recaptchaHelper.Response))
+                if (Session["RATING_TIME"] == null)
                 {
-                    TempData["RateActionStatus"] = false;
-                    TempData["RateActionMessage"] = "Vui lòng nhập mã bảo mật bên dưới.";
-                    return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = id, redirect = "yes" });
+                    Session["RATING_TIME"] = 0;
                 }
 
-                RecaptchaVerificationResult recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
+                int ratingTime = (int)Session["RATING_TIME"];
+                Session["RATING_TIME"] = ++ratingTime;
 
-                if (recaptchaResult != RecaptchaVerificationResult.Success)
+                if (ratingTime > 3)
                 {
-                    TempData["RateActionStatus"] = false;
-                    TempData["RateActionMessage"] = "Vui lòng nhập lại mã bảo mật bên dưới.";
-                    return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = id, redirect = "yes" });
+                    RecaptchaVerificationHelper recaptchaHelper = this.GetRecaptchaVerificationHelper();
+
+                    if (String.IsNullOrEmpty(recaptchaHelper.Response))
+                    {
+                        TempData["RateActionStatus"] = false;
+                        TempData["RateActionMessage"] = "Vui lòng nhập mã bảo mật bên dưới.";
+
+                        return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = id, redirect = "yes" });
+                    }
+
+                    RecaptchaVerificationResult recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
+
+                    if (recaptchaResult != RecaptchaVerificationResult.Success)
+                    {
+                        TempData["RateActionStatus"] = false;
+                        TempData["RateActionMessage"] = "Vui lòng nhập lại mã bảo mật bên dưới.";
+
+                        return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = id, redirect = "yes" });
+                    }
                 }
 
                 string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
@@ -397,5 +477,6 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
+
     }
 }

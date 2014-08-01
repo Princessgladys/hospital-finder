@@ -91,48 +91,63 @@
                                         alertDisplayMode = "block";
                                     }
                                 }
+
+                                if (Session["RATING_TIME"] == null)
+                                {
+                                    Session["RATING_TIME"] = 0;
+                                }
+                                
                             }
-                            <div class="alert alert-info fade in" style="display: none;">
-                                <button class="close">
-                                    ×
-                                </button>
-                                <i class="fa-fw fa fa-check"></i>
-                                Vui lòng <strong><a href="#" class="fb-login" style="color: #296191 !important;">đăng nhập</a></strong> và 
-                                         <strong style="color: #296191 !important;">chọn mức đánh giá</strong> để tiến hành đánh giá.
-                            </div>
-                            <div class="alert alert-success fade in" style="display: @(successDisplayMode);">
-                                <button class="close">
-                                    ×
-                                </button>
-                                <i class="fa-fw fa fa-check"></i>
-                                <strong>Đã bình chọn</strong> Cám ơn bạn đã tham gia đánh giá.
-                            </div>
-                            <div class="alert alert-danger fade in" style="display: @(alertDisplayMode);">
-                                <button class="close">
-                                    ×
-                                </button>
-                                <i class="fa-fw fa fa-times"></i>
-                                <strong>Lỗi!</strong> @(ViewBag.RateActionMessage)
-                            </div>
                             @using (Html.BeginForm(Constants.RateHospitalAction, Constants.HomeController, FormMethod.Post, new { @onsubmit = "return checkVoteForm()" }))
                             {
                                 <fieldset>
-                                    <legend>Bạn có hài lòng với dịch vụ của bệnh viện? Mong bạn dành ít phút để giúp chúng tôi đánh giá bệnh viện này.</legend>
-                                    <div class="display-inline">
-                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tạm Được" value="1" />
-                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Được" value="2"/>
-                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tốt" value="3"/>
-                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Rất Tốt" value="4"/>
-                                        <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tuyệt Vời" value="5"/>
+                                    <legend>Bạn có hài lòng với dịch vụ của bệnh viện?</legend>
+                                    <div class="alert alert-info fade in" style="display: none;">
+                                        <button class="close">
+                                            ×
+                                        </button>
+                                        <i class="fa-fw fa fa-check"></i>
+                                        Vui lòng <strong style="color: #296191 !important;">chọn mức đánh giá</strong> để tiến hành đánh giá.
                                     </div>
-                                    <strong id="rate-tip"></strong>
-                                    <input id="hospital-id" type="hidden" name="id" value="@(hospital.Hospital_ID)" />
-                                    <input id="score" type="hidden" name="score" value="0" />
-                                    <br />
-                                    @Html.Recaptcha(language: "vi")
+                                    <div class="alert alert-success fade in" style="display: @(successDisplayMode);">
+                                        <button class="close">
+                                            ×
+                                        </button>
+                                        <i class="fa-fw fa fa-check"></i>
+                                        <strong>Đã bình chọn</strong> Cám ơn bạn đã tham gia đánh giá.
+                                    </div>
+                                    <div class="alert alert-danger fade in" style="display: @(alertDisplayMode);">
+                                        <button class="close">
+                                            ×
+                                        </button>
+                                        <i class="fa-fw fa fa-times"></i>
+                                        <strong>Lỗi!</strong> @(ViewBag.RateActionMessage)
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>Mức đánh giá</strong></label>
+                                        <br />
+                                        <div class="display-inline">
+                                            <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tạm Được" value="1" />
+                                            <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Được" value="2"/>
+                                            <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tốt" value="3"/>
+                                            <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Rất Tốt" value="4"/>
+                                            <input name="star_@(hospital.Hospital_ID)" type="radio" class="hover-star" title="Tuyệt Vời" value="5"/>
+                                        </div>
+                                        <strong id="rate-tip" class="txt-color-blue"></strong>
+                                        <input id="hospital-id" type="hidden" name="id" value="@(hospital.Hospital_ID)" />
+                                        <input id="score" type="hidden" name="score" value="0" />
+                                    </div>
+
+                                    @if (((int)Session["RATING_TIME"]) > 2)
+                                    {
+                                        <div class="form-group">
+                                            <label><strong class="txt-color-red">Vui lòng nhập mã bảo mật bên dưới</strong></label>
+                                            @Html.Recaptcha(language: "vi")
+                                        </div>          
+                                    }
                                 </fieldset>
                                 <footer>
-                                    <button class="btn btn-primary" type="submit">
+                                    <button class="btn btn-primary @(string.IsNullOrEmpty(User.Identity.Name) ? "fb-login" : string.Empty)" type="submit">
                                         <i class="fa fa-check"></i>&nbsp;Bình Chọn
                                     </button>
                                 </footer>
@@ -301,6 +316,8 @@
         </div>
         <div class="col-md-12">
             <hr />
+            <div class="fb-like" data-href="@(url)" data-layout="standard" data-action="recommend" data-show-faces="true" data-share="true"></div>
+            <hr />
             <div class="fb-comments" data-href="@(url)" data-colorscheme="light" data-numposts="10" data-width="100%">
             </div>
         </div>
@@ -433,20 +450,20 @@
         google.maps.event.addDomListener(window, 'load', initializeMap);
 
         // ------------------------------------------------------------------------
-
+        var startLocationMarker;
+        var rendererOptions = {
+            suppressMarkers: true
+        };
+        var directionsService = new google.maps.DirectionsService();
+        var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
         function calcRoute() {
             var _resultPanel = $('#directions-panel');
             var userlocation = document.getElementById("origin").value;
             if (!userlocation) {
                 _resultPanel.html('<div><p><strong>Vui lòng nhập địa điểm xuất phát.<strong></p></div>');
             } else {
-                var rendererOptions = {
-                    suppressMarkers: true
-                };
-
-                var directionsService = new google.maps.DirectionsService();
-                var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-
+                _resultPanel.html('<img src="../Content/img/loading-backup.gif"/>');
+                
                 var request = {
                     origin: userlocation,
                     destination: '@(hospital.Address)',
@@ -459,7 +476,10 @@
                     if (status == google.maps.DirectionsStatus.OK) {
                         _resultPanel.empty();
                         // change start and end icons on map
-                        var marker = new google.maps.Marker({
+                        if (startLocationMarker != null) {
+                            startLocationMarker.setMap(null);
+                        }
+                        startLocationMarker = new google.maps.Marker({
                             position: response.routes[0].legs[0].start_location,
                             map: map,
                             draggable: false,
@@ -467,23 +487,24 @@
                             animation: google.maps.Animation.DROP
                         });
 
-                        google.maps.event.addListener(marker, 'click', function () {
-                            map.panTo(marker.getPosition());
+                        google.maps.event.addListener(startLocationMarker, 'click', function () {
+                            map.panTo(startLocationMarker.getPosition());
                         });
 
-                        google.maps.event.addListener(marker, 'mouseover', function () {
-                            toggleBounce(marker);
+                        google.maps.event.addListener(startLocationMarker, 'mouseover', function () {
+                            toggleBounce(startLocationMarker);
                         });
 
-                        google.maps.event.addListener(marker, 'mouseout', function () {
-                            toggleBounce(marker);
+                        google.maps.event.addListener(startLocationMarker, 'mouseout', function () {
+                            toggleBounce(startLocationMarker);
                         });
 
                         directionsDisplay.setMap(map);
                         directionsDisplay.setDirections(response);
                         directionsDisplay.setPanel(document.getElementById('directions-panel'));
                     } else {
-
+                        _resultPanel.empty();
+                        _resultPanel.html('<div><p><strong>Vui lòng nhập địa điểm xuất phát khác.<strong></p></div>');
                     }
                 });
             }
@@ -504,9 +525,12 @@
     function checkVoteForm() {
         var check = $('#score').val() > 0;
         if (!check) {
-            $('.alert-info').show();
-            $('.alert-success').hide();
-            $('.alert-danger').hide();
+            var user = '@(User.Identity.Name.Split(Char.Parse(Constants.Minus))[0])';
+            if (user) {
+                $('.alert-info').show();
+                $('.alert-success').hide();
+                $('.alert-danger').hide();
+            }
         }
         return check;
     }
@@ -527,11 +551,7 @@
             },
             callback: function (value, link) {
                 var user = '@(User.Identity.Name.Split(Char.Parse(Constants.Minus))[0])';
-                if (!user) {
-                    $('.alert-info').show();
-                    $('.alert-success').hide();
-                    $('.alert-danger').hide();
-                } else {
+                if (user) {
                     $('#score').val(value);
                 }
             }

@@ -59,10 +59,7 @@
                             <label class="label col col-2">Tìm theo</label>
                             <section class="col col-4">
                                 <label class="select">
-                                    <select class="form-control" id="LocationType" name="LocationType">
-                                        <option value="2" selected>Nhập vị trí</option>
-                                        <option value="1">Vị trí hiện tại</option>
-                                    </select>
+                                    @Html.DropDownListFor(m => m.LocationType, (SelectList)ViewBag.LocationTypeList, new { @class = "form-control"}) 
                                     <i></i>
                                 </label>
                             </section>
@@ -78,16 +75,7 @@
                             <label class="label col col-2">Bán kính</label>
                             <section class="col col-4">
                                 <label class="select">
-                                    <select class="form-control" id="Radius" name="Radius">
-                                        <option value="0.3">300 m</option>
-                                        <option value="0.5">500 m</option>
-                                        <option value="1">1 km</option>
-                                        <option value="2">2 km</option>
-                                        <option value="5">5 km</option>
-                                        <option value="10">10 km</option>
-                                        <option value="16">16 km</option>
-                                        <option value="20">20 km</option>
-                                    </select>
+                                    @Html.DropDownListFor(m => m.Radius, (SelectList)ViewBag.RadiusList, new { @class = "form-control"}) 
                                     <i></i>
                                 </label>
                             </section>
@@ -161,6 +149,8 @@
             </div>
 
         </div>
+        <hr />
+        <div class="fb-like" data-href="http://www.timkiembenhvien.com" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
     </div>
 </div>
 

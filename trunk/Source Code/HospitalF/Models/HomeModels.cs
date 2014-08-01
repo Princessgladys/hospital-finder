@@ -108,6 +108,11 @@ namespace HospitalF.Models
         /// </summary>
         public string WhatPhrase { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property WhatPhrase
+        /// </summary>
+        public int LocationType { get; set; }
+
         #endregion
 
         #region GIR Query Analyzer
@@ -564,7 +569,7 @@ namespace HospitalF.Models
         /// <param name="longitude">Longitude</param>
         /// <param name="distance">Distance between 2 locations</param>
         /// <returns>List[HospitalEntity] that contains a list of Hospitals</returns>
-        public async Task<List<HospitalEntity>> LocationSearchHospital(double latitude, double longitude, double distance)
+        public static async Task<List<HospitalEntity>> LocationSearchHospital(double latitude, double longitude, double distance)
         {
             List<HospitalEntity> hospitalList = null;
 
@@ -579,8 +584,11 @@ namespace HospitalF.Models
                          Hospital_Name = h.Hospital_Name,
                          Address = h.Address,
                          Ward_ID = h.Ward_ID,
+                         Ward_Name = h.Ward_Name,
                          District_ID = h.District_ID,
+                         District_Name = h.District_Name,
                          City_ID = h.City_ID,
+                         City_Name = h.City_Name,
                          Phone_Number = h.Phone_Number,
                          Fax = h.Fax,
                          Email = h.Email,
@@ -684,6 +692,7 @@ namespace HospitalF.Models
             return services;
 
         }
+        
         #endregion
     }
 }
