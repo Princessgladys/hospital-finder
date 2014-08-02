@@ -67,7 +67,7 @@
                 data-widget-sortable="false">
                 <header>
                     <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                    @*<h2>Thông tin bệnh viện</h2>*@
+                    <h2>Thông tin bệnh viện</h2>
                 </header>
                 <!-- widget div-->
                 <div>
@@ -346,7 +346,7 @@
                                 <div class="row">
                                     <div class="form-group">
                                         <label><strong>Từ khóa tìm kiếm</strong></label>
-                                        @*<input class="form-control tagsinput" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput">*@
+                                        <input class="form-control tagsinput" value="Amsterdam" data-role="tagsinput">
                                         <div class="note">
                                             <strong>Chỉ dẫn:</strong> Từ khóa tìm kiếm giúp tối ưu hóa khả năng tìm kiếm của hệ thống.
                                         </div>
@@ -354,17 +354,21 @@
                                 </div>
                             </fieldset>
                             
-                            <div class="dropzone dropzone-previews" id="my-awesome-dropzone"></div>
-
+                            <fieldset>
+                                <legend>Hình ảnh</legend>
+                                <div class="dropzone dropzone-previews" id="my-awesome-dropzone"></div>
+                            </fieldset>
+                            
+                            <fieldset>
+                                <legend>Miêu tả</legend>
+                                <div id="summernote"></div>
+                            </fieldset>
+                            
                             <footer>
                                 <button class="btn" type="reset">
                                     <i class="fa fa-refresh"></i>&nbsp;
                                     Nhập lại
                                 </button>
-                                <a class="btn btn-sm btn-success btn-next" id="edit-description">
-                                    <i class="fa fa-edit"></i>&nbsp;
-                                    Thay đổi thông tin bệnh viện
-                                </a>
                                 <button class="btn btn-primary" type="submit" id="confirm-button">
                                     <i class="fa fa-save"></i>&nbsp;
                                     Xác nhận
@@ -389,67 +393,6 @@
     <div class="modal-dialog">
         <div class="modal-content"></div>
     </div>
-</div>
-
-<div id="partial-description" style="display: none">
-    <!-- widget grid -->
-    <section id="widget-grid" class="">
-        <!-- row -->
-        <div class="row">
-            <!-- NEW WIDGET START -->
-            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
-                <!-- Widget ID (each widget will need unique ID)-->
-                <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
-                    data-widget-colorbutton="false"
-                    data-widget-editbutton="false"
-                    data-widget-togglebutton="false"
-                    data-widget-deletebutton="false"
-                    data-widget-fullscreenbutton="false"
-                    data-widget-custombutton="false"
-                    data-widget-collapsed="false"
-                    data-widget-sortable="false">
-                    <header>
-                        <span class="widget-icon"><i class="fa fa-pencil"></i></span>
-                        @*<h2>Thông tin bệnh viện</h2>*@
-                    </header>
-                    <!-- widget div-->
-                    <div>
-                        <!-- widget edit box -->
-                        <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-                        </div>
-                        <!-- end widget edit box -->
-                        <!-- widget content -->
-                        <div class="widget-body no-padding">
-
-                            <div id="summernote"></div>
-
-                            <div class="widget-footer smart-form">
-                                <div class="btn-group">
-                                    <a class="btn btn-sm btn-primary"
-                                        id="save-button">
-                                        <i class="fa fa-check"></i>Lưu
-                                    </a>
-                                </div>
-                                <div class="btn-group">
-                                    <a class="btn btn-sm btn-success"
-                                        id="quit-button">
-                                        <i class="fa fa-times"></i>Thoát
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end widget content -->
-                    </div>
-                    <!-- end widget div -->
-                </div>
-                <!-- end widget -->
-            </article>
-            <!-- WIDGET END -->
-        </div>
-        <!-- end row -->
-    </section>
-    <!-- end widget grid -->
 </div>
 
 <script type="text/javascript">
@@ -1159,32 +1102,7 @@
             height: 400,
             minHeight: null,
             maxHeight: null,
-            focus: true,
-            onImageUpload: function (files, editor, $editable) {
-
-            }
-        });
-
-        $('#quit-button').click(function () {
-            if (confirm('Lưu thông tin trước khi thoát, mọi thông tin chưa lưu sẽ không có hiệu lực!')) {
-                $('#summernote').destroy();
-                $("#partial-description").hide();
-            } else {
-                return false;
-            }
-        });
-
-        $('#save-button').click(function () {
-            var a = $('#summernote').code();
-
-            $("#FullDescription").val($('#summernote').code());
-            notif({
-                msg: "Lưu thông tin thành công.",
-                type: "success",
-                position: "center",
-                fade: true,
-                multiline: true
-            });
+            focus: false
         });
     });
 
