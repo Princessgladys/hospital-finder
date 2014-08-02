@@ -80,6 +80,7 @@
                                 <legend>Thông tin căn bản</legend>
                                 <div class="row">
                                     <section class="col col-6">
+                                        <label class="label">Tên bệnh viện <font color="red">*</font></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-home"></i>
                                             @Html.TextBoxFor(m => m.HospitalName, new { @placeholder = "Tên bệnh viện" })
@@ -87,6 +88,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
+                                        <label class="label">Loại bệnh viện <font color="red">*</font></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.HospitalTypeList,
@@ -98,6 +100,7 @@
 
                                 <div class="row">
                                     <section class="col col-6">
+                                        <label class="label">Giờ khám ngày thường <font color="red">*</font></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.OrdinaryStartTime, new { @placeholder = "Giờ khám ngày thường", @id = "OrdinaryTime" })
@@ -106,6 +109,7 @@
                                         <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
                                     </section>
                                     <section class="col col-6">
+                                        <label class="label">Giờ khám ngày lễ và cuối tuần <font color="red">*</font></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.HolidayStartTime, new { @placeholder = "Giờ khám ngày lễ và cuối tuần", @id = "HolidayTime" })
@@ -136,6 +140,7 @@
                                 <legend>Địa chỉ</legend>
                                 <div class="row">
                                     <section class="col col-6">
+                                        <label class="label">Số địa chỉ <font color="red">*</font></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-building"></i>
                                             @Html.TextBoxFor(m => m.LocationAddress, new { @placeholder = "Số địa chỉ" })
@@ -143,6 +148,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
+                                        <label class="label">Tên đường <font color="red">*</font></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-truck"></i>
                                             @Html.TextBoxFor(m => m.StreetAddress, new { @placeholder = "Tên đường" })
@@ -153,6 +159,7 @@
 
                                 <div class="row">
                                     <section class="col col-4">
+                                        <label class="label">Tỉnh / thành phố <font color="red">*</font></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
@@ -161,6 +168,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-4">
+                                        <label class="label">Quận / Huyện / Thị xã <font color="red">*</font></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
@@ -169,6 +177,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-4">
+                                        <label class="label">Phường / Xã <font color="red">*</font></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.WardID, (SelectList)ViewBag.WardList,
@@ -179,6 +188,7 @@
                                 </div>
 
                                 <section>
+                                    <label class="label">Địa chỉ đầy đủ</label>
                                     <label class="input">
                                         <i class="icon-prepend fa fa-location-arrow"></i>
                                         @Html.TextBoxFor(m => m.FullAddress, new { @placeholder = "Địa chỉ đầy đủ", @disabled = "disabled" })
@@ -214,6 +224,7 @@
                                 <legend>Thông tin liên lạc</legend>
                                 <div class="row">
                                     <section class="col col-4">
+                                        <label class="label">Số điện thoại chính <font color="red">*</font></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Số điện thoại chính" })
@@ -222,6 +233,7 @@
                                         <p class="note"><strong>Lưu ý:</strong> Không nhập khoảng trắng.</p>
                                     </section>
                                     <section class="col col-4">
+                                        <label class="label">Số điện thoại thay thế</label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo2, new { @placeholder = "Số thay thế (nếu có)" })
@@ -229,6 +241,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-4">
+                                        <label class="label">Di động</label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo3, new { @placeholder = "Số di động (nếu có)" })
@@ -239,6 +252,7 @@
 
                                 <div class="row">
                                     <section class="col col-6">
+                                        <label class="label">Email bệnh viện</label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-envelope"></i>
                                             @Html.TextBoxFor(m => m.HospitalEmail, new { @placeholder = "Email bệnh viện", @type = "email" })
@@ -246,6 +260,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
+                                        <label class="label">Trang web bệnh viện</label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-globe"></i>
                                             @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
@@ -256,6 +271,7 @@
 
                                 <div class="row">
                                     <section class="col col-6">
+                                        <label class="label">Người chịu trách nhiệm chính <font color="red">*</font></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-male"></i>
                                             @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm", @type = "email" })
@@ -263,6 +279,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
+                                        <label class="label">Số fax bệnh viện</label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-fax"></i>
                                             @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax của bệnh viện" })
