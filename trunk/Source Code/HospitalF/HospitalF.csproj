@@ -247,6 +247,7 @@
     <Content Include="Content\css\bootstrap-image-gallery-demo.css" />
     <Content Include="Content\css\bootstrap-image-gallery.css" />
     <Content Include="Content\css\bootstrap-image-gallery.m.css" />
+    <Content Include="Content\css\bootstrap-taginput\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap.m.css" />
     <Content Include="Content\css\custom-home.css" />
     <Content Include="Content\css\custom-hospital.css" />
@@ -352,6 +353,7 @@
     <Content Include="Content\js\notification\notifIt.js" />
     <Content Include="Content\js\notification\SmartNotification.min.js" />
     <Content Include="Content\js\plugin\bootstrap-slider\bootstrap-slider.min.js" />
+    <Content Include="Content\js\plugin\bootstrap-taginput\bootstrap-tagsinput.js" />
     <Content Include="Content\js\plugin\bootstrap-timepicker\bootstrap-timepicker.min.js" />
     <Content Include="Content\js\plugin\bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="Content\js\plugin\confirm\jquery.confirm.js" />
