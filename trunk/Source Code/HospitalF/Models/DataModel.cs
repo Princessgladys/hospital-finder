@@ -155,7 +155,7 @@ namespace HospitalF.Models
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
-                    data.SP_UPDATE_SERVICE(model.ServiceID, model.ServiceName, model.TypeID));
+                    data.SP_UDPATE_SERVICE(model.ServiceID, model.ServiceName, model.TypeID));
             }
         }
 
