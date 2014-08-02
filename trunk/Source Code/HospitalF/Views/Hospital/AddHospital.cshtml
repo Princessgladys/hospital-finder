@@ -478,13 +478,13 @@
                     data: { "email": email },
                     success: function (data) {
                         if (data.value == 1) {
-                            setUserNotificationMessage("Người chịu trách nhiệm hợp lệ.", 1);
+                            setUserNotificationMessage("@ErrorMessage.CEM019", 1);
                         }
                         if (data.value == 2) {
-                            setUserNotificationMessage("Người dùng hiện đang chịu trách nhiệm một bệnh viện khác.", 0);
+                            setUserNotificationMessage("@ErrorMessage.CEM020", 0);
                         }
                         if (data.value == 0) {
-                            setUserNotificationMessage("Người dùng không tồn tại trong hệ thống.", 0);
+                            setUserNotificationMessage("@ErrorMessage.CEM021", 0);
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -573,8 +573,11 @@
 
         @*Check if coordinate has been changed*@
         $("#Coordinate").change(function () {
-            if ($("#address-message").text() == "Xin hãy chọn địa điểm bệnh viện trên bản đồ.") {;
-                setAddressNotificationMessage("Địa điểm đã được xác định", 1);
+            if ($("#address-message").text() == '@ErrorMessage.CEM014') {;
+                $("#loaderIcon").hide();
+                $("#validIcon").show();
+                $("#invalidIcon").hide();
+                $("#address-message").text(@ErrorMessage.CEM018);
             }
         });
     });
@@ -619,23 +622,23 @@
         // Check if hospital is valid
         var hospitalName = $("#HospitalName").val();
         if (locationAddress == "") {
-            setAddressNotificationMessage("Thiếu thông tin Địa chỉ.", 0);
+            setAddressNotificationMessage('@ErrorMessage.CEM015', 0);
             return false;
         }
         if (streetAddress == "") {
-            setAddressNotificationMessage("Thiếu thông tin Tên đường.", 0);
+            setAddressNotificationMessage("@ErrorMessage.CEM028", 0);
             return false;
         }
         if (city == "") {
-            setAddressNotificationMessage("Thiếu thông tin Tỉnh / thành phố.", 0);
+            setAddressNotificationMessage("@ErrorMessage.CEM029", 0);
             return false;
         }
         if (district == "") {
-            setAddressNotificationMessage("Thiếu thông tin Quận / huyện.", 0);
+            setAddressNotificationMessage("@ErrorMessage.CEM030", 0);
             return false;
         }
         if (district == "") {
-            setAddressNotificationMessage("Thiếu thông tin Phường / xã.", 0);
+            setAddressNotificationMessage("@ErrorMessage.CEM031", 0);
             return false;
         }
 
@@ -656,15 +659,15 @@
                 },
                 success: function (data) {
                     if (data.value == 1) {
-                        setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
+                        setAddressNotificationMessage('@ErrorMessage.CEM016', 1);
                     } else {
-                        setAddressNotificationMessage("Địa chỉ trùng lắp với bệnh viện khác.", 0);
+                        setAddressNotificationMessage('@ErrorMessage.CEM017', 0);
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     $("#invalidIcon").show();
-                    $("#address-message").text("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.");
-                    setNotification("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.", 2);
+                    $("#address-message").text("@ErrorMessage.CEM022");
+                    setNotification("@ErrorMessage.CEM022", 2);
                 }
             });
             return false;
@@ -714,54 +717,38 @@
     @*Data validation*@
     $(document).ready(function () {
         $('#confirm-button').click(function (e) {
-            var city = "";
-            if (($('#CityID').val() != null) && ($('#CityID').val() != '')) {
-                city = ", " + $("#CityID option:selected").text();
-            }
-            var district = "";
-            if (($('#DistrictID').val() != null) && ($("#DistrictID").val() != '')) {
-                district = ", " + $("#DistrictID option:selected").text();
-            }
-            var ward = "";
-            if (($('#WardID').val() != null) && ($("#WardID").val() != '')) {
-                ward = ", " + $("#WardID option:selected").text();
-            }
-            var locationAddress = $("#LocationAddress").val();
-            var streetAddress = $("#StreetAddress").val();
-            var fullAddress = $("#FullAddress").val();
-
-            if ((locationAddress == "") ||
-            (streetAddress == "") || (city == "") ||
-            (district == "") || (ward == "")) {
+            if ($("#address-message").text() == "@ErrorMessage.CEM017") {
                 $("#LocationAddress").focus();
-                setNotification("Thiếu thông tin địa chỉ.", 2);
+                setNotification("@ErrorMessage.CEM017", 2);
                 return false;
-            } else if ($("#address-message").text() == "Địa chỉ trùng lắp với bệnh viện khác.") {
-                $("#LocationAddress").focus();
-                setNotification("Địa chỉ trùng lắp với bệnh viện khác.", 2);
+            }
+
+            if ($("#invalidIconUser").is(":visible")) {
+                $("#PersonInCharged").focus();
+                setNotification("Người chịu trách nhiệm không phù hợp.", 2);
+                $("#PersonInCharged").focus();
                 return false;
             }
 
             var coordinate = $("#Coordinate").val();
             if (coordinate.trim() == "") {
-                setAddressNotificationMessage("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 0);
-                setNotification("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 2);
-                $("google-map").focus();
+                $("#loaderIcon").hide();
+                $("#validIcon").hide();
+                $("#invalidIcon").show();
+                $("#address-message").text('@ErrorMessage.CEM014');
+                setNotification('@ErrorMessage.CEM014', 2);
+                $('html, body').animate({ scrollTop: $('#FullAddress').offset().top }, 'fast');
                 return false;
-            } else if ($("#invalidIconUser").is(":visible")) {
-                $("#PersonInCharged").focus();
-                setNotification("Người chịu trách nhiệm không phù hợp", 2);
-                $("#PersonInCharged").focus();
-            } else {
-                var dz = Dropzone.forElement("#my-awesome-dropzone");
-                if (dz.getQueuedFiles().length > 0) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    dz.processQueue();
-                }
-                $("#FullDescription").val($('#summernote').code());
-                $('#addHospitalForm').submit();
             }
+
+            var dz = Dropzone.forElement("#my-awesome-dropzone");
+            if (dz.getQueuedFiles().length > 0) {
+                e.preventDefault();
+                e.stopPropagation();
+                dz.processQueue();
+            }
+            $("#FullDescription").val($('#summernote').code());
+            $('#addHospitalForm').submit();
         });
 
         $.validator.addMethod("time",
@@ -778,23 +765,23 @@
                 }
 
                 return false;
-            }, "Thời gian không phù hợp.");
+            }, "@ErrorMessage.CEM023");
 
         $.validator.addMethod("locationAddress",
             function (value, element) {
                 return /^[a-zA-Z0-9/]*$/.test(value);
-            }, "Giá trị không được chứa khoảng trắng và ký tự đặc biệt.");
+            }, "@ErrorMessage.CEM024");
 
         $.validator.addMethod("phone",
             function (value, element) {
                 return /^[0-9()]*$/.test(value);
-            }, "Số điện thoại không phù hợp.");
+            }, "@string.Format(ErrorMessage.CEM005, Constants.Email)");
 
         $.validator.addMethod("notEqual",
             function (value, element, param) {
                 var a = param;
                 return this.optional(element) || value != $(param).val();
-            }, "Email phụ không được trùng với Email chính.");
+            }, "@ErrorMessage.CEM025");
 
         $('#addHospitalForm').validate({
             // Rules for form validation
@@ -845,6 +832,7 @@
                     email: true
                 },
                 PersonInCharged: {
+                    required: true,
                     email: true
                 },
                 Website: {
@@ -911,6 +899,7 @@
                     email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
                 },
                 PersonInCharged: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.PersonInCharged)',
                     email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
                 },
                 Website: {
@@ -943,7 +932,7 @@
             navigator.geolocation.getCurrentPosition(initializeMap);
         }
         else {
-            setNotification("Trình duyệt không hỗ trợ xác định vị trí.", 2);
+            setNotification("@ErrorMessage.CEM026", 2);
         }
 
         // Declare marker - Make it global so only one marker can be created
@@ -995,13 +984,13 @@
         // Press button get location from address
         $("#button-get-loction").click(function () {
             if ($("#FullAddress").val().trim() == "") {
-                setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+                setAddressNotificationMessage('@ErrorMessage.CEM015', 0);
                 $("#LocationAddress").focus();
                 return false;
             }
 
-            if (($("#address-message").text() == "Địa chỉ phù hợp.") ||
-                ($("#address-message").text() == "Xin hãy chọn địa điểm bệnh viện trên bản đồ.")) {
+            if (($("#address-message").text() == '@ErrorMessage.CEM016') ||
+                ($("#address-message").text() == '@ErrorMessage.CEM014')) {
                 getCoordinateFromAddress();
             }
             return false;
@@ -1032,7 +1021,7 @@
             $("#loaderIcon").show();
             $("#validIcon").hide();
             $("#invalidIcon").hide();
-            $("#address-message").text("Đang xử lý thông tin.");
+            $("#address-message").text("@ErrorMessage.CEM027");
 
             // Take full address
             var address = $("#FullAddress").val();
@@ -1069,30 +1058,14 @@
                     $('#Coordinate').val(currentCoordinate).trigger('change');
 
                     // Display message
-                    setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
+                    setAddressNotificationMessage('@ErrorMessage.CEM016', 1);
                 } else {
-                    setAddressNotificationMessage("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 0);
-                    setNotification("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 2);
+                    setAddressNotificationMessage("@ErrorMessage.CEM032", 0);
+                    setNotification("@ErrorMessage.CEM032", 2);
                 }
             });
             return false;
         }
-    });
-
-    @*Hopsital description*@
-    $(document).ready(function () {
-        $('#edit-description').click(function () {
-            if ($("#partial-description").is(":visible")) {
-                if (confirm('Lưu thông tin trước khi thoát, mọi thông tin chưa lưu sẽ không có hiệu lực!')) {
-                    $('.summernote').destroy();
-                    $("#partial-description").hide();
-                } else {
-                    return false;
-                }
-            } else {
-                $("#partial-description").show();
-            }
-        });
     });
 
     @*Summer note*@
@@ -1114,7 +1087,7 @@
             maxFiles: 10,
             parallelUploads: 10,
             maxfilesexceeded: function (file) {
-                setNotification("Không thể tải nhiều hơn 10 hình.", 2);
+                setNotification("@string.Format(@ErrorMessage.CEM033, 10.ToString())", 2);
             },
             maxFilesize: 5,
             acceptedFiles: "image/jpeg,image/png,image/jpg,image/gif",

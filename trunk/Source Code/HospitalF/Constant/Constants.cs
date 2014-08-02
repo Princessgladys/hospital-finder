@@ -538,6 +538,11 @@ namespace HospitalF.Constant
         public const string MobilePhone = "Số di động";
 
         /// <summary>
+        /// Vietnames name of property PersonInCharged
+        /// </summary>
+        public const string PersonInCharged = "Người chịu trách nhiệm";
+
+        /// <summary>
         /// Vietnames name of property Doctor
         /// </summary>
         public const string Doctor = "Bác sĩ";
