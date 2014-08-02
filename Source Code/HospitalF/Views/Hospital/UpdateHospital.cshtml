@@ -1001,9 +1001,6 @@
             });
         }
 
-        // Load initial options on loading event
-        google.maps.event.addDomListener(window, 'load', initializeMap);
-
         // Press button get location from address
         $("#button-get-loction").click(function () {
             if ($("#FullAddress").val().trim() == "") {

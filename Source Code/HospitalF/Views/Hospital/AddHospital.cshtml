@@ -11,6 +11,8 @@
 <script src="~/Scripts/dropzone/dropzone.js"></script>
 <link href="~/Scripts/dropzone/css/basic.css" rel="stylesheet" />
 <link href="~/Scripts/dropzone/css/dropzone.css" rel="stylesheet" />
+<link href="~/Content/css/bootstrap-taginput/bootstrap-tagsinput.css" rel="stylesheet" />
+<script src="~/Content/js/plugin/bootstrap-taginput/bootstrap-tagsinput.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
 
 <div class="row">
@@ -322,6 +324,19 @@
                                 </div>
                             </fieldset>
 
+                            <fieldset>
+                                <legend>Từ khóa</legend>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Từ khóa tìm kiếm</strong></label>
+                                        @*<input class="form-control tagsinput" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput">*@
+                                        <div class="note">
+                                            <strong>Chỉ dẫn:</strong> Từ khóa tìm kiếm giúp tối ưu hóa khả năng tìm kiếm của hệ thống.
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            
                             <div class="dropzone dropzone-previews" id="my-awesome-dropzone"></div>
 
                             <footer>
@@ -981,13 +996,17 @@
         var geocoder;
 
         // Display current location
-        function initializeMap() {
-
+        function initializeMap(position) {
+            // Get current latitude and longitude
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var currentLocation = new google.maps.LatLng(latitude, longitude);
             geocoder = new google.maps.Geocoder();
+
             // Initial map options
             var mapOptions = {
                 zoom: 11,
-                center: new google.maps.LatLng('10.762622', '106.660172'),
+                center: currentLocation,
                 mapTypeControl: true,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
@@ -1012,9 +1031,6 @@
                 clearTimeout(update_timeout);
             });
         }
-
-        // Load initial options on loading event
-        google.maps.event.addDomListener(window, 'load', initializeMap);
 
         // Press button get location from address
         $("#button-get-loction").click(function () {
