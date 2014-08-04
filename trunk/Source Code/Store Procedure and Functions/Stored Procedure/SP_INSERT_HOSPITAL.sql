@@ -26,6 +26,7 @@ CREATE PROCEDURE SP_INSERT_HOSPITAL
 	@FullDescription NVARCHAR(4000),
 	@PersonInChared VARCHAR(64),
 	@PhotoList NVARCHAR(4000),
+	@TagInput NVARCHAR(4000),
 	@SpecialityList NVARCHAR(4000),
 	@ServiceList NVARCHAR(4000),
 	@FacilityList NVARCHAR(4000)
@@ -260,6 +261,66 @@ BEGIN
 					@CreatedPerson,
 					'True'
 				)
+
+				IF @@ROWCOUNT = 0
+				BEGIN
+					ROLLBACK TRAN T;
+					RETURN 0;
+				END
+
+				SET @RowNumber += 1
+			END
+		END
+
+		-- INSERT TO WORD_DICTIONARY TABLE
+		IF (@TagInput != '')
+		BEGIN
+			SET @RowNumber = 1
+			SET @TotalToken = 0
+			DECLARE @WordID INT = 0
+
+			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
+								  FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList)
+
+			WHILE (@RowNumber <= @TotalToken)
+			BEGIN
+				SELECT @Token = (SELECT TokenList.Token
+								 FROM (SELECT ROW_NUMBER()
+									   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+									   FROM [dbo].[FU_STRING_TOKENIZE] (@PhotoList, ',') TokenList) AS TokenList
+								 WHERE RowNumber = @RowNumber)
+
+				SET @WordID = (SELECT TOP 1 Word_ID
+							   FROM WordDictionary
+							   ORDER BY Word_ID DESC)
+
+				IF (EXISTS(SELECT Word_ID
+						   FROM WordDictionary
+						   WHERE LOWER(Word) = LOWER(@Token)))
+				BEGIN
+					SET @WordID = (SELECT Word_ID
+								   FROM WordDictionary
+								   WHERE LOWER(Word) = LOWER(@Token))
+				END
+				ELSE
+				BEGIN
+					INSERT INTO WordDictionary
+					VALUES(@Token, 3)
+
+					IF @@ROWCOUNT = 0
+					BEGIN
+						ROLLBACK TRAN T;
+						RETURN 0;
+					END
+
+					SET @WordID = (SELECT TOP 1 Word_ID
+								   FROM WordDictionary
+								   ORDER BY Word_ID DESC)
+				END
+
+				-- INSERT TO WORD_HOSPITAL TABLE
+				INSERT INTO Word_Hospital
+				VALUES(@WordID, @HospitalID)
 
 				IF @@ROWCOUNT = 0
 				BEGIN
