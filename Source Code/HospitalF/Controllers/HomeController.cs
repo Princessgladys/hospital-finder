@@ -398,9 +398,11 @@ namespace HospitalF.Controllers
                     {
                         hospital.Services = HomeModels.LoadServicesByHospitalId(hospitalId);
                         hospital.Facilities = HomeModels.LoadFacillitiesByHospitalId(hospitalId);
+                        hospital.Specialities = HomeModels.LoadSpecialitiesByHospitalId(hospitalId);
                         ViewBag.RateActionStatus = TempData["RateActionStatus"];
                         ViewBag.RateActionMessage = TempData["RateActionMessage"];
                         ViewBag.HospitalEntity = hospital;
+                        ViewBag.Photos = HomeModels.LoadPhotosByHospitalId(hospitalId);
                     }
                     else
                     {

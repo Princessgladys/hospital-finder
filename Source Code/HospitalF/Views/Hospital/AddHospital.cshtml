@@ -27,7 +27,7 @@
 </div>
 
 <div class="alert alert-block alert-info">
-    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>Nhập thông tin</h4>
+    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>&nbsp;Nhập thông tin</h4>
     <p>
         Điền những thông tin cần thiết vào bản mẫu. Sau đó ấn xác nhận để tạo bệnh viện mới.
     </p>
@@ -395,7 +395,68 @@
     </div>
 </div>
 
-<script type="text/javascript" charset="utf-8">
+<div id="partial-description" style="display: none">
+    <!-- widget grid -->
+    <section id="widget-grid-partial" class="">
+        <!-- row -->
+        <div class="row">
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0-partial"
+                    data-widget-colorbutton="false"
+                    data-widget-editbutton="false"
+                    data-widget-togglebutton="false"
+                    data-widget-deletebutton="false"
+                    data-widget-fullscreenbutton="false"
+                    data-widget-custombutton="false"
+                    data-widget-collapsed="false"
+                    data-widget-sortable="false">
+                    <header>
+                        <span class="widget-icon"><i class="fa fa-pencil"></i></span>
+                        @*<h2>Thông tin bệnh viện</h2>*@
+                    </header>
+                    <!-- widget div-->
+                    <div>
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+
+                            <div id="summernote"></div>
+
+                            <div class="widget-footer smart-form">
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-primary"
+                                        id="save-button">
+                                        <i class="fa fa-check"></i>Lưu
+                                    </a>
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-success"
+                                        id="quit-button">
+                                        <i class="fa fa-times"></i>Thoát
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- WIDGET END -->
+        </div>
+        <!-- end row -->
+    </section>
+    <!-- end widget grid -->
+</div>
+
+<script type="text/javascript">
     pageSetUp();
 
     @*Add success notification*@

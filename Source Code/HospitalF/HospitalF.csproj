@@ -366,6 +366,12 @@
     <Content Include="Content\js\plugin\datatables\ZeroClipboard.js" />
     <Content Include="Content\js\plugin\easy-pie-chart\jquery.easy-pie-chart.min.js" />
     <Content Include="Content\js\plugin\fastclick\fastclick.js" />
+    <Content Include="Content\js\plugin\flot\jquery.flot.cust.min.js" />
+    <Content Include="Content\js\plugin\flot\jquery.flot.fillbetween.min.js" />
+    <Content Include="Content\js\plugin\flot\jquery.flot.orderBar.min.js" />
+    <Content Include="Content\js\plugin\flot\jquery.flot.pie.min.js" />
+    <Content Include="Content\js\plugin\flot\jquery.flot.resize.min.js" />
+    <Content Include="Content\js\plugin\flot\jquery.flot.tooltip.min.js" />
     <Content Include="Content\js\plugin\jquery-validate\jquery.validate.min.js" />
     <Content Include="Content\js\plugin\masked-input\jquery.maskedinput.min.js" />
     <Content Include="Content\js\plugin\msie-fix\jquery.mb.browser.min.js" />
@@ -522,6 +528,7 @@
     <Content Include="Views\Data\UpdateService.cshtml" />
     <Content Include="Views\Data\UpdateFacility.cshtml" />
     <Content Include="Views\Data\UpdateSpeciality.cshtml" />
+    <Content Include="Views\Data\Statistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

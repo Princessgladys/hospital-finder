@@ -692,7 +692,34 @@ namespace HospitalF.Models
             return services;
 
         }
-        
+
+        public static List<Speciality> LoadSpecialitiesByHospitalId(int id)
+        {
+            List<Speciality> sepcilities = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                sepcilities = (from s in data.SP_LOAD_SPECIALITY_BY_HOSPITALID(id)
+                               select new Speciality()
+                               {
+                                   Speciality_ID = s.Speciality_ID,
+                                   Speciality_Name = s.Speciality_Name
+                               }).ToList<Speciality>();
+            }
+            return sepcilities;
+        }
+
+        public static List<Photo> LoadPhotosByHospitalId(int id)
+        {
+            List<Photo> photos = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                photos = (from p in data.Photos
+                          where p.Hospital_ID == id && p.Is_Active == true
+                          select p).ToList<Photo>();
+            }
+            return photos;
+        }
+
         #endregion
     }
 }
