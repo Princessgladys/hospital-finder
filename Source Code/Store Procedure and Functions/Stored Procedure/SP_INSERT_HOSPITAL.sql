@@ -273,11 +273,37 @@ BEGIN
 		END
 
 		-- INSERT TO WORD_DICTIONARY TABLE
+		DECLARE @WordID INT = 0
+
+		IF (EXISTS(SELECT Word_ID
+				   FROM WordDictionary
+				   WHERE LOWER(Word) = LOWER(@HospitalName)))
+		BEGIN
+			SET @WordID = (SELECT Word_ID
+						   FROM WordDictionary
+						   WHERE LOWER(Word) = LOWER(@HospitalName))
+
+			INSERT INTO Word_Hospital
+			VALUES(@WordID, @HospitalID)
+		END
+		ELSE
+		BEGIN
+			INSERT INTO WordDictionary
+			VALUES(@HospitalName, 3)
+
+			SET @WordID = (SELECT TOP 1 Word_ID
+						   FROM WordDictionary
+						   ORDER BY Word_ID DESC)
+
+			INSERT INTO Word_Hospital
+			VALUES(@WordID, @HospitalID)
+		END
+
+		-- CHECK IF THERE IS ADDITIONAL TAG WORDS
 		IF (@TagInput != '')
 		BEGIN
 			SET @RowNumber = 1
 			SET @TotalToken = 0
-			DECLARE @WordID INT = 0
 
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 								  FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList)
