@@ -1,0 +1,181 @@
+﻿@using HospitalF.Constant;
+
+@{
+    ViewBag.Title = "Statistic";
+}
+
+<script src="~/Content/js/plugin/flot/jquery.flot.cust.min.js"></script>
+<script src="~/Content/js/plugin/flot/jquery.flot.resize.min.js"></script>
+<script src="~/Content/js/plugin/flot/jquery.flot.fillbetween.min.js"></script>
+<script src="~/Content/js/plugin/flot/jquery.flot.orderBar.min.js"></script>
+<script src="~/Content/js/plugin/flot/jquery.flot.pie.min.js"></script>
+<script src="~/Content/js/plugin/flot/jquery.flot.tooltip.min.js"></script>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-pencil-square-o fa-fw "></i>
+            Thống kê
+        </h1>
+    </div>
+</div>
+
+<div class="alert alert-block alert-info">
+    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>&nbsp;Dữ liệu thống kê</h4>
+    <p>
+        Thông tin thống kê về dữ liệu hệ thống.
+    </p>
+</div>
+
+<section id="widget-grid" class="">
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="false"
+                data-widget-sortable="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Thông tin bệnh viện</h2>
+                </header>
+                <div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <h5>Thống kê chung</h5>
+                                <hr />
+                                <div class="widget-body no-padding">
+                                    <div id="pie-chart" class="chart"></div>
+                                </div>
+                                <table class="table table-bordered table-striped table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Tổng số bệnh viện và phòng khám</strong></td>
+                                            <td>@(ViewBag.TotalHospitalCount)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tổng số bệnh viện đăng ký thành viên</td>
+                                            <td>@(ViewBag.TotalMemberHospitalCount)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tổng số bệnh viện không đăng ký thành viên</td>
+                                            <td>@(ViewBag.TotalNoMemberHospitalCount)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tổng số bệnh viện ngưng hoạt động</td>
+                                            <td>@(ViewBag.TotalInactiveHospitalCount)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Top 10 bệnh viện</h5>
+                                <hr />
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tên bệnh viện</th>
+                                            <th>Bình chọn</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{int count = 0;}
+                                        @foreach (HospitalF.Models.Hospital hospital in ViewBag.TopTenBestRatingHospital)
+                                        {
+                                            double rate = Math.Round((double)(hospital.Rating == null ? 0 : hospital.Rating), 1);
+                                            <tr>
+                                                <td>@(++count)</td>
+                                                <td><strong>@(Html.ActionLink(hospital.Hospital_Name, Constants.HospitalAction, Constants.HomeController, new { hospitalId = hospital.Hospital_ID}, new { @target = "_blank" }))</strong></td>
+                                                <td>@(rate)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+</section>
+
+<script type="text/javascript">
+    pageSetUp();
+
+    /* chart colors default */
+    var $chrt_border_color = "#efefef";
+    var $chrt_grid_color = "#DDD"
+    var $chrt_main = "#E24913";			/* red       */
+    var $chrt_second = "#6595b4";		/* blue      */
+    var $chrt_third = "#FF9F01";		/* orange    */
+    var $chrt_fourth = "#7e9d3a";		/* green     */
+    var $chrt_fifth = "#BD362F";		/* dark red  */
+    var $chrt_mono = "#000";
+
+    /* pie chart */
+
+    if ($('#pie-chart').length) {
+
+        var data_pie = [];
+        data_pie[0] = {
+            label: "Đăng ký thành viên",
+            data: @(ViewBag.TotalMemberHospitalCount)
+            }
+
+        data_pie[1] = {
+            label: "Không đăng ký thành viên",
+            data: @(ViewBag.TotalNoMemberHospitalCount)
+            }
+
+        data_pie[2] = {
+            label: "Không hoạt động",
+            data: @(ViewBag.TotalInactiveHospitalCount)
+            }
+
+        $.plot($("#pie-chart"), data_pie, {
+            series: {
+                pie: {
+                    show: true,
+                    innerRadius: 0.5,
+                    radius: 1,
+                    label: {
+                        show: false,
+                        radius: 2 / 3,
+                        formatter: function (label, series) {
+                            return '<div style="font-size:11px;text-align:center;padding:4px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+                        },
+                        threshold: 0.1
+                    }
+                }
+            },
+            legend: {
+                show: true,
+                noColumns: 1, // number of colums in legend table
+                labelFormatter: null, // fn: string -> string
+                labelBoxBorderColor: "#000", // border color for the little label boxes
+                container: null, // container (as jQuery object) to put legend in, null means default on top of graph
+                position: "ne", // position of default legend container within plot
+                margin: [5, 10], // distance from grid edge to default legend container within plot
+                backgroundColor: "#efefef", // null means auto-detect
+                backgroundOpacity: 1 // set to 0 to avoid background
+            },
+            grid: {
+                hoverable: true,
+                clickable: true
+            },
+        });
+
+    }
+
+    /* end pie chart */
+</script>
