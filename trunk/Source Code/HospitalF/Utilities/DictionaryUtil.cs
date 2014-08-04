@@ -23,7 +23,7 @@ namespace HospitalF.Utilities
             {
                 return await Task.Run(() =>
                     (from w in data.WordDictionaries
-                     where w.Priority == 1
+                     where w.Type == 1
                      select w.Word).ToList());
             }
         }
