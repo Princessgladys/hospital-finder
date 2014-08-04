@@ -1,0 +1,934 @@
+﻿@{
+    ViewBag.Title = "Cập nhật thông tin cơ bản";
+}
+
+@using HospitalF.Constant;
+
+@model HospitalF.Models.HospitalModel
+
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-pencil-square-o fa-fw "></i>
+            Cập nhật thông tin cơ bản
+            <span>>
+                Nhập liệu
+            </span>
+        </h1>
+    </div>
+</div>
+
+<div class="alert alert-block alert-success">
+    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>Nhập thông tin</h4>
+    <p>
+        Điền những thông tin cần thiết vào bản mẫu. Sau đó ấn xác nhận để cập nhật thông tin cơ bản của bệnh viện
+    </p>
+</div>
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="false"
+                data-widget-sortable="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Thông tin bệnh viện</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        @using (Html.BeginForm(Constants.HospitalBasicInforUpdateAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "add-hospital-form" }))
+                        {
+                            <fieldset>
+                                <legend>Thông tin căn bản</legend>
+                                <div class="row">
+                                    <section class="col col-6">
+                                            <label class="control-label">Tên bệnh viện</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-home"></i>
+                                            
+                                            @Html.TextBoxFor(m => m.HospitalName, new 
+                                       { 
+                                           @placeholder = "Nhập tên bệnh viện",
+                                           @readonly=true
+                                       })
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                            <label class="control-label">Loại hình dịch vụ</label>
+                                        <label class="select">
+                                            <i></i>
+                                            @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.HospitalTypeList,
+                                            //Constants.RequireHospitalType,
+                                            new { 
+                                                    @class = "form-control"})
+                                            @Html.TextBoxFor(m => m.HospitalTypeName, new { @type = "hidden" })
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                            <label class="control-label">Lịch khám ngày thường</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-clock-o"></i>
+                                            @Html.TextBoxFor(m => m.OrdinaryStartTime, new { @placeholder = "Giờ khám ngày thường", @id = "OrdinaryTime" })
+                                        </label>
+                                        <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
+                                    </section>
+                                    <section class="col col-6">
+                                            <label class="control-label">Lịch khám ngày lễ/Tết</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-clock-o"></i>
+                                            @Html.TextBoxFor(m => m.HolidayStartTime, new { @placeholder = "Giờ khám ngày lễ và cuối tuần", @id = "HolidayTime" })
+                                        </label>
+                                        <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
+                                    </section>
+                                </div>
+
+                                <section>
+                                    <div class="inline-group">
+                                            
+                                        <label class="radio">
+                                            @Html.RadioButtonFor(m => m.IsAllowAppointment, true,
+                                                new { @type = "radio", @name = "radio-inline", @checked = "checked" })
+                                            <i></i>Cho phép đăng ký khám trực tuyến
+                                        </label>
+                                        <label class="radio">
+                                            @Html.RadioButtonFor(m => m.IsAllowAppointment, false,
+                                                new { @type = "radio", @name = "radio-inline" })
+                                            <i></i>Không có dịch vụ đăng ký khám trực tuyến
+                                        </label>
+                                    </div>
+                                </section>
+
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Địa chỉ</legend>
+                                <div class="row">
+                                    <section class="col col-6"><label class="control-label">Số địa chỉ</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-building"></i>
+                                            @Html.TextBoxFor(m => m.LocationAddress, new { @placeholder = "Số địa chỉ" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-6"><label class="control-label">Tên đường</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-truck"></i>
+                                            @Html.TextBoxFor(m => m.StreetAddress, new { @placeholder = "Tên đường" })
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-4">
+                                        <label class="select">
+                                            <i></i>
+                                            @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList, 
+                                             new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.CityName, new {@type="hidden"})
+                                        </label>
+                                    </section>
+                                    <section class="col col-4">
+                                        <label class="select">
+                                            <i></i>
+                                            @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
+                                                new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.DistrictName, new {@type="hidden"})
+                                        </label>
+                                    </section>
+                                    <section class="col col-4">
+                                        <label class="select">
+                                            <i></i>
+                                            @Html.DropDownListFor(m => m.WardID, (SelectList)ViewBag.WardList,
+                                                new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.WardName, new {@type="hidden"})
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <section>
+                                    <label class="input">
+                                        <i class="icon-prepend fa fa-location-arrow"></i>
+                                        @Html.TextBoxFor(m => m.FullAddress, new { @placeholder = "Địa chỉ đầy đủ", @disabled = "disabled"})
+                                    </label>
+                                </section>
+
+                                <div class="row">
+                                    <section class="col col-8">
+                                        <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
+                                             style="display: none;" id="loaderIcon">
+                                        <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
+                                             style="display: none;" id="validIcon">
+                                        <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
+                                             style="display: none;" id="invalidIcon">
+                                        <span id="address-message"></span>
+                                    </section>
+                                    <section class="col col-4">
+                                        <a href="" class="btn btn-sm btn-success btn-next"
+                                           id="button-get-loction" style="float: right;">
+                                            Lấy địa điểm từ địa chỉ
+                                        </a>
+                                    </section>
+                                </div>
+
+                                @*<div class="row">
+                                    <section class="col col-12">
+                                        <div id="google-map"></div>
+                                    </section>
+                                </div>
+                                @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })*@
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Thông tin liên lạc</legend>
+                                <div class="row">
+                                    <section class="col col-4"><label class="control-label">Số điện thoại chính
+                                                               </label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-phone"></i>
+                                            @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Nhập số điện thoại chính" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-4"><label class="control-label">Số thay thế (nếu có)</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-phone"></i>
+                                            @Html.TextBoxFor(m => m.PhoneNo2, new { @placeholder = "Số thay thế (nếu có)" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-4"><label class="control-label">Số di động</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-phone"></i>
+                                            @Html.TextBoxFor(m => m.PhoneNo3, new { @placeholder = "Số di động (nếu có)" })
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-envelope"></i>
+                                            @Html.TextBoxFor(m => m.HospitalEmail, new { @placeholder = "Nhập địa chỉ hộp thư điện tử" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-globe"></i>
+                                            @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6"><label class="control-label">Số fax</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-fax"></i>
+                                            @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax" })
+                                        </label>
+                                    </section>
+                                    @*<section class="col col-6">
+                                            <label class="input">
+                                                <i class="icon-prepend fa fa-male"></i>
+                                                @Html.TextBoxFor(m => m.CreatedPerson, new { @placeholder = "Nhập Email của người chịu trách nhiệm" })
+                                            </label>
+                                        </section>*@
+                                </div>
+                            </fieldset>
+                            <footer>
+                                <button id="Cancel" class="btn" type="reset" onclick="parent.history.back();
+            return false;">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Hủy
+                                </button>
+                                @Html.TextBoxFor(m => m.HospitalID, new {@type="hidden"})
+                                <button class="btn btn-primary" type="submit" id="confirm-button">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Xác nhận
+                                </button>
+                            </footer>
+                        }
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+    <!-- end row -->
+
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+    pageSetUp();
+
+    @*Display notification*@
+    function setNotification(message, type) {
+        // Success
+        if (type == 1) {
+            notif({
+                msg: message,
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Warning
+        if (type == 2) {
+            notif({
+                msg: message,
+                type: "warning",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Error
+        if (type == 3) {
+            notif({
+                msg: message,
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+    }
+
+    @*Display notification*@
+    function displayNotification() {
+        // Add hospital
+        if ('@ViewBag.AddHospitalStatus' == '') {
+            return false;
+        } else {
+            var returnValue = '@ViewBag.AddHospitalStatus';
+            returnValue = returnValue.split('-');
+            var status = returnValue[0];
+            var hospitalName = returnValue[1];
+
+            if (status != 0) {
+                $("#success-alert").show();
+                setNotification("Cập nhật thông tin cơ bản [" + hospitalName + "] thành công!", 1);
+            } else {
+                $("#error-alert").show();
+                setNotification("Cập nhật thông tin cơ bản [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
+            }
+        }
+    }
+
+
+    $(document).ready(function () {
+        displayNotification();
+    });
+
+    var timeoutReference;
+    $(document).ready(function () {
+                @*Format textbox data*@
+        $(function ($) {
+            $('#OrdinaryTime').mask('99:99 - 99:99');
+            $('#HolidayTime').mask('99:99 - 99:99');
+            $('#Fax').mask('(99) 99999999');
+            $('#PhoneNo').mask('(99) 99999999');
+            $('#PhoneNo2').mask('(99) 99999999');
+        });
+
+        @*Take text value of hospital type drop down list*@
+        $("#HospitalTypeID").change(function () {
+            $('#HospitalTypeName').val($("#HospitalTypeID option:selected").text());
+        });
+
+        @*AJAX for cascading District drop down list*@
+        $("#CityID").change(function () {
+            $('#CityName').val($("#CityID option:selected").text());
+            var selectedItem = $(this).val();
+            var ddlDistrict = $("#DistrictID");
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetDistrictByCityAction))",
+                data: { "cityId": selectedItem },
+                success: function (data) {
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    $('#DistrictName').val($("#DistrictID option:selected").text());
+
+                    selectedItem = $("#DistrictID").val();
+                    var ddlWard = $("#WardID");
+                    $.ajax({
+                        cache: false,
+                        type: "GET",
+                        url: "@(Url.RouteUrl(Constants.GetWardByDistrictAction))",
+                        data: { "districtId": selectedItem },
+                        success: function (data) {
+                            ddlWard.html('');
+                            $.each(data, function (id, option) {
+                                ddlWard.append($('<option></option>').val(option.id).html(option.name));
+                            });
+                            $('#WardName').val($("#WardID option:selected").text());
+                            bindFullAddress()
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                        }
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                }
+            });
+        });
+
+        @*AJAX for cascading Ward drop down list*@
+        $("#DistrictID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlWard = $("#WardID");
+            $('#DistrictName').val($("#DistrictID option:selected").text());
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetWardByDistrictAction))",
+                data: { "districtId": selectedItem },
+                success: function (data) {
+                    ddlWard.html('');
+                    $.each(data, function (id, option) {
+                        ddlWard.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    $('#WardName').val($("#WardID option:selected").text());
+                    bindFullAddress();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                }
+            });
+        });
+    });
+
+    @*Bind data for full address*@
+    $('#LocationAddress').on('input', function () {
+        bindFullAddress();
+    });
+    $('#StreetAddress').on('input', function () {
+        bindFullAddress();
+    });
+    $("#WardID").change(function () {
+        $('#WardName').val($("#WardID option:selected").text());
+        bindFullAddress();
+    });
+    function bindFullAddress() {
+        var city = "";
+        if (($('#CityID').val() != null) && ($('#CityID').val() != '')) {
+            city = ", " + $("#CityID option:selected").text();
+        }
+        var district = "";
+        if (($('#DistrictID').val() != null) && ($("#DistrictID").val() != '')) {
+            district = ", " + $("#DistrictID option:selected").text();
+        }
+        var ward = "";
+        if (($('#WardID').val() != null) && ($("#WardID").val() != '')) {
+            ward = ", " + $("#WardID option:selected").text();
+        }
+        var locationAddress = $("#LocationAddress").val();
+        var streetAddress = $("#StreetAddress").val();
+
+        var fullAddress = locationAddress + " " + streetAddress +
+            ward + district + city;
+
+        $("#FullAddress").val(fullAddress);
+
+        checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress);
+    }
+
+    @*Check if hospital and address information are not duplicated*@
+    function checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress) {
+        // Check if hospital is valid
+        var hospitalName = $("#HospitalName").val();
+        if ((locationAddress == "") ||
+            (streetAddress == "") || (city == "") ||
+            (district == "") || (ward == "")) {
+            setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+            return false;
+        }
+
+        if ((locationAddress != "") &&
+            (streetAddress != "") && (city != "") &&
+            (district != "") && (ward != "")) {
+            $("#loaderIcon").show();
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("CheckValidHospitalWithAddress"))",
+                data: {
+                    "address": locationAddress + " " + streetAddress,
+                    "cityId": $('#CityID').val(),
+                    "districtId": $('#DistrictID').val(),
+                    "wardId": $('#WardID').val()
+                },
+                success: function (data) {
+                    if (data.value == 1) {
+                        setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
+                    } else {
+                        setAddressNotificationMessage("Địa chỉ trùng lắp với bệnh viện khác.", 0);
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $("#invalidIcon").show();
+                    $("#address-message").text("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.");
+                }
+            });
+
+            return false;
+        }
+    }
+
+    function setAddressNotificationMessage(message, mode) {
+        if (mode == 1) {
+            $("#loaderIcon").hide();
+            $("#validIcon").show();
+            $("#invalidIcon").hide();
+            $("#address-message").text(message);
+            $('#FullAddress').css('background', '#f0fff0');
+            $('#FullAddress').css('border-color', '#7DC27D');
+        } else {
+            $("#loaderIcon").hide();
+            $("#validIcon").hide();
+            $("#invalidIcon").show();
+            $("#address-message").text(message);
+            $('#FullAddress').css('background', '#fff0f0');
+            $('#FullAddress').css('border-color', '#A90329');
+        }
+    }
+
+    @*Data validation*@
+    $(document).ready(function () {
+        $('#confirm-button').click(function () {
+            var city = "";
+            if (($('#CityID').val() != null) && ($('#CityID').val() != '')) {
+                city = ", " + $("#CityID option:selected").text();
+            }
+            var district = "";
+            if (($('#DistrictID').val() != null) && ($("#DistrictID").val() != '')) {
+                district = ", " + $("#DistrictID option:selected").text();
+            }
+            var ward = "";
+            if (($('#WardID').val() != null) && ($("#WardID").val() != '')) {
+                ward = ", " + $("#WardID option:selected").text();
+            }
+            var locationAddress = $("#LocationAddress").val();
+            var streetAddress = $("#StreetAddress").val();
+
+            if ((locationAddress == "") ||
+            (streetAddress == "") || (city == "") ||
+            (district == "") || (ward == "")) {
+                setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+                return false;
+            }
+
+            //var coordinate = $("#Coordinate").val();
+            //if (coordinate.trim() == "") {
+            //    setAddressNotificationMessage("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 0);
+            //}
+
+            //var fullAddress = $("#FullAddress").val();
+            //if (fullAddress.trim() != "") {
+            //    if ($("#invalidIcon").is(":visible")) {
+            //        return false;
+            //    }
+            //} else {
+            //    $('#add-hospital-form').submit();
+            //}
+        });
+
+        $.validator.addMethod("time",
+            function (value, element) {
+                var fullTime = value.split('-');
+                var startTime = fullTime[0].trim();
+                var endTime = fullTime[1].trim();
+
+                var startValue = parseInt(startTime.replace(':', ''), 10);
+                var endValue = parseInt(endTime.replace(':', ''), 10);
+
+                if ((startValue >= 0) && (endValue <= 2400) && (startValue < endValue)) {
+                    return true;
+                }
+
+                return false;
+            }, "Thời gian không phù hợp.");
+
+        $.validator.addMethod("phone",
+            function (value, element) {
+                return /^[0-9()]*$/.test(value);
+            }, "Số điện thoại không phù hợp.");
+
+        $('#add-hospital-form').validate({
+            // Rules for form validation
+            rules: {
+                HospitalName: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 64
+                },
+                HospitalTypeID: {
+                    required: true
+                },
+                LocationAddress: {
+                    required: true,
+                    maxlength: 10
+                },
+                StreetAddress: {
+                    required: true,
+                    maxlength: 32
+                },
+                CityID: {
+                    required: true
+                },
+                DistrictID: {
+                    required: true
+                },
+                WardID: {
+                    required: true
+                },
+                PhoneNo: {
+                    required: true,
+                    minlength: 8,
+                    maxlength: 13,
+                    phone: true
+                },
+                PhoneNo2: {
+                    minlength: 8,
+                    maxlength: 13,
+                    phone: true
+                },
+                PhoneNo3: {
+                    minlength: 11,
+                    maxlength: 13,
+                    digits: true
+                },
+                Email: {
+                    email: true
+                },
+                PersonInCharged: {
+                    email: true
+                },
+                Website: {
+                    url: true
+                },
+                Fax: {
+                    minlength: 8,
+                    maxlength: 16,
+                    digits: true
+                },
+                OrdinaryStartTime: {
+                    required: true,
+                    time: true
+                },
+                HolidayStartTime: {
+                    required: true,
+                    time: true
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                HospitalName: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.HospitalName)',
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.HospitalName, 2)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.HospitalName, 64)'
+                },
+                HospitalTypeID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.HospitalType)'
+                },
+                LocationAddress: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.LocationAddress)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.LocationAddress, 10)'
+                },
+                StreetAddress: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.StreetAddress)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.StreetAddress, 32)'
+                },
+                CityID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.City)'
+                },
+                DistrictID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.District)'
+                },
+                Ward: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.Ward)'
+                },
+                PhoneNo: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.PhoneNo)',
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.PhoneNo, 8)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.PhoneNo, 13)'
+                },
+                PhoneNo2: {
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.AlternativePhone, 8)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.AlternativePhone, 13)',
+                },
+                PhoneNo3: {
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.MobilePhone, 11)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.MobilePhone, 13)',
+                    digits: '@string.Format(ErrorMessage.CEM005, Constants.MobilePhone)'
+                },
+                Email: {
+                    email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
+                },
+                PersonInCharged: {
+                    email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
+                },
+                Website: {
+                    url: '@string.Format(ErrorMessage.CEM005, Constants.Website)'
+                },
+                Fax: {
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.Fax, 8)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.Fax, 16)',
+                    digits: '@string.Format(ErrorMessage.CEM005, Constants.Fax)'
+                },
+                OrdinaryStartTime: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.OrdinaryTime)'
+                },
+                HolidayStartTime: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.HolidayTime)'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
+
+    @*Google map*@
+    $(document).ready(function () {
+        // Check if browser support identifying current location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(initializeMap);
+        }
+        else {
+            notif({
+                msg: "Trình duyệt không hỗ trợ xác định vị trí.",
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Declare marker - Make it global so only one marker can be created
+        var marker;
+        // Time out variable to prevent double click event creating new marker
+        var update_timeout = null;
+        // Declare variable to create Google map
+        var map;
+        // Variable to analyze coordinate from address
+        var geocoder;
+
+        // Display current location
+        function initializeMap(position) {
+            // Get current latitude and longitude
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var currentLocation = new google.maps.LatLng(latitude, longitude);
+            geocoder = new google.maps.Geocoder();
+
+            // Initial map options
+            var mapOptions = {
+                zoom: 11,
+                center: currentLocation,
+                mapTypeControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            // Create the map, and place it in the HTML google-map div
+            map = new google.maps.Map(
+                document.getElementById("google-map"), mapOptions
+            );
+
+            // Allow create marker on click event after 300ms
+            google.maps.event.addListener(map, 'click', function (event) {
+                update_timeout = setTimeout(function () {
+                    placeMarker(event.latLng);
+                    // Get coordinate at the marker's location after clicking on map
+                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                    $('#Coordinate').val(currentCoordinate);
+                }, 300);
+            });
+
+            // Prevent double click event to create new marker
+            google.maps.event.addListener(map, 'dblclick', function (event) {
+                clearTimeout(update_timeout);
+            });
+        }
+
+        // Load initial options on loading event
+        google.maps.event.addDomListener(window, 'load', initializeMap);
+
+        // Press button get location from address
+        $("#button-get-loction").click(function () {
+            if ($("#validIcon").is(":visible")) {
+                getCoordinateFromAddress();
+            } else {
+                setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+            }
+            return false;
+        });
+
+        // Allow creating only one marker at a time
+        function placeMarker(location) {
+            if (marker) {
+                marker.setPosition(location);
+            } else {
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP
+                });
+
+                // Get coordinate at the marker's location after dragging process
+                google.maps.event.addListener(marker, 'dragend', function (event) {
+                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                    $('#Coordinate').val(currentCoordinate);
+                });
+            }
+        }
+
+        // Get coordinate from a specific address
+        function getCoordinateFromAddress() {
+            $("#loaderIcon").show();
+            $("#validIcon").hide();
+            $("#invalidIcon").hide();
+            $("#address-message").text("Đang xử lý thông tin.");
+
+            // Take full address
+            var address = $("#FullAddress").val();
+            address = address + ", " + "Việt Nam";
+
+            // Query address from Google
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                // Check if address is understandable
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+
+                    // Check if marker is already existed
+                    if (marker != null) {
+                        marker.setMap(null);
+                    }
+
+                    // Create marker
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        draggable: true,
+                        animation: google.maps.Animation.DROP
+                    });
+
+                    // Set coordinate value
+                    var currentCoordinate = results[0].geometry.location.lat().toFixed(6) +
+                        ", " + results[0].geometry.location.lng().toFixed(6);
+                    $('#Coordinate').val(currentCoordinate);
+
+                    // Display message
+                    setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
+                } else {
+                    setAddressNotificationMessage("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 0);
+                }
+            });
+            return false;
+        }
+    });
+
+    @*Hopsital description*@
+    $(document).ready(function () {
+        $('#edit-description').click(function () {
+            if ($("#partial-description").is(":visible")) {
+                if (confirm('Lưu thông tin trước khi thoát, mọi thông tin chưa lưu sẽ không có hiệu lực!')) {
+                    $('.summernote').destroy();
+                    $("#partial-description").hide();
+                } else {
+                    return false;
+                }
+            } else {
+                $("#partial-description").show();
+            }
+        });
+    });
+
+    @*Summer note*@
+    $(document).ready(function () {
+        $('#summernote').summernote({
+            lang: 'vi-VN',
+            height: 250,
+            minHeight: null,
+            maxHeight: null,
+            focus: true,
+            onImageUpload: function (files, editor, $editable) {
+
+            }
+        });
+
+        $('#quit-button').click(function () {
+            if (confirm('Lưu thông tin trước khi thoát, mọi thông tin chưa lưu sẽ không có hiệu lực!')) {
+                $('#summernote').destroy();
+                $("#partial-description").hide();
+            } else {
+                return false;
+            }
+        });
+
+        $('#save-button').click(function () {
+            var a = $('#summernote').code();
+
+            $("#FullDescription").val($('#summernote').code());
+            notif({
+                msg: "Lưu thông tin thành công.",
+                type: "success",
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        });
+    });
+
+</script>
+
+
+<style>
+    #google-map
+    {
+        height: 300px;
+        width: 687px;
+    }
+
+    .resizeIcon
+    {
+        width: 16px;
+        height: auto;
+    }
+</style>
+

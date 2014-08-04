@@ -1,0 +1,209 @@
+﻿@using HospitalF.Constant;
+
+@model HospitalF.Models.HospitalModel
+
+@{
+    ViewBag.Title = "Cập nhật thông tin chuyên ngành";
+}
+
+
+<section id="widget-grid" class="">
+    <div class="alert alert-danger fade in" style="display: none;"
+         id="error-alert">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-times"></i>
+        <strong>Lỗi!</strong> thao tác không thành công. Xin vui lòng thử lại.
+    </div>
+    <div class="alert alert-success fade in" style="display: none;"
+         id="success-alert">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        <strong>Thành công</strong> Thêm mới bệnh viện thành công.
+    </div>
+    <!-- row -->
+    <div class="row">
+
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-2" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false">
+                <!-- widget options:
+				usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+				data-widget-colorbutton="false"
+				data-widget-editbutton="false"
+				data-widget-togglebutton="false"
+				data-widget-deletebutton="false"
+				data-widget-fullscreenbutton="false"
+				data-widget-custombutton="false"
+				data-widget-collapsed="true"
+				data-widget-sortable="false"
+
+				-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Chuyên khoa - Dịch vụ - Cơ sở vật chất</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+
+
+                    <!-- widget content -->
+                    <div class="widget-body">
+@using(Html.BeginForm(Constants.SpecialityServiceFacilityUpdateAction,Constants.HospitalController,FormMethod.Post,new{ @class = "smart-form", @id = "add-hospital-form", @enctype = "multipart/form-data" }))
+{
+                            <fieldset>
+                                <legend>Chuyên ngành</legend>
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Danh sách chuyên ngành</strong></label>
+                                        @Html.DropDownListFor(m => m.SelectedSpecialities,
+                                            (MultiSelectList)ViewBag.SpecialityList,
+                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                        <div class="note">
+                                            <strong>Chỉ dẫn:</strong> Danh sách chuyên ngành góp phần gia tăng việc tìm kiếm bệnh viện
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Dịch vụ</legend>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Danh sách dịch vụ</strong></label>
+                                        
+                                        @Html.DropDownGroupListFor(m => m.SelectedServices,
+                                            (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList,
+                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Cơ sở vật chất</legend>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Danh sách cơ sở vật chất</strong></label>
+                                        @Html.DropDownGroupListFor(m => m.SelectedFacilities,
+                                            (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList,
+                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                        <div class="note">
+                                            <strong>Chỉ dẫn:</strong> Cung cấp danh sách các dịch vụ và cơ sở vật chất góp phần làm tăng độ tin cậy của bệnh viện
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+
+                            <footer>
+                                <button id="Cancel" class="btn" type="reset" onclick="parent.history.back();
+            return false;">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Hủy
+                                </button>
+                                @Html.TextBoxFor(m => m.HospitalID, new {@type="hidden"})
+                                <button class="btn btn-primary" type="submit" id="confirm-button">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Xác nhận
+                                </button>
+                            </footer>
+                            @*<div class="form-actions">
+								<div class="row">
+									<div class="col-md-12">
+										<button class="btn btn-primary" type="submit">
+											<i class="fa fa-save"></i>
+											Cập nhật
+										</button>
+										<button class="btn btn-default" type="reset">
+											Hủy
+										</button>
+									</div>
+								</div>
+							</div>*@
+
+                        }
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+
+        </article>
+    </div>
+    </section>
+<script type="text/javascript">
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+    pageSetUp();
+
+     @*Add success notification*@
+    function setNotification(message, type) {
+        // Success
+        if (type == 1) {
+            notif({
+                msg: message,
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Warning
+        if (type == 2) {
+            notif({
+                msg: message,
+                type: "warning",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Error
+        if (type == 3) {
+            notif({
+                msg: message,
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+    }
+
+    @*Display notification*@
+    function displayNotification() {
+        // Add hospital
+        if ('@ViewBag.AddHospitalStatus' == '') {
+            return false;
+        } else {
+            var returnValue = '@ViewBag.AddHospitalStatus';
+            returnValue = returnValue.split('-');
+            var status = returnValue[0];
+            var hospitalName = returnValue[1];
+
+            if (status != 0) {
+                $("#success-alert").show();
+                setNotification("Cập nhật thông tin chuyên ngành [" + hospitalName + "] thành công!", 1);
+            } else {
+                $("#error-alert").show();
+                setNotification("Cập nhật thông tin chuyên ngành [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        displayNotification();
+    });
+
+</script>

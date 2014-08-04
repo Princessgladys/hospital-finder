@@ -792,7 +792,7 @@ namespace HospitalF.Controllers
 
             return View(pagedHospitalList);
         }
-
+        
         /// <summary>
         /// GET: /Hospital/DisplayHospitalList
         /// </summary>
@@ -847,7 +847,7 @@ namespace HospitalF.Controllers
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [Authorize(Roles= Constants.AdministratorRoleName + ", " + Constants.HospitalUserRoleName)]
         public async Task<ActionResult> AddHospital()
         {
             try
