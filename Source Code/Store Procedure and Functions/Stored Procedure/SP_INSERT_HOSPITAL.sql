@@ -313,7 +313,7 @@ BEGIN
 				SELECT @Token = (SELECT TokenList.Token
 								 FROM (SELECT ROW_NUMBER()
 									   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
-									   FROM [dbo].[FU_STRING_TOKENIZE] (@PhotoList, ',') TokenList) AS TokenList
+									   FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList) AS TokenList
 								 WHERE RowNumber = @RowNumber)
 
 				SET @WordID = (SELECT TOP 1 Word_ID
