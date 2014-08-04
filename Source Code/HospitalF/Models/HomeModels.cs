@@ -479,7 +479,7 @@ namespace HospitalF.Models
 
             // Take input values
             int cityId = this.CityID;
-            string districtName = this.DistrictName;
+            int districtId = this.DistrictID;
             string whatPhrase = this.WhatPhrase;
 
             // Search for suitable hospitals in database
@@ -487,7 +487,7 @@ namespace HospitalF.Models
             {
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_NORMAL_SEARCH_HOSPITAL(whatPhrase.Trim().ToLower(),
-                         cityId, (districtName != null ? districtName.ToLower() : null))
+                         cityId, districtId)
                      select new HospitalEntity()
                      {
                          Hospital_ID = h.Hospital_ID,
@@ -501,7 +501,7 @@ namespace HospitalF.Models
                          Email = h.Email,
                          Website = h.Website,
                          Ordinary_Start_Time = h.Ordinary_Start_Time,
-                         Ordinary_End_Time = h.OrDinary_End_Time,
+                         Ordinary_End_Time = h.Ordinary_End_Time,
                          Holiday_Start_Time = h.Holiday_Start_Time,
                          Holiday_End_Time = h.Holiday_End_Time,
                          Coordinate = h.Coordinate,
