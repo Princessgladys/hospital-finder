@@ -247,7 +247,6 @@
     <Content Include="Content\css\bootstrap-image-gallery-demo.css" />
     <Content Include="Content\css\bootstrap-image-gallery.css" />
     <Content Include="Content\css\bootstrap-image-gallery.m.css" />
-    <Content Include="Content\css\bootstrap-taginput\bootstrap-tagsinput.css" />
     <Content Include="Content\css\bootstrap.m.css" />
     <Content Include="Content\css\custom-home.css" />
     <Content Include="Content\css\custom-hospital.css" />
