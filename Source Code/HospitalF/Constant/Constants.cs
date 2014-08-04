@@ -100,6 +100,16 @@ namespace HospitalF.Constant
         public const string GetWorkingDayAction = "GetWorkingDay";
 
         /// <summary>
+        /// Name of LoadTimeCheckHealthAction
+        /// </summary>
+        public const string LoadTimeCheckHealthAction = "LoadTimeCheckHealth";
+
+        /// <summary>
+        /// Name of ConfirmAction
+        /// </summary>
+        public const string ConfirmAction = "Confirm";
+
+        /// <summary>
         /// Name of IndexAction
         /// </summary>
         public const string IndexAction = "Index";
@@ -274,7 +284,7 @@ namespace HospitalF.Constant
         #region HomeModel
 
         #region Property Vietnamese name
-
+        
         /// <summary>
         /// Vietnamese name of property SearchValue
         /// </summary>
@@ -567,6 +577,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string HolidayTime = "Giờ khám ngày lễ và cuối tuần";
 
+        /// <summary>
+        /// Vietnames name of property HealthInsuranceCode
+        /// </summary>
+        public const string HealthInsuranceCode = "Mã bảo hiểm y tế";
+
         #endregion
 
         #region English Name
@@ -771,6 +786,11 @@ namespace HospitalF.Constant
         #endregion
 
         #region Utilities
+
+        /// <summary>
+        /// Constant for timeCheck is 20 minutes
+        /// </summary>
+        public const int TimeCheck = 20;
 
         /// <summary>
         /// Constant for LoggingPartition key in appSettings section of Web.config

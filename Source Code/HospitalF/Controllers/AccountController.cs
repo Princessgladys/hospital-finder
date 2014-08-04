@@ -54,7 +54,7 @@ namespace HospitalF.Controllers
                     // Check if user is Hospital User
                     if (SimpleSessionPersister.Role.Equals(Constants.HospitalUserRoleName))
                     {
-
+                        return RedirectToAction(Constants.IndexAction, Constants.HospitalController);
                     }
 
                     // Redirect to Login page as default

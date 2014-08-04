@@ -97,6 +97,11 @@ namespace HospitalF
                             new { controller = "Account", action = "AddAccount" },
                             new[] { "HospitalF.Controllers" });
 
+            routes.MapRoute("LoadTimeCheckHealth",
+                            "appointment/loadtimecheckhealth/",
+                            new { controller = "appointment", action = "loadtimecheckhealth" },
+                            new[] { "HospitalF.Controllers" });
+
             routes.MapRoute("ChangeServiceStatus",
                             "data/changeservicestatus/",
                             new { controller = "Data", action = "ChangeServiceStatus" },
