@@ -69,6 +69,18 @@
 		-moz-columns: 3;
 	}
 
+#speciality-content
+{
+}
+
+	#speciality-content ul
+	{
+		columns: 3;
+		-webkit-columns: 3;
+		-moz-columns: 3;
+	}
+
+
 .fb-comments, .fb-comments > span[style], .fb_iframe_widget iframe[style]
 {
 	width: 100% !important;

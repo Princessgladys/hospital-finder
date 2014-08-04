@@ -692,5 +692,19 @@ namespace HospitalF.Controllers
         }
 
         #endregion
+
+        #region Statistic
+        [LayoutInjecter(Constants.AdmidLayout)]
+        public ActionResult Statistic()
+        {
+            ViewBag.TotalHospitalCount = DataModel.TotalHospitalCount();
+            ViewBag.TotalInactiveHospitalCount = DataModel.TotalInactiveHospitalCount();
+            ViewBag.TotalMemberHospitalCount = DataModel.TotalMemberHospitalCount();
+            ViewBag.TotalNoMemberHospitalCount = ViewBag.TotalHospitalCount - ViewBag.TotalInactiveHospitalCount - ViewBag.TotalMemberHospitalCount;
+            ViewBag.TopTenBestRatingHospital = DataModel.TopTenBestRatingHospital();
+            return View();
+        }
+
+        #endregion
     }
 }

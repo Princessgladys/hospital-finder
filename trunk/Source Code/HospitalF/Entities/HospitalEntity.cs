@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HospitalF.Models;
 
 namespace HospitalF.Entities
 {
@@ -149,6 +150,11 @@ namespace HospitalF.Entities
         /// Property for Facilities attribute
         /// </summary>
         public List<FacilityEntity> Facilities { get; set; }
+
+        /// <summary>
+        /// Property for Specialities attribute
+        /// </summary>
+        public List<Speciality> Specialities { get; set; }
 
         /// <summary>
         /// Property for Is_Active attribute

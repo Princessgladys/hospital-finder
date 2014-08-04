@@ -337,5 +337,89 @@ namespace HospitalF.Models
         #endregion
 
         #endregion
+
+        #region Static Method
+        public static int TotalUserCount()
+        {
+            int count = 0;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                count = (from h in data.Users
+                         select h.User_ID).Count();
+            }
+            return count;
+        }
+
+        public static int TotalHospitalCount()
+        {
+            int count = 0;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                count = (from h in data.Hospitals
+                         select h.Hospital_ID).Count();
+            }
+            return count;
+        }
+
+        public static int TotalInactiveHospitalCount()
+        {
+            int count = 0;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                count = (from h in data.Hospitals
+                         where h.Is_Active == false
+                         select h.Hospital_ID).Count();
+            }
+            return count;
+        }
+
+        public static int TotalMemberHospitalCount()
+        {
+            int count = 0;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                count = (from h in data.Hospitals
+                         where h.Is_Active == true
+                         select h.Hospital_ID).Count();
+            }
+            return count;
+        }
+
+        public static Hospital BestRatingHospital()
+        {
+            Hospital hospital = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                hospital = (from h in data.Hospitals
+                            where h.Is_Active == true
+                            select h).OrderByDescending(h => h.Ratings).FirstOrDefault();
+            }
+            return hospital;
+        }
+
+        public static List<Hospital> TopTenBestRatingHospital()
+        {
+            List<Hospital> hospitals = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                hospitals = (from h in data.Hospitals
+                            where h.Is_Active == true
+                            select h).OrderByDescending(x => x.Rating).Take(10).ToList<Hospital>();
+            }
+            return hospitals;
+        }
+
+        public static Hospital BestRatingCountHospital()
+        {
+            Hospital hospital = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                hospital = (from h in data.Hospitals
+                            where h.Is_Active == true
+                            select h).OrderByDescending(h => h.Rating_Count).FirstOrDefault();
+            }
+            return hospital;
+        }
+        #endregion
     }
 }
