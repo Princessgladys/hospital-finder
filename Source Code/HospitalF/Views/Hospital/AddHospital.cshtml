@@ -270,7 +270,7 @@
 
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Người chịu trách nhiệm chính <font color="red">*</font></label>
+                                        <label class="label">Người chịu trách nhiệm chính</label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-male"></i>
                                             @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm", @type = "email" })
@@ -893,7 +893,6 @@
                     email: true
                 },
                 PersonInCharged: {
-                    required: true,
                     email: true
                 },
                 Website: {
@@ -960,7 +959,6 @@
                     email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
                 },
                 PersonInCharged: {
-                    required: '@string.Format(ErrorMessage.CEM001, Constants.PersonInCharged)',
                     email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
                 },
                 Website: {

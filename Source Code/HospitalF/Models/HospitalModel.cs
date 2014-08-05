@@ -429,6 +429,12 @@ namespace HospitalF.Models
                 }
             }
 
+            // Person in charged
+            if (model.PersonInCharged == null)
+            {
+                model.PersonInCharged = string.Empty;
+            }
+
             #endregion
 
             // Return list of dictionary words
