@@ -570,7 +570,8 @@ BEGIN
 					   h.Rating, h.Rating_Count
 				FROM Hospital h, @TempHospitalList temp
 				WHERE h.Hospital_ID = temp.Hospital_ID AND
-					  h.City_ID = @CityID
+					  h.City_ID = @CityID AND
+					  h.Is_Active = 'True'
 				ORDER BY temp.Priorty DESC
 				RETURN;
 			END
@@ -585,7 +586,8 @@ BEGIN
 					   h.Rating, h.Rating_Count
 				FROM Hospital h, @TempHospitalList temp
 				WHERE h.Hospital_ID = temp.Hospital_ID AND
-					  h.District_ID = @DistrictID
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
 				ORDER BY temp.Priorty DESC
 				RETURN;
 			END
@@ -601,7 +603,8 @@ BEGIN
 				FROM Hospital h, @TempHospitalList temp
 				WHERE h.Hospital_ID = temp.Hospital_ID AND
 					  h.City_ID = @CityID AND
-					  h.District_ID = @DistrictID
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
 				ORDER BY temp.Priorty DESC
 				RETURN;
 			END
@@ -617,7 +620,8 @@ BEGIN
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
 				FROM Hospital h
-				WHERE h.City_ID = @CityID
+				WHERE h.City_ID = @CityID AND
+					  h.Is_Active = 'True'
 				ORDER BY [dbo].[FU_TAKE_RATING_POINT] (h.Hospital_ID) +
 						 [dbo].[FU_TAKE_RATING_COUNT] (h.Hospital_ID) +
 						 @ExactlyPriorityOfCity DESC
@@ -633,7 +637,8 @@ BEGIN
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
 				FROM Hospital h
-				WHERE h.District_ID = @DistrictID
+				WHERE h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
 				ORDER BY [dbo].[FU_TAKE_RATING_POINT] (h.Hospital_ID) +
 						 [dbo].[FU_TAKE_RATING_COUNT] (h.Hospital_ID) +
 						 @ExactlyPriorityOfDistrict DESC
@@ -650,7 +655,8 @@ BEGIN
 					   h.Rating, h.Rating_Count
 				FROM Hospital h
 				WHERE h.City_ID = @CityID AND
-					  h.District_ID = @DistrictID
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
 				ORDER BY [dbo].[FU_TAKE_RATING_POINT] (h.Hospital_ID) +
 						 [dbo].[FU_TAKE_RATING_COUNT] (h.Hospital_ID) +
 						 @ExactlyPriorityOfCity + @ExactlyPriorityOfDistrict DESC
@@ -667,7 +673,8 @@ BEGIN
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 			   h.Rating
 		FROM Hospital h, @TempHospitalList temp
-		WHERE h.Hospital_ID = temp.Hospital_ID
+		WHERE h.Hospital_ID = temp.Hospital_ID AND
+			  h.Is_Active = 'True'
 		ORDER BY temp.Priorty DESC
 		RETURN;
 	END
