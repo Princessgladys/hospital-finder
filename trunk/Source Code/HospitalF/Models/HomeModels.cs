@@ -156,7 +156,8 @@ namespace HospitalF.Models
             {
                 // Find matching result for cities
                 if (!string.IsNullOrEmpty(city.City_Name) &&
-                    StringUtil.IsPatternMatched(inputStr, city.City_Name.Trim().ToLower()))
+                    StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr),
+                        StringUtil.RemoveDiacriticMarks(city.City_Name.Trim().ToLower())))
                 {
                     this.CityID = city.City_ID;
                     this.CityName = city.City_Name;
@@ -170,7 +171,8 @@ namespace HospitalF.Models
             {
                 // Find matching result for districts
                 if (!string.IsNullOrEmpty(district.District_Name) &&
-                    StringUtil.IsPatternMatched(inputStr, district.District_Name.Trim().ToLower()))
+                    StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr), 
+                        StringUtil.RemoveDiacriticMarks(district.District_Name.Trim().ToLower())))
                 {
                     this.DistrictID = district.District_ID;
                     this.DistrictName = district.District_Name;
@@ -215,7 +217,8 @@ namespace HospitalF.Models
                 if (!string.IsNullOrEmpty(city.City_Name))
                 {
                     tempCityIndex = StringUtil.TakeMatchedStringPosition(
-                        queryStr, city.City_Name.ToLower());
+                        StringUtil.RemoveDiacriticMarks(queryStr),
+                        StringUtil.RemoveDiacriticMarks(city.City_Name.ToLower()));
                     if (tempCityIndex != Constants.DefaultMatchingValue)
                     {
                         cityPosition = tempCityIndex;
@@ -234,7 +237,8 @@ namespace HospitalF.Models
                 if (!string.IsNullOrEmpty(district.District_Name))
                 {
                     tempDistrictIndex = StringUtil.TakeMatchedStringPosition(
-                        queryStr, district.District_Name.ToLower());
+                         StringUtil.RemoveDiacriticMarks(queryStr),
+                         StringUtil.RemoveDiacriticMarks(district.District_Name.ToLower()));
                     if (tempDistrictIndex != Constants.DefaultMatchingValue)
                     {
                         districtPosition = tempDistrictIndex;

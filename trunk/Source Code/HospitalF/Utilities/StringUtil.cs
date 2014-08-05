@@ -480,13 +480,17 @@ namespace HospitalF.Utilities
         /// </summary>
         /// <param name="inputStr">Input Vietnamse sentence with diacritics marks</param>
         /// <returns>Non-diacritic string</returns>
-        public string RemoveDiacriticMarks(string inputStr)
+        public static string RemoveDiacriticMarks(string inputStr)
         {
-            Regex v_reg_regex = new Regex(Constants.CheckDiacriticalMark);
-            string v_str_FormD = inputStr.Normalize(NormalizationForm.FormD);
-            return v_reg_regex.Replace(v_str_FormD, String.Empty).
-                Replace(Constants.LatinSmallLetterDWithStroke, 'd').
-                Replace(Constants.LatinCapitalLetterDWithStroke, 'D');
+            Regex regex = new Regex("\\p{IsCombiningDiacriticalMarks}+");
+            string temp = inputStr.Normalize(NormalizationForm.FormD);
+            return regex.Replace(temp, String.Empty)
+                        .Replace('\u0111', 'd').Replace('\u0110', 'D');
+            //Regex v_reg_regex = new Regex(Constants.CheckDiacriticalMark);
+            //string v_str_FormD = inputStr.Normalize(NormalizationForm.FormD);
+            //return v_reg_regex.Replace(v_str_FormD, String.Empty).
+            //    Replace(Constants.LatinSmallLetterDWithStroke, 'd').
+            //    Replace(Constants.LatinCapitalLetterDWithStroke, 'D');
         } 
     }
 }

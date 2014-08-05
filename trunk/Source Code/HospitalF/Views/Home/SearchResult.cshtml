@@ -26,6 +26,19 @@
             </div>
             <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
         }
+        @if (!string.IsNullOrEmpty(suggestionSentence))
+        {
+            suggestionSentence = suggestionSentence.Trim();
+            <div class="col-md-12">
+                <p>
+                    Có phải bạn muốn tìm <i>
+                        @Html.ActionLink(suggestionSentence,
+                                Constants.SearchResultAction, Constants.HomeController,
+                                new { SearchValue = suggestionSentence }, null)
+                    </i>
+                </p>
+            </div>
+        }
         @if (hospitalList.TotalItemCount == 0)
         {
             <div class="col-md-12">
@@ -36,17 +49,6 @@
                     <li>Hãy thử những từ khóa khác.</li>
                 </ul>
             </div>
-        }
-        @if (!string.IsNullOrEmpty(suggestionSentence))
-        {
-            suggestionSentence = suggestionSentence.Trim();
-            <p>
-                Có phải bạn muốn tìm <i>
-                    @Html.ActionLink(suggestionSentence,
-                                Constants.SearchResultAction, Constants.HomeController,
-                                new { SearchValue = suggestionSentence }, null)
-                </i>
-            </p>
         }
     </div>
 
