@@ -136,52 +136,54 @@ BEGIN
 				SET @RowNum += 1
 			END
 		END
-
 		-- NON-DIACRITIC VIETNAMESE
-		SET @NumOfHospitalFoundByRelativeTag = 
-			(SELECT COUNT(*)
-			 FROM (SELECT Word_ID
-				   FROM WordDictionary
-				   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
-						 [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
-						 [Type] = 2) w)
-
-		IF (@NumOfHospitalFoundByRelativeTag > 0)
+		ELSE
 		BEGIN
-			SET @RowNum = 1
-			WHILE (@RowNum <= @NumOfHospitalFoundByRelativeTag)
+			SET @NumOfHospitalFoundByRelativeTag = 
+				(SELECT COUNT(*)
+				 FROM (SELECT Word_ID
+					   FROM WordDictionary
+					   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
+							 [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
+							 [Type] = 2) w)
+
+			IF (@NumOfHospitalFoundByRelativeTag > 0)
 			BEGIN
-				SET @TempHospitalID = (SELECT h.Hospital_ID
-									   FROM (SELECT ROW_NUMBER()
-											 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
-											 FROM WordDictionary w, Word_Hospital wh
-											 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
-												   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
-												   [Type] = 2 AND
-												   w.Word_ID = wh.Word_ID) AS h
-									   WHERE RowNumber = @RowNum)
-				
-				-- ADD ONLY HOSPITALS THAT HAS NOT BEEN APPEARED IN TEMPORARY LIST
-				IF (NOT EXISTS(SELECT Hospital_ID
-							   FROM @TempHospitalList
-							   WHERE Hospital_ID = @TempHospitalID))
+				SET @RowNum = 1
+				WHILE (@RowNum <= @NumOfHospitalFoundByRelativeTag)
 				BEGIN
-					-- TAKE RATING POINT
-					SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
+					SET @TempHospitalID = (SELECT h.Hospital_ID
+										   FROM (SELECT ROW_NUMBER()
+												 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
+												 FROM WordDictionary w, Word_Hospital wh
+												 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
+													   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
+													   [Type] = 2 AND
+													   w.Word_ID = wh.Word_ID) AS h
+										   WHERE RowNumber = @RowNum)
+				
+					-- ADD ONLY HOSPITALS THAT HAS NOT BEEN APPEARED IN TEMPORARY LIST
+					IF (NOT EXISTS(SELECT Hospital_ID
+								   FROM @TempHospitalList
+								   WHERE Hospital_ID = @TempHospitalID))
+					BEGIN
+						-- TAKE RATING POINT
+						SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
 
-					-- TAKE RATING COUNT NUMBER
-					SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
+						-- TAKE RATING COUNT NUMBER
+						SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
 
-					-- INSERT TO @TempHospitalList
-					INSERT INTO @TempHospitalList
-					SELECT @TempHospitalID,
-						   (SELECT [dbo].FU_TAKE_NUMBER_OF_RELATIVE_TAG (@TempHospitalID, @NonDiacriticWhatPhrase) *
-								   @NonDiacriticPriorityOfTag +
-								   CONVERT(INT, @RatingPoint * @PriorityOfRatingPoint) +
-								   @RatingCount * @PriorityOfRatingCount)
+						-- INSERT TO @TempHospitalList
+						INSERT INTO @TempHospitalList
+						SELECT @TempHospitalID,
+							   (SELECT [dbo].FU_TAKE_NUMBER_OF_RELATIVE_TAG (@TempHospitalID, @NonDiacriticWhatPhrase) *
+									   @NonDiacriticPriorityOfTag +
+									   CONVERT(INT, @RatingPoint * @PriorityOfRatingPoint) +
+									   @RatingCount * @PriorityOfRatingCount)
+					END
+
+					SET @RowNum += 1
 				END
-
-				SET @RowNum += 1
 			END
 		END
 	END
