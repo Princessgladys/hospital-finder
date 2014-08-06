@@ -847,7 +847,7 @@ namespace HospitalF.Controllers
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles= Constants.AdministratorRoleName + ", " + Constants.HospitalUserRoleName)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> AddHospital()
         {
             try
@@ -937,7 +937,13 @@ namespace HospitalF.Controllers
                 }
 
                 // Assign value for drop down list
-                PassValueDropdownlist();
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+                ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+                ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
+                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+                ViewBag.ServiceList = serviceList;
+                ViewBag.FacilityList = facilityList;
 
                 // Check if insert process is success or not
                 if (result == 0)
@@ -1144,20 +1150,19 @@ namespace HospitalF.Controllers
 
         #endregion
 
-        #region Private method
+        #region Import Excel
 
         /// <summary>
-        /// Pass existed value for drop down list on view
+        /// GET: /Hospital/ImportExcel
         /// </summary>
-        private void PassValueDropdownlist()
+        /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> ImportExcel()
         {
-            ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-            ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
-            ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
-            ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
-            ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-            ViewBag.ServiceList = serviceList;
-            ViewBag.FacilityList = facilityList;
+
+
+            return View();
         }
 
         #endregion
