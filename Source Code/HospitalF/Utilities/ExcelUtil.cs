@@ -6,6 +6,8 @@ using System.Web;
 using HospitalF.Models;
 using LinqToExcel;
 using System.IO;
+using System.Web.Configuration;
+using HospitalF.Constant;
 
 namespace HospitalF.Utilities
 {
@@ -17,17 +19,21 @@ namespace HospitalF.Utilities
         /// <summary>
         /// Read data from Excel file
         /// </summary>
+        /// <param name="userId">User ID</param>
         /// <param name="file">Input file</param>
         /// <returns>List[HospitalModel] that contains list of hospitals</returns>
-        public static List<HospitalModel> LoadDataFrom(HttpPostedFileBase file)
+        public static List<HospitalModel> LoadDataFromExcel(HttpPostedFileBase file, int userId)
         {
-            // Create new list of hospitals
             List<HospitalModel> hospitalList = new List<HospitalModel>();
+
+            // Save file to server
+            string fileFullPath = string.Format("{0}{1}",
+                WebConfigurationManager.AppSettings[Constants.ExcelFolder],
+                FileUtil.SaveFileToServer(file, userId, 0));
 
             // Create instance of Excel file
             var excelFile = new ExcelQueryFactory();
-            string a = Path.GetFileName(file.FileName);
-            excelFile.FileName = Path.GetFullPath(file.FileName);
+            excelFile.FileName = fileFullPath;
             excelFile.AddMapping<HospitalModel>(d => d.HospitalName, "FirstName");
 
             // Read data

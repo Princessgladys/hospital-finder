@@ -740,8 +740,8 @@ namespace HospitalF.Controllers
                 fName = file.FileName;
                 if (file != null && file.ContentLength > 0)
                 {
-                    filePath.Add(PhotoUtil.SaveImageToServer(file,
-                        Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2])));
+                    filePath.Add(FileUtil.SaveFileToServer(file,
+                        Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]), 1));
                 }
             }
 
@@ -1183,7 +1183,9 @@ namespace HospitalF.Controllers
                 {
                     if (file != null && file.ContentLength > 0)
                     {
-                        List<HospitalModel> hospitalList = ExcelUtil.LoadDataFrom(file);
+                        HospitalModel mdel = new HospitalModel();
+                        List<HospitalModel> hospitalList = await mdel.HandleExcelFileData(file,
+                            Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]));
                         return View(hospitalList);
                     }
                 }

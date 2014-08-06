@@ -13,15 +13,16 @@ namespace HospitalF.Utilities
     /// <summary>
     /// Class define methods to handle photo
     /// </summary>
-    public class PhotoUtil
+    public class FileUtil
     {
         /// <summary>
         /// Save picture to folder in database
         /// </summary>
         /// <param name="file">Picture file</param>
         /// <param name="userId">User ID</param>
+        /// <param name="mode">1: Photo, 0: Excel</param>
         /// <returns>File name</returns>
-        public static string SaveImageToServer(HttpPostedFileBase file, int userId)
+        public static string SaveFileToServer(HttpPostedFileBase file, int userId, int mode)
         {
             // Check if input file is null
             if (file == null)
@@ -29,18 +30,33 @@ namespace HospitalF.Utilities
                 return null;
             }
 
-            // Read configutation detail from Web.config
-            string photoLocation = WebConfigurationManager.
-                AppSettings[Constants.PhotoFolder];
+            string fileLocation = string.Empty;
+
+            // Handle photo files
+            if (mode == 1)
+            {
+                fileLocation = WebConfigurationManager.AppSettings[Constants.PhotoFolder];
+            }
+            else
+            {
+                // Handle Excel file
+                fileLocation = WebConfigurationManager.AppSettings[Constants.ExcelFolder];
+            }
 
             // Handle name of picture to avoid duplicated
-            var fileName = HandlePictureFileName(file, photoLocation, userId);
+            var fileName = HandleFileName(file, fileLocation, userId);
             // Save the picture to the PersonalPicture folder which located on server
-            var path = Path.Combine(photoLocation, fileName);
+            var path = Path.Combine(fileLocation, fileName);
             file.SaveAs(path);
 
-            // Return file name
-            return Constants.Slash + Constants.ImagesFolder + Constants.Slash + fileName;
+            if (mode == 1)
+            {
+                return Constants.Slash + Constants.ImagesFolder + Constants.Slash + fileName;
+            }
+            else
+            {
+                return Constants.DoubleReverseSlash + fileName; 
+            }
         }
 
         /// <summary>
@@ -50,7 +66,7 @@ namespace HospitalF.Utilities
         /// <param name="filePath">Filepath</param>
         /// <param name="userId">User ID</param>
         /// <returns>Filename after modified</returns>
-        private static string HandlePictureFileName(HttpPostedFileBase file, string filePath, int userId)
+        private static string HandleFileName(HttpPostedFileBase file, string filePath, int userId)
         {
             // Declare variable to take file name
             string fileName = String.Empty;
