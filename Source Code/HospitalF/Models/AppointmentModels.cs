@@ -179,7 +179,7 @@ namespace HospitalF.Models
                 result = await Task.Run(() => data.SP_INSERT_APPOINTMENT(app.Patient_Full_Name, app.Patient_Gender,
                     app.Patient_Birthday, app.Patient_Phone_Number, app.Patient_Email,
                     app.Appointment_Date, app.Start_Time, app.End_Time, app.In_Charge_Doctor,
-                    app.Curing_Hospital, app.Confirm_Code,app.HealthInsuranceCode,app.SymptomDescription));
+                    app.Curing_Hospital, app.Confirm_Code, app.Health_Insurance_Code, app.Symptom_Description));
             }
             return result;
         }

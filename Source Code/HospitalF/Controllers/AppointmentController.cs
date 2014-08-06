@@ -99,8 +99,8 @@ namespace HospitalF.Controllers
                 appointment.End_Time = EndTime;
                 appointment.Appointment_Date = model.AppDate;
                 appointment.Curing_Hospital = model.HospitalID;
-                appointment.HealthInsuranceCode = model.HealthInsuranceCode;
-                appointment.SymptomDescription = model.SymptomDescription;
+                appointment.Health_Insurance_Code = model.HealthInsuranceCode;
+                appointment.Symptom_Description = model.SymptomDescription;
                 int result = await AppointmentModels.InsertAppointment(appointment);
                 if (result != 1)
                 {
