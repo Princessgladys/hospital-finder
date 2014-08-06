@@ -39,8 +39,8 @@ BEGIN
 		,[In_Charge_Doctor]
 		,[Curing_Hospital]
 		,[Confirm_Code]
-		,[HealthInsuranceCode]
-		,[SymptomDescription]
+		,[Health_Insurance_Code]
+		,[Symptom_Description]
 		,[Is_Confirm]
 		,[Is_Active])
 	VALUES
