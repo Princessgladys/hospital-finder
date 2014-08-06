@@ -23,7 +23,7 @@
     <p>Chọn tập tin <code>Excel</code> chứa thông tin bệnh viện. Sau khi kiếm tra kỹ thông tin, ấn <code>Xác nhận</code> để hoàn tất.</p>
 </div>
 
-@using (Html.BeginForm(Constants.ImportExcelAction, Constants.HospitalController, FormMethod.Get, new { @id = "import-form" }))
+@using (Html.BeginForm(Constants.ImportExcelAction, Constants.HospitalController, FormMethod.Post, new { @id = "import-form", @enctype = "multipart/form-data" }))
 {
     <section id="widget-grid" class="">
         <div class="alert alert-danger fade in" style="display: none;"
@@ -57,7 +57,8 @@
                     <td>&nbsp;</td>
                     <td style="position: absolute;">
                         <button class="btn btn-sm btn-success btn-next" type="submit"
-                                name="@Constants.Button" id="@Constants.ButtonUpload">
+                                name="@Constants.Button" id="@Constants.ButtonUpload"
+                                value="@Constants.ButtonUpload">
                             <i class="fa fa-cloud-upload"></i>&nbsp;Tải danh sách
                         </button>
                     </td>
@@ -95,7 +96,7 @@
                 setFileNotificationMessage('Không có tập tin.', 0);
                 return false;
             } else {
-                if ($('invalidFileIcon:visible')) {
+                if ($('#invalidFileIcon').is(":visible")) {
                     return false;
                 } else {
                     $('#import-form').submit();

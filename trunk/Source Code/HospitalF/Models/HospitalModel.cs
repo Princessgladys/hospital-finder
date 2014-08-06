@@ -197,6 +197,11 @@ namespace HospitalF.Models
         /// </summary>
         public string TagsInput { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property PhotoFilesPath
+        /// </summary>
+        public int RecordStatus { get; set; }
+
         public List<Speciality> SpecialityList { get; set; }
         public List<Service> ServiceList { get; set; }
         public List<Facility> FacilityList { get; set; }
