@@ -893,13 +893,12 @@ namespace HospitalF.Controllers
         /// POST: /Hospital/AddHospital
         /// </summary>
         /// <param name="model">Hospital Model</param>
-        /// <param name="files">Photo files</param>
         /// <returns>Task[ActionResult]</returns>
         [HttpPost]
         [LayoutInjecter(Constants.AdmidLayout)]
         [Authorize(Roles = Constants.AdministratorRoleName)]
         [ValidateInput(false)]
-        public async Task<ActionResult> AddHospital(HospitalModel model, List<HttpPostedFileBase> file)
+        public async Task<ActionResult> AddHospital(HospitalModel model)
         {
             try
             {
@@ -1158,9 +1157,38 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
         [Authorize(Roles = Constants.AdministratorRoleName)]
-        public async Task<ActionResult> ImportExcel()
+        public ActionResult ImportExcel()
         {
+            return View();
+        }
 
+        /// <summary>
+        /// POST: /Hospital/ImportExcel
+        /// </summary>
+        /// <param name="model">List of Hospital [HospitalModel]</param>
+        /// <param name="file">Upload file</param>
+        /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> ImportExcel(List<HospitalModel> model, HttpPostedFileBase file)
+        {
+            try
+            {
+                // Indicate which button is clicked
+                string button = Request[Constants.Button];
+
+                // Upload file
+                if (Constants.NormalSearchForm.Equals(button))
+                {
+
+                }
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
 
             return View();
         }
