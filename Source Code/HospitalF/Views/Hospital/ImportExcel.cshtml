@@ -91,7 +91,6 @@
     $(document).ready(function () {
         $('#UploadFile').click(function (e) {
             var file = $('#file').val()
-
             if (file.trim() == "") {
                 setFileNotificationMessage('Không có tập tin.', 0);
                 return false;
