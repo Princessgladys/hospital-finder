@@ -329,9 +329,6 @@
     <Content Include="Content\img\logo-o.png" />
     <Content Include="Content\img\logo.png" />
     <Content Include="Content\img\saturation.png" />
-    <Content Include="Content\img\scrollbar\bg-scrollbar-thumb-y.png" />
-    <Content Include="Content\img\scrollbar\bg-scrollbar-track-y.png" />
-    <Content Include="Content\img\scrollbar\bg-scrollbar-trackend-y.png" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
     <Content Include="Content\img\sort_both.png" />
@@ -369,7 +366,6 @@
     <Content Include="Content\js\notification\SmartNotification.min.js" />
     <Content Include="Content\js\plugin\bootstrap-slider\bootstrap-slider.min.js" />
     <Content Include="Content\js\plugin\bootstrap-taginput\bootstrap-tagsinput.js" />
-    <Content Include="Content\js\plugin\bootstrap-timepicker\bootstrap-timepicker.min.js" />
     <Content Include="Content\js\plugin\bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="Content\js\plugin\confirm\jquery.confirm.js" />
     <Content Include="Content\js\plugin\datatables\ColReorder.min.js" />
@@ -533,7 +529,6 @@
     <Content Include="Views\Account\AddAccount.cshtml" />
     <Content Include="Views\Hospital\UpdateHospital.cshtml" />
     <Content Include="Views\Doctor\Index.cshtml" />
-    <Content Include="Views\Hospital\SpecialityServiceFacilityUpdate.cshtml" />
     <Content Include="Views\Doctor\UpdateDoctor.cshtml" />
     <Content Include="Views\Data\ServiceList.cshtml" />
     <Content Include="Views\Data\FacilityList.cshtml" />
@@ -549,6 +544,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

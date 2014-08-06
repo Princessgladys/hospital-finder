@@ -280,6 +280,11 @@ namespace HospitalF.Constant
         /// </summary>
         public const string AddSpecialityAction = "AddSpeciality";
 
+        /// <summary>
+        /// Name of Statistic method in DataController
+        /// </summary>
+        public const string StatisticAction = "Statistic";
+
         #endregion
 
         #region AccountModel

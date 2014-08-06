@@ -20,13 +20,6 @@
     </div>
 </div>
 
-<div class="alert alert-block alert-info">
-    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>&nbsp;Dữ liệu thống kê</h4>
-    <p>
-        Thông tin thống kê về dữ liệu hệ thống.
-    </p>
-</div>
-
 <section id="widget-grid" class="">
     <div class="row">
         <!-- NEW WIDGET START -->
@@ -50,9 +43,9 @@
                     <!-- widget content -->
                     <div class="widget-body">
                         <div class="col-md-12">
+                            <h5>Tổng quan về hệ thống</h5>
+                            <hr />
                             <div class="col-md-6">
-                                <h5>Thống kê chung</h5>
-                                <hr />
                                 <div class="widget-body no-padding">
                                     <div id="pie-chart" class="chart"></div>
                                 </div>
@@ -78,27 +71,19 @@
                                 </table>
                             </div>
                             <div class="col-md-6">
-                                <h5>Top 10 bệnh viện</h5>
-                                <hr />
+                                <div class="widget-body no-padding">
+                                    <div id="pie-chart-second" class="chart"></div>
+                                </div>
                                 <table class="table table-bordered table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>STT</th>
-                                            <th>Tên bệnh viện</th>
-                                            <th>Bình chọn</th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
-                                        @{int count = 0;}
-                                        @foreach (HospitalF.Models.Hospital hospital in ViewBag.TopTenBestRatingHospital)
+                                        @foreach (KeyValuePair<string, int> pair in ViewBag.HospitalTypeCount)
                                         {
-                                            double rate = Math.Round((double)(hospital.Rating == null ? 0 : hospital.Rating), 1);
                                             <tr>
-                                                <td>@(++count)</td>
-                                                <td><strong>@(Html.ActionLink(hospital.Hospital_Name, Constants.HospitalAction, Constants.HomeController, new { hospitalId = hospital.Hospital_ID}, new { @target = "_blank" }))</strong></td>
-                                                <td>@(rate)</td>
+                                                <td><strong>@(pair.Key)</strong></td>
+                                                <td>@(pair.Value)</td>
                                             </tr>
                                         }
+
                                     </tbody>
                                 </table>
                             </div>
@@ -109,73 +94,271 @@
         </article>
 </section>
 
+<section id="widget-grid-second" class="">
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-second"
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="false"
+                data-widget-sortable="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Thông tin từ người dùng</h2>
+                </header>
+                <div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <h5>Danh sách 10 bệnh viện có điểm đánh giá cao nhất</h5>
+                                <hr />
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tên bệnh viện</th>
+                                            <th>Điểm số</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{int count = 0;}
+                                        @foreach (HospitalF.Models.Hospital hospital in ViewBag.TopTenBestRatingHospital)
+                                        {
+                                            double rate = Math.Round((double)(hospital.Rating == null ? 0 : hospital.Rating), 1);
+                                            <tr>
+                                                <td>@(++count)</td>
+                                                <td><strong>@(Html.ActionLink(hospital.Hospital_Name, Constants.HospitalAction, Constants.HomeController, new { hospitalId = hospital.Hospital_ID }, new { @target = "_blank" }))</strong></td>
+                                                <td>@(rate)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Danh sách số lượng lịch hẹn của bệnh viện</h5>
+                                <hr />
+                                @using (Html.BeginForm(Constants.StatisticAction, Constants.DataController, FormMethod.Get))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input class="form-control" id="from" name="sFromDate" type="text" placeholder="Từ ngày..." value="@(ViewBag.FromDate)">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input class="form-control" id="to" name="sToDate" type="text" placeholder="...đến ngày..." value="@(ViewBag.ToDate)">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i>&nbsp;Lọc</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                @{ List<HospitalF.Models.Hospital> hospitals = ViewBag.TopTenHospitalAppointment;
+                                   count = 0;
+                                }
+                                @if (hospitals.Count > 0)
+                                {
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Tên bệnh viện</th>
+                                                <th>Số lịch hẹn</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (HospitalF.Models.Hospital hospital in hospitals)
+                                            {
+                                                <tr>
+                                                    <td>@(++count)</td>
+                                                    <td><strong>@(Html.ActionLink(hospital.Hospital_Name, Constants.HospitalAction, Constants.HomeController, new { hospitalId = hospital.Hospital_ID }, new { @target = "_blank" }))</strong></td>
+                                                    <td>@(hospital.Rating_Count)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                                else
+                                {
+                                    <p><strong>Không có bệnh viện nào.</strong></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
 <script type="text/javascript">
-    pageSetUp();
+    $(document).ready(function () {
+        pageSetUp();
 
-    /* chart colors default */
-    var $chrt_border_color = "#efefef";
-    var $chrt_grid_color = "#DDD"
-    var $chrt_main = "#E24913";			/* red       */
-    var $chrt_second = "#6595b4";		/* blue      */
-    var $chrt_third = "#FF9F01";		/* orange    */
-    var $chrt_fourth = "#7e9d3a";		/* green     */
-    var $chrt_fifth = "#BD362F";		/* dark red  */
-    var $chrt_mono = "#000";
+        /* chart colors default */
+        var $chrt_border_color = "#efefef";
+        var $chrt_grid_color = "#DDD"
+        var $chrt_main = "#E24913";			/* red       */
+        var $chrt_second = "#6595b4";		/* blue      */
+        var $chrt_third = "#FF9F01";		/* orange    */
+        var $chrt_fourth = "#7e9d3a";		/* green     */
+        var $chrt_fifth = "#BD362F";		/* dark red  */
+        var $chrt_mono = "#000";
 
-    /* pie chart */
+        /* pie chart */
 
-    if ($('#pie-chart').length) {
+        if ($('#pie-chart').length) {
 
-        var data_pie = [];
-        data_pie[0] = {
-            label: "Đăng ký thành viên",
-            data: @(ViewBag.TotalMemberHospitalCount)
-            }
-
-        data_pie[1] = {
-            label: "Không đăng ký thành viên",
-            data: @(ViewBag.TotalNoMemberHospitalCount)
-            }
-
-        data_pie[2] = {
-            label: "Không hoạt động",
-            data: @(ViewBag.TotalInactiveHospitalCount)
-            }
-
-        $.plot($("#pie-chart"), data_pie, {
-            series: {
-                pie: {
-                    show: true,
-                    innerRadius: 0.5,
-                    radius: 1,
-                    label: {
-                        show: false,
-                        radius: 2 / 3,
-                        formatter: function (label, series) {
-                            return '<div style="font-size:11px;text-align:center;padding:4px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
-                        },
-                        threshold: 0.1
-                    }
+            var data_pie = [];
+            data_pie[0] = {
+                label: "Đăng ký thành viên",
+                data: @(ViewBag.TotalMemberHospitalCount)
                 }
-            },
-            legend: {
-                show: true,
-                noColumns: 1, // number of colums in legend table
-                labelFormatter: null, // fn: string -> string
-                labelBoxBorderColor: "#000", // border color for the little label boxes
-                container: null, // container (as jQuery object) to put legend in, null means default on top of graph
-                position: "ne", // position of default legend container within plot
-                margin: [5, 10], // distance from grid edge to default legend container within plot
-                backgroundColor: "#efefef", // null means auto-detect
-                backgroundOpacity: 1 // set to 0 to avoid background
-            },
-            grid: {
-                hoverable: true,
-                clickable: true
-            },
+
+            data_pie[1] = {
+                label: "Không đăng ký thành viên",
+                data: @(ViewBag.TotalNoMemberHospitalCount)
+                }
+
+            data_pie[2] = {
+                label: "Không hoạt động",
+                data: @(ViewBag.TotalInactiveHospitalCount)
+                }
+
+            $.plot($("#pie-chart"), data_pie, {
+                series: {
+                    pie: {
+                        show: true,
+                        innerRadius: 0,
+                        radius: 1,
+                        label: {
+                            show: true,
+                            radius: 2 / 3,
+                            formatter: function (label, series) {
+                                return '<div style="font-size:11px;text-align:center;padding:4px;color:white;">' + Math.round(series.percent) + '%</div>';
+                            },
+                            threshold: 0.1
+                        }
+                    }
+                },
+                legend: {
+                    show: true,
+                    noColumns: 1, // number of colums in legend table
+                    labelFormatter: null, // fn: string -> string
+                    labelBoxBorderColor: "#000", // border color for the little label boxes
+                    container: null, // container (as jQuery object) to put legend in, null means default on top of graph
+                    position: "ne", // position of default legend container within plot
+                    margin: [5, 10], // distance from grid edge to default legend container within plot
+                    backgroundColor: "#efefef", // null means auto-detect
+                    backgroundOpacity: 1 // set to 0 to avoid background
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true
+                },
+            });
+
+        }
+
+        if ($('#pie-chart-second').length) {
+
+            var data_pie = [];
+            @{count = 0;}
+            @foreach (KeyValuePair<string, int> pair in ViewBag.HospitalTypeCount)
+            {
+                <text>
+                    data_pie[@(count++)] = {
+                        label: "@(pair.Key)",
+                        data: @(pair.Value)
+                        }
+                </text>
+            }
+
+            $.plot($("#pie-chart-second"), data_pie, {
+                series: {
+                    pie: {
+                        show: true,
+                        innerRadius: 0,
+                        radius: 1,
+                        label: {
+                            show: true,
+                            radius: 2 / 3,
+                            formatter: function (label, series) {
+                                return '<div style="font-size:11px;text-align:center;padding:4px;color:white;">' + Math.round(series.percent) + '%</div>';
+                            },
+                            threshold: 0.1
+                        }
+                    }
+                },
+                legend: {
+                    show: true,
+                    noColumns: 1, // number of colums in legend table
+                    labelFormatter: null, // fn: string -> string
+                    labelBoxBorderColor: "#000", // border color for the little label boxes
+                    container: null, // container (as jQuery object) to put legend in, null means default on top of graph
+                    position: "ne", // position of default legend container within plot
+                    margin: [5, 10], // distance from grid edge to default legend container within plot
+                    backgroundColor: "#efefef", // null means auto-detect
+                    backgroundOpacity: 1 // set to 0 to avoid background
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true
+                },
+            });
+
+        }
+
+        /* end pie chart */
+
+        // Date Range Picker
+        $("#from").datepicker({
+            defaultDate: "dateToday",
+            maxDate: "dateToday",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: "dd/mm/yy",
+            prevText: '<i class="fa fa-chevron-left"></i>',
+            nextText: '<i class="fa fa-chevron-right"></i>',
+            onClose: function (selectedDate) {
+                $("#to").datepicker("option", "minDate", selectedDate);
+            }
+
         });
-
-    }
-
-    /* end pie chart */
+        $("#to").datepicker({
+            defaultDate: "+1m",
+            maxDate: "dateToday",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: "dd/mm/yy",
+            prevText: '<i class="fa fa-chevron-left"></i>',
+            nextText: '<i class="fa fa-chevron-right"></i>',
+            onClose: function (selectedDate) {
+                //$("#from").datepicker("option", "minDate", selectedDate);
+            }
+        });
+    });
+    
 </script>

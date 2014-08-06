@@ -155,7 +155,7 @@ namespace HospitalF.Models
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
-                    data.SP_UDPATE_SERVICE(model.ServiceID, model.ServiceName, model.TypeID));
+                    data.SP_UPDATE_SERVICE(model.ServiceID, model.ServiceName, model.TypeID));
             }
         }
 
@@ -397,7 +397,7 @@ namespace HospitalF.Models
             return hospital;
         }
 
-        public static List<Hospital> TopTenBestRatingHospital()
+        public static List<Hospital> TopTenRatingHospital()
         {
             List<Hospital> hospitals = null;
             using (LinqDBDataContext data = new LinqDBDataContext())
@@ -419,6 +419,41 @@ namespace HospitalF.Models
                             select h).OrderByDescending(h => h.Rating_Count).FirstOrDefault();
             }
             return hospital;
+        }
+
+        public static List<Hospital> TopTenHospitalAppointment(DateTime fromDate, DateTime toDate)
+        {
+            List<Hospital> hospitals = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                hospitals = (from h in data.SP_LOAD_TOP_10_HOSPITAL_APPOINTMENT(fromDate, toDate)
+                             select new Hospital()
+                             {
+                                 Hospital_ID = h.Hospital_ID,
+                                 Hospital_Name = h.Hospital_Name,
+                                 Rating_Count = h.Appointment_Count
+                             }).ToList<Hospital>();
+            }
+            return hospitals;
+        }
+
+        public static Dictionary<string, int> HospitalTypeCount()
+        {
+            Dictionary<string, int> hospitalTypes = new Dictionary<string, int>();
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                var temp = (from ht in data.SP_LOAD_HOSPITAL_TYPE_COUNT()
+                            select new
+                            {
+                                Type_Name = ht.Type_Name,
+                                HospitalType_Count = ht.HospitalType_Count
+                            });
+                foreach (var t in temp)
+                {
+                    hospitalTypes.Add(t.Type_Name, (int)t.HospitalType_Count);
+                }
+            }
+            return hospitalTypes;
         }
         #endregion
     }
