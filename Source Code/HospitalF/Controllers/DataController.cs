@@ -81,7 +81,7 @@ namespace HospitalF.Controllers
                 }
                 else
                 {
-                    serviceList =  await model.LoadListOfService(
+                    serviceList = await model.LoadListOfService(
                         model.ServiceName, model.TypeID, model.IsActive);
                     ViewBag.CurrentStatus = model.IsActive;
                 }
@@ -345,7 +345,7 @@ namespace HospitalF.Controllers
                 // Handle query string
                 NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
                 queryString.Remove(Constants.PageUrlRewriting);
-                ViewBag.Query = queryString.ToString();   
+                ViewBag.Query = queryString.ToString();
 
                 // Return value to view
                 pagedFacilityList = facilityList.ToPagedList(page.Value, Constants.PageSize);
@@ -695,14 +695,39 @@ namespace HospitalF.Controllers
 
         #region Statistic
         [LayoutInjecter(Constants.AdmidLayout)]
-        public ActionResult Statistic()
+        public ActionResult Statistic(string sFromDate, string sToDate)
         {
-            ViewBag.TotalHospitalCount = DataModel.TotalHospitalCount();
-            ViewBag.TotalInactiveHospitalCount = DataModel.TotalInactiveHospitalCount();
-            ViewBag.TotalMemberHospitalCount = DataModel.TotalMemberHospitalCount();
-            ViewBag.TotalNoMemberHospitalCount = ViewBag.TotalHospitalCount - ViewBag.TotalInactiveHospitalCount - ViewBag.TotalMemberHospitalCount;
-            ViewBag.TopTenBestRatingHospital = DataModel.TopTenBestRatingHospital();
-            return View();
+            try
+            {
+                ViewBag.TotalHospitalCount = DataModel.TotalHospitalCount();
+                ViewBag.TotalInactiveHospitalCount = DataModel.TotalInactiveHospitalCount();
+                ViewBag.TotalMemberHospitalCount = DataModel.TotalMemberHospitalCount();
+                ViewBag.TotalNoMemberHospitalCount = ViewBag.TotalHospitalCount - ViewBag.TotalInactiveHospitalCount - ViewBag.TotalMemberHospitalCount;
+                ViewBag.TopTenBestRatingHospital = DataModel.TopTenRatingHospital();
+                ViewBag.HospitalTypeCount = DataModel.HospitalTypeCount();
+                DateTime fromDate = new DateTime();
+                DateTime toDate = new DateTime();
+                if (string.IsNullOrEmpty(sFromDate))
+                {
+                    DateTime today = DateTime.Today;
+                    fromDate = new DateTime(today.Year, today.Month - 1, 1);
+                    toDate = new DateTime(today.Year, today.Month, 1);
+                }
+                else
+                {
+                    fromDate = DateTime.ParseExact(sFromDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    toDate = DateTime.ParseExact(sToDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                }
+                ViewBag.TopTenHospitalAppointment = DataModel.TopTenHospitalAppointment(fromDate, toDate);
+                ViewBag.FromDate = string.Format("{0:dd/MM/yyyy}", fromDate);
+                ViewBag.ToDate = string.Format("{0:dd/MM/yyyy}", toDate);
+                return View();
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
         }
 
         #endregion
