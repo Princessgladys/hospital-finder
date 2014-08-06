@@ -1179,9 +1179,13 @@ namespace HospitalF.Controllers
                 string button = Request[Constants.Button];
 
                 // Upload file
-                if (Constants.NormalSearchForm.Equals(button))
+                if (Constants.ButtonUpload.Equals(button))
                 {
-
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        List<HospitalModel> hospitalList = ExcelUtil.LoadDataFrom(file);
+                        return View(hospitalList);
+                    }
                 }
             }
             catch (Exception exception)
