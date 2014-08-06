@@ -529,6 +529,7 @@
     <Content Include="Views\Data\UpdateFacility.cshtml" />
     <Content Include="Views\Data\UpdateSpeciality.cshtml" />
     <Content Include="Views\Data\Statistic.cshtml" />
+    <Content Include="Views\Hospital\ImportExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

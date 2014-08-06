@@ -186,6 +186,11 @@ namespace HospitalF.Constant
         public const string DisplayHospitalListAction = "DisplayHospitalList";
 
         /// <summary>
+        /// Name of ImportExcel method in HospitalController
+        /// </summary>
+        public const string ImportExcelAction = "ImportExcel";
+
+        /// <summary>
         /// Name of ChangeHospitalStatusAction method in HospitalController
         /// </summary>
         public const string ChangeHospitalStatusAction = "ChangeHospitalStatus";
@@ -626,6 +631,11 @@ namespace HospitalF.Constant
         public const string FileInSession = "SessionFiles";
 
         #endregion
+
+        /// <summary>
+        /// Button for upload file button in page Import Excel
+        /// </summary>
+        public const string ButtonUpload = "UploadFile";
 
         #endregion
 

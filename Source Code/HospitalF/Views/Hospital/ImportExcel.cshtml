@@ -1,5 +1,80 @@
-﻿@model HospitalF.Models.HospitalModel
+﻿@using HospitalF.Constant
+
+@model List<HospitalF.Models.HospitalModel>
 
 @{
     ViewBag.Title = "Thêm bệnh viện từ Excel";
 }
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-pencil-square-o fa-fw "></i>
+            Thêm mới bệnh viện
+            <span>
+                > Từ Excel
+            </span>
+        </h1>
+    </div>
+</div>
+
+<div class="alert alert-block alert-info">
+    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>&nbsp;Tải danh sách bệnh viện</h4>
+    <p>Chọn tập tin <code>Excel</code> chứa thông tin bệnh viện. Sau khi kiếm tra kỹ thông tin, ấn <code>Xác nhận</code> để hoàn tất.</p>
+</div>
+
+@using (Html.BeginForm(Constants.ImportExcelAction, Constants.HospitalController, FormMethod.Get, new { @id = "import-form" }))
+{
+    <section id="widget-grid" class="">
+        <div class="alert alert-danger fade in" style="display: none;"
+             id="error-alert">
+            <button class="close" data-dismiss="alert">
+                ×
+            </button>
+            <i class="fa-fw fa fa-times"></i>
+            <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
+        </div>
+        <div class="alert alert-success fade in" style="display: none;"
+             id="success-alert">
+            <button class="close" data-dismiss="alert">
+                ×
+            </button>
+            <i class="fa-fw fa fa-check"></i>
+            <strong>Thành công</strong> Thêm mới bệnh viện thành công.
+        </div>
+
+        <div class="form-group">
+            <table border="0">
+                <tr>
+                    <td>
+                        <input type="file" class="btn btn-default" id="file">
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <button class="btn btn-sm btn-success btn-next" type="submit"
+                                name="@Constants.Button" id="@Constants.ButtonUpload">
+                            <i class="fa fa-cloud-upload"></i>&nbsp;Tải danh sách
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <p class="help-block">
+                Chọn tập tin Excel để tải danh sách bệnh viện
+            </p>
+        </div>
+
+
+    </section>
+}
+
+<script type="text/javascript">
+    pageSetUp();
+
+    @*Data validation*@
+    $(document).ready(function () {
+
+
+
+    });
+
+</script>
