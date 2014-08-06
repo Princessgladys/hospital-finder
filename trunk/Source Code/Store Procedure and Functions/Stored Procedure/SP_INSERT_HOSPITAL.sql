@@ -27,6 +27,7 @@ CREATE PROCEDURE SP_INSERT_HOSPITAL
 	@PersonInChared VARCHAR(64),
 	@PhotoList NVARCHAR(4000),
 	@TagInput NVARCHAR(4000),
+	@AvgCuringTime INT,
 	@SpecialityList NVARCHAR(4000),
 	@ServiceList NVARCHAR(4000),
 	@FacilityList NVARCHAR(4000)
@@ -54,6 +55,7 @@ BEGIN
 			Ordinary_End_Time,
 			Is_Allow_Appointment,
 			Full_Description,
+			Avg_Curing_Time,
 			Coordinate,
 			Created_Person,
 			Is_Active
@@ -76,6 +78,7 @@ BEGIN
 			@OrdinaryEndTime,
 			@IsAllowAppointment,
 			@FullDescription,
+			@AvgCuringTime,
 			@Coordinate,
 			@CreatedPerson,
 			'True'
