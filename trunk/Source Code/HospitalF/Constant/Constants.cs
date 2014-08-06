@@ -361,6 +361,11 @@ namespace HospitalF.Constant
         public const string Coordinate = "Tọa độ";
 
         /// <summary>
+        /// Vietnamese name of property AverageCuringTime
+        /// </summary>
+        public const string AverageCuringTime = "Thời gian khám trung bình";
+
+        /// <summary>
         /// Vietnamese name of property DoctorNameViet
         /// </summary>
         public const string DoctorNameViet = "Tên bác sĩ";
@@ -913,14 +918,24 @@ namespace HospitalF.Constant
         public const string PhotoFolder = "PhotoFolder";
 
         /// <summary>
+        /// Constant for ExcelFolder key in appSettings section of Web.config
+        /// </summary>
+        public const string ExcelFolder = "ExcelFolder";
+
+        /// <summary>
         /// Format time with 2 digit
         /// </summary>
         public const string Format2Digit = "d2";
 
         /// <summary>
-        /// Location of images folder
+        /// Location of Images folder
         /// </summary>
         public const string ImagesFolder = "Images";
+
+        /// <summary>
+        /// Location of App_Data folder
+        /// </summary>
+        public const string AppDataFolder = "App_Data";
 
         /// <summary>
         /// Take relative diacritic Vietnamese characters according to input letter

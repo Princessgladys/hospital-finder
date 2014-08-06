@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using HospitalF.Constant;
 using System.Text.RegularExpressions;
+using HospitalF.Constant;
+using HospitalF.Utilities;
 
 namespace HospitalF.Models
 {
@@ -201,6 +202,11 @@ namespace HospitalF.Models
         /// Get/Set value for property PhotoFilesPath
         /// </summary>
         public int RecordStatus { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property AverageCuringTime
+        /// </summary>
+        public int? AverageCuringTime { get; set; }
 
         public List<Speciality> SpecialityList { get; set; }
         public List<Service> ServiceList { get; set; }
@@ -451,7 +457,8 @@ namespace HospitalF.Models
                     model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
                     model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment,
                     model.CreatedPerson, model.FullDescription, model.PersonInCharged,
-                    model.PhotoFilesPath, model.TagsInput, speciality, service, facility));
+                    model.PhotoFilesPath, model.TagsInput, model.AverageCuringTime, speciality,
+                    service, facility));
             }
             return result;
         }
@@ -700,6 +707,24 @@ namespace HospitalF.Models
                     model.FullDescription, speciality, service, facility));
             }
             return result;
+        }
+
+        /// <summary>
+        /// Handle Excel file
+        /// </summary>
+        /// <param name="file">Input file</param>
+        /// <param name="userId">User ID</param>
+        /// <returns>List[HospitalModel] that contains list of Hospitals</returns>
+        public async Task<List<HospitalModel>> HandleExcelFileData(HttpPostedFileBase file, int userId)
+        {
+            // Create new list of hospitals
+            List<HospitalModel> hospitalList = new List<HospitalModel>();
+
+            // Load data from Excel
+            hospitalList = ExcelUtil.LoadDataFromExcel(file, userId);
+
+            // Return hospital list
+            return hospitalList;
         }
 
         #endregion
