@@ -47,10 +47,15 @@
             <table border="0">
                 <tr>
                     <td>
-                        <input type="file" class="btn btn-default" id="file">
+                        <input type="file" class="btn btn-default" name="file" id="file">
+                        <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
+                             style="display: none;" id="validFileIcon">
+                        <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
+                             style="display: none;" id="invalidFileIcon">
+                        <span id="file-message"></span>
                     </td>
                     <td>&nbsp;</td>
-                    <td>
+                    <td style="position: absolute;">
                         <button class="btn btn-sm btn-success btn-next" type="submit"
                                 name="@Constants.Button" id="@Constants.ButtonUpload">
                             <i class="fa fa-cloud-upload"></i>&nbsp;Tải danh sách
@@ -58,23 +63,63 @@
                     </td>
                 </tr>
             </table>
-            <p class="help-block">
-                Chọn tập tin Excel để tải danh sách bệnh viện
-            </p>
         </div>
-
-
     </section>
 }
 
 <script type="text/javascript">
-    pageSetUp();
+    @*Set file message notification*@
+    function setFileNotificationMessage(message, mode) {
+        if (mode == 1) {
+            $("#validFileIcon").show();
+            $("#invalidFileIcon").hide();
+            $("#file-message").text(message);
+            $('#file-message').css('color', 'black');
+            $('#file').css('background', '#f0fff0');
+            $('#file').css('border-color', '#7DC27D');
+        } else {
+            $("#validFileIcon").hide();
+            $("#invalidFileIcon").show();
+            $("#file-message").text(message);
+            $('#file-message').css('color', '#D56161');
+            $('#file').css('background', '#fff0f0');
+            $('#file').css('border-color', '#A90329');
+        }
+    }
 
     @*Data validation*@
     $(document).ready(function () {
+        $('#UploadFile').click(function (e) {
+            var file = $('#file').val()
 
+            if (file.trim() == "") {
+                setFileNotificationMessage('Không có tập tin.', 0);
+                return false;
+            } else {
+                if ($('invalidFileIcon:visible')) {
+                    return false;
+                } else {
+                    $('#import-form').submit();
+                }
+            }
+        });
 
-
+        $("input:file").change(function () {
+            var extension = $('#file').val().split('.').pop().toLowerCase();
+            if ($.inArray(extension, ['xls', 'xlsx']) == -1) {
+                setFileNotificationMessage("Tập tin không phù hợp.", 0);
+            } else {
+                setFileNotificationMessage("Tập tin phù hợp.", 1);
+            }
+        });
     });
 
 </script>
+
+<style>
+    .resizeIcon
+    {
+        width: 16px;
+        height: auto;
+    }
+</style>

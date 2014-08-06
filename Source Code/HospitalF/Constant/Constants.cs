@@ -603,7 +603,7 @@ namespace HospitalF.Constant
 
         #region HospitalModel
 
-        #region English name
+        #region Property English name
 
         /// <summary>
         /// English name of property FacilityName
@@ -629,6 +629,15 @@ namespace HospitalF.Constant
         /// Constant to store file in session
         /// </summary>
         public const string FileInSession = "SessionFiles";
+
+        #endregion
+
+        #region Property Vietnamese
+
+        /// <summary>
+        /// Vietnamese name for UploadFile
+        /// </summary>
+        public const string UploadFile = "Tập tin";
 
         #endregion
 
