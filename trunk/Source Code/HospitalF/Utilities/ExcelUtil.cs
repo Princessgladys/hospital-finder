@@ -25,6 +25,9 @@ namespace HospitalF.Utilities
         public static List<HospitalModel> LoadDataFromExcel(HttpPostedFileBase file, int userId)
         {
             List<HospitalModel> hospitalList = new List<HospitalModel>();
+            HospitalModel model = null;
+            int tempInt = 0;
+            bool tempBoolean = false;
 
             // Save file to server
             string fileFullPath = string.Format("{0}{1}",
@@ -32,42 +35,49 @@ namespace HospitalF.Utilities
                 FileUtil.SaveFileToServer(file, userId, 0));
 
             // Create instance of Excel file
-            var excelFile = new ExcelQueryFactory();
-            excelFile.FileName = fileFullPath;
-
-            // Mapping attributes
-            excelFile.AddMapping<HospitalModel>(d => d.HospitalName, Constants.HospitalName);
-            excelFile.AddMapping<HospitalModel>(d => d.HospitalTypeID, Constants.TypeID);
-            excelFile.AddMapping<HospitalModel>(d => d.HospitalTypeName, Constants.HospitalType);
-            excelFile.AddMapping<HospitalModel>(d => d.OrdinaryStartTime, Constants.OrdinaryTime);
-            excelFile.AddMapping<HospitalModel>(d => d.HolidayStartTime, Constants.HolidayTime);
-            excelFile.AddMapping<HospitalModel>(d => d.IsAllowAppointment, Constants.AppointmentOnline);
-            excelFile.AddMapping<HospitalModel>(d => d.AverageCuringTime, Constants.AverageCuringTime);
-            excelFile.AddMapping<HospitalModel>(d => d.LocationAddress, Constants.LocationAddress);
-            excelFile.AddMapping<HospitalModel>(d => d.StreetAddress, Constants.StreetAddress);
-            excelFile.AddMapping<HospitalModel>(d => d.CityID, Constants.CityID);
-            excelFile.AddMapping<HospitalModel>(d => d.CityName, Constants.City);
-            excelFile.AddMapping<HospitalModel>(d => d.DistrictID, Constants.DistrictID);
-            excelFile.AddMapping<HospitalModel>(d => d.DistrictName, Constants.District);
-            excelFile.AddMapping<HospitalModel>(d => d.WardID, Constants.WardID);
-            excelFile.AddMapping<HospitalModel>(d => d.WardName, Constants.Ward);
-            excelFile.AddMapping<HospitalModel>(d => d.PhoneNo, Constants.PhoneNo);
-            excelFile.AddMapping<HospitalModel>(d => d.PhoneNo2, Constants.AlternativePhone);
-            excelFile.AddMapping<HospitalModel>(d => d.PhoneNo3, Constants.MobilePhone);
-            excelFile.AddMapping<HospitalModel>(d => d.Fax, Constants.Fax);
-            excelFile.AddMapping<HospitalModel>(d => d.HospitalEmail, Constants.Email);
-            excelFile.AddMapping<HospitalModel>(d => d.Website, Constants.Website);
-            excelFile.AddMapping<HospitalModel>(d => d.SpecialityName, Constants.Speciality);
-            excelFile.AddMapping<HospitalModel>(d => d.ServiceName, Constants.Service);
-            excelFile.AddMapping<HospitalModel>(d => d.FacilityName, Constants.Facility);
+            var excelFile = new ExcelQueryFactory(fileFullPath);
 
             // Read data
-            var dataList = from data in excelFile.Worksheet<HospitalModel>()
+            var dataList = from data in excelFile.Worksheet(Constants.TemplateSheet)
                            select data;
             foreach (var data in dataList)
             {
-                HospitalModel model = new HospitalModel();
-                
+                model = new HospitalModel();
+
+                // Take data from file
+                model.HospitalName = data[0];
+                Int32.TryParse(data[23], out tempInt);
+                model.HospitalTypeID = tempInt;
+                model.HospitalTypeName = data[1];
+                model.OrdinaryStartTime = data[2];
+                model.HolidayStartTime = data[3];
+                Boolean.TryParse(data[4], out tempBoolean);
+                model.IsAllowAppointment = tempBoolean;
+                Int32.TryParse(data[5], out tempInt);
+                model.AverageCuringTime = tempInt;
+                model.LocationAddress = data[6];
+                model.StreetAddress = data[7];
+                Int32.TryParse(data[20], out tempInt);
+                model.CityID = tempInt;
+                model.CityName = data[8];
+                Int32.TryParse(data[21], out tempInt);
+                model.DistrictID = tempInt;
+                model.DistrictName = data[9];
+                Int32.TryParse(data[22], out tempInt);
+                model.WardID = tempInt;
+                model.WardName = data[10];
+                model.PhoneNo = data[11];
+                model.PhoneNo2 = data[12];
+                model.PhoneNo3 = data[13];
+                model.Fax = data[14];
+                model.HospitalEmail = data[15];
+                model.Website = data[16];
+                model.SpecialityName = data[17];
+                model.ServiceName = data[18];
+                model.FacilityName = data[19];
+
+                // Add to hospital list
+                hospitalList.Add(model);
             }
 
             // Return list of hospitals

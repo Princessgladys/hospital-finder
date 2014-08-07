@@ -958,6 +958,11 @@ namespace HospitalF.Constant
         public const string AppDataFolder = "App_Data";
 
         /// <summary>
+        /// Template sheet in Excel Import file
+        /// </summary>
+        public const string TemplateSheet = "Template";
+
+        /// <summary>
         /// Take relative diacritic Vietnamese characters according to input letter
         /// </summary>
         /// <param name="letter">Input letter (a ă â e ê o ô ơ u ư i y đ)</param>
