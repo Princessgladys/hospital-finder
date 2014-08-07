@@ -54,7 +54,7 @@ BEGIN
 										   FROM (SELECT Word_ID
 												 FROM WordDictionary
 												 WHERE @WhatPhrase LIKE  N'%' + Word + N'%' AND
-													   [Type] = 2) w)
+													   [Type] = 3) w)
 
 	IF (@NumOfHospitalFoundByExactlyTag > 0)
 	BEGIN
@@ -66,7 +66,7 @@ BEGIN
 										 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
 										 FROM WordDictionary w, Word_Hospital wh
 										 WHERE @WhatPhrase LIKE  N'%' + Word + N'%' AND
-											   w.[Type] = 2 AND
+											   w.[Type] = 3 AND
 											   w.Word_ID = wh.Word_ID) AS h
 								   WHERE RowNumber = @RowNum)
 
@@ -95,7 +95,7 @@ BEGIN
 			(SELECT COUNT(*)
 			 FROM (SELECT DISTINCT wh.Hospital_ID
 				   FROM WordDictionary w, Word_Hospital wh
-				   WHERE w.[Type] = 2 AND
+				   WHERE w.[Type] = 3 AND
 						 FREETEXT (w.Word, @WhatPhrase) AND
 						 w.Word_ID = wh.Word_ID) n)
 
@@ -108,7 +108,7 @@ BEGIN
 									   FROM (SELECT ROW_NUMBER()
 											 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
 											 FROM WordDictionary w, Word_Hospital wh
-											 WHERE w.[Type] = 2 AND
+											 WHERE w.[Type] = 3 AND
 												   FREETEXT (w.Word,  @WhatPhrase) AND
 												   w.Word_ID = wh.Word_ID) AS h
 									   WHERE RowNumber = @RowNum)
@@ -145,7 +145,7 @@ BEGIN
 					   FROM WordDictionary
 					   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
 							 [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
-							 [Type] = 2) w)
+							 [Type] = 3) w)
 
 			IF (@NumOfHospitalFoundByRelativeTag > 0)
 			BEGIN
@@ -158,7 +158,7 @@ BEGIN
 												 FROM WordDictionary w, Word_Hospital wh
 												 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
 													   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
-													   [Type] = 2 AND
+													   [Type] = 3 AND
 													   w.Word_ID = wh.Word_ID) AS h
 										   WHERE RowNumber = @RowNum)
 				
