@@ -106,7 +106,7 @@
 
         $("input:file").change(function () {
             var extension = $('#file').val().split('.').pop().toLowerCase();
-            if ($.inArray(extension, ['xls', 'xlsx']) == -1) {
+            if ($.inArray(extension, ['xls', 'xlsx', 'xlsm']) == -1) {
                 setFileNotificationMessage("Tập tin không phù hợp.", 0);
             } else {
                 setFileNotificationMessage("Tập tin phù hợp.", 1);

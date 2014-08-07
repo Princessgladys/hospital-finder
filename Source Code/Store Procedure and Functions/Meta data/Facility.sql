@@ -9,7 +9,7 @@ INSERT INTO Facility VALUES
 	(N'Nhà vệ sinh cho người khuyết tật', 2),
 	(N'Khu vui chơi thiếu nhi', 3),
 	(N'Thư viện tra cứu thông tin', 3),
-	(N'Tap hóa', 5),
+	(N'Tạp hóa', 5),
 	(N'Quán café', 5),
 	(N'Khu ăn uống', 5),
 	(N'Khu dành riêng cho người hút thuốc', 5),
