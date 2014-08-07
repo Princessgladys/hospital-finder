@@ -34,12 +34,36 @@ namespace HospitalF.Utilities
             // Create instance of Excel file
             var excelFile = new ExcelQueryFactory();
             excelFile.FileName = fileFullPath;
-            excelFile.AddMapping<HospitalModel>(d => d.HospitalName, "FirstName");
+
+            // Mapping attributes
+            excelFile.AddMapping<HospitalModel>(d => d.HospitalName, Constants.HospitalName);
+            excelFile.AddMapping<HospitalModel>(d => d.HospitalTypeID, Constants.TypeID);
+            excelFile.AddMapping<HospitalModel>(d => d.HospitalTypeName, Constants.HospitalType);
+            excelFile.AddMapping<HospitalModel>(d => d.OrdinaryStartTime, Constants.OrdinaryTime);
+            excelFile.AddMapping<HospitalModel>(d => d.HolidayStartTime, Constants.HolidayTime);
+            excelFile.AddMapping<HospitalModel>(d => d.IsAllowAppointment, Constants.AppointmentOnline);
+            excelFile.AddMapping<HospitalModel>(d => d.AverageCuringTime, Constants.AverageCuringTime);
+            excelFile.AddMapping<HospitalModel>(d => d.LocationAddress, Constants.LocationAddress);
+            excelFile.AddMapping<HospitalModel>(d => d.StreetAddress, Constants.StreetAddress);
+            excelFile.AddMapping<HospitalModel>(d => d.CityID, Constants.CityID);
+            excelFile.AddMapping<HospitalModel>(d => d.CityName, Constants.City);
+            excelFile.AddMapping<HospitalModel>(d => d.DistrictID, Constants.DistrictID);
+            excelFile.AddMapping<HospitalModel>(d => d.DistrictName, Constants.District);
+            excelFile.AddMapping<HospitalModel>(d => d.WardID, Constants.WardID);
+            excelFile.AddMapping<HospitalModel>(d => d.WardName, Constants.Ward);
+            excelFile.AddMapping<HospitalModel>(d => d.PhoneNo, Constants.PhoneNo);
+            excelFile.AddMapping<HospitalModel>(d => d.PhoneNo2, Constants.AlternativePhone);
+            excelFile.AddMapping<HospitalModel>(d => d.PhoneNo3, Constants.MobilePhone);
+            excelFile.AddMapping<HospitalModel>(d => d.Fax, Constants.Fax);
+            excelFile.AddMapping<HospitalModel>(d => d.HospitalEmail, Constants.Email);
+            excelFile.AddMapping<HospitalModel>(d => d.Website, Constants.Website);
+            excelFile.AddMapping<HospitalModel>(d => d.SpecialityName, Constants.Speciality);
+            excelFile.AddMapping<HospitalModel>(d => d.ServiceName, Constants.Service);
+            excelFile.AddMapping<HospitalModel>(d => d.FacilityName, Constants.Facility);
 
             // Read data
-            var dataList = from data in excelFile.Worksheet()
+            var dataList = from data in excelFile.Worksheet<HospitalModel>()
                            select data;
-
             foreach (var data in dataList)
             {
                 HospitalModel model = new HospitalModel();

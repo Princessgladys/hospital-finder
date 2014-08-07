@@ -208,6 +208,16 @@ namespace HospitalF.Models
         /// </summary>
         public int? AverageCuringTime { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property ServiceName
+        /// </summary>
+        public string ServiceName { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property FacilityName
+        /// </summary>
+        public string FacilityName { get; set; }
+
         public List<Speciality> SpecialityList { get; set; }
         public List<Service> ServiceList { get; set; }
         public List<Facility> FacilityList { get; set; }
@@ -554,9 +564,6 @@ namespace HospitalF.Models
 
                 // Address
                 string[] addressList = model.FullAddress.Split(Char.Parse(Constants.Comma));
-                model.WardName = addressList[1];
-                model.DistrictName = addressList[2];
-                model.CityName = addressList[3];
                 string[] detailAddress = addressList[0].Split(Char.Parse(Constants.WhiteSpace));
                 model.LocationAddress = detailAddress[0];
                 for (int n = 1; n < detailAddress.Count(); n++)

@@ -313,12 +313,12 @@ namespace HospitalF.Constant
         /// <summary>
         /// Vietnamese name of property Province
         /// </summary>
-        public const string City = "Tỉnh thành";
+        public const string City = "Tỉnh / Thành phố";
 
         /// <summary>
         /// Vietnamese name of property District
         /// </summary>
-        public const string District = "Quận / Huyện";
+        public const string District = "Quận / Huyện / Thị xã";
 
         /// <summary>
         /// Vietnamese name of property Ward
@@ -364,11 +364,6 @@ namespace HospitalF.Constant
         /// Vietnamese name of property Coordinate
         /// </summary>
         public const string Coordinate = "Tọa độ";
-
-        /// <summary>
-        /// Vietnamese name of property AverageCuringTime
-        /// </summary>
-        public const string AverageCuringTime = "Thời gian khám trung bình";
 
         /// <summary>
         /// Vietnamese name of property DoctorNameViet
@@ -550,12 +545,12 @@ namespace HospitalF.Constant
         /// <summary>
         /// Vietnames name of property PhoneNo
         /// </summary>
-        public const string PhoneNo = "Số điện thoại";
+        public const string PhoneNo = "Số điện thoại chính";
 
         /// <summary>
         /// Vietnames name of property PhoneNo2
         /// </summary>
-        public const string AlternativePhone = "Số điện thoại";
+        public const string AlternativePhone = "Số điện thoại thay thế";
 
         /// <summary>
         /// Vietnames name of property PhoneN3
@@ -648,6 +643,26 @@ namespace HospitalF.Constant
         /// Vietnamese name for UploadFile
         /// </summary>
         public const string UploadFile = "Tập tin";
+
+        /// <summary>
+        /// Vietnamese name for AppointmentOnline
+        /// </summary>
+        public const string AppointmentOnline = "Đăng ký khám trực tuyến";
+
+        /// <summary>
+        /// Vietnamese name of property AverageCuringTime
+        /// </summary>
+        public const string AverageCuringTime = "Thời gian khám trung bình";
+
+        /// <summary>
+        /// Vietnamese name of property Service
+        /// </summary>
+        public const string Service = "Dịch vụ";
+
+        /// <summary>
+        /// Vietnamese name of property Service
+        /// </summary>
+        public const string Facility = "Cơ sở vật chất";
 
         #endregion
 
