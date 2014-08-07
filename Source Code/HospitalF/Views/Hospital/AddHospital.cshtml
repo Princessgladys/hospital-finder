@@ -139,7 +139,7 @@
                                         <label class="input">
                                             <i class="icon-append fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.AverageCuringTime, new { @class = "form-control", @placeholder = "Thời gian khám trung bình", })
-                                            <b class="tooltip tooltip-top-right">Nhập thời gian khám trung bình một bệnh nhân</b>
+                                            <b class="tooltip tooltip-top-right"><i class="icon-append fa fa-clock-o txt-color-teal"></i>Nhập thời gian khám trung bình một bệnh nhân</b>
                                         </label>
                                         <p class="note"><strong>Lưu ý:</strong> Khoảng thời gian được tính bằng phút.</p>
                                     </section>
@@ -225,7 +225,7 @@
 
                                 <div class="row">
                                     <section class="col col-md-12">
-                                        <div id="google-map"></div>
+                                        <div id="google-map" tabindex="-1"></div>
                                     </section>
                                 </div>
                                 @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
@@ -789,29 +789,16 @@
 
     @*Data validation*@
     $(document).ready(function () {
-        if ($("*[type='radio']").value == "True") {
-            $('#curing-time').show();
-        }
-        else {
-            $('#curing-time').hide();
-        }
-
         $("*[type='radio']").click(function () {
             if (this.value == "True")
-            {
+            {  
                 $('#curing-time').show();
             }
             else
             {
+                $('#AverageCuringTime').val('');
                 $('#curing-time').hide();
             }
-
-            //if ($('input:radio:checked').length > 0) {
-                
-            //}
-            //else {
-            //    $('#curing-time').hide();
-            //}
         });
         
 
