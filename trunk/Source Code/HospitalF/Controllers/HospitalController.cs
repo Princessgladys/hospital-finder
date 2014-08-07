@@ -1159,7 +1159,7 @@ namespace HospitalF.Controllers
         [Authorize(Roles = Constants.AdministratorRoleName)]
         public ActionResult ImportExcel()
         {
-            return View();
+            return View(new List<HospitalModel>());
         }
 
         /// <summary>

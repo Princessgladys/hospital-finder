@@ -68,7 +68,126 @@
     </section>
 }
 
+
+
+<!-- widget grid -->
+<section id="data-table" class="">
+    <div class="well">
+        <div class="input-group">
+            <label class="select">
+                <select class="form-control" id="IsActive" name="IsActive">
+
+                            <option value="true" selected>Đang hoạt động</option>
+                            <option value="false">Ngưng hoạt động</option>
+
+                </select>
+                <i></i>
+            </label>
+            <div class="input-group-btn">
+                <button class="btn btn-default btn-primary" type="submit"
+                        value="@Constants.NormalSearchForm" name="@Constants.Button"
+                        id="normal-search-button">
+                    <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                 data-widget-colorbutton="false"
+                 data-widget-editbutton="false"
+                 data-widget-togglebutton="false"
+                 data-widget-deletebutton="false"
+                 data-widget-fullscreenbutton="false"
+                 data-widget-custombutton="false"
+                 data-widget-collapsed="false"
+                 data-widget-sortable="false">
+
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                    <h2>Danh sách dữ liệu</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <p>Xác nhận thông tin và bấm <code>Xác nhận</code> để thêm mới danh sách bệnh viện</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered tablesorter" id="hospital-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên bệnh viện</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Loại</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    @{
+                                        if (Model.Count == 0)
+                                        {
+                                            <tr>
+                                                <td colspan="5">Không có dữ liệu</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            foreach (var hospital in Model)
+                                            {
+                                                if (!string.IsNullOrEmpty(@hospital.HospitalName))
+                                                {
+                                                    <tr>
+                                                        <td hidden>@hospital.HospitalID</td>
+                                                        <td hidden>@hospital.HospitalName</td>
+                                                        <td>
+                                                            @Html.ActionLink(@hospital.HospitalName,
+                                                                Constants.UpdateHospitalAction, Constants.HospitalController,
+                                                             new { hospitalId = @hospital.HospitalID }, null)
+                                                        </td>
+                                                        <td>@hospital.FullAddress</td>
+                                                        <td>@hospital.HospitalTypeName</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+</section>
+<!-- end widget grid -->
+
 <script type="text/javascript">
+    @*Display list of hospitals*@
+    $(document).ready(function () {
+        var numOfRecord = '@Model.Count'
+
+        if (numOfRecord > 0) {
+            $('#data-table').show();
+        }
+        else {
+            $('#data-table').hide();
+        }
+    });
+
     @*Set file message notification*@
     function setFileNotificationMessage(message, mode) {
         if (mode == 1) {
