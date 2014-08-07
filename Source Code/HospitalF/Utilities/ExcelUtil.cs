@@ -46,35 +46,45 @@ namespace HospitalF.Utilities
 
                 // Take data from file
                 model.HospitalName = data[0];
-                Int32.TryParse(data[23], out tempInt);
-                model.HospitalTypeID = tempInt;
-                model.HospitalTypeName = data[1];
-                model.OrdinaryStartTime = data[2];
-                model.HolidayStartTime = data[3];
-                Boolean.TryParse(data[4], out tempBoolean);
-                model.IsAllowAppointment = tempBoolean;
-                Int32.TryParse(data[5], out tempInt);
-                model.AverageCuringTime = tempInt;
-                model.LocationAddress = data[6];
-                model.StreetAddress = data[7];
-                Int32.TryParse(data[20], out tempInt);
-                model.CityID = tempInt;
-                model.CityName = data[8];
-                Int32.TryParse(data[21], out tempInt);
-                model.DistrictID = tempInt;
-                model.DistrictName = data[9];
-                Int32.TryParse(data[22], out tempInt);
-                model.WardID = tempInt;
-                model.WardName = data[10];
-                model.PhoneNo = data[11];
-                model.PhoneNo2 = data[12];
-                model.PhoneNo3 = data[13];
-                model.Fax = data[14];
-                model.HospitalEmail = data[15];
-                model.Website = data[16];
-                model.SpecialityName = data[17];
-                model.ServiceName = data[18];
-                model.FacilityName = data[19];
+                if (string.IsNullOrEmpty(data[0]))
+                {
+                    model.RecordStatus = 0;
+                }
+                else
+                {
+                    Int32.TryParse(data[23], out tempInt);
+                    model.HospitalTypeID = tempInt;
+                    model.HospitalTypeName = data[1];
+                    model.OrdinaryStartTime = data[2];
+                    model.HolidayStartTime = data[3];
+                    Boolean.TryParse(data[4], out tempBoolean);
+                    model.IsAllowAppointment = tempBoolean;
+                    Int32.TryParse(data[5], out tempInt);
+                    model.AverageCuringTime = tempInt;
+                    model.LocationAddress = data[6];
+                    model.StreetAddress = data[7];
+                    Int32.TryParse(data[20], out tempInt);
+                    model.CityID = tempInt;
+                    model.CityName = data[8];
+                    Int32.TryParse(data[21], out tempInt);
+                    model.DistrictID = tempInt;
+                    model.DistrictName = data[9];
+                    Int32.TryParse(data[22], out tempInt);
+                    model.WardID = tempInt;
+                    model.WardName = data[10];
+                    model.FullAddress = string.Format("{0} {1}, {2}, {3}, {4}", model.LocationAddress,
+                        model.StreetAddress, model.WardName, model.DistrictName, model.CityName);
+                    model.PhoneNo = data[11];
+                    model.PhoneNo2 = data[12];
+                    model.PhoneNo3 = data[13];
+                    model.Fax = data[14];
+                    model.HospitalEmail = data[15];
+                    model.Website = data[16];
+                    model.SpecialityName = data[17];
+                    model.ServiceName = data[18];
+                    model.FacilityName = data[19];
+                    model.RecordStatus = 1;
+                }
 
                 // Add to hospital list
                 hospitalList.Add(model);
