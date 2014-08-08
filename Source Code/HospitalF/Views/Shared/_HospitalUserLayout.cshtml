@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using HospitalF.Constant
+@using System.Collections.Generic
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -191,19 +193,31 @@
         <div id="project-context" class="pull-right">
 
             <span><a href="/"><i class="fa fa-user"></i></a></span>
-            <span id="project-selector" data-toggle="dropdown">Lê Phước Việt <i class="fa fa-angle-down"></i></span>
+            @{
+                string username = string.Empty;
+                string email = string.Empty;
+               
+                if (HospitalF.Models.SimpleSessionPersister.Username != null)
+                {
+                    string[] userInfo = HospitalF.Models.SimpleSessionPersister.Username.
+                       Split(Char.Parse(Constants.Minus));
+                    username = userInfo[1];
+                    email = userInfo[0];
+                }
+            }
+            <span id="project-selector" data-toggle="dropdown">@username<i class="fa fa-angle-down"></i></span>
 
             <!-- Suggestion: populate this list with fetch and push technique -->
             <ul class="dropdown-menu">
                 <li>
-                    <a href="javascript:void(0);">Thông tin cá nhân</a>
+                    @Html.ActionLink("Thông tin cá nhân", Constants.DisplayProfileAction, Constants.AccountController)
                 </li>
                 <li>
-                    <a href="javascript:void(0);">Đổi mật khẩu</a>
+                    @Html.ActionLink("Đổi mật khẩu", Constants.ChangePasswordAction, Constants.AccountController)
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="javascript:void(0);">Đăng xuất</a>
+                    @Html.ActionLink("Đăng xuất", Constants.LogoutAction, Constants.AccountController)
                 </li>
             </ul>
             <!-- end dropdown-menu-->
@@ -265,10 +279,10 @@
                 <li>
                     <a href="ajax/flot.html"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Thông Tin Chung</a>
                 </li>
-                <li>
-                    <a href="ajax/morris.html"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Lịch Hẹn</a>
-                </li>
-                <li>
+                <li><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">
+                            @Html.ActionLink("Quản lý lịch hẹn","Index","Calendar")
+                            
+                        </li><li>
                     <a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Danh Sách Bác Sĩ</a>
                 </li>
                 <li>

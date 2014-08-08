@@ -58,6 +58,7 @@ namespace HospitalF.Constant
         /// Name of Hospital controller
         /// </summary>
         public const string HospitalController = "Hospital";
+        public const string CalendarController = "Calendar";
 
         /// <summary>
         /// Name of Doctor controller
