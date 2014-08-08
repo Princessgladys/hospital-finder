@@ -855,7 +855,7 @@
 
         $.validator.addMethod("locationAddress",
             function (value, element) {
-                return /^[a-zA-Z0-9/]*$/.test(value);
+                return /^[a-zA-Z0-9 /-]*$/.test(value);
             }, "@ErrorMessage.CEM024");
 
         $.validator.addMethod("phone",

@@ -105,6 +105,7 @@
                             <table class="table table-bordered tablesorter" id="hospital-table">
                                 <thead>
                                     <tr>
+                                        <th>Dòng</th>
                                         <th>Tên bệnh viện</th>
                                         <th>Địa chỉ</th>
                                         <th>Loại</th>
@@ -127,6 +128,7 @@
                                                     <tr>
                                                         <td hidden>@hospital.HospitalID</td>
                                                         <td hidden>@hospital.HospitalName</td>
+                                                        <td>@hospital.HospitalID</td>
                                                         <td>
                                                             @Html.ActionLink(@hospital.HospitalName,
                                                                 Constants.UpdateHospitalAction, Constants.HospitalController,

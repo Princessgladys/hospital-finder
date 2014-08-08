@@ -66,7 +66,14 @@ namespace HospitalF.Utilities
                     Boolean.TryParse(data[4], out tempBoolean);
                     model.IsAllowAppointment = tempBoolean;
                     Int32.TryParse(data[5], out tempInt);
-                    model.AverageCuringTime = tempInt;
+                    if (tempInt == 0)
+                    {
+                        model.AverageCuringTime = null;
+                    }
+                    else
+                    {
+                        model.AverageCuringTime = tempInt;
+                    }
                     model.LocationAddress = data[6];
                     model.StreetAddress = data[7];
                     Int32.TryParse(data[21], out tempInt);
@@ -78,14 +85,33 @@ namespace HospitalF.Utilities
                     Int32.TryParse(data[23], out tempInt);
                     model.WardID = tempInt;
                     model.WardName = data[10];
-                    model.FullAddress = string.Format("{0} {1}, {2}, {3}, {4}", model.LocationAddress,
-                        model.StreetAddress, model.WardName, model.DistrictName, model.CityName);
                     model.PhoneNo = data[11];
                     model.PhoneNo2 = data[12];
                     model.PhoneNo3 = data[13];
-                    model.Fax = data[14];
-                    model.HospitalEmail = data[15];
-                    model.Website = data[16];
+                    if (string.IsNullOrEmpty(data[14]))
+                    {
+                        model.Fax = null;
+                    }
+                    else
+                    {
+                        model.Fax = data[14];
+                    }
+                    if (string.IsNullOrEmpty(data[15]))
+                    {
+                        model.HospitalEmail = null;
+                    }
+                    else
+                    {
+                        model.HospitalEmail = data[15];
+                    }
+                    if (string.IsNullOrEmpty(data[16]))
+                    {
+                        model.Website = null;
+                    }
+                    else
+                    {
+                        model.Website = data[16];
+                    }
                     model.SpecialityName = data[17];
                     model.ServiceName = data[18];
                     model.FacilityName = data[19];
