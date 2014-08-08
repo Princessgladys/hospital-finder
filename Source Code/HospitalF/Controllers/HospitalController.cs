@@ -792,7 +792,7 @@ namespace HospitalF.Controllers
 
             return View(pagedHospitalList);
         }
-        
+
         /// <summary>
         /// GET: /Hospital/DisplayHospitalList
         /// </summary>
@@ -923,6 +923,8 @@ namespace HospitalF.Controllers
                                 Constants.VerticalBar.ToString();
                         }
                     }
+                    // Set photo session to null value
+                    Session[Constants.FileInSession] = null;
                 }
                 else
                 {
@@ -993,21 +995,21 @@ namespace HospitalF.Controllers
                 // Load list of districts
                 districtList = await LocationUtil.LoadDistrictInCityAsync(model.CityID);
                 var districtResult = (from d in districtList
-                              select new
-                              {
-                                  District_ID = d.District_ID,
-                                  District_Name = d.Type + Constants.WhiteSpace + d.District_Name
-                              });
+                                      select new
+                                      {
+                                          District_ID = d.District_ID,
+                                          District_Name = d.Type + Constants.WhiteSpace + d.District_Name
+                                      });
                 ViewBag.DistrictList = new SelectList(districtResult, Constants.DistrictID, Constants.DistrictName);
 
                 // Load list of districts
                 wardList = await LocationUtil.LoadWardInDistrictAsync(model.DistrictID);
                 var wardResult = (from w in wardList
-                                      select new
-                                      {
-                                          Ward_ID = w.Ward_ID,
-                                          Ward_Name = w.Type + Constants.WhiteSpace + w.Ward_Name
-                                      });
+                                  select new
+                                  {
+                                      Ward_ID = w.Ward_ID,
+                                      Ward_Name = w.Type + Constants.WhiteSpace + w.Ward_Name
+                                  });
                 ViewBag.WardList = new SelectList(wardResult, Constants.WardID, Constants.WardName);
 
                 // Load list of hospital types
@@ -1186,6 +1188,9 @@ namespace HospitalF.Controllers
                         HospitalModel mdel = new HospitalModel();
                         List<HospitalModel> hospitalList = await mdel.HandleExcelFileData(file,
                             Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]));
+
+                        // Add list to session and return to view
+                        Session[Constants.HospitalExcelSession] = hospitalList;
                         return View(hospitalList);
                     }
                 }
@@ -1193,20 +1198,24 @@ namespace HospitalF.Controllers
                 // Add hospital list to data
                 if (Constants.ButtonConfirm.Equals(button))
                 {
-                    using (LinqDBDataContext data = new LinqDBDataContext())
+                    List<HospitalModel> hospitalList = (List<HospitalModel>)Session[Constants.HospitalExcelSession];
+
+                    if (hospitalList != null)
                     {
-                        foreach (HospitalModel record in model)
+                        foreach (HospitalModel record in hospitalList)
                         {
                             if (record.RecordStatus != 0)
                             {
                                 record.CreatedPerson =
-                                Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+                                    Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
                                 await record.InsertHospitalAsync(record, 0);
                             }
                         }
-                        ViewBag.AddStatus = 1;
-                        return View(model);
+                        Session[Constants.HospitalExcelSession] = null;
                     }
+
+                    ViewBag.AddStatus = 1;
+                    return View(new List<HospitalModel>());
                 }
             }
             catch (Exception exception)

@@ -677,6 +677,10 @@ namespace HospitalF.Constant
         /// </summary>
         public const string ButtonConfirm = "Confirm";
 
+        /// <summary>
+        /// Constant to store list of hospitals in Excel file in session
+        /// </summary>
+        public const string HospitalExcelSession = "HospitalExcelList";
         #endregion
 
         #region DataModel
