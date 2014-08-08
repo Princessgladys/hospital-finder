@@ -1,6 +1,7 @@
 ﻿@using HospitalF.Constant
 @model HospitalF.Models.AppointmentModels
 
+@using Recaptcha.Web.Mvc;
 @{
     ViewBag.Title = "Đặt lịch hẹn";
 }
@@ -95,7 +96,7 @@
                     maxlength: 32
                 },
                 Birthday: {
-                    required:true
+                    required: true
                 },
                 PhoneNo: {
                     required: true,
@@ -111,7 +112,7 @@
                     maxlength: 13
                 },
                 SpecialityID: {
-                    required:true
+                    required: true
                 }
             },
 
@@ -231,21 +232,21 @@
                     cache: false,
                     type: "GET",
                     url: "@(Url.RouteUrl(Constants.LoadTimeCheckHealthAction))",
-                data: { "hospitalID": hospitalID, "doctorID": doctorID, "checkHealthDate": selectedItem },
-                success: function (data) {
-                    window.alert(ddlTimeCheckHealth.length);
-                    ddlTimeCheckHealth.html('');
-                    ddlTimeCheckHealth.append($('<option></option>').val(0).html("-- Xin chọn thời gian --"));
-                    $.each(data, function (id, option) {
-                        ddlTimeCheckHealth.append($('<option></option>').val(option.id).html(option.name));
-                    });
-                    statesProgress.hide();
-                    disableDays = AllDays;
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    statesProgress.hide();
-                }
-            });
+                    data: { "hospitalID": hospitalID, "doctorID": doctorID, "checkHealthDate": selectedItem },
+                    success: function (data) {
+                        window.alert(ddlTimeCheckHealth.length);
+                        ddlTimeCheckHealth.html('');
+                        ddlTimeCheckHealth.append($('<option></option>').val(0).html("-- Xin chọn thời gian --"));
+                        $.each(data, function (id, option) {
+                            ddlTimeCheckHealth.append($('<option></option>').val(option.id).html(option.name));
+                        });
+                        statesProgress.hide();
+                        disableDays = AllDays;
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        statesProgress.hide();
+                    }
+                });
             }
         }).datepicker("setDate", new Date());
 
@@ -282,7 +283,7 @@
 
 <section id="widget-grid" class="">
     <div class="alert alert-danger fade in" style="display: none;"
-         id="error-alert">
+        id="error-alert">
         <button class="close" data-dismiss="alert">
             ×
         </button>
@@ -290,7 +291,7 @@
         <strong>Lỗi!</strong> thao tác không thành công. Xin vui lòng thử lại.
     </div>
     <div class="alert alert-success fade in" style="display: none;"
-         id="success-alert">
+        id="success-alert">
         <button class="close" data-dismiss="alert">
             ×
         </button>
@@ -298,198 +299,204 @@
         <strong>Thành công</strong> Thêm mới bệnh viện thành công.
     </div>
 
-<h2>CreateAppointment</h2>
-<div class="row">
-    <article class="col-sm-12 col-md-12 col-lg-7" style="margin-left: 20%;">
+    <h2>CreateAppointment</h2>
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-7" style="margin-left: 20%;">
 
-        <!-- Widget ID (each widget will need unique ID)-->
-        <div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false">
-            @using (Html.BeginForm(Constants.IndexAction, Constants.AppointmentController,
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false">
+                @using (Html.BeginForm(Constants.IndexAction, Constants.AppointmentController,
                 FormMethod.Post, new { @class = "smart-form", @id = "add-appointment-form" }))
-            {
-                <div>
-                    <h1 class="titleL">Đăng ký khám bệnh</h1>
-                </div>
-                <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: white;">
-                    <tbody>
-                        <tr>
-                            <td style="padding-right: 15px">
-                                <img alt="" src="~/Content/img/pic_mess_capital.jpg" style="width: 110px; height: 105px"></td>
-                            <td>
-                                <p>
-                                    <span style="color: rgb(88,137,5)">
-                                        <span style="font-family: botonfont; font-size: 18px">THÔNG BÁO :</span>
-                                    </span>
-                                    <span style="line-height: 17.99px; font-family: arial, helvetica, sans-serif; color: rgb(255,0,0); font-size: 12px">
-                                        <span style="font-size: 14px"></span></span>
-                                    <span style="color: rgb(255,0,0)">Quý khách vui lòng đặt hẹn trước 2 tiếng. Xem trước lịch khám của bác sĩ để đặt hẹn.</span>
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div>
-                    <fieldset>
-                        <h3>Thông tin bệnh nhân</h3>
-                        <br />
-                        <div class="row_o">
-                            <section class="col col-9">
-                                <label class="input">
-                                    <i class="icon-append fa fa-user"></i>
-                                    @Html.TextBoxFor(m => m.FullName, new { @placeholder = "Họ tên" })
-                                    <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i>Xin nhập đầy đủ họ tên</b>
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row_o">
-                            <section class="col col-5">
-                                <label class="input">
-                                    <i class="icon-append fa fa-calendar"></i>
-                                    @Html.TextBoxFor(m => m.Birthday, new
+                {
+                    <div>
+                        <h1 class="titleL">Đăng ký khám bệnh</h1>
+                    </div>
+                    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: white;">
+                        <tbody>
+                            <tr>
+                                <td style="padding-right: 15px">
+                                    <img alt="" src="~/Content/img/pic_mess_capital.jpg" style="width: 110px; height: 105px"></td>
+                                <td>
+                                    <p>
+                                        <span style="color: rgb(88,137,5)">
+                                            <span style="font-family: botonfont; font-size: 18px">THÔNG BÁO :</span>
+                                        </span>
+                                        <span style="line-height: 17.99px; font-family: arial, helvetica, sans-serif; color: rgb(255,0,0); font-size: 12px">
+                                            <span style="font-size: 14px"></span></span>
+                                        <span style="color: rgb(255,0,0)">Quý khách vui lòng đặt hẹn trước 2 tiếng. Xem trước lịch khám của bác sĩ để đặt hẹn.</span>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <fieldset>
+                            <h3>Thông tin bệnh nhân</h3>
+                            <br />
+                            <div class="row_o">
+                                <section class="col col-9">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-user"></i>
+                                        @Html.TextBoxFor(m => m.FullName, new { @placeholder = "Họ tên" })
+                                        <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i>Xin nhập đầy đủ họ tên</b>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row_o">
+                                <section class="col col-5">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-calendar"></i>
+                                        @Html.TextBoxFor(m => m.Birthday, new
                                {
                                    @placeholder = "Ngày sinh",
                                    @id = "birthdayDatetime"
                                })
-                                </label>
-                                <div class="note">Định dạng: mm/dd/yy</div>
-                            </section>
-                            <section class="col col-4">
-                                <label class="select">
-                                    <select name="Speciality">
-                                        <option value="-1" selected="" disabled="">Giới tính</option>
-                                        <option value="1">Nam</option>
-                                        <option value="0">Nữ</option>
-                                    </select>
-                                    <i></i>
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row_o">
-                            <section class="col col-9">
-                                <label class="input">
-                                    <i class="icon-append fa fa-envelope-o"></i>
-                                    @Html.TextBoxFor(m => m.Email, new
+                                    </label>
+                                    <div class="note">Định dạng: mm/dd/yy</div>
+                                </section>
+                                <section class="col col-4">
+                                    <label class="select">
+                                        <select name="Speciality">
+                                            <option value="-1" selected="" disabled="">Giới tính</option>
+                                            <option value="1">Nam</option>
+                                            <option value="0">Nữ</option>
+                                        </select>
+                                        <i></i>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row_o">
+                                <section class="col col-9">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-envelope-o"></i>
+                                        @Html.TextBoxFor(m => m.Email, new
                            {
                                @placeholder = "E-mail"
                            })
-                                    <b class="tooltip tooltip-top-right"><i class="fa fa-envelope-o txt-color-teal"></i>Xin nhập Địa chỉ email</b>
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row_o">
-                            <section class="col col-9">
-                                <label class="input">
-                                    <i class="icon-append fa fa-phone"></i>
-                                    @Html.TextBoxFor(m => m.PhoneNo, new
+                                        <b class="tooltip tooltip-top-right"><i class="fa fa-envelope-o txt-color-teal"></i>Xin nhập Địa chỉ email</b>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row_o">
+                                <section class="col col-9">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-phone"></i>
+                                        @Html.TextBoxFor(m => m.PhoneNo, new
                            {
                                @id = "phoneNo",
                                @placeholder = "Số điện thoại"
                            })
-                                    <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Xin nhập Số điện thoại</b>
-                                </label>
-                            </section>
-                        </div>
-                    </fieldset>
-                    @*</div>*@
-                    <!-- end widget content -->
+                                        <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Xin nhập Số điện thoại</b>
+                                    </label>
+                                </section>
+                            </div>
+                        </fieldset>
+                        @*</div>*@
+                        <!-- end widget content -->
 
-                    @*                </div>
+                        @*                </div>
                 <div style="float: right; width: 50%;">*@
-                    <fieldset>
-                        <h3>Thông tin đặt hẹn</h3>
-                        <br />
-                        <div class="row_o">
-                            <section class="col col-9">
-                                <label class="input">
-                                    <i class="icon-append fa fa-home"></i>
-                                    @Html.TextBoxFor(m => m.HospitalName, new { @type = "text", @readonly = "readonly" })
-                                </label>
-                            </section>
-                        </div>
-                        @{ bool isHealthInsurance = ViewBag.IsHealthInsurance;
-                           if (isHealthInsurance)
-                           {
-                               <div class="row_o">
-                            <section class="col col-9">
-                                <label class="input">
-                                    <i class="icon-append fa fa-credit-card"></i>
-                                    @Html.TextBoxFor(m => m.HealthInsuranceCode, new
+                        <fieldset>
+                            <h3>Thông tin đặt hẹn</h3>
+                            <br />
+                            <div class="row_o">
+                                <section class="col col-9">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-home"></i>
+                                        @Html.TextBoxFor(m => m.HospitalName, new { @type = "text", @readonly = "readonly" })
+                                    </label>
+                                </section>
+                            </div>
+                            @{ bool isHealthInsurance = ViewBag.IsHealthInsurance;
+                               if (isHealthInsurance)
+                               {
+                                <div class="row_o">
+                                    <section class="col col-9">
+                                        <label class="input">
+                                            <i class="icon-append fa fa-credit-card"></i>
+                                            @Html.TextBoxFor(m => m.HealthInsuranceCode, new
                            {
                                @id = "phoneNo",
                                @placeholder = "Mã bảo hiểm y tế (Nếu có)"
                            })
-                                    <b class="tooltip tooltip-top-right"><i class="fa fa-credit-card txt-color-teal"></i>Nhập mã bảo hiểm y tế</b>
-                                </label>
-                            </section>
-                        </div>
-                           }
-                        }
-                        <div class="row_o">
-                            <section class="col col-4">
-                                <label class="select">
-                                    @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-credit-card txt-color-teal"></i>Nhập mã bảo hiểm y tế</b>
+                                        </label>
+                                    </section>
+                                </div>
+                               }
+                            }
+                            <div class="row_o">
+                                <section class="col col-4">
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
                                                 Constants.RequireSpeciality)
-                                    <i></i>
-                                </label>
-                            </section>
-                            <section class="col col-5">
-                                <label class="select">
-                                    @Html.DropDownListFor(m => m.DoctorID, (SelectList)ViewBag.DoctorList,
+                                        <i></i>
+                                    </label>
+                                </section>
+                                <section class="col col-5">
+                                    <label class="select">
+                                        @Html.DropDownListFor(m => m.DoctorID, (SelectList)ViewBag.DoctorList,
                                                 Constants.RequireDoctor)
-                                    <i></i>
-                                </label>
-                            </section>
-@*                            <section class="col col-2">
+                                        <i></i>
+                                    </label>
+                                </section>
+                                @*                            <section class="col col-2">
                                 <a style="cursor:pointer;">Xem lý lịch</a>
                             </section>*@
-                        </div>
-                        <div class="row_o">
-                            <section class="col col-5">
-                                <label class="input">
-                                    <i class="icon-append fa fa-calendar"></i>
-                                    @Html.TextBoxFor(m => m.AppDate, new
+                            </div>
+                            <div class="row_o">
+                                <section class="col col-5">
+                                    <label class="input">
+                                        <i class="icon-append fa fa-calendar"></i>
+                                        @Html.TextBoxFor(m => m.AppDate, new
                                         {
                                             @id = "appointmentDate",
                                             @placeholder = "Ngày khám"
                                         })
-                                </label>
-                                <div class="note">Định dạng: mm/dd/yy</div>
-                            </section>
-                            <section class="col col-4">
-                                <label class="select">
-                                    <i class="icon-append fa fa-clock-o"></i>
-                                    @Html.DropDownListFor(m => m.StartTime, (SelectList)ViewBag.TimeList, new
+                                    </label>
+                                    <div class="note">Định dạng: mm/dd/yy</div>
+                                </section>
+                                <section class="col col-4">
+                                    <label class="select">
+                                        <i class="icon-append fa fa-clock-o"></i>
+                                        @Html.DropDownListFor(m => m.StartTime, (SelectList)ViewBag.TimeList, new
                            {
                                @class = "form-control",
                                @id = "startTime",
                                @placeholder = "Thời gian khám"
                            })
-                                </label>
-                            </section>
-                        </div>
-                        <div class="row_o">
-                            <section class="col col-9">
-                                <label class="textarea">
-                                    <i class="icon-append fa fa-comment"></i>
-                                    @Html.TextAreaFor(m => m.SymptomDescription, new { @placeholder="Mô tả triệu chứng",@rows="5"})
-                                    <b class="tooltip tooltip-top-right"><i class="fa fa-comment txt-color-teal"></i>Mô tả thêm triệu chứng</b>
-                                </label>
-                            </section>
-                        </div>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row_o">
+                                <section class="col col-9">
+                                    <label class="textarea">
+                                        <i class="icon-append fa fa-comment"></i>
+                                        @Html.TextAreaFor(m => m.SymptomDescription, new { @placeholder = "Mô tả triệu chứng", @rows = "5" })
+                                        <b class="tooltip tooltip-top-right"><i class="fa fa-comment txt-color-teal"></i>Mô tả thêm triệu chứng</b>
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row_o">
+                                <section class="col col-9">
+                                    <label><strong class="txt-color-red">Vui lòng nhập mã bảo vệ bên dưới</strong></label>
+                                    @Html.Recaptcha(language: "vi")
+                                </section>
+                            </div>
 
-                    </fieldset>
-                </div>
-                <footer>
-                    <button type="reset" class="btn btn-primary">
-                        Hủy
-                    </button>
-                    &nbsp;
+                        </fieldset>
+                    </div>
+                    <footer>
+                        <button type="reset" class="btn btn-primary">
+                            Hủy
+                        </button>
+                        &nbsp;
                 @Html.TextBoxFor(m => m.HospitalID, new { @type = "hidden" })
-                    <button type="submit" class="btn btn-primary">
-                        Đặt lịch khám
-                    </button>
-                </footer>
-            }
-        </div>
-    </article>
-</div>
+                        <button type="submit" class="btn btn-primary">
+                            Đặt lịch khám
+                        </button>
+                    </footer>
+                }
+            </div>
+        </article>
+    </div>
