@@ -668,9 +668,14 @@ namespace HospitalF.Constant
         #endregion
 
         /// <summary>
-        /// Button for upload file button in page Import Excel
+        /// Upload file button in page Import Excel
         /// </summary>
         public const string ButtonUpload = "UploadFile";
+
+        /// <summary>
+        /// Confirm button in page Import Excel
+        /// </summary>
+        public const string ButtonConfirm = "Confirm";
 
         #endregion
 

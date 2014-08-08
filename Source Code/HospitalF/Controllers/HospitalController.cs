@@ -932,7 +932,7 @@ namespace HospitalF.Controllers
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
-                    result = await model.InsertHospitalAsync(model);
+                    result = await model.InsertHospitalAsync(model, 1);
                 }
 
                 // Assign value for drop down list
@@ -1187,6 +1187,20 @@ namespace HospitalF.Controllers
                         List<HospitalModel> hospitalList = await mdel.HandleExcelFileData(file,
                             Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]));
                         return View(hospitalList);
+                    }
+                }
+
+                // Add hospital list to data
+                if (Constants.ButtonConfirm.Equals(button))
+                {
+                    using (LinqDBDataContext data = new LinqDBDataContext())
+                    {
+                        foreach (HospitalModel record in model)
+                        {
+                            record.CreatedPerson =
+                                Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+                            await record.InsertHospitalAsync(record, 1);
+                        }
                     }
                 }
             }
