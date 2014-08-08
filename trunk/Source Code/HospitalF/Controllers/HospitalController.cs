@@ -1197,10 +1197,15 @@ namespace HospitalF.Controllers
                     {
                         foreach (HospitalModel record in model)
                         {
-                            record.CreatedPerson =
+                            if (record.RecordStatus != 0)
+                            {
+                                record.CreatedPerson =
                                 Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
-                            await record.InsertHospitalAsync(record, 1);
+                                await record.InsertHospitalAsync(record, 0);
+                            }
                         }
+                        ViewBag.AddStatus = 1;
+                        return View(model);
                     }
                 }
             }
