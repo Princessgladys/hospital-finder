@@ -68,7 +68,6 @@
     </section>
 }
 
-
 @using (Html.BeginForm(Constants.ImportExcelAction, Constants.HospitalController, FormMethod.Post, new { @id = "import-form", @class = "smart-from" }))
 {
 <!-- widget grid -->
@@ -115,9 +114,9 @@
                                     @{
                                         if (Model.Count == 0)
                                         {
-                                                        <tr>
-                                                            <td colspan="5">Không có dữ liệu</td>
-                                                        </tr>
+                                            <tr>
+                                                <td colspan="5">Không có dữ liệu</td>
+                                            </tr>
                                         }
                                         else
                                         {
@@ -125,17 +124,17 @@
                                             {
                                                 if (!string.IsNullOrEmpty(hospital.HospitalName))
                                                 {
-                                                        <tr>
-                                                            <td hidden>@hospital.HospitalID</td>
-                                                            <td hidden>@hospital.HospitalName</td>
-                                                            <td>
-                                                                @Html.ActionLink(@hospital.HospitalName,
-                                                                    Constants.UpdateHospitalAction, Constants.HospitalController,
-                                                                    new { hospitalId = @hospital.HospitalID }, null)
-                                                            </td>
-                                                            <td>@hospital.FullAddress</td>
-                                                            <td>@hospital.HospitalTypeName</td>
-                                                        </tr>
+                                                    <tr>
+                                                        <td hidden>@hospital.HospitalID</td>
+                                                        <td hidden>@hospital.HospitalName</td>
+                                                        <td>
+                                                            @Html.ActionLink(@hospital.HospitalName,
+                                                                Constants.UpdateHospitalAction, Constants.HospitalController,
+                                                                new { hospitalId = @hospital.HospitalID }, null)
+                                                        </td>
+                                                        <td>@hospital.FullAddress</td>
+                                                        <td>@hospital.HospitalTypeName</td>
+                                                    </tr>
                                                 }
                                             }
                                         }
@@ -168,6 +167,20 @@
     @*Display list of hospitals*@
     $(document).ready(function () {
         var numOfRecord = '@Model.Count'
+        var addStatus = '@ViewBag.AddStatus'
+
+        if (addStatus == 1) {
+            notif({
+                msg: "Thêm mới danh sách bệnh viện thành công!",
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+            $('#data-table').hide();
+            return false;
+        }
 
         if (numOfRecord > 0) {
             $('#data-table').show();

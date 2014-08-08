@@ -476,7 +476,48 @@ namespace HospitalF.Models
             }
             else
             {
+                #region Prepare data
 
+                // Phone number
+                string phoneNumber = model.PhoneNo;
+                if (!string.IsNullOrEmpty(model.PhoneNo2))
+                {
+                    phoneNumber += Constants.Slash + model.PhoneNo2;
+                }
+                if (!string.IsNullOrEmpty(model.PhoneNo3))
+                {
+                    phoneNumber += Constants.Slash + model.PhoneNo3;
+                }
+                model.PhoneNo = phoneNumber;
+
+                // Holiday time
+                string[] holidayTime = model.HolidayStartTime.Split(char.Parse(Constants.Minus));
+                string holidayStartTime = holidayTime[0].Trim();
+                model.HolidayStartTime = holidayStartTime;
+                string holidayEndTime = holidayTime[1].Trim();
+                model.HolidayEndTime = holidayEndTime;
+
+                // Ordinary time
+                string[] OrdinaryTime = model.OrdinaryStartTime.Split(char.Parse(Constants.Minus));
+                string ordinaryStartTime = OrdinaryTime[0].Trim();
+                model.OrdinaryStartTime = ordinaryStartTime;
+                string ordinaryEndTime = OrdinaryTime[1].Trim();
+                model.OrdinaryEndTime = ordinaryEndTime;
+
+                #endregion
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await Task.Run(() => data.SP_INSERT_HOSPITAL_EXCEL(model.HospitalName,
+                        model.HospitalTypeID, model.LocationAddress, model.StreetAddress,
+                        model.CityID, model.DistrictID, model.WardID, model.PhoneNo, model.Fax,
+                        model.HospitalEmail, model.Website, model.HolidayStartTime, model.HolidayEndTime,
+                        model.OrdinaryStartTime, model.OrdinaryEndTime, model.Coordinate,
+                        model.IsAllowAppointment, model.CreatedPerson, model.TagsInput,
+                        model.AverageCuringTime, model.SpecialityName, model.ServiceName,
+                        model.FacilityName));
+                }
             }
             
             return result;
@@ -740,7 +781,7 @@ namespace HospitalF.Models
             hospitalList = await ExcelUtil.LoadDataFromExcel(file, userId);
 
             // Return hospital list
-            return hospitalList.Where(d => d.HospitalName != null).ToList();
+            return hospitalList;
         }
 
         #endregion
