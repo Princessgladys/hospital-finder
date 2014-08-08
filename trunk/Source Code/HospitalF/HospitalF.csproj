@@ -218,6 +218,7 @@
     <Compile Include="Constant\ErrorMessage.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
+    <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\DoctorController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -328,6 +329,7 @@
     <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\logo-o.png" />
     <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\pic_mess_capital.jpg" />
     <Content Include="Content\img\saturation.png" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -464,15 +466,15 @@
     <Content Include="Content\css\fonts\flexslider-icon.eot" />
     <Content Include="Content\css\fonts\flexslider-icon.ttf" />
     <Content Include="Content\css\fonts\flexslider-icon.woff" />
+    <Content Include="Scripts\dropzone\css\basic.css" />
+    <Content Include="Scripts\dropzone\css\dropzone.css" />
+    <Content Include="Scripts\dropzone\css\stylus\dropzone.styl" />
+    <Content Include="Scripts\dropzone\css\stylus\basic.styl" />
     <Content Include="Models\LinqDB.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>LinqDB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Scripts\dropzone\css\basic.css" />
-    <Content Include="Scripts\dropzone\css\dropzone.css" />
-    <Content Include="Scripts\dropzone\css\stylus\dropzone.styl" />
-    <Content Include="Scripts\dropzone\css\stylus\basic.styl" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="RecaptchaNet.ReadMe.txt" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
@@ -495,7 +497,6 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -541,6 +542,11 @@
     <Content Include="Views\Data\UpdateSpeciality.cshtml" />
     <Content Include="Views\Data\Statistic.cshtml" />
     <Content Include="Views\Hospital\ImportExcel.cshtml" />
+    <Content Include="Views\Hospital\ViewDoctorDetail.cshtml" />
+    <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Hospital\HospitalBasicInforUpdate.cshtml" />
+    <Content Include="Views\Hospital\SpecialityServiceFacilityUpdate.cshtml" />
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
