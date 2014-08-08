@@ -255,39 +255,69 @@ namespace HospitalF.Controllers
         [HttpPost]
         public async Task<ActionResult> Confirm(AppointmentModels model)
         {
-            using (LinqDBDataContext data = new LinqDBDataContext())
+            try
             {
-                Appointment appointment = (from a in data.Appointments
-                                     where a.Confirm_Code == model.ConfirmCode
-                                     select a).FirstOrDefault();
-                if (appointment != null)
+                using (LinqDBDataContext data = new LinqDBDataContext())
                 {
-                    DateTime today = new DateTime();
-                    // ngay dang ky kham lon hon ngay hien tai
-                    if (today.CompareTo(appointment.Appointment_Date) > 0)
+                    Appointment appointment = (from a in data.Appointments
+                                               where a.Confirm_Code == model.ConfirmCode
+                                               select a).FirstOrDefault();
+                    if (appointment != null)
                     {
-                        appointment.Is_Confirm = true;
-                        appointment.Is_Active = false;
-                    }
-                    else if (today.CompareTo(appointment.Appointment_Date) == 0 && new TimeSpan().CompareTo(appointment.Start_Time) < 0)
-                    {
-                        appointment.Is_Confirm = true;
-                        appointment.Is_Active = true;
+                        DateTime today = new DateTime();
+                        // ngay dang ky kham lon hon ngay hien tai
+                        if (today.CompareTo(appointment.Appointment_Date) > 0)
+                        {
+                            appointment.Is_Confirm = true;
+                            appointment.Is_Active = false;
+                        }
+                        else if (today.CompareTo(appointment.Appointment_Date) == 0 && new TimeSpan().CompareTo(appointment.Start_Time) < 0)
+                        {
+                            appointment.Is_Confirm = true;
+                            appointment.Is_Active = true;
+                        }
+                        else
+                        {
+                            appointment.Is_Confirm = true;
+                            appointment.Is_Active = true;
+                        }
+                        data.SubmitChanges();
+
+                        //--add column Speciality_ID
+                        //USE HospitalF
+                        //GO
+
+                        //ALTER TABLE Appointment
+                        //--ADD Speciality_ID INT
+
+                        //ADD CONSTRAINT FK_Appointment_Speciality
+                        //FOREIGN KEY (Speciality_ID)
+                        //REFERENCES Speciality(Speciality_ID)
+
+                        //sync event into google calendar
+                        Doctor doctor = (from d in data.Doctors
+                                         where d.Doctor_ID == appointment.In_Charge_Doctor
+                                         select d).FirstOrDefault();
+
+                        Speciality speciality = (from s in data.Specialities
+                                                 where s.Speciality_ID == appointment.Speciality_ID
+                                                 select s).FirstOrDefault();
+
+                        CalendarUtil.InsertEntry(appointment,doctor,speciality);
+                        return RedirectToAction(Constants.IndexAction, Constants.HomeController);
                     }
                     else
                     {
-                        appointment.Is_Confirm = true;
-                        appointment.Is_Active = true;
+                        return View();
                     }
-                    data.SubmitChanges();
-                    return RedirectToAction(Constants.IndexAction, Constants.HomeController);
-                }
-                else
-                {
-                    return View();
                 }
             }
-            
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+
         }
         #endregion
     }
