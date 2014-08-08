@@ -40,15 +40,15 @@ BEGIN
 		DECLARE @DistrictName NVARCHAR(128)
 		DECLARE @WardName NVARCHAR(128)
 
-		SET @CityName = (SELECT @CityName
+		SET @CityName = (SELECT City_Name
 						 FROM City
 						 WHERE City_ID = @CityID)
 
-		SET @DistrictName = (SELECT District_Name
+		SET @DistrictName = (SELECT [Type] + ' ' + District_Name
 							 FROM District
 							 WHERE District_ID = @DistrictID)
 
-		SET @WardName = (SELECT Ward_Name
+		SET @WardName = (SELECT [Type] + ' ' + Ward_Name
 						 FROM Ward
 						 WHERE Ward_ID = @WardID)
 		
