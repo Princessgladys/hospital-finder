@@ -358,118 +358,127 @@ namespace HospitalF.Models
         /// Insert new hospital
         /// </summary>
         /// <param name="model">Hospital model</param>
+        /// <param name="mode">1: Manually, 0: Excel</param>
         /// <returns></returns>
-        public async Task<int> InsertHospitalAsync(HospitalModel model)
+        public async Task<int> InsertHospitalAsync(HospitalModel model, int mode)
         {
             int result = 0;
 
-            #region Prepare data
-
-            // Full address
-            model.FullAddress = string.Format("{0} {1}, {2}, {3}, {4}",
-                model.LocationAddress, model.StreetAddress, model.WardName,
-                model.DistrictName, model.CityName);
-
-            // Phone number
-            string phoneNumber = model.PhoneNo;
-            if (!string.IsNullOrEmpty(model.PhoneNo2))
+            if (mode == 1)
             {
-                phoneNumber += Constants.Slash + model.PhoneNo2;
-            }
-            if (!string.IsNullOrEmpty(model.PhoneNo3))
-            {
-                phoneNumber += Constants.Slash + model.PhoneNo3;
-            }
-            model.PhoneNo = phoneNumber;
+                #region Prepare data
 
-            // Holiday time
-            string[] holidayTime = model.HolidayStartTime.Split(char.Parse(Constants.Minus));
-            string holidayStartTime = holidayTime[0].Trim();
-            model.HolidayStartTime = holidayStartTime;
-            string holidayEndTime = holidayTime[1].Trim();
-            model.HolidayEndTime = holidayEndTime;
+                // Full address
+                model.FullAddress = string.Format("{0} {1}, {2}, {3}, {4}",
+                    model.LocationAddress, model.StreetAddress, model.WardName,
+                    model.DistrictName, model.CityName);
 
-            // Ordinary time
-            string[] OrdinaryTime = model.OrdinaryStartTime.Split(char.Parse(Constants.Minus));
-            string ordinaryStartTime = OrdinaryTime[0].Trim();
-            model.OrdinaryStartTime = ordinaryStartTime;
-            string ordinaryEndTime = OrdinaryTime[1].Trim();
-            model.OrdinaryEndTime = ordinaryEndTime;
-
-            // Speciality list
-            string speciality = string.Empty;
-            if ((model.SelectedSpecialities != null) && (model.SelectedSpecialities.Count != 0))
-            {
-                for (int n = 0; n < model.SelectedSpecialities.Count; n++)
+                // Phone number
+                string phoneNumber = model.PhoneNo;
+                if (!string.IsNullOrEmpty(model.PhoneNo2))
                 {
-                    if (n == (model.SelectedSpecialities.Count - 1))
+                    phoneNumber += Constants.Slash + model.PhoneNo2;
+                }
+                if (!string.IsNullOrEmpty(model.PhoneNo3))
+                {
+                    phoneNumber += Constants.Slash + model.PhoneNo3;
+                }
+                model.PhoneNo = phoneNumber;
+
+                // Holiday time
+                string[] holidayTime = model.HolidayStartTime.Split(char.Parse(Constants.Minus));
+                string holidayStartTime = holidayTime[0].Trim();
+                model.HolidayStartTime = holidayStartTime;
+                string holidayEndTime = holidayTime[1].Trim();
+                model.HolidayEndTime = holidayEndTime;
+
+                // Ordinary time
+                string[] OrdinaryTime = model.OrdinaryStartTime.Split(char.Parse(Constants.Minus));
+                string ordinaryStartTime = OrdinaryTime[0].Trim();
+                model.OrdinaryStartTime = ordinaryStartTime;
+                string ordinaryEndTime = OrdinaryTime[1].Trim();
+                model.OrdinaryEndTime = ordinaryEndTime;
+
+                // Speciality list
+                string speciality = string.Empty;
+                if ((model.SelectedSpecialities != null) && (model.SelectedSpecialities.Count != 0))
+                {
+                    for (int n = 0; n < model.SelectedSpecialities.Count; n++)
                     {
-                        speciality += model.SelectedSpecialities[n];
-                    }
-                    else
-                    {
-                        speciality += model.SelectedSpecialities[n] +
-                            Constants.VerticalBar.ToString();
+                        if (n == (model.SelectedSpecialities.Count - 1))
+                        {
+                            speciality += model.SelectedSpecialities[n];
+                        }
+                        else
+                        {
+                            speciality += model.SelectedSpecialities[n] +
+                                Constants.VerticalBar.ToString();
+                        }
                     }
                 }
-            }
 
-            // Service list
-            string service = string.Empty;
-            if ((model.SelectedServices != null) && (model.SelectedServices.Count != 0))
-            {
-                for (int n = 0; n < model.SelectedServices.Count; n++)
+                // Service list
+                string service = string.Empty;
+                if ((model.SelectedServices != null) && (model.SelectedServices.Count != 0))
                 {
-                    if (n == (model.SelectedServices.Count - 1))
+                    for (int n = 0; n < model.SelectedServices.Count; n++)
                     {
-                        service += model.SelectedServices[n];
-                    }
-                    else
-                    {
-                        service += model.SelectedServices[n] +
-                            Constants.VerticalBar.ToString();
+                        if (n == (model.SelectedServices.Count - 1))
+                        {
+                            service += model.SelectedServices[n];
+                        }
+                        else
+                        {
+                            service += model.SelectedServices[n] +
+                                Constants.VerticalBar.ToString();
+                        }
                     }
                 }
-            }
 
-            // Facility list
-            string facility = string.Empty;
-            if ((model.SelectedFacilities != null) && (model.SelectedFacilities.Count != 0))
-            {
-                for (int n = 0; n < model.SelectedFacilities.Count; n++)
+                // Facility list
+                string facility = string.Empty;
+                if ((model.SelectedFacilities != null) && (model.SelectedFacilities.Count != 0))
                 {
-                    if (n == (model.SelectedFacilities.Count - 1))
+                    for (int n = 0; n < model.SelectedFacilities.Count; n++)
                     {
-                        facility += model.SelectedFacilities[n];
-                    }
-                    else
-                    {
-                        facility += model.SelectedFacilities[n] +
-                            Constants.VerticalBar.ToString();
+                        if (n == (model.SelectedFacilities.Count - 1))
+                        {
+                            facility += model.SelectedFacilities[n];
+                        }
+                        else
+                        {
+                            facility += model.SelectedFacilities[n] +
+                                Constants.VerticalBar.ToString();
+                        }
                     }
                 }
-            }
 
-            // Person in charged
-            if (model.PersonInCharged == null)
+                // Person in charged
+                if (model.PersonInCharged == null)
+                {
+                    model.PersonInCharged = string.Empty;
+                }
+
+                #endregion
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await Task.Run(() => data.SP_INSERT_HOSPITAL(model.HospitalName,
+                        model.HospitalTypeID, model.FullAddress, model.CityID, model.DistrictID,
+                        model.WardID, model.PhoneNo, model.Fax, model.HospitalEmail, model.Website,
+                        model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
+                        model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment,
+                        model.CreatedPerson, model.FullDescription, model.PersonInCharged,
+                        model.PhotoFilesPath, model.TagsInput, model.AverageCuringTime, speciality,
+                        service, facility));
+                }
+            }
+            else
             {
-                model.PersonInCharged = string.Empty;
-            }
 
-            #endregion
-
-            // Return list of dictionary words
-            using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                result = await Task.Run(() => data.SP_INSERT_HOSPITAL(model.HospitalName,
-                    model.HospitalTypeID, model.FullAddress, model.CityID, model.DistrictID,
-                    model.WardID, model.PhoneNo, model.Fax, model.HospitalEmail, model.Website,
-                    model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
-                    model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment,
-                    model.CreatedPerson, model.FullDescription, model.PersonInCharged,
-                    model.PhotoFilesPath, model.TagsInput, model.AverageCuringTime, speciality,
-                    service, facility));
             }
+            
             return result;
         }
 
@@ -728,10 +737,10 @@ namespace HospitalF.Models
             List<HospitalModel> hospitalList = new List<HospitalModel>();
 
             // Load data from Excel
-            hospitalList = ExcelUtil.LoadDataFromExcel(file, userId);
+            hospitalList = await ExcelUtil.LoadDataFromExcel(file, userId);
 
             // Return hospital list
-            return hospitalList;
+            return hospitalList.Where(d => d.HospitalName != null).ToList();
         }
 
         #endregion
