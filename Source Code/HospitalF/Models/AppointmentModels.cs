@@ -130,7 +130,7 @@ namespace HospitalF.Models
             //string t2 = dt.ToString("HH:mm tt");
             for (TimeSpan time = ordinaryStart; time >= ordinaryStart && time < ordinaryEnd; time = time.Add(new TimeSpan(1, 0, 0)))
             {
-                for (int i = 0; i <= 60; i += Constants.TimeCheck)
+                for (int i = 0; i <= 60; i += (int)hospital.Avg_Curing_Time)
                 {
                     dt = DateTime.Today.Add(time.Add(new TimeSpan(0, i, 0)));
                     if (!listTime[listTime.Count - 1].Equals(dt.ToString("HH:mm")) &&
@@ -175,11 +175,10 @@ namespace HospitalF.Models
             int result = 0;
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                //result = data.SP_INSERT_APPOINTMENT(null, null, null, null, null, null, null, null, null, null,null);
                 result = await Task.Run(() => data.SP_INSERT_APPOINTMENT(app.Patient_Full_Name, app.Patient_Gender,
                     app.Patient_Birthday, app.Patient_Phone_Number, app.Patient_Email,
                     app.Appointment_Date, app.Start_Time, app.End_Time, app.In_Charge_Doctor,
-                    app.Curing_Hospital, app.Confirm_Code, app.Health_Insurance_Code, app.Symptom_Description));
+                    app.Curing_Hospital, app.Confirm_Code, app.Health_Insurance_Code, app.Symptom_Description,app.Speciality_ID));
             }
             return result;
         }

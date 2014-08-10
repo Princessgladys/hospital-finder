@@ -840,12 +840,7 @@ namespace HospitalF.Constant
         #endregion
 
         #region Utilities
-
-        /// <summary>
-        /// Constant for timeCheck is 20 minutes
-        /// </summary>
-        public const int TimeCheck = 20;
-
+        
         /// <summary>
         /// Constant for LoggingPartition key in appSettings section of Web.config
         /// </summary>

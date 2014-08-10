@@ -50,12 +50,12 @@
     }
 
     @*Display notification*@
-    function displayNotification() {
+    @*function displayNotification() {
         // Add hospital
-        if ('@ViewBag.AddAppoitmentStatus' == '') {
+        if (@ViewBag.AddAppoitmentStatus == '') {
             return false;
         } else {
-            var returnValue = '@ViewBag.AddAppoitmentStatus';
+            var returnValue = @ViewBag.AddAppoitmentStatus;
             returnValue = returnValue.split('-');
             var status = returnValue[0];
             var phoneNo = returnValue[1];
@@ -68,7 +68,7 @@
                 setNotification("Đặt lịch hẹn không thành công, xin hãy thử lại.", 3);
             }
         }
-    }
+    }*@
 
     $(document).ready(function () {
         displayNotification();
@@ -207,7 +207,7 @@
         });
         // Ngay kham datepicker
         $("#appointmentDate").datepicker({
-            dateFormat: "mm/dd/yy",
+            dateFormat: "dd/mm/yy",
             prevText: '<i class="fa fa-chevron-left"></i>',
             nextText: '<i class="fa fa-chevron-right"></i>',
             minDate: new Date(currentYear, currentMonth, currentDate),
@@ -234,7 +234,6 @@
                     url: "@(Url.RouteUrl(Constants.LoadTimeCheckHealthAction))",
                     data: { "hospitalID": hospitalID, "doctorID": doctorID, "checkHealthDate": selectedItem },
                     success: function (data) {
-                        window.alert(ddlTimeCheckHealth.length);
                         ddlTimeCheckHealth.html('');
                         ddlTimeCheckHealth.append($('<option></option>').val(0).html("-- Xin chọn thời gian --"));
                         $.each(data, function (id, option) {
@@ -251,11 +250,12 @@
         }).datepicker("setDate", new Date());
 
         $("#birthdayDatetime").datepicker({
-            dateFormat: "mm/dd/yy",
+            dateFormat: "dd/mm/yy",
             maxDate: new Date(currentYear, currentMonth, currentDate - 1),
             prevText: '<i class="fa fa-chevron-left"></i>',
             nextText: '<i class="fa fa-chevron-right"></i>'
         }).datepicker("setDate", new Date() - 1);
+        $("birthdayDatetime").select(function () {});
     });
 
 </script>
@@ -352,7 +352,7 @@
                                    @id = "birthdayDatetime"
                                })
                                     </label>
-                                    <div class="note">Định dạng: mm/dd/yy</div>
+                                    <div class="note">Định dạng: dd/mm/yy</div>
                                 </section>
                                 <section class="col col-4">
                                     <label class="select">
@@ -454,7 +454,7 @@
                                             @placeholder = "Ngày khám"
                                         })
                                     </label>
-                                    <div class="note">Định dạng: mm/dd/yy</div>
+                                    <div class="note">Định dạng: dd/mm/yy</div>
                                 </section>
                                 <section class="col col-4">
                                     <label class="select">
@@ -477,12 +477,12 @@
                                     </label>
                                 </section>
                             </div>
-                            <div class="row_o">
+                            @*<div class="row_o">
                                 <section class="col col-9">
                                     <label><strong class="txt-color-red">Vui lòng nhập mã bảo vệ bên dưới</strong></label>
                                     @Html.Recaptcha(language: "vi")
                                 </section>
-                            </div>
+                            </div>*@
 
                         </fieldset>
                     </div>
