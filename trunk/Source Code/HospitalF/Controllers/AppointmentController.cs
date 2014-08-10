@@ -8,6 +8,7 @@ using HospitalF.App_Start;
 using HospitalF.Constant;
 using HospitalF.Models;
 using HospitalF.Utilities;
+using System.Globalization;
 
 namespace HospitalF.Controllers
 {
@@ -86,21 +87,31 @@ namespace HospitalF.Controllers
             try
             {
                 string confirmCode = SMSUtil.GetConfirmCode();
-                EndTime = TimeSpan.Parse(model.StartTime).Add(new TimeSpan(0, Constants.TimeCheck, 0));
+                Hospital hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(model.HospitalID);
+                EndTime = TimeSpan.Parse(model.StartTime).Add(new TimeSpan(0,(int) hospital.Avg_Curing_Time, 0));
                 Appointment appointment = new Appointment();
                 appointment.Patient_Full_Name = model.FullName;
                 appointment.Patient_Gender = model.Gender == 0 ? true : false;
                 appointment.Patient_Phone_Number = model.PhoneNo;
                 appointment.Patient_Email = model.Email;
-                appointment.Patient_Birthday = model.Birthday;
                 appointment.In_Charge_Doctor = model.DoctorID;
                 appointment.Confirm_Code = confirmCode;
                 appointment.Start_Time = TimeSpan.Parse(model.StartTime);
                 appointment.End_Time = EndTime;
-                appointment.Appointment_Date = model.AppDate;
                 appointment.Curing_Hospital = model.HospitalID;
                 appointment.Health_Insurance_Code = model.HealthInsuranceCode;
                 appointment.Symptom_Description = model.SymptomDescription;
+                appointment.Speciality_ID = model.SpecialityID;
+                // convert model.birthday and model.appDate "dd/mm/yy" to mm/dd/yy
+                IFormatProvider provider = new System.Globalization.CultureInfo("en-CA",true);
+                string datetime = model.Birthday.ToString().Trim();
+                DateTime dt = DateTime.Parse(datetime, provider, System.Globalization.DateTimeStyles.NoCurrentDateDefault);
+                appointment.Patient_Birthday = dt;
+
+                datetime = model.AppDate.ToString().Trim();
+                dt = DateTime.Parse(datetime, provider, System.Globalization.DateTimeStyles.NoCurrentDateDefault);
+                appointment.Appointment_Date = dt;
+
                 int result = await AppointmentModels.InsertAppointment(appointment);
                 if (result != 1)
                 {
@@ -260,22 +271,26 @@ namespace HospitalF.Controllers
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
                     Appointment appointment = (from a in data.Appointments
-                                               where a.Confirm_Code == model.ConfirmCode
+                                               where a.Confirm_Code == model.ConfirmCode &&
+                                                     a.Is_Confirm==false
                                                select a).FirstOrDefault();
                     if (appointment != null)
                     {
-                        DateTime today = new DateTime();
-                        // ngay dang ky kham lon hon ngay hien tai
-                        if (today.CompareTo(appointment.Appointment_Date) > 0)
+                        DateTime today = DateTime.Now;
+                        DateTime appointmentDate = DateTime.Parse(appointment.Appointment_Date.ToString()).Add(TimeSpan.Parse(appointment.Start_Time.ToString()));
+                        // ngay gio confirm lon hon ngay hen kham
+                        if (today.CompareTo(appointmentDate) > 0)
                         {
                             appointment.Is_Confirm = true;
                             appointment.Is_Active = false;
                         }
-                        else if (today.CompareTo(appointment.Appointment_Date) == 0 && new TimeSpan().CompareTo(appointment.Start_Time) < 0)
+                            //ngay gio confirm trung ngay hen kham
+                        else if (today.CompareTo(appointmentDate) == 0)
                         {
                             appointment.Is_Confirm = true;
                             appointment.Is_Active = true;
                         }
+                            //ngay gio confirm nho hon ngay hen kham
                         else
                         {
                             appointment.Is_Confirm = true;
@@ -295,6 +310,9 @@ namespace HospitalF.Controllers
                         //REFERENCES Speciality(Speciality_ID)
 
                         //sync event into google calendar
+                        List<string> gmailList = (from u in data.Users
+                                                  where u.Hospital_ID == appointment.Curing_Hospital
+                                                  select u.Email).ToList();
                         Doctor doctor = (from d in data.Doctors
                                          where d.Doctor_ID == appointment.In_Charge_Doctor
                                          select d).FirstOrDefault();
@@ -302,8 +320,7 @@ namespace HospitalF.Controllers
                         Speciality speciality = (from s in data.Specialities
                                                  where s.Speciality_ID == appointment.Speciality_ID
                                                  select s).FirstOrDefault();
-
-                        CalendarUtil.InsertEntry(appointment,doctor,speciality);
+                        GoogleCalendarUtil.InsertEntry(appointment, doctor, speciality, gmailList);
                         return RedirectToAction(Constants.IndexAction, Constants.HomeController);
                     }
                     else
