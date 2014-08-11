@@ -664,14 +664,14 @@ namespace HospitalF.Models
             List<ServiceEntity> services = null;
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                services = (from s in data.SP_LOAD_SERVICE_IN_HOSPITAL_SERVICE(id)
+                services = (from s in data.SP_LOAD_SERVICES_BY_HOSPITAL_ID(id)
                             select new ServiceEntity()
                             {
                                 Service_ID = s.Service_ID,
                                 Service_Name = s.Service_Name,
-                                Type_ID = s.Service_Type,
-                                Type_Name = s.Type_Name
-                                //Is_Active = s.Is_Active
+                                Type_ID = s.Type_ID,
+                                Type_Name = s.Type_Name,
+                                Is_Active = s.Is_Active
                             }).ToList<ServiceEntity>();
             }
             return services;
@@ -683,14 +683,14 @@ namespace HospitalF.Models
             List<FacilityEntity> services = null;
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                services = (from f in data.SP_LOAD_FACILITY_IN_HOSPITAL_FACILITY(id)
+                services = (from f in data.SP_LOAD_FACILITIES_BY_HOSPITAL_ID(id)
                             select new FacilityEntity()
                             {
                                 Facility_ID = f.Facility_ID,
                                 Facility_Name = f.Facility_Name,
-                                Type_ID = f.Facility_Type,
-                                Type_Name = f.Type_Name
-                                //Is_Active = f.Is_Active
+                                Type_ID = f.Type_ID,
+                                Type_Name = f.Type_Name,
+                                Is_Active = f.Is_Active
                             }).ToList<FacilityEntity>();
             }
             return services;

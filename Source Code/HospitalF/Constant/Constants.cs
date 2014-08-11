@@ -286,6 +286,10 @@ namespace HospitalF.Constant
         /// </summary>
         public const string StatisticAction = "Statistic";
 
+        /// <summary>
+        /// Name of SearchQueryStatistic method in DataController
+        /// </summary>
+        public const string SearchQueryStatisticAction = "SearchQueryStatistic";
         #endregion
 
         #region AccountModel

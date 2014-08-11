@@ -43,6 +43,48 @@
     <Reference Include="DropDownList_Optgroup">
       <HintPath>..\packages\DropDownList.Optgroup.MVC.1.0.0\lib\net40\DropDownList_Optgroup.dll</HintPath>
     </Reference>
+    <Reference Include="Google.GData.AccessControl">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.AccessControl.DLL</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Analytics">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Apps">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Apps.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Blogger">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Blogger.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Calendar">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Calendar.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Client">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Contacts">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Contacts.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.ContentForShopping">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.ContentForShopping.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Documents">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Documents.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Photos">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Photos.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Spreadsheets">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.Spreadsheets.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.WebmasterTools">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.WebmasterTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.YouTube">
+      <HintPath>..\packages\Google Data API SDK\Google.GData.YouTube.dll</HintPath>
+    </Reference>
     <Reference Include="LinqToExcel">
       <HintPath>..\packages\LinqToExcel.1.9.0\lib\LinqToExcel.dll</HintPath>
     </Reference>
@@ -227,6 +269,7 @@
     <Compile Include="Controllers\SecurityBaseController.cs" />
     <Compile Include="Entities\FacilityEntity.cs" />
     <Compile Include="Entities\HospitalEntity.cs" />
+    <Compile Include="Entities\SentenceDictionaryEntity.cs" />
     <Compile Include="Entities\ServiceEntity.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -247,6 +290,7 @@
     <Compile Include="Utilities\DictionaryUtil.cs" />
     <Compile Include="Utilities\ExcelUtil.cs" />
     <Compile Include="Utilities\FileUtil.cs" />
+    <Compile Include="Utilities\GoogleCalendarUtil.cs" />
     <Compile Include="Utilities\HospitalUtil.cs" />
     <Compile Include="Utilities\LocationUtil.cs" />
     <Compile Include="Utilities\LoggingUtil.cs" />
@@ -547,6 +591,7 @@
     <Content Include="Views\Hospital\HospitalBasicInforUpdate.cshtml" />
     <Content Include="Views\Hospital\SpecialityServiceFacilityUpdate.cshtml" />
     <Content Include="Web.config" />
+    <Content Include="Views\Data\SearchQueryStatistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
