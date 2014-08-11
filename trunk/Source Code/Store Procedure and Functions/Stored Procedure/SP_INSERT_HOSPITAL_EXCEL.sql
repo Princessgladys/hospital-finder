@@ -10,6 +10,9 @@ CREATE PROCEDURE SP_INSERT_HOSPITAL_EXCEL
 	@HospitalType INT,
 	@LocationAddress NVARCHAR(128),
 	@StreetAddress NVARCHAR(128),
+	@CityName NVARCHAR(128),
+	@DistrictName NVARCHAR(128),
+	@WardName NVARCHAR(128),
 	@CityID INT,
 	@DistrictID INT,
 	@WardID INT,
@@ -36,22 +39,7 @@ BEGIN
 	-- INSERT TO HOSPITAL TABLE
 	BEGIN
 		DECLARE @FullAddress NVARCHAR(512)
-		DECLARE @CityName NVARCHAR(128)
-		DECLARE @DistrictName NVARCHAR(128)
-		DECLARE @WardName NVARCHAR(128)
 
-		SET @CityName = (SELECT City_Name
-						 FROM City
-						 WHERE City_ID = @CityID)
-
-		SET @DistrictName = (SELECT [Type] + ' ' + District_Name
-							 FROM District
-							 WHERE District_ID = @DistrictID)
-
-		SET @WardName = (SELECT [Type] + ' ' + Ward_Name
-						 FROM Ward
-						 WHERE Ward_ID = @WardID)
-		
 		SET @FullAddress = @LocationAddress + ' ' + @StreetAddress + ', ' +
 			@WardName + ', ' + @DistrictName + ', ' + @CityName
 
