@@ -1188,9 +1188,7 @@ namespace HospitalF.Controllers
                         HospitalModel mdel = new HospitalModel();
                         List<HospitalModel> hospitalList = await mdel.HandleExcelFileData(file,
                             Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]));
-
-                        // Add list to session and return to view
-                        Session[Constants.HospitalExcelSession] = hospitalList;
+                        // Return list of hospital to view
                         return View(hospitalList);
                     }
                 }
@@ -1198,11 +1196,9 @@ namespace HospitalF.Controllers
                 // Add hospital list to data
                 if (Constants.ButtonConfirm.Equals(button))
                 {
-                    List<HospitalModel> hospitalList = (List<HospitalModel>)Session[Constants.HospitalExcelSession];
-
-                    if (hospitalList != null)
+                    if (model != null)
                     {
-                        foreach (HospitalModel record in hospitalList)
+                        foreach (HospitalModel record in model)
                         {
                             if (record.RecordStatus != 0)
                             {
@@ -1211,7 +1207,6 @@ namespace HospitalF.Controllers
                                 await record.InsertHospitalAsync(record, 0);
                             }
                         }
-                        Session[Constants.HospitalExcelSession] = null;
                     }
 
                     ViewBag.AddStatus = 1;

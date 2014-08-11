@@ -85,6 +85,8 @@ namespace HospitalF.Utilities
                     Int32.TryParse(data[23], out tempInt);
                     model.WardID = tempInt;
                     model.WardName = data[10];
+                    model.FullAddress = string.Format("{0} {1}, {2}, {3}, {4}", model.LocationAddress,
+                        model.StreetAddress, model.WardName, model.DistrictName, model.CityName);
                     model.PhoneNo = data[11];
                     model.PhoneNo2 = data[12];
                     model.PhoneNo3 = data[13];
