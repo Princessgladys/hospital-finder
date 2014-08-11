@@ -3,10 +3,6 @@
 -- SCRIPT TO INSERT APPOINTMENT
 -- ANHDTH
 
---ALTER TABLE Appointment
---ADD HealthInsuranceCode VARCHAR(15),
---	SymptomDescription nvarchar(200)
-
 IF OBJECT_ID('[SP_INSERT_APPOINTMENT]') IS NOT NULL
 	DROP PROCEDURE [SP_INSERT_APPOINTMENT]
 GO
@@ -23,7 +19,8 @@ CREATE PROCEDURE [dbo].[SP_INSERT_APPOINTMENT]
 	@Hospital_ID int,
 	@Confirm_Code varchar(8),
 	@HealthInsuranceCode varchar(15),
-	@SymptomDescription nvarchar(200)
+	@SymptomDescription nvarchar(200),
+	@Speciality_ID int
 AS
 BEGIN
 	BEGIN TRANSACTION
@@ -42,7 +39,8 @@ BEGIN
 		,[Health_Insurance_Code]
 		,[Symptom_Description]
 		,[Is_Confirm]
-		,[Is_Active])
+		,[Is_Active]
+		,[Speciality_ID])
 	VALUES
 		(@FullName
 		,@Gender
@@ -58,7 +56,8 @@ BEGIN
 		,@HealthInsuranceCode
 		,@SymptomDescription
 		,'False'
-		,'False')
+		,'False'
+		,@Speciality_ID)
 	IF @@ERROR <>0
 	BEGIN
 		ROLLBACK TRAN;
