@@ -6,6 +6,35 @@
     ViewBag.Title = "Thêm bệnh viện từ Excel";
 }
 
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
+<script type="text/javascript">
+    // Get coordinate from a specific address
+    function getCoordinateFromAddress(fulladdress) {
+        // Take full address
+        address = fulladdress + ", " + "Việt Nam";
+        var geocoder = new google.maps.Geocoder();
+
+        // Query address from Google
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            // Check if address is understandable
+            if (status == google.maps.GeocoderStatus.OK) {
+
+                // Set coordinate value
+                var currentCoordinate = results[0].geometry.location.lat().toFixed(6) +
+                    ", " + results[0].geometry.location.lng().toFixed(6);
+                $('#Coordinate').val(currentCoordinate);
+
+                // Display message
+                setAddressNotificationMessage('@ErrorMessage.CEM016', 1);
+            } else {
+                setAddressNotificationMessage("@ErrorMessage.CEM032", 0);
+                setNotification("@ErrorMessage.CEM032", 2);
+            }
+        });
+        return false;
+    }
+</script>
+
 <div class="row">
     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
         <h1 class="page-title txt-color-blueDark">
@@ -121,21 +150,51 @@
                                         }
                                         else
                                         {
-                                            foreach (var hospital in Model)
+                                            for (int n = 0; n < Model.Count; n++)
                                             {
-                                                if (!string.IsNullOrEmpty(hospital.HospitalName))
+                                                if (!string.IsNullOrEmpty(Model[n].HospitalName))
                                                 {
+                                                    @Html.TextBoxFor(m => m[n].HospitalID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalTypeID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalTypeName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].OrdinaryStartTime, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HolidayStartTime, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].IsAllowAppointment, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].AverageCuringTime, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].LocationAddress, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].StreetAddress, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].CityID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].CityName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].DistrictID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].DistrictName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].WardID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].WardName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].FullAddress, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].PhoneNo, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].PhoneNo2, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].PhoneNo3, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].Fax, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalEmail, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].Website, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].SpecialityName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].ServiceName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].FacilityName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].TagsInput, new { @type = "hidden" })
+    <script type="text/javascript">
+    getCoordinateFromAddress('@Model[n].FullAddress');
+    </script>
+                                                    @Html.TextBoxFor(m => m[n].Coordinate, new { @type = "hidden" })
                                                     <tr>
-                                                        <td hidden>@hospital.HospitalID</td>
-                                                        <td hidden>@hospital.HospitalName</td>
-                                                        <td>@hospital.HospitalID</td>
+                                                        <td hidden>@Model[n].HospitalID</td>
+                                                        <td hidden>@Model[n].HospitalName</td>
+                                                        <td>@Model[n].HospitalID</td>
                                                         <td>
-                                                            @Html.ActionLink(@hospital.HospitalName,
+                                                            @Html.ActionLink(@Model[n].HospitalName,
                                                                 Constants.UpdateHospitalAction, Constants.HospitalController,
-                                                                new { hospitalId = @hospital.HospitalID }, null)
+                                                             new { hospitalId = @Model[n].HospitalID }, null)
                                                         </td>
-                                                        <td>@hospital.FullAddress</td>
-                                                        <td>@hospital.HospitalTypeName</td>
+                                                        <td>@Model[n].FullAddress</td>
+                                                        <td>@Model[n].HospitalTypeName</td>
                                                     </tr>
                                                 }
                                             }
