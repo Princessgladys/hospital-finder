@@ -853,11 +853,6 @@
                 return false;
             }, "@ErrorMessage.CEM023");
 
-        $.validator.addMethod("locationAddress",
-            function (value, element) {
-                return /^[a-zA-Z0-9 /-]*$/.test(value);
-            }, "@ErrorMessage.CEM024");
-
         $.validator.addMethod("phone",
             function (value, element) {
                 return /^[0-9()]*$/.test(value);
@@ -882,8 +877,7 @@
                 },
                 LocationAddress: {
                     required: true,
-                    maxlength: 10,
-                    locationAddress: true
+                    maxlength: 32
                 },
                 StreetAddress: {
                     required: true,
@@ -954,8 +948,7 @@
                 },
                 LocationAddress: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.LocationAddress)',
-                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.LocationAddress, 10)',
-                    locationAddress: '@string.Format(ErrorMessage.CEM013, Constants.LocationAddress)'
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.LocationAddress, 32)'
                 },
                 StreetAddress: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.StreetAddress)',
