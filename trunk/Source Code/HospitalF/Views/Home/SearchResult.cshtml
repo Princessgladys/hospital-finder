@@ -26,22 +26,24 @@
             </div>
             <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
         }
-        @if (!string.IsNullOrEmpty(suggestionSentence))
+        @if (string.IsNullOrEmpty(ViewBag.SearchType))
         {
-            suggestionSentence = suggestionSentence.Trim();
-            <div class="col-md-12">
+            if (!string.IsNullOrEmpty(suggestionSentence))
+            {
+                suggestionSentence = suggestionSentence.Trim();
+<div class="col-md-12">
                 <p>
                     Có phải bạn muốn tìm <i>
                         @Html.ActionLink(suggestionSentence,
                                 Constants.SearchResultAction, Constants.HomeController,
                                 new { SearchValue = suggestionSentence }, null)
-                    </i>
+            </i>
                 </p>
             </div>
-        }
-        @if (hospitalList.TotalItemCount == 0)
-        {
-            <div class="col-md-12">
+            }
+            if (hospitalList.TotalItemCount == 0)
+            {
+<div class="col-md-12">
                 <p><strong>Không có kết quả tìm kiếm với từ khóa</strong> <span style="color: blue">@(ViewBag.SearchValue)</span></p>
 
                 <ul>
@@ -49,12 +51,12 @@
                     <li>Hãy thử những từ khóa khác.</li>
                 </ul>
             </div>
+            }
         }
     </div>
 
-
-
-    <div class="col-md-12">
+    <div class="col-md-8">
+        <hr />
         @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = ViewBag.SearchType }))
         {
             string button = ViewBag.SearchType;
@@ -66,7 +68,7 @@
                     <label class="label col col-2">Tìm theo</label>
                     <section class="col col-4">
                         <label class="select">
-                            @Html.DropDownListFor(m => m.LocationType, (SelectList)ViewBag.LocationTypeList, new { @class = "form-control"}) 
+                            @Html.DropDownListFor(m => m.LocationType, (SelectList)ViewBag.LocationTypeList, new { @class = "form-control" })
                             <i></i>
                         </label>
                     </section>
@@ -82,12 +84,17 @@
                     <label class="label col col-2">Bán kính</label>
                     <section class="col col-4">
                         <label class="select">
-                            @Html.DropDownListFor(m => m.Radius, (SelectList)ViewBag.RadiusList, new { @class = "form-control"}) 
+                            @Html.DropDownListFor(m => m.Radius, (SelectList)ViewBag.RadiusList, new { @class = "form-control" })
                             <i></i>
                         </label>
                     </section>
                 </div>
             </fieldset>
+            <footer>
+                <button class="btn btn-default btn-primary" type="submit" value="@(ViewBag.SearchType)" name="@(Constants.Button)">
+                    <i class="fa fa-search"></i>&nbsp;Tìm kiếm
+                </button>
+            </footer>
             }
             else if (Constants.AdvancedSearchForm.Equals(button))
             {
@@ -135,19 +142,18 @@
                     </section>
                 </div>
             </fieldset>
-            }
-            
             <footer>
                 <button class="btn btn-default btn-primary" type="submit" value="@(ViewBag.SearchType)" name="@(Constants.Button)">
                     <i class="fa fa-search"></i>&nbsp;Tìm kiếm
                 </button>
             </footer>
+            }
         }
     </div>
 
     <div class="col-md-12">
         <hr />
-        <div id="hospital-list-results" class="col-md-4" style="padding: 0">
+        <div id="hospital-list-results" class="col-md-4 no-padding">
             @if (hospitalList.TotalItemCount > 0)
             {
                 <h1 class="font-md">Danh sách <span class="semi-bold">bệnh viện</span><small class="text-danger"> &nbsp;&nbsp;(@(hospitalList != null ? hospitalList.TotalItemCount : 0) kết quả)</small></h1>
@@ -219,7 +225,7 @@
 
         @if (hospitalList.TotalItemCount > 0)
         {
-            <div id="map-results" class="col-md-8" style="padding: 0">
+            <div id="map-results" class="col-md-8 no-padding">
                 <div id="map-canvas"></div>
             </div>
         }

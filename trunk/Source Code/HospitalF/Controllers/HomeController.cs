@@ -209,6 +209,8 @@ namespace HospitalF.Controllers
                     // Search hospitals
                     hospitalList = await model.NormalSearchHospital();
                     pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
+                    // Search Query Statistic
+                    DataModel.StoreSearchQuery(model.SearchValue, hospitalList.Count);
                 }
 
                 // Advanced search form
@@ -265,6 +267,10 @@ namespace HospitalF.Controllers
                     string coordinate = model.Coordinate;
                     string position = model.Position;
                     double radius = model.Radius;
+                    if (!(0 < radius && radius <= 20))
+                    {
+                        radius = 10;
+                    }
 
                     if (model.LocationType == 1)
                     {

@@ -707,7 +707,7 @@ namespace HospitalF.Controllers
                 ViewBag.HospitalTypeCount = DataModel.HospitalTypeCount();
                 DateTime fromDate = new DateTime();
                 DateTime toDate = new DateTime();
-                if (string.IsNullOrEmpty(sFromDate))
+                if (string.IsNullOrEmpty(sFromDate) || string.IsNullOrEmpty(sToDate))
                 {
                     DateTime today = DateTime.Today;
                     fromDate = new DateTime(today.Year, today.Month - 1, 1);
@@ -730,6 +730,37 @@ namespace HospitalF.Controllers
             }
         }
 
+        [LayoutInjecter(Constants.AdmidLayout)]
+        public ActionResult SearchQueryStatistic(string sFromDate, string sToDate, int page = 1)
+        {
+            try
+            {
+                DateTime fromDate = new DateTime();
+                DateTime toDate = new DateTime();
+                if (string.IsNullOrEmpty(sFromDate) || string.IsNullOrEmpty(sToDate))
+                {
+                    DateTime today = DateTime.Today;
+                    fromDate = new DateTime(today.Year, today.Month - 1, 1);
+                    toDate = new DateTime(today.Year, today.Month, 1);
+                }
+                else
+                {
+                    fromDate = DateTime.ParseExact(sFromDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    toDate = DateTime.ParseExact(sToDate + " 23:59:59", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                }
+                ViewBag.SearchQueryStatistic = DataModel.SearchQueryStatistic(fromDate, toDate).ToPagedList(page, Constants.PageSize + 5);
+                ViewBag.FromDate = string.Format("{0:dd/MM/yyyy}", fromDate);
+                ViewBag.ToDate = string.Format("{0:dd/MM/yyyy}", toDate);
+                return View();
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+
+            
+        }
         #endregion
     }
 }

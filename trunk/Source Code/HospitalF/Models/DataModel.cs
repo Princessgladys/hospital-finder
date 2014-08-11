@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using HospitalF.Constant;
+using HospitalF.Entities;
 
 namespace HospitalF.Models
 {
@@ -454,6 +455,32 @@ namespace HospitalF.Models
                 }
             }
             return hospitalTypes;
+        }
+
+        public static bool StoreSearchQuery(string searchQuery, int resultCount)
+        {
+            int check = -1;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                check = data.SP_INSERT_SEARCH_QUERY(searchQuery, resultCount, DateTime.Now);
+            }
+            return (check >= 0);
+        }
+
+        public static List<SentenceDictionaryEntity> SearchQueryStatistic(DateTime fromDate, DateTime toDate)
+        {
+            List<SentenceDictionaryEntity> sdeList = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                sdeList = (from sd in data.SP_LOAD_SEARCH_QUERY_STATISTIC(fromDate, toDate)
+                           select new SentenceDictionaryEntity()
+                           {
+                               Sentence = sd.Sentence,
+                               Search_Date = sd.Search_Date,
+                               Result_Count = sd.Result_Count
+                           }).ToList<SentenceDictionaryEntity>();
+            }
+            return sdeList;
         }
         #endregion
     }

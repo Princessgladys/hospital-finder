@@ -1,0 +1,149 @@
+﻿@using HospitalF.Constant;
+@using HospitalF.Entities;
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    IPagedList<SentenceDictionaryEntity> sdeList = (IPagedList<SentenceDictionaryEntity>)ViewBag.SearchQueryStatistic;
+    int count = 0;
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-pencil-square-o fa-fw "></i>
+            Thống kê từ khóa tìm kiếm
+        </h1>
+    </div>
+</div>
+
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="false"
+                data-widget-sortable="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Thông tin từ khóa tìm kiếm</h2>
+                </header>
+                <div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <div class="col-md-12">
+                            <h5>Danh sách số lượng lịch hẹn của bệnh viện</h5>
+                            <hr />
+                            <div class="col-md-8 no-padding">
+                                @using (Html.BeginForm(Constants.SearchQueryStatisticAction, Constants.DataController, FormMethod.Get))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input class="form-control" id="from" name="sFromDate" type="text" placeholder="Từ ngày..." value="@(ViewBag.FromDate)">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input class="form-control" id="to" name="sToDate" type="text" placeholder="...đến ngày..." value="@(ViewBag.ToDate)">
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i>&nbsp;Lọc</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-12 no-padding">
+                                @if (sdeList.Count > 0)
+                                {
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Từ khóa</th>
+                                                <th>Thời gian</th>
+                                                <th>Số kết quả</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (HospitalF.Entities.SentenceDictionaryEntity sde in sdeList)
+                                            {
+                                                <tr>
+                                                    <td>@(++count)</td>
+                                                    <td>@(sde.Sentence)</td>
+                                                    <td>@(string.Format("{0:dd/MM/yyyy HH:mm:ss}",sde.Search_Date))</td>
+                                                    <td>@(sde.Result_Count)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <div class="text-center">
+                                        <hr>
+                                        @Html.PagedListPager(sdeList, page => Url.Content(Constants.SearchQueryStatisticAction + "?sFromDate=" + ViewBag.FromDate + "&sToDate=" + ViewBag.ToDate + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p><strong>Không có bệnh viện nào.</strong></p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        pageSetUp();
+        // Date Range Picker
+        $("#from").datepicker({
+            defaultDate: "dateToday",
+            maxDate: "dateToday",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: "dd/mm/yy",
+            prevText: '<i class="fa fa-chevron-left"></i>',
+            nextText: '<i class="fa fa-chevron-right"></i>',
+            onClose: function (selectedDate) {
+                $("#to").datepicker("option", "minDate", selectedDate);
+            }
+
+        });
+        $("#to").datepicker({
+            defaultDate: "+1m",
+            maxDate: "dateToday",
+            changeMonth: true,
+            numberOfMonths: 3,
+            dateFormat: "dd/mm/yy",
+            prevText: '<i class="fa fa-chevron-left"></i>',
+            nextText: '<i class="fa fa-chevron-right"></i>',
+            onClose: function (selectedDate) {
+                //$("#from").datepicker("option", "minDate", selectedDate);
+            }
+        });
+    });
+
+</script>
