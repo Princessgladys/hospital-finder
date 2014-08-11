@@ -29,7 +29,7 @@ namespace HospitalF.Utilities
             HospitalModel model = null;
             int tempInt = 0;
             bool tempBoolean = false;
-            int count = 1;
+            int count = 2;
 
             // Save file to server
             string fileFullPath = string.Format("{0}{1}",
