@@ -8,11 +8,7 @@ GO
 CREATE PROCEDURE SP_INSERT_HOSPITAL_EXCEL
 	@HospitalName NVARCHAR(64),
 	@HospitalType INT,
-	@LocationAddress NVARCHAR(128),
-	@StreetAddress NVARCHAR(128),
-	@CityName NVARCHAR(128),
-	@DistrictName NVARCHAR(128),
-	@WardName NVARCHAR(128),
+	@FullAddress NVARCHAR(256),
 	@CityID INT,
 	@DistrictID INT,
 	@WardID INT,
@@ -38,11 +34,6 @@ BEGIN
 	BEGIN TRY
 	-- INSERT TO HOSPITAL TABLE
 	BEGIN
-		DECLARE @FullAddress NVARCHAR(512)
-
-		SET @FullAddress = @LocationAddress + ' ' + @StreetAddress + ', ' +
-			@WardName + ', ' + @DistrictName + ', ' + @CityName
-
 		INSERT INTO Hospital
 		(
 			Hospital_Name,
