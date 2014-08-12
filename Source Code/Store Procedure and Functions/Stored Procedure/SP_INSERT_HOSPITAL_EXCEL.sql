@@ -91,7 +91,7 @@ BEGIN
 								   ORDER BY Hospital_ID DESC)
 
 		-- INSERT TO HOSPITAL_SPECIALITY TABLE
-		IF (@SpecialityList != '')
+		IF (@SpecialityList IS NOT NULL AND @SpecialityList != '')
 		BEGIN
 			DECLARE @RowNumber INT = 1
 			DECLARE @TotalToken  INT = 0
@@ -101,17 +101,11 @@ BEGIN
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 								  FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, ',') TokenList)
 
-			WHILE (@RowNumber <= @TotalToken)
+			IF (@TotalToken = 0)
 			BEGIN
-				SELECT @Token = (SELECT LTRIM(TokenList.Token)
-								 FROM (SELECT ROW_NUMBER()
-									   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
-									   FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, ',') TokenList) AS TokenList
-								 WHERE RowNumber = @RowNumber)
-
 				SET @SpecialityId = (SELECT Speciality_ID
 									 FROM Speciality
-									 WHERE Speciality_Name = @Token)
+									 WHERE Speciality_Name = @SpecialityList)
 
 				IF (@SpecialityId IS NOT NULL AND @SpecialityId != 0)
 				BEGIN
@@ -129,20 +123,47 @@ BEGIN
 						'False',
 						'True'
 					)
-
-					IF @@ROWCOUNT = 0
-					BEGIN
-						ROLLBACK TRAN T;
-						RETURN 0;
-					END
 				END
+			END
+			ELSE
+			BEGIN
+				WHILE (@RowNumber <= @TotalToken)
+				BEGIN
+					SELECT @Token = (SELECT LTRIM(TokenList.Token)
+									 FROM (SELECT ROW_NUMBER()
+										   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+										   FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, ',') TokenList) AS TokenList
+									 WHERE RowNumber = @RowNumber)
 
-				SET @RowNumber += 1
+					SET @SpecialityId = (SELECT Speciality_ID
+										 FROM Speciality
+										 WHERE Speciality_Name = @Token)
+
+					IF (@SpecialityId IS NOT NULL AND @SpecialityId != 0)
+					BEGIN
+						INSERT INTO Hospital_Speciality
+						(
+							Hospital_ID,
+							Speciality_ID,
+							Is_Main_Speciality,
+							Is_Active
+						)
+						VALUES
+						(
+							@HospitalID,
+							@SpecialityId,
+							'False',
+							'True'
+						)
+					END
+
+					SET @RowNumber += 1
+				END
 			END
 		END
 
 		-- INSERT TO SERVCE TABLE
-		IF (@ServiceList != '')
+		IF (@ServiceList IS NOT NULL AND @ServiceList != '')
 		BEGIN
 			SET @RowNumber = 1
 			SET @TotalToken = 0
@@ -151,17 +172,11 @@ BEGIN
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 								  FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, ',') TokenList)
 
-			WHILE (@RowNumber <= @TotalToken)
+			IF (@TotalToken = 0)
 			BEGIN
-				SELECT @Token = (SELECT LTRIM(TokenList.Token)
-								 FROM (SELECT ROW_NUMBER()
-									   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
-									   FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, ',') TokenList) AS TokenList
-								 WHERE RowNumber = @RowNumber)
-
 				SET @ServiceId = (SELECT Service_ID
 								  FROM [Service]
-								  WHERE [Service_Name] = @Token)
+								  WHERE [Service_Name] = @ServiceList)
 
 				IF (@ServiceId IS NOT NULL AND @ServiceId != 0)
 				BEGIN
@@ -177,20 +192,45 @@ BEGIN
 						@ServiceId,
 						'True'
 					)
+				END	
+			END
+			ELSE
+			BEGIN
+				WHILE (@RowNumber <= @TotalToken)
+				BEGIN
+					SELECT @Token = (SELECT LTRIM(TokenList.Token)
+									 FROM (SELECT ROW_NUMBER()
+										   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+										   FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, ',') TokenList) AS TokenList
+									 WHERE RowNumber = @RowNumber)
 
-					IF @@ROWCOUNT = 0
+					SET @ServiceId = (SELECT Service_ID
+									  FROM [Service]
+									  WHERE [Service_Name] = @Token)
+
+					IF (@ServiceId IS NOT NULL AND @ServiceId != 0)
 					BEGIN
-						ROLLBACK TRAN T;
-						RETURN 0;
-					END
-				END			
+						INSERT INTO Hospital_Service
+						(
+							Hospital_ID,
+							Service_ID,
+							Is_Active
+						)
+						VALUES
+						(
+							@HospitalID,
+							@ServiceId,
+							'True'
+						)
+					END			
 
-				SET @RowNumber += 1
+					SET @RowNumber += 1
+				END
 			END
 		END
 
 		-- INSERT TO FACILITY TABLE
-		IF (@FacilityList != '')
+		IF (@FacilityList IS NOT NULL AND @FacilityList != '')
 		BEGIN
 			SET @RowNumber = 1
 			SET @TotalToken = 0
@@ -199,14 +239,8 @@ BEGIN
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 								  FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, ',') TokenList)
 
-			WHILE (@RowNumber <= @TotalToken)
+			IF (@TotalToken = 0)
 			BEGIN
-				SELECT @Token = (SELECT LTRIM(TokenList.Token)
-								 FROM (SELECT ROW_NUMBER()
-									   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
-									   FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, ',') TokenList) AS TokenList
-								 WHERE RowNumber = @RowNumber)
-
 				SET @FacilityId = (SELECT Facility_ID
 								   FROM Facility
 								   WHERE Facility_Name = @Token)
@@ -225,16 +259,41 @@ BEGIN
 						@FacilityId,
 						'True'
 					)
-
-					IF @@ROWCOUNT = 0
-					BEGIN
-						ROLLBACK TRAN T;
-						RETURN 0;
-					END
 				END
-
-				SET @RowNumber += 1
 			END
+			ELSE
+			BEGIN
+				WHILE (@RowNumber <= @TotalToken)
+				BEGIN
+					SELECT @Token = (SELECT LTRIM(TokenList.Token)
+									 FROM (SELECT ROW_NUMBER()
+										   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+										   FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, ',') TokenList) AS TokenList
+									 WHERE RowNumber = @RowNumber)
+
+					SET @FacilityId = (SELECT Facility_ID
+									   FROM Facility
+									   WHERE Facility_Name = @Token)
+
+					IF (@FacilityId IS NOT NULL AND @FacilityId != 0)
+					BEGIN
+						INSERT INTO Hospital_Facility
+						(
+							Hospital_ID,
+							Facility_ID,
+							Is_Active
+						)
+						VALUES
+						(
+							@HospitalID,
+							@FacilityId,
+							'True'
+						)
+					END
+
+					SET @RowNumber += 1
+				END
+			END		
 		END
 
 		-- INSERT TO WORD_DICTIONARY TABLE
@@ -265,66 +324,75 @@ BEGIN
 		END
 
 		-- CHECK IF THERE IS ADDITIONAL TAG WORDS
-		IF (@TagInput != '')
+		IF (@TagInput IS NOT NULL AND @TagInput != '')
 		BEGIN
 			SET @RowNumber = 1
 			SET @TotalToken = 0
 
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
 								  FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList)
-
-			WHILE (@RowNumber <= @TotalToken)
+			
+			IF (@TotalToken = 0)
 			BEGIN
-				SELECT @Token = (SELECT LTRIM(TokenList.Token)
-								 FROM (SELECT ROW_NUMBER()
-									   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
-									   FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList) AS TokenList
-								 WHERE RowNumber = @RowNumber)
-
-				-- CHECK IF TOKEN IS NULL
-				IF (@Token IS NOT NULL)
+				IF (NOT EXISTS(SELECT Word_ID
+						   FROM WordDictionary
+						   WHERE LOWER(Word) = LOWER(@TagInput)))
 				BEGIN
+					INSERT INTO WordDictionary
+					VALUES(@TagInput, 3)
+
 					SET @WordID = (SELECT TOP 1 Word_ID
-							   FROM WordDictionary
-							   ORDER BY Word_ID DESC)
-
-					IF (EXISTS(SELECT Word_ID
-							   FROM WordDictionary
-							   WHERE LOWER(Word) = LOWER(@Token)))
-					BEGIN
-						SET @WordID = (SELECT Word_ID
-									   FROM WordDictionary
-									   WHERE LOWER(Word) = LOWER(@Token))
-					END
-					ELSE
-					BEGIN
-						INSERT INTO WordDictionary
-						VALUES(@Token, 3)
-
-						IF @@ROWCOUNT = 0
-						BEGIN
-							ROLLBACK TRAN T;
-							RETURN 0;
-						END
-
-						SET @WordID = (SELECT TOP 1 Word_ID
-									   FROM WordDictionary
-									   ORDER BY Word_ID DESC)
-					END
+								   FROM WordDictionary
+								   ORDER BY Word_ID DESC)
 
 					-- INSERT TO WORD_HOSPITAL TABLE
 					INSERT INTO Word_Hospital
 					VALUES(@WordID, @HospitalID)
-
-					IF @@ROWCOUNT = 0
-					BEGIN
-						ROLLBACK TRAN T;
-						RETURN 0;
-					END
 				END
-
-				SET @RowNumber += 1
 			END
+			ELSE
+			BEGIN
+				WHILE (@RowNumber <= @TotalToken)
+				BEGIN
+					SELECT @Token = (SELECT LTRIM(TokenList.Token)
+									 FROM (SELECT ROW_NUMBER()
+										   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+										   FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList) AS TokenList
+									 WHERE RowNumber = @RowNumber)
+
+					-- CHECK IF TOKEN IS NULL
+					IF (@Token IS NOT NULL)
+					BEGIN
+						SET @WordID = (SELECT TOP 1 Word_ID
+									   FROM WordDictionary
+									   ORDER BY Word_ID DESC)
+
+						IF (EXISTS(SELECT Word_ID
+								   FROM WordDictionary
+								   WHERE LOWER(Word) = LOWER(@Token)))
+						BEGIN
+							SET @WordID = (SELECT Word_ID
+										   FROM WordDictionary
+										   WHERE LOWER(Word) = LOWER(@Token))
+						END
+						ELSE
+						BEGIN
+							INSERT INTO WordDictionary
+							VALUES(@Token, 3)
+
+							SET @WordID = (SELECT TOP 1 Word_ID
+										   FROM WordDictionary
+										   ORDER BY Word_ID DESC)
+						END
+
+						-- INSERT TO WORD_HOSPITAL TABLE
+						INSERT INTO Word_Hospital
+						VALUES(@WordID, @HospitalID)
+					END
+
+					SET @RowNumber += 1
+				END
+			END		
 		END
 	END
 	COMMIT TRAN T;
