@@ -19,7 +19,7 @@
 
 #content
 {
-	margin-top: 2%;
+	margin-top: 50px;
 }
 
 #content-results
@@ -29,9 +29,9 @@
 
 #main-logo
 {
-	background-image: url("../img/hospital-icon.png");
+	background-image: url("../img/HospitalF - Logo.png");
 	background-repeat: no-repeat;
-	background-size: 20%;
+	background-size: 50%;
 	background-position: center;
 	margin-bottom: 10px;
 }

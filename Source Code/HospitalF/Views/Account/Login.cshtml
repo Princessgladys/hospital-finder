@@ -48,7 +48,9 @@
         <!--<span id="logo"></span>-->
         <div id="logo-group">
             <span id="logo">
-                <img src="../Content/img/logo.png" alt="SmartAdmin">
+                <a href="/">
+                    <img src="../Content/img/HospitalF.png" alt="SmartAdmin">
+                </a>
             </span>
 
             <!-- END AJAX-DROPDOWN -->
@@ -61,38 +63,25 @@
         <div id="content" class="container">
 
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
-                    <h1 class="txt-color-red login-header-big">SmartAdmin</h1>
+                <div class="col-md-8">
+                    <h1 class="txt-color-red login-header-big">Tìm Kiếm Bệnh Viện</h1>
                     <div class="hero">
-
-                        <div class="pull-left login-desc-box-l">
-                            <h4 class="paragraph-header">It's Okay to be Smart. Experience the simplicity of SmartAdmin, everywhere you go!</h4>
-                            <div class="login-app-icons">
-                                <a href="javascript:void(0);" class="btn btn-danger btn-sm">Frontend Template</a>
-                                <a href="javascript:void(0);" class="btn btn-danger btn-sm">Find out more</a>
-                            </div>
-                        </div>
-
-                        <img src="../Content/img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width: 210px">
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <h5 class="about-heading">About SmartAdmin - Are you up to date?</h5>
+                        <div class="col-md-12 no-padding">
                             <p>
-                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa.
+                                <img src="../Content/img/HospitalF - Logo.png" alt="HospitalF">
                             </p>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <h5 class="about-heading">Not just your average template!</h5>
                             <p>
-                                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi voluptatem accusantium!
+                                <span style="font-size: 14px;">timkiembenhvien.com © 2014 – <strong>Hệ thống <a href="/" target="_blank" title="Hệ thống tìm kiếm bệnh viện">tìm kiếm bệnh viện</a> hàng đầu Việt Nam</strong><br>
+                                    <strong>Văn phòng tại Tp. Hồ Chí Minh</strong>: Công viên phần mềm Quang Trung - STEC, Quận 12, Tp. Hồ Chí Minh, Việt Nam.
+                <br>
+                                    <strong>Văn phòng tại Hà Nội:</strong> Lầu 9, 70-72 Bà Triệu, Quận Hoàn Kiếm, Hà Nội.<br>
+                                    Điện thoại : (08) 3838 3838 | Email CSKH: <a href="mailto:hospitalf@gmail.com" target="_blank" title="Email Chăm sóc khách hàng">hospitalf@gmail.com</a></span>
                             </p>
                         </div>
                     </div>
 
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+                <div class="col-md-4">
                     <div class="well no-padding">
                         @using (Html.BeginForm(Constants.LoginAction, Constants.AccountController, FormMethod.Post, new { @id = "login-form", @class = "smart-form client-form" }))
                         {
