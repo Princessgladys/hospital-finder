@@ -12,6 +12,8 @@ using HospitalF.Utilities;
 using HospitalF.Entities;
 using System.Collections.Specialized;
 using System.IO;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace HospitalF.Controllers
 {
@@ -1185,9 +1187,33 @@ namespace HospitalF.Controllers
                 {
                     if (file != null && file.ContentLength > 0)
                     {
+                        WebClient client = new WebClient();
                         HospitalModel mdel = new HospitalModel();
                         List<HospitalModel> hospitalList = await mdel.HandleExcelFileData(file,
                             Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]));
+                        string geoJsonResult = string.Empty;
+
+                        // Handle coordinate
+                        foreach (HospitalModel record in hospitalList)
+                        {
+                            if (!string.IsNullOrEmpty(record.HospitalName))
+                            {
+                                geoJsonResult = client.DownloadString(string.Concat(
+                                    Constants.GeoCodeJsonQuery, record.FullAddress));
+                                JObject geoJsonObject = JObject.Parse(geoJsonResult);
+                                if (Constants.Ok.Equals(geoJsonObject.Value<string>(Constants.GeoCodeStatus)))
+                                {
+                                    record.Coordinate = string.Format("{0}, {1}",
+                                        geoJsonObject[Constants.GeoCodeResults].
+                                            First[Constants.GeoCodeGemometry][Constants.GeoCodeLocation].
+                                            Value<double>(Constants.GeoCodeTatitude),
+                                        geoJsonObject[Constants.GeoCodeResults].
+                                            First[Constants.GeoCodeGemometry][Constants.GeoCodeLocation].
+                                            Value<double>(Constants.GeoCodeLongitude));
+                                }
+                            } 
+                        }
+
                         // Return list of hospital to view
                         return View(hospitalList);
                     }

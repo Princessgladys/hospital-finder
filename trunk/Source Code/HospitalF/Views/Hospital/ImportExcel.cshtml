@@ -11,7 +11,7 @@
     // Get coordinate from a specific address
     function getCoordinateFromAddress(fulladdress) {
         // Take full address
-        address = fulladdress + ", " + "Việt Nam";
+        var address = fulladdress + ", " + "Việt Nam";
         var geocoder = new google.maps.Geocoder();
 
         // Query address from Google
@@ -19,18 +19,14 @@
             // Check if address is understandable
             if (status == google.maps.GeocoderStatus.OK) {
 
-                // Set coordinate value
-                var currentCoordinate = results[0].geometry.location.lat().toFixed(6) +
+                //// Set coordinate value
+                //var currentCoordinate = results[0].geometry.location.lat().toFixed(6) +
+                //    ", " + results[0].geometry.location.lng().toFixed(6);
+                //$('#Coordinate').val(currentCoordinate);
+                return results[0].geometry.location.lat().toFixed(6) +
                     ", " + results[0].geometry.location.lng().toFixed(6);
-                $('#Coordinate').val(currentCoordinate);
-
-                // Display message
-                setAddressNotificationMessage('@ErrorMessage.CEM016', 1);
-            } else {
-                setAddressNotificationMessage("@ErrorMessage.CEM032", 0);
-                setNotification("@ErrorMessage.CEM032", 2);
             }
-        });
+        }, 2000);
         return false;
     }
 </script>
@@ -180,9 +176,6 @@
                                                     @Html.TextBoxFor(m => m[n].ServiceName, new { @type = "hidden" })
                                                     @Html.TextBoxFor(m => m[n].FacilityName, new { @type = "hidden" })
                                                     @Html.TextBoxFor(m => m[n].TagsInput, new { @type = "hidden" })
-    <script type="text/javascript">
-    getCoordinateFromAddress('@Model[n].FullAddress');
-    </script>
                                                     @Html.TextBoxFor(m => m[n].Coordinate, new { @type = "hidden" })
                                                     <tr>
                                                         <td hidden>@Model[n].HospitalID</td>

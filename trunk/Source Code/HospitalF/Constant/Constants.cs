@@ -997,6 +997,46 @@ namespace HospitalF.Constant
             }
         }
 
+        /// <summary>
+        /// Google api geographic code json query
+        /// </summary>
+        public static string GeoCodeJsonQuery = "http://maps.googleapis.com/maps/api/geocode/json?address=";
+
+        /// <summary>
+        /// Google api geographic code json status
+        /// </summary>
+        public static string GeoCodeStatus = "status";
+
+        /// <summary>
+        /// Constant for OK statement
+        /// </summary>
+        public static string Ok = "OK";
+
+        /// <summary>
+        /// Google api geographic code json results
+        /// </summary>
+        public static string GeoCodeResults = "results";
+
+        /// <summary>
+        /// Google api geographic code json geometry
+        /// </summary>
+        public static string GeoCodeGemometry = "geometry";
+
+        /// <summary>
+        /// Google api geographic code json location
+        /// </summary>
+        public static string GeoCodeLocation = "location";
+
+        /// <summary>
+        /// Google api geographic code json latitude
+        /// </summary>
+        public static string GeoCodeTatitude = "lat";
+
+        /// <summary>
+        /// Google api geographic code json longitude
+        /// </summary>
+        public static string GeoCodeLongitude = "lng";
+
         #endregion
 
         #region Others
