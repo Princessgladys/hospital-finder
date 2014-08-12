@@ -150,6 +150,7 @@
                                             {
                                                 if (!string.IsNullOrEmpty(Model[n].HospitalName))
                                                 {
+                                                    @Html.TextBoxFor(m => m[n].HospitalName, new { @type = "hidden" })
                                                     @Html.TextBoxFor(m => m[n].HospitalID, new { @type = "hidden" })
                                                     @Html.TextBoxFor(m => m[n].HospitalTypeID, new { @type = "hidden" })
                                                     @Html.TextBoxFor(m => m[n].HospitalTypeName, new { @type = "hidden" })
@@ -177,6 +178,7 @@
                                                     @Html.TextBoxFor(m => m[n].FacilityName, new { @type = "hidden" })
                                                     @Html.TextBoxFor(m => m[n].TagsInput, new { @type = "hidden" })
                                                     @Html.TextBoxFor(m => m[n].Coordinate, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].RecordStatus, new { @type = "hidden" })
                                                     <tr>
                                                         <td hidden>@Model[n].HospitalID</td>
                                                         <td hidden>@Model[n].HospitalName</td>

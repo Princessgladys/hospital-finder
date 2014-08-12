@@ -510,8 +510,7 @@ namespace HospitalF.Models
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
                     result = await Task.Run(() => data.SP_INSERT_HOSPITAL_EXCEL(model.HospitalName,
-                        model.HospitalTypeID, model.LocationAddress, model.StreetAddress,
-                        model.CityName, model.DistrictName, model.WardName,
+                        model.HospitalTypeID, model.FullAddress,
                         model.CityID, model.DistrictID, model.WardID, model.PhoneNo, model.Fax,
                         model.HospitalEmail, model.Website, model.HolidayStartTime, model.HolidayEndTime,
                         model.OrdinaryStartTime, model.OrdinaryEndTime, model.Coordinate,
