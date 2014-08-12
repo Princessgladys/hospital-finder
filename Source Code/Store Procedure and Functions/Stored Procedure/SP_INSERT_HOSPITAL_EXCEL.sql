@@ -201,7 +201,7 @@ BEGIN
 
 			WHILE (@RowNumber <= @TotalToken)
 			BEGIN
-				SELECT @Token = (SELECT TokenList.Token
+				SELECT @Token = (SELECT LTRIM(TokenList.Token)
 								 FROM (SELECT ROW_NUMBER()
 									   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
 									   FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, ',') TokenList) AS TokenList
@@ -281,42 +281,46 @@ BEGIN
 									   FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList) AS TokenList
 								 WHERE RowNumber = @RowNumber)
 
-				SET @WordID = (SELECT TOP 1 Word_ID
+				-- CHECK IF TOKEN IS NULL
+				IF (@Token IS NOT NULL)
+				BEGIN
+					SET @WordID = (SELECT TOP 1 Word_ID
 							   FROM WordDictionary
 							   ORDER BY Word_ID DESC)
 
-				IF (EXISTS(SELECT Word_ID
-						   FROM WordDictionary
-						   WHERE LOWER(Word) = LOWER(@Token)))
-				BEGIN
-					SET @WordID = (SELECT Word_ID
-								   FROM WordDictionary
-								   WHERE LOWER(Word) = LOWER(@Token))
-				END
-				ELSE
-				BEGIN
-					INSERT INTO WordDictionary
-					VALUES(@Token, 3)
+					IF (EXISTS(SELECT Word_ID
+							   FROM WordDictionary
+							   WHERE LOWER(Word) = LOWER(@Token)))
+					BEGIN
+						SET @WordID = (SELECT Word_ID
+									   FROM WordDictionary
+									   WHERE LOWER(Word) = LOWER(@Token))
+					END
+					ELSE
+					BEGIN
+						INSERT INTO WordDictionary
+						VALUES(@Token, 3)
+
+						IF @@ROWCOUNT = 0
+						BEGIN
+							ROLLBACK TRAN T;
+							RETURN 0;
+						END
+
+						SET @WordID = (SELECT TOP 1 Word_ID
+									   FROM WordDictionary
+									   ORDER BY Word_ID DESC)
+					END
+
+					-- INSERT TO WORD_HOSPITAL TABLE
+					INSERT INTO Word_Hospital
+					VALUES(@WordID, @HospitalID)
 
 					IF @@ROWCOUNT = 0
 					BEGIN
 						ROLLBACK TRAN T;
 						RETURN 0;
 					END
-
-					SET @WordID = (SELECT TOP 1 Word_ID
-								   FROM WordDictionary
-								   ORDER BY Word_ID DESC)
-				END
-
-				-- INSERT TO WORD_HOSPITAL TABLE
-				INSERT INTO Word_Hospital
-				VALUES(@WordID, @HospitalID)
-
-				IF @@ROWCOUNT = 0
-				BEGIN
-					ROLLBACK TRAN T;
-					RETURN 0;
 				END
 
 				SET @RowNumber += 1
