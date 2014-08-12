@@ -366,6 +366,12 @@
     <Content Include="Content\img\hospital-2.png" />
     <Content Include="Content\img\hospital-icon.png" />
     <Content Include="Content\img\hospital.png" />
+    <Content Include="Content\img\HospitalF - Google.jpg" />
+    <Content Include="Content\img\HospitalF - Google.png" />
+    <Content Include="Content\img\HospitalF - Logo - Small.png" />
+    <Content Include="Content\img\HospitalF - Logo.png" />
+    <Content Include="Content\img\HospitalF.jpg" />
+    <Content Include="Content\img\HospitalF.png" />
     <Content Include="Content\img\hue.png" />
     <Content Include="Content\img\leanmodal\hd-bg.png" />
     <Content Include="Content\img\leanmodal\modal_close.png" />
@@ -541,6 +547,10 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Views\Account\AddAccount.cshtml" />
+    <Content Include="Views\Account\Login.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -561,17 +571,14 @@
     <Content Include="Views\Error\SystemFailureAdmin.cshtml" />
     <Content Include="Views\Error\SystemFailureHospitalUser.cshtml" />
     <Content Include="Views\Appointment\Index.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Appointment\Confirm.cshtml">
       <SubType>Code</SubType>
     </Content>
     <Content Include="Views\Hospital\Index.cshtml" />
     <Content Include="Views\Hospital\SearchResult.cshtml" />
     <Content Include="Views\Hospital\HospitalList.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\Hospital.cshtml" />
     <Content Include="Views\Hospital\AddHospital.cshtml" />
-    <Content Include="Views\Account\AddAccount.cshtml" />
     <Content Include="Views\Hospital\UpdateHospital.cshtml" />
     <Content Include="Views\Doctor\Index.cshtml" />
     <Content Include="Views\Doctor\UpdateDoctor.cshtml" />
