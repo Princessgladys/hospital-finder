@@ -39,7 +39,7 @@ namespace HospitalF.Utilities
             {
                 return await Task.Run(() =>
                     (from s in data.SentenceDictionaries
-                     select s.Sentence).ToList());
+                     select s.Sentence).Distinct().ToList());
             }
         }
     }
