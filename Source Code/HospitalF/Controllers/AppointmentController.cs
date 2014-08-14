@@ -9,6 +9,8 @@ using HospitalF.Constant;
 using HospitalF.Models;
 using HospitalF.Utilities;
 using System.Globalization;
+using Recaptcha.Web;
+using Recaptcha.Web.Mvc;
 
 namespace HospitalF.Controllers
 {
@@ -24,7 +26,7 @@ namespace HospitalF.Controllers
         //
         // GET: /Appointment/
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> Index(int hospitalID)
+        public async Task<ActionResult> Index(int hospitalID, int doctorID)
         {
             try
             {
@@ -33,12 +35,25 @@ namespace HospitalF.Controllers
                 Hospital hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
 
                 //load list of speciality
-
+                List<int> doctor_Speciality;
+                
                 specialityList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
+                
                 ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
 
                 //load list of doctor
                 doctorList = new List<Doctor>();
+                if (doctorID != null)
+                {
+                    model.DoctorID = doctorID;
+                    using (LinqDBDataContext data = new LinqDBDataContext())
+                    {
+                        doctor_Speciality = (from d in data.Doctor_Specialities where d.Doctor_ID == doctorID select d.Speciality_ID).ToList();
+                        model.SpecialityID = doctor_Speciality[0];
+                        //doctorList = await HospitalUtil.LoadDoctorInDoctorSpecialityAsyn(model.SpecialityID, hospitalID);
+                    }
+                    
+                }
                 ViewBag.DoctorList = new SelectList(doctorList, Constants.DoctorID, Constants.DoctorName);
 
                 //load time to check health of hospital
@@ -115,7 +130,9 @@ namespace HospitalF.Controllers
                 int result = await AppointmentModels.InsertAppointment(appointment);
                 if (result != 1)
                 {
-                    return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+                    ViewBag.CreateAppointmentStatus = 1.ToString() + Constants.Minus + appointment.Patient_Full_Name;
+                    ModelState.Clear();
+                    return View();
                 }
                 else
                 {
@@ -128,6 +145,7 @@ namespace HospitalF.Controllers
                     //    LoggingUtil.LogException(ex);
 
                     //}
+                    ViewBag.CreateAppointmentStatus = 0.ToString() + Constants.Minus + appointment.Patient_Full_Name;
                     return View("Confirm");
                 }
             }
@@ -268,6 +286,27 @@ namespace HospitalF.Controllers
         {
             try
             {
+                ////validate recaptcha
+                //RecaptchaVerificationHelper recaptchaHelper = this.GetRecaptchaVerificationHelper();
+
+                //if (String.IsNullOrEmpty(recaptchaHelper.Response))
+                //{
+                //    TempData["RateActionStatus"] = false;
+                //    TempData["RateActionMessage"] = "Vui lòng nhập mã bảo mật bên dưới.";
+
+                //    return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = id, redirect = "yes" });
+                //}
+
+                //RecaptchaVerificationResult recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
+
+                //if (recaptchaResult != RecaptchaVerificationResult.Success)
+                //{
+                //    TempData["RateActionStatus"] = false;
+                //    TempData["RateActionMessage"] = "Vui lòng nhập lại mã bảo mật bên dưới.";
+
+                //    return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = id, redirect = "yes" });
+                //}
+
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
                     Appointment appointment = (from a in data.Appointments
@@ -320,7 +359,7 @@ namespace HospitalF.Controllers
                         Speciality speciality = (from s in data.Specialities
                                                  where s.Speciality_ID == appointment.Speciality_ID
                                                  select s).FirstOrDefault();
-                        GoogleCalendarUtil.InsertEntry(appointment, doctor, speciality, gmailList);
+                        GoogleUtil.InsertEventToCalendar(appointment, doctor, speciality, gmailList);
                         return RedirectToAction(Constants.IndexAction, Constants.HomeController);
                     }
                     else

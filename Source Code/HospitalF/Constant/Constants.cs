@@ -212,6 +212,11 @@ namespace HospitalF.Constant
         public const string RateHospitalAction = "RateHospital";
 
         /// <summary>
+        /// Name of FeedbackAction in HomeController
+        /// </summary>
+        public const string FeedbackAction = "FeedBack";
+
+        /// <summary>
         /// Name of AddAccount method in AccountController
         /// </summary>
         public const string AddAccountAction = "AddAccount";
@@ -706,6 +711,38 @@ namespace HospitalF.Constant
 
         #endregion
 
+        #region FeedbackModel
+        /// <summary>
+        /// English name of property FeedbackType
+        /// </summary>
+        public const string FeedbackType = "Type_ID";
+
+        /// <summary>
+        /// English name of property FeedbackTypeName
+        /// </summary>
+        public const string FeedbackTypeName = "Type_Name";
+        
+        /// <summary>
+        /// Vietnamese message request for Feedback
+        /// </summary>
+        public const string RequiredFeedback = "-- Xin chọn loại ý kiến --";
+
+        /// <summary>
+        /// Vietnames name of property Feedback
+        /// </summary>
+        public const string Feedback = "Loại ý kiến";
+
+        /// <summary>
+        /// Vietnames name of property Header
+        /// </summary>
+        public const string Header = "Tiêu đề";
+
+        /// <summary>
+        /// Vietnames name of property Content
+        /// </summary>
+        public const string Content = "Nội dung";
+        #endregion
+
         #region Regular Expression
 
         /// <summary>
@@ -844,7 +881,27 @@ namespace HospitalF.Constant
         #endregion
 
         #region Utilities
-        
+
+        /// <summary>
+        /// Constant for SystemGMail key in appSettings section of Web.config
+        /// </summary>
+        public const string GmailAccount = "SystemGMail";
+
+        /// <summary>
+        /// Constant for SystemGMailPassword key in appSettings section of Web.config
+        /// </summary>
+        public const string GmailPassword = "SystemGMailPassword";
+
+        /// <summary>
+        /// Constant for esmsAPIKey key in appSettings section of Web.config
+        /// </summary>
+        public const string ESMSAPIKey = "esmsAPIKey";
+
+        /// <summary>
+        /// Constant for esmsSecretKey key in appSettings section of Web.config
+        /// </summary>
+        public const string ESMSSecretKey = "esmsSecretKey";
+
         /// <summary>
         /// Constant for LoggingPartition key in appSettings section of Web.config
         /// </summary>

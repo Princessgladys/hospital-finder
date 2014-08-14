@@ -37,7 +37,7 @@ namespace HospitalF.Models
         /// Get/Set value for property HospitalTypeID
         /// </summary>
         public int HospitalTypeID { get; set; }
-        
+
         /// <summary>
         /// Get/Set value for property LocationAddress
         /// </summary>
@@ -225,7 +225,7 @@ namespace HospitalF.Models
         public int SpecialityID { get; set; }
         public string DoctorName { get; set; }
         public List<Doctor> DoctorList { get; set; }
-        
+
         #endregion
 
         #region Doctor Properties
@@ -257,6 +257,38 @@ namespace HospitalF.Models
                     where p.Photo_ID == photoID
                     select p).FirstOrDefault();
             }
+        }
+        #endregion
+
+        #region check model is updated
+        public async Task<string> CheckModelIsUpdated(HospitalModel model)
+        {
+            string updatedContent = string.Empty;
+            if (model.HospitalName != null || model.OrdinaryStartTime != null ||
+                model.HolidayStartTime != null || model.AverageCuringTime != null)
+            {
+                updatedContent = updatedContent + "Basic information" + Constants.Comma;
+            }
+            if (model.LocationAddress != null || model.StreetAddress != null)
+            {
+                updatedContent = updatedContent + "Hospital Address" + Constants.Comma;
+            }
+            if (model.PhoneNo != null || model.PhoneNo2 != null ||
+                model.PhoneNo3 != null || model.Fax != null ||
+                model.HospitalEmail != null || model.Website != null ||model.PersonInCharged!=null)
+            {
+                updatedContent = updatedContent + "Hospital contact information" + Constants.Comma;
+            }
+            if (model.SelectedSpecialities != null || model.SelectedSpecialities.Count != 0 ||
+                model.SelectedServices != null || model.SelectedFacilities!=null)
+            {
+                updatedContent = updatedContent + "Hospital speciality information" + Constants.Comma;
+            }
+            if (model.FullDescription != null)
+            {
+                updatedContent = updatedContent + "Hospital full description";
+            }
+            return updatedContent;
         }
         #endregion
 
@@ -320,7 +352,7 @@ namespace HospitalF.Models
             string hospitalName, int cityId, int districtId, int hospitalType, bool isActive)
         {
             // Declare new list
-            List<SP_LOAD_HOSPITAL_LISTResult> hospitalList = 
+            List<SP_LOAD_HOSPITAL_LISTResult> hospitalList =
                 new List<SP_LOAD_HOSPITAL_LISTResult>();
 
             // Search for suitable hospitals in database
@@ -519,7 +551,7 @@ namespace HospitalF.Models
                         model.FacilityName));
                 }
             }
-            
+
             return result;
         }
 
@@ -535,9 +567,9 @@ namespace HospitalF.Models
 
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                
+
                 #region Load single hospital data
-                
+
                 model = await Task.Run(() =>
                     (from h in data.SP_LOAD_SPECIFIC_HOSPITAL(hospitalId)
                      select new HospitalModel()
@@ -573,7 +605,7 @@ namespace HospitalF.Models
                      }).SingleOrDefault());
 
                 #endregion
-                
+
                 #region Load list of persons in charged
 
                 model.SelectedPersonInCharged = await Task.Run(() =>
@@ -638,7 +670,7 @@ namespace HospitalF.Models
                     {
                         model.PhoneNo3 = phoneNumberList[1];
                     }
-                    
+
                 }
                 if (phoneNumberQuantity == 3)
                 {
@@ -652,9 +684,9 @@ namespace HospitalF.Models
 
             // Return HospitalModel
             return model;
-                 
+
         }
-                
+
         /// <summary>
         /// Update specific hospital
         /// </summary>

@@ -37,6 +37,12 @@ namespace HospitalF
                             new[] { "HospitalF.Controllers" }
             );
 
+            routes.MapRoute("Feedback",
+                            "home/Feedback/",
+                            new { controller = "Home", action = "Feedback" },
+                            new[] { "HospitalF.Controllers" }
+            );
+
             routes.MapRoute("GetDoctorBySpeciality",
                             "appointment/getdoctorbyspeciality/",
                             new { controller = "Appointment", action = "GetDoctorBySpeciality" },

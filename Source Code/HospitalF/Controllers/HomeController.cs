@@ -405,6 +405,7 @@ namespace HospitalF.Controllers
                         hospital.Services = HomeModels.LoadServicesByHospitalId(hospitalId);
                         hospital.Facilities = HomeModels.LoadFacillitiesByHospitalId(hospitalId);
                         hospital.Specialities = HomeModels.LoadSpecialitiesByHospitalId(hospitalId);
+                        ViewBag.SpecialityList = new SelectList(hospital.Specialities, Constants.SpecialityID, Constants.SpecialityName);
                         ViewBag.RateActionStatus = TempData["RateActionStatus"];
                         ViewBag.RateActionMessage = TempData["RateActionMessage"];
                         ViewBag.HospitalEntity = hospital;
@@ -486,5 +487,90 @@ namespace HospitalF.Controllers
             }
         }
 
+        public async Task<ActionResult> FeedBack(int hospitalID)
+        {
+            string email = string.Empty;
+            FeedBackModels model = new FeedBackModels();
+            Hospital hospital;
+            List<FeedbackType> feebackType = FeedBackModels.LoadFeedbackType();
+            ViewBag.FeedbackTypeList = new SelectList(feebackType, Constants.FeedbackType, Constants.FeedbackTypeName);
+            hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
+            model.HospitalName = hospital.Hospital_Name;
+            model.HospitalID = hospitalID;
+            // login user is normal user
+            if (User.IsInRole("2"))
+            {
+                model.Email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+            }
+            else if (User.IsInRole("3"))
+            {
+                model.Email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+            }
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> FeedBack(FeedBackModels model)
+        {
+            try
+            {
+                int result = 0;
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.InsertFeedbackAsync(model);
+                }
+
+                // Check returned result
+                if (result == 1)
+                {
+
+                    ViewBag.AddFeedbackStatus = 1.ToString();
+                    return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = model.HospitalID, redirect = "yes" });
+                }
+                else
+                {
+                    ViewBag.AddFeedbackStatus = 0.ToString();
+                    ModelState.Clear();
+                    return View();
+                }
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        #region search doctor
+        public async Task<ActionResult> SearchDoctor(string SpecialityID, string DoctorName, string HospitalID)
+        {
+            try
+            {
+                int tempSpecialityID, tempHospitalID;
+               List<Doctor> doctorList = new List<Doctor>();
+                ViewBag.Hospital = Int32.Parse(HospitalID);
+                if (SpecialityID == "")
+                {
+                    SpecialityID = "0";
+                }
+                if (!String.IsNullOrEmpty(SpecialityID) && Int32.TryParse(SpecialityID, out tempSpecialityID)
+                    && Int32.TryParse(HospitalID, out tempHospitalID))
+                {
+                    doctorList = await HospitalUtil.SearchDoctor(DoctorName, tempSpecialityID, tempHospitalID);
+                    ViewBag.DoctorList = doctorList;
+                    ViewBag.HospitalID = tempHospitalID;
+                }
+                return PartialView("SearchDoctor");
+            }
+            catch (Exception ex)
+            {
+                LoggingUtil.LogException(ex);
+                return RedirectToAction(Constants.SystemFailureHospitalUserAction, Constants.ErrorController);
+            }
+
+        }
+        #endregion
     }
 }

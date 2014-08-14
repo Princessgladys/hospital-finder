@@ -175,6 +175,7 @@ namespace HospitalF.Controllers
                 {
                     doctorList = await HospitalUtil.SearchDoctor(DoctorName, tempSpecialityID, tempHospitalID);
                     ViewBag.DoctorList = doctorList;
+                    ViewBag.HospitalID = tempHospitalID;
                 }
                 return PartialView("SearchResult");
             }
@@ -979,7 +980,7 @@ namespace HospitalF.Controllers
         /// <param name="hospitalId">Hospital ID</param>
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [Authorize(Roles = Constants.AdministratorRoleName+","+Constants.HospitalUserRoleName)]
         public async Task<ActionResult> UpdateHospital(int hospitalId)
         {
             HospitalModel model = new HospitalModel();
@@ -1069,7 +1070,7 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [HttpPost]
         [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [Authorize(Roles = Constants.AdministratorRoleName + "," + Constants.HospitalUserRoleName)]
         [ValidateInput(false)]
         public async Task<ActionResult> UpdateHospital(HospitalModel model, List<HttpPostedFileBase> file)
         {
@@ -1077,12 +1078,29 @@ namespace HospitalF.Controllers
             {
                 // Prepare data
                 int result = 0;
+                string updatedContent = string.Empty;
+                bool flag=false;
                 model.CreatedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
 
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
                     result = await model.UpdateHospitalAsync(model);
+                    updatedContent = await model.CheckModelIsUpdated(model);
+                    string currentEmail = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+                    if (User.IsInRole("3"))
+                    {
+                        List<string> adminGmailList = (from u in data.Users where u.Role_ID == 1 select u.Email).ToList();
+                        GoogleUtil.SendEmailToAdmin(currentEmail, adminGmailList, model.HospitalName, updatedContent);
+                    }
+                    else
+                    {
+                        List<string> hospitalUserGmailList = (from u in data.Users
+                                                              where u.Role_ID == 3
+                                                                  && u.Hospital_ID == model.HospitalID
+                                                              select u.Email).ToList();
+                        GoogleUtil.SendEmailToHospitalUser(currentEmail, hospitalUserGmailList, model.HospitalName, updatedContent);
+                    }
                 }
 
                 #region cascading dropdownlist
