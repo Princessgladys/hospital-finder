@@ -6,7 +6,21 @@
 @model IPagedList<SP_TAKE_SPECIALITY_AND_TYPEResult>
 
 @{
-    ViewBag.Title = "Loại hình dịch vụ";
+    ViewBag.Title = "Tìm kiếm bệnh viện - Loại hình dịch vụ";
+}
+
+@section SpecialityListActive 
+{
+class="active"
+}
+
+@section BreadCrumb 
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Dữ Liệu</li>
+        <li>Chuyên Ngành</li>
+    </ol>
 }
 
 @using (Html.BeginForm(Constants.DisplaySpecialityAction, Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))

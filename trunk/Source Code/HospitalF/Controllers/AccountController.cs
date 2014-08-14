@@ -45,20 +45,27 @@ namespace HospitalF.Controllers
 
                 if (checkLogin)
                 {
-                    // Check if user is Administrator
-                    if (SimpleSessionPersister.Role.Equals(Constants.AdministratorRoleName))
+                    string returlUrl = "/";
+                    string requestQuery = Server.UrlDecode(Request.UrlReferrer.Query);
+                    if (string.IsNullOrEmpty(requestQuery))
                     {
-                        return RedirectToAction(Constants.InitialHospitalListAction, Constants.HospitalController);
-                    }
+                        // Check if user is Administrator
+                        if (SimpleSessionPersister.Role.Equals(Constants.AdministratorRoleName))
+                        {
+                            return RedirectToAction(Constants.InitialHospitalListAction, Constants.HospitalController);
+                        }
 
-                    // Check if user is Hospital User
-                    if (SimpleSessionPersister.Role.Equals(Constants.HospitalUserRoleName))
+                        // Check if user is Hospital User
+                        if (SimpleSessionPersister.Role.Equals(Constants.HospitalUserRoleName))
+                        {
+                            return RedirectToAction(Constants.IndexAction, Constants.HospitalController);
+                        }
+                    }
+                    else if (requestQuery.Contains("ReturnUrl"))
                     {
-                        return RedirectToAction(Constants.IndexAction, Constants.HospitalController);
+                        returlUrl = requestQuery.Split('=')[1];
                     }
-
-                    // Redirect to Login page as default
-                    return RedirectToAction(Constants.LoginAction, Constants.AccountController);
+                    return Redirect(returlUrl);
                 }
                 else
                 {
@@ -86,7 +93,16 @@ namespace HospitalF.Controllers
 
                 bool checkFacebookLogin = AccountModels.CheckFacebookLogin(jsonUserInfo);
 
-                return RedirectToAction(Constants.IndexAction, Constants.HomeController);
+                string returlUrl = "/";
+
+                string urlReferrer = Server.UrlDecode(Request.UrlReferrer.AbsoluteUri);
+
+                if (!string.IsNullOrEmpty(urlReferrer))
+                {
+                    returlUrl = urlReferrer;
+                }
+               
+                return Redirect(returlUrl);
             }
             catch (Exception exception)
             {
@@ -112,7 +128,7 @@ namespace HospitalF.Controllers
                 HttpCookie cookie2 = new HttpCookie("ASP.NET_SessionId", "");
                 cookie2.Expires = DateTime.Now.AddYears(-1);
                 Response.Cookies.Add(cookie2);
-                return RedirectToAction(Constants.LoginAction, Constants.AccountController);
+                return RedirectToAction(Constants.IndexAction, Constants.HomeController);
             }
             catch (Exception exception)
             {
@@ -174,13 +190,19 @@ namespace HospitalF.Controllers
                 // Check returned result
                 if (result == 1)
                 {
-                    return Json(new { result = 1.ToString() +
-                        Constants.VerticalBar + model.Email }, JsonRequestBehavior.AllowGet);
+                    return Json(new
+                    {
+                        result = 1.ToString() +
+                            Constants.VerticalBar + model.Email
+                    }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return Json(new { result = 0.ToString() +
-                        Constants.VerticalBar + model.Email }, JsonRequestBehavior.AllowGet);
+                    return Json(new
+                    {
+                        result = 0.ToString() +
+                            Constants.VerticalBar + model.Email
+                    }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception exception)

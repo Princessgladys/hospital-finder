@@ -134,7 +134,7 @@ namespace HospitalF.Models
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 User user = (from u in data.Users
-                             where u.Email.Equals(email.Trim()) && u.Password.Equals(password)
+                             where u.Email.Equals(email.Trim()) && u.Password.Equals(password) && u.Is_Active == true
                              select u).SingleOrDefault();
                 if (user != null)
                 {

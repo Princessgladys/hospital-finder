@@ -3,9 +3,22 @@
 @model List<HospitalF.Models.HospitalModel>
 
 @{
-    ViewBag.Title = "Thêm bệnh viện từ Excel";
+    ViewBag.Title = "Tìm kiếm bệnh viện - Thêm bệnh viện từ Excel";
 }
 
+@section ImportExcelActive 
+{
+class="active"
+}
+
+@section BreadCrumb 
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Thêm Mới Bệnh Viện</li>
+        <li>Từ Excel</li>
+    </ol>
+}
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
 <script type="text/javascript">
     // Get coordinate from a specific address
@@ -30,14 +43,12 @@
         return false;
     }
 </script>
-
 <div class="row">
     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
         <h1 class="page-title txt-color-blueDark">
             <i class="fa fa-pencil-square-o fa-fw "></i>
             Thêm mới bệnh viện
-            <span>
-                > Từ Excel
+            <span>> Từ Excel
             </span>
         </h1>
     </div>
@@ -52,7 +63,7 @@
 {
     <section id="widget-grid" class="">
         <div class="alert alert-danger fade in" style="display: none;"
-             id="error-alert">
+            id="error-alert">
             <button class="close" data-dismiss="alert">
                 ×
             </button>
@@ -60,7 +71,7 @@
             <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
         </div>
         <div class="alert alert-success fade in" style="display: none;"
-             id="success-alert">
+            id="success-alert">
             <button class="close" data-dismiss="alert">
                 ×
             </button>
@@ -74,9 +85,9 @@
                     <td>
                         <input type="file" class="btn btn-default" name="file" id="file">
                         <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
-                             style="display: none;" id="validFileIcon">
+                            style="display: none;" id="validFileIcon">
                         <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
-                             style="display: none;" id="invalidFileIcon">
+                            style="display: none;" id="invalidFileIcon">
                         <span id="file-message"></span>
                     </td>
                     <td>&nbsp;</td>
@@ -95,51 +106,51 @@
 
 @using (Html.BeginForm(Constants.ImportExcelAction, Constants.HospitalController, FormMethod.Post, new { @id = "import-form", @class = "smart-from" }))
 {
-<!-- widget grid -->
-<section id="data-table" class="">
-    <!-- row -->
-    <div class="row">
-        <!-- NEW WIDGET START -->
-        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <!-- Widget ID (each widget will need unique ID)-->
-            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
-                 data-widget-colorbutton="false"
-                 data-widget-editbutton="false"
-                 data-widget-togglebutton="false"
-                 data-widget-deletebutton="false"
-                 data-widget-fullscreenbutton="false"
-                 data-widget-custombutton="false"
-                 data-widget-collapsed="false"
-                 data-widget-sortable="false">
+    <!-- widget grid -->
+    <section id="data-table" class="">
+        <!-- row -->
+        <div class="row">
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                    data-widget-colorbutton="false"
+                    data-widget-editbutton="false"
+                    data-widget-togglebutton="false"
+                    data-widget-deletebutton="false"
+                    data-widget-fullscreenbutton="false"
+                    data-widget-custombutton="false"
+                    data-widget-collapsed="false"
+                    data-widget-sortable="false">
 
-                <header>
-                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                    <h2>Danh sách dữ liệu</h2>
-                </header>
-                <!-- widget div-->
-                <div>
-                    <!-- widget edit box -->
-                    <div class="jarviswidget-editbox">
-                        <!-- This area used as dropdown edit box -->
-                    </div>
-                    <!-- end widget edit box -->
-                    <!-- widget content -->
-                    <div class="widget-body">
-                        <p>Xác nhận thông tin và bấm <code>Xác nhận</code> để thêm mới danh sách bệnh viện</p>
-                        <div class="table-responsive">
-                            <table class="table table-bordered tablesorter" id="hospital-table">
-                                <thead>
-                                    <tr>
-                                        <th>Dòng</th>
-                                        <th>Tên bệnh viện</th>
-                                        <th>Địa chỉ</th>
-                                        <th>Loại</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table-body">
-                                    @{
-                                        if (Model.Count == 0)
-                                        {
+                    <header>
+                        <span class="widget-icon"><i class="fa fa-table"></i></span>
+                        <h2>Danh sách dữ liệu</h2>
+                    </header>
+                    <!-- widget div-->
+                    <div>
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body">
+                            <p>Xác nhận thông tin và bấm <code>Xác nhận</code> để thêm mới danh sách bệnh viện</p>
+                            <div class="table-responsive">
+                                <table class="table table-bordered tablesorter" id="hospital-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Dòng</th>
+                                            <th>Tên bệnh viện</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Loại</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-body">
+                                        @{
+    if (Model.Count == 0)
+    {
                                             <tr>
                                                 <td colspan="5">Không có dữ liệu</td>
                                             </tr>
@@ -194,29 +205,28 @@
                                                 }
                                             }
                                         }
-                                    }
-                                </tbody>
-                            </table>
-                            <footer>
-                                <button class="btn btn-primary" type="submit" id="confirm-button"
+                                    </tbody>
+                                </table>
+                                <footer>
+                                    <button class="btn btn-primary" type="submit" id="confirm-button"
                                         name="@Constants.Button" value="@Constants.ButtonConfirm"
                                         style="float:right;">
-                                    <i class="fa fa-save"></i>&nbsp;
+                                        <i class="fa fa-save"></i>&nbsp;
                                     Xác nhận
-                                </button>
-                            </footer>
+                                    </button>
+                                </footer>
+                            </div>
                         </div>
+                        <!-- end widget content -->
                     </div>
-                    <!-- end widget content -->
+                    <!-- end widget div -->
                 </div>
-                <!-- end widget div -->
-            </div>
-            <!-- end widget -->
-        </article>
-        <!-- WIDGET END -->
-    </div>
-</section>
-<!-- end widget grid -->
+                <!-- end widget -->
+            </article>
+            <!-- WIDGET END -->
+        </div>
+    </section>
+    <!-- end widget grid -->
 }
 
 <script type="text/javascript">

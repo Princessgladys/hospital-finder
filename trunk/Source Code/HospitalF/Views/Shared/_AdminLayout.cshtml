@@ -37,9 +37,9 @@
     <link rel="apple-touch-startup-image" href="../Content/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
 
     <script>
-    if (!window.jQuery) {
-        document.write('<script src="../Content/js/libs/jquery-2.0.2.m.js"><\/script>');
-    }
+        if (!window.jQuery) {
+            document.write('<script src="../Content/js/libs/jquery-2.0.2.m.js"><\/script>');
+        }
     </script>
 
     <script>
@@ -105,7 +105,7 @@
                 </a>
             </span>
             <!-- END LOGO PLACEHOLDER -->
-           
+
         </div>
 
         <!-- pulled right: nav area -->
@@ -124,7 +124,7 @@
 
             <!-- logout button -->
             <div id="#" class="btn-header transparent pull-right">
-                <span><a href="/"><i class="fa fa-sign-out"></i></a></span>
+                <span><a href="/@(Constants.AccountController)/@(Constants.LogoutAction)"><i class="fa fa-sign-out"></i></a></span>
             </div>
             <!-- end logout button -->
         </div>
@@ -132,12 +132,12 @@
 
         <!-- projects dropdown -->
         <div id="project-context" class="pull-right">
-            
+
             <span><a href="/"><i class="fa fa-user"></i></a></span>
             @{
                 string username = string.Empty;
                 string email = string.Empty;
-               
+
                 if (HospitalF.Models.SimpleSessionPersister.Username != null)
                 {
                     string[] userInfo = HospitalF.Models.SimpleSessionPersister.Username.
@@ -146,7 +146,7 @@
                     email = userInfo[0];
                 }
             }
-            <span id="project-selector" data-toggle="dropdown">@username<i class="fa fa-angle-down"></i></span>
+            <span id="project-selector" data-toggle="dropdown">@username&nbsp;<i class="fa fa-angle-down"></i></span>
 
             <!-- Suggestion: populate this list with fetch and push technique -->
             <ul class="dropdown-menu">
@@ -179,7 +179,7 @@
                 <!-- User image size is adjusted inside CSS, it should stay as it -->
 
                 <a href="javascript:void(0);" id="show-shortcut">
-                    <img src="../Content/img/avatars/doctor_ logo.jpg" alt="me" class="online" />
+                    <img src="../Content/img/avatars/sunny.png" alt="me" class="online" />
                     <span>@(email)</span>
                 </a>
 
@@ -200,65 +200,65 @@
 				-->
 
             <ul>
-                <li class="">
+                <li @RenderSection("HospitalListActive", false)>
                     <a href="/Hospital/HospitalList" title="Dashboard">
-                        <i class="fa fa-lg fa-fw fa-home"></i>
-                        <span class="menu-item-parent">Danh sách bệnh viện</span>
+                        <i class="fa fa-lg fa-fw fa-list"></i>
+                        <span class="menu-item-parent">Danh Sách Bệnh Viện</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-lg fa-fw fa-inbox"></i><span class="menu-item-parent">Thêm mới bệnh viện</span></a>
+                    <a href="#"><i class="fa fa-lg fa-fw fa-hospital-o"></i><span class="menu-item-parent">Thêm Mới Bệnh Viện</span></a>
                     <ul>
-                        <li>
+                        <li @RenderSection("ImportExcelActive", false)>
                             <a href="/Hospital/ImportExcel">Từ Excel</a>
                         </li>
-                        <li>
-                            <a href="/Hospital/AddHospital">Nhập liệu</a>
+                        <li @RenderSection("AddHospitalActive", false)>
+                            <a href="/Hospital/AddHospital">Nhập Liệu</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-lg fa-fw fa-inbox"></i><span class="menu-item-parent">Thống Kê</span></a>
+                    <a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Thống Kê</span></a>
                     <ul>
-                        <li>
-                            <a href="ajax/flot.html">Thống Kê Chung</a>
+                        <li @RenderSection("StatisticActive", false)>
+                            <a href="/Data/Statistic">Thống Kê Chung</a>
                         </li>
-                        <li>
-                            <a href="ajax/morris.html">Dữ Liệu</a>
-                        </li>                       
-                    </ul>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Dữ Liệu</span></a>
-                    <ul>
-                        <li>
-                            <a href="/Data/SpecialityList">Chuyên ngành</a>
-                        </li>
-                        <li>
-                            <a href="/Data/DiseaseList">Loại bệnh</a>
-                        </li>
-                        <li>
-                            <a href="/Data/ServiceList">Dịch vụ</a>
-                        </li>
-                        <li>
-                            <a href="/Data/FacilityList">Cơ sở vật chất</a>
+                        <li @RenderSection("SearchQueryStatisticActive", false)>
+                            <a href="/Data/SearchQueryStatistic">Từ Khóa Tìm Kiếm</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-lg fa-fw fa-table"></i><span class="menu-item-parent">Tài Khoản</span></a>
+                    <a href="#"><i class="fa fa-lg fa-fw fa-database"></i><span class="menu-item-parent">Dữ Liệu</span></a>
+                    <ul>
+                        <li @RenderSection("SpecialityListActive", false)>
+                            <a href="/Data/SpecialityList">Chuyên Ngành</a>
+                        </li>
+                        <li @RenderSection("DiseaseListActive", false)>
+                            <a href="/Data/DiseaseList">Loại Bệnh</a>
+                        </li>
+                        <li @RenderSection("ServiceListActive", false)>
+                            <a href="/Data/ServiceList">Dịch Vụ</a>
+                        </li>
+                        <li @RenderSection("FacilityListActive", false)>
+                            <a href="/Data/FacilityList">Cơ Sở Vật Chất</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-lg fa-fw fa-user"></i><span class="menu-item-parent">Tài Khoản</span></a>
                     <ul>
                         <li>
-                            <a href="ajax/table.html">Quản Lý Người Dùng</a>
+                            <a href="#">Quản Lý Người Dùng</a>
                         </li>
                         <li>
-                            <a href="ajax/table.html">Phản Hồi</a>
+                            <a href="#">Phản Hồi</a>
                         </li>
                         <li>
-                            <a href="ajax/table.html">Thông Tin Tài Khoản</a>
+                            <a href="#">Thông Tin Tài Khoản</a>
                         </li>
                         <li>
-                            <a href="ajax/datatables.html">Đổi Mật Khẩu</a>
+                            <a href="#">Đổi Mật Khẩu</a>
                         </li>
                     </ul>
                 </li>
@@ -279,9 +279,9 @@
             <span class="ribbon-button-alignment"><span id="refresh" class="btn btn-ribbon" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true" data-reset-msg="Would you like to RESET all your saved widgets and clear LocalStorage?"><i class="fa fa-refresh"></i></span></span>
 
             <!-- breadcrumb -->
-            <ol class="breadcrumb">
-                <!-- This is auto generated -->
-            </ol>
+
+            @RenderSection("BreadCrumb", false)
+
             <!-- end breadcrumb -->
 
             <!-- You can also add more buttons to the
@@ -299,7 +299,7 @@
         <!-- END RIBBON -->
 
         <!-- MAIN CONTENT -->
-        <div id="content" style="opacity: 1;font-family: Arial;">
+        <div id="content" style="opacity: 1; font-family: Arial;">
             @RenderBody()
         </div>
         <!-- END MAIN CONTENT -->

@@ -1,7 +1,21 @@
 ﻿@using HospitalF.Constant;
 
 @{
-    ViewBag.Title = "Statistic";
+    ViewBag.Title = "Tìm kiếm bệnh viện - Thống kê";
+}
+
+@section StatisticActive 
+{
+class="active"
+}
+
+@section BreadCrumb 
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Thống Kê</li>
+        <li>Thống Kê Chung</li>
+    </ol>
 }
 
 <script src="~/Content/js/plugin/flot/jquery.flot.cust.min.js"></script>
@@ -290,8 +304,8 @@
             @foreach (KeyValuePair<string, int> pair in ViewBag.HospitalTypeCount)
             {
                 <text>
-                    data_pie[@(count++)] = {
-                        label: "@(pair.Key)",
+            data_pie[@(count++)] = {
+                label: "@(pair.Key)",
                         data: @(pair.Value)
                         }
                 </text>

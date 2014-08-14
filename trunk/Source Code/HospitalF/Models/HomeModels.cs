@@ -488,8 +488,7 @@ namespace HospitalF.Models
 
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                /*
+            {             
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_NORMAL_SEARCH_HOSPITAL(whatPhrase.Trim().ToLower(),
                          cityId, districtId)
@@ -515,7 +514,6 @@ namespace HospitalF.Models
                          Is_Active = h.Is_Active,
                          Rating = h.Rating
                      }).ToList());
-                 * */
             }
 
             // Return list of hospitals
@@ -624,11 +622,14 @@ namespace HospitalF.Models
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 hospital = await Task.Run(() => (from h in data.Hospitals
-                                                 where h.Hospital_ID == id
+                                                 from ht in data.HospitalTypes
+                                                 where h.Hospital_ID == id && h.Hospital_Type == ht.Type_ID && h.Is_Active == true
                                                  select new HospitalEntity()
                                                  {
                                                      Hospital_ID = h.Hospital_ID,
                                                      Hospital_Name = h.Hospital_Name,
+                                                     Hospital_Type = h.Hospital_Type,
+                                                     Hospital_Type_Name = ht.Type_Name,
                                                      Address = h.Address,
                                                      Ward_ID = h.Ward_ID,
                                                      District_ID = h.District_ID,

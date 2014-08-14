@@ -695,6 +695,7 @@ namespace HospitalF.Controllers
 
         #region Statistic
         [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public ActionResult Statistic(string sFromDate, string sToDate)
         {
             try
@@ -731,6 +732,7 @@ namespace HospitalF.Controllers
         }
 
         [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public ActionResult SearchQueryStatistic(string sFromDate, string sToDate, int page = 1)
         {
             try

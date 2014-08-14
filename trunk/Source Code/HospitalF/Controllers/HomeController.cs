@@ -266,11 +266,14 @@ namespace HospitalF.Controllers
                     WebClient client = new WebClient();
                     string coordinate = model.Coordinate;
                     string position = model.Position;
-                    double radius = model.Radius;
-                    if (!(0 < radius && radius <= 20))
+
+                    if (!(0 < model.Radius && model.Radius <= 20))
                     {
-                        radius = 10;
+                        model.Radius = 10;
                     }
+
+                    double radius = model.Radius;
+                    
 
                     if (model.LocationType == 1)
                     {
@@ -349,42 +352,6 @@ namespace HospitalF.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// GET: /Home/Index
-        /// </summary>
-        /// <param name="model">HomeModels</param>
-        /// <returns>Task[ActionResult]</returns>
-        [HttpGet]
-        [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> FilterResult(int searchType = 2, int page = 1)
-        {
-            try
-            {
-                if (searchType == 1)
-                {
-                }
-                else if (searchType == 2)
-                {
-                    List<HospitalEntity> hospitalList = await HomeModels.LocationSearchHospital(10.8525022, 106.6226, 16000);
-                    List<HospitalEntity> filteredHospitalList = (from h in hospitalList
-                                                                 orderby h.Rating descending
-                                                                 select h).ToList<HospitalEntity>();
-                    IPagedList<HospitalEntity> pagedHospitalList = filteredHospitalList.ToPagedList(page, Constants.PageSize);
-                    ViewBag.HospitalList = pagedHospitalList;
-                    ViewBag.JsonHospitalList = JsonConvert.SerializeObject(pagedHospitalList);
-                }
-                else if (searchType == 3)
-                {
-                }
-                return View(Constants.SearchResultAction);
-            }
-            catch (Exception exception)
-            {
-                LoggingUtil.LogException(exception);
-                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
-            }
-        }
-
         #endregion
 
         /// <summary>
@@ -431,6 +398,7 @@ namespace HospitalF.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Constants.UserRoleName)]
         public ActionResult RateHospital(int id = 0, int score = 0)
         {
             try

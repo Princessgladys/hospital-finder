@@ -6,7 +6,21 @@
 @model IPagedList<SP_TAKE_FACILITY_AND_TYPEResult>
 
 @{
-    ViewBag.Title = "Cơ sở vật chất";
+    ViewBag.Title = "Tìm kiếm bệnh viện - Cơ sở vật chất";
+}
+
+@section FacilityListActive 
+{
+class="active"
+}
+
+@section BreadCrumb 
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Dữ Liệu</li>
+        <li>Cơ Sở Vật Chất</li>
+    </ol>
 }
 
 @using (Html.BeginForm(Constants.DisplayFacilityAction, Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))

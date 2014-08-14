@@ -476,7 +476,7 @@ namespace HospitalF.Models
                            select new SentenceDictionaryEntity()
                            {
                                Sentence = sd.Sentence,
-                               Search_Date = sd.Search_Date,
+                               Search_Time_Count = sd.Search_Time_Count,
                                Result_Count = sd.Result_Count
                            }).ToList<SentenceDictionaryEntity>();
             }

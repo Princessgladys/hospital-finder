@@ -6,7 +6,21 @@
 @model IPagedList<SP_TAKE_SERVICE_AND_TYPEResult>
 
 @{
-    ViewBag.Title = "Loại hình dịch vụ";
+    ViewBag.Title = "Tìm kiếm bệnh viện - Loại hình dịch vụ";
+}
+
+@section ServiceListActive 
+{
+class="active"
+}
+
+@section BreadCrumb 
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Dữ Liệu</li>
+        <li>Dịch Vụ</li>
+    </ol>
 }
 
 @using (Html.BeginForm(Constants.DisplayServiceAction, Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
@@ -29,17 +43,17 @@
     <label class="select">
         <select class="form-control" id="Type" name="IsActive">
             @{
-                bool isActive = (bool)ViewBag.CurrentStatus;
-                if (isActive)
-                {
-                    <option value="true" selected>Đang hoạt động</option>
-                            <option value="false">Ngưng hoạt động</option>
-                }
-                else
-                {
-                    <option value="true">Đang hoạt động</option>
-                            <option value="false" selected>Ngưng hoạt động</option>
-                }
+    bool isActive = (bool)ViewBag.CurrentStatus;
+    if (isActive)
+    {
+                <option value="true" selected>Đang hoạt động</option>
+                <option value="false">Ngưng hoạt động</option>
+    }
+    else
+    {
+                <option value="true">Đang hoạt động</option>
+                <option value="false" selected>Ngưng hoạt động</option>
+    }
             }
         </select>
 
@@ -47,8 +61,7 @@
     </label>
 
     <a href="/Data/AddService" class="btn btn-sm btn-success btn-next"
-       id="add-button" data-toggle="modal" data-target="#addService">
-        Thêm dịch vụ
+        id="add-button" data-toggle="modal" data-target="#addService">Thêm dịch vụ
     </a>
 
     <div class="well">
@@ -72,7 +85,7 @@
 }
 
 <div class="alert alert-danger fade in" style="display: none;"
-     id="error-alert">
+    id="error-alert">
     <button class="close" data-dismiss="alert">
         ×
     </button>
@@ -80,7 +93,7 @@
     <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
 </div>
 <div class="alert alert-success fade in" style="display: none;"
-     id="success-alert">
+    id="success-alert">
     <button class="close" data-dismiss="alert">
         ×
     </button>
@@ -89,14 +102,14 @@
 </div>
 
 <div class="modal fade" id="addService" tabindex="-1"
-     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content"></div>
     </div>
 </div>
 
 <div class="modal fade" id="updateService" tabindex="-1"
-     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content"></div>
     </div>
@@ -110,17 +123,17 @@
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <!-- Widget ID (each widget will need unique ID)-->
             <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
-                 data-widget-colorbutton="false"
-                 data-widget-editbutton="false"
-                 data-widget-togglebutton="false"
-                 data-widget-deletebutton="false"
-                 data-widget-fullscreenbutton="false"
-                 data-widget-custombutton="false"
-                 data-widget-collapsed="false"
-                 data-widget-sortable="false">
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="false"
+                data-widget-sortable="false">
 
                 <header>
-                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                    <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>Danh sách</h2>
                 </header>
                 <!-- widget div-->
@@ -147,32 +160,32 @@
                                     @{
                                         if (Model.Count == 0)
                                         {
-                                            <tr>
-                                                <td colspan="5">Không có dữ liệu</td>
-                                            </tr>
+                                        <tr>
+                                            <td colspan="5">Không có dữ liệu</td>
+                                        </tr>
                                         }
                                         else
                                         {
                                             foreach (var service in Model)
                                             {
-                                                <tr>
-                                                    <td hidden>@service.Service_ID</td>
-                                                    <td hidden>@service.Service_Name</td>
-                                                    <td hidden>@service.Is_Active</td>
-                                                    <td>
-                                                        <a href="/Data/UpdateService?serviceId=@service.Service_ID"
+                                        <tr>
+                                            <td hidden>@service.Service_ID</td>
+                                            <td hidden>@service.Service_Name</td>
+                                            <td hidden>@service.Is_Active</td>
+                                            <td>
+                                                <a href="/Data/UpdateService?serviceId=@service.Service_ID"
                                                            id="update-button" data-toggle="modal" data-target="#updateService">
-                                                            @service.Service_Name
-                                                        </a>
-                                                    </td>
-                                                    <td>@service.Type_Name</td>
-                                                    <td>@(@service.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
-                                                    <td>
-                                                        <a href="" class="btn btn-sm btn-success btn-next">
-                                                            @(service.Is_Active.Value ? "Ngừng" : "Kích hoạt")
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                    @service.Service_Name
+                                                </a>
+                                            </td>
+                                            <td>@service.Type_Name</td>
+                                            <td>@(@service.Is_Active.Value ? "Hoạt động" : "Ngưng")</td>
+                                            <td>
+                                                <a href="" class="btn btn-sm btn-success btn-next">
+                                                    @(service.Is_Active.Value ? "Ngừng" : "Kích hoạt")
+                                                </a>
+                                            </td>
+                                        </tr>
                                             }
                                         }
                                     }
@@ -183,7 +196,7 @@
                             @{
                                 if (Model.Count != 0)
                                 {
-                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayServiceAction + "?" +
+                                @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayServiceAction + "?" +
                                         ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
                                 }
                             }
