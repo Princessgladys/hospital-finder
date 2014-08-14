@@ -11,9 +11,11 @@ CREATE PROCEDURE SP_LOAD_SEARCH_QUERY_STATISTIC
 )
 AS
 BEGIN
-	SELECT sd.Sentence, sd.Search_Date, sd.Result_Count
+	SELECT sd.Sentence, COUNT(*) AS Search_Time_Count, sd.Result_Count
 	FROM SentenceDictionary sd
 	WHERE sd.Search_Date BETWEEN @From_Date AND @To_Date
-	GROUP BY sd.Sentence, sd.Search_Date, sd.Result_Count
-	ORDER BY sd.Search_Date DESC
+	GROUP BY sd.Sentence, CAST(ISNULL(sd.Search_Date, '1900-01-01') AS DATE), sd.Result_Count
+	ORDER BY Search_Time_Count DESC
 END
+
+EXEC SP_LOAD_SEARCH_QUERY_STATISTIC '1900-12-31', '2015-12-31'
