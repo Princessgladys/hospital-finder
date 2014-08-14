@@ -4,8 +4,23 @@
 @using PagedList;
 
 @{
+    ViewBag.Title = "Tìm kiếm bệnh viện - Thống kê từ khóa tìm kiếm";
     IPagedList<SentenceDictionaryEntity> sdeList = (IPagedList<SentenceDictionaryEntity>)ViewBag.SearchQueryStatistic;
     int count = 0;
+}
+
+@section SearchQueryStatisticActive 
+{
+class="active"
+}
+
+@section BreadCrumb 
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Thống Kê</li>
+        <li>Từ khóa tìm kiếm</li>
+    </ol>
 }
 
 <div class="row">
@@ -81,7 +96,7 @@
                                             <tr>
                                                 <th>STT</th>
                                                 <th>Từ khóa</th>
-                                                <th>Thời gian</th>
+                                                <th>Số lượt tìm kiếm</th>
                                                 <th>Số kết quả</th>
                                             </tr>
                                         </thead>
@@ -91,7 +106,7 @@
                                                 <tr>
                                                     <td>@(++count)</td>
                                                     <td>@(sde.Sentence)</td>
-                                                    <td>@(string.Format("{0:dd/MM/yyyy HH:mm:ss}",sde.Search_Date))</td>
+                                                    <td>@(sde.Search_Time_Count)</td>
                                                     <td>@(sde.Result_Count)</td>
                                                 </tr>
                                             }

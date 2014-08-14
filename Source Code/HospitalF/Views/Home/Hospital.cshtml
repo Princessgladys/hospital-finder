@@ -7,6 +7,8 @@
 @model HospitalF.Models.HospitalModel
 @{
     HospitalEntity hospital = (HospitalEntity)ViewBag.HospitalEntity;
+    ViewBag.Title = "Tìm kiếm bệnh viện - " + hospital.Hospital_Name;
+    
     Uri uri = new Uri(Request.Url.AbsoluteUri);
     string url = uri.GetLeftPart(UriPartial.Path) + "?hospitalId=" + Request["hospitalId"];
     string successMessage = "none";
@@ -48,6 +50,8 @@
             <hr />
             <div class="contact-info">
                 <address>
+                    <strong>@(hospital.Hospital_Type_Name)</strong>
+                    <br />
                     <strong>Địa chỉ</strong>: @(hospital.Address) <i class="fa fa-location-arrow"></i>
                     <br />
                     <strong>Điện thoại</strong>: @(hospital.Phone_Number) <i class="fa fa-mobile"></i>

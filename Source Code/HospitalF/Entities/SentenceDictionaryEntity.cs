@@ -23,6 +23,12 @@ namespace HospitalF.Entities
         /// </summary>
         public DateTime? Search_Date { get; set; }
 
+
+        /// <summary>
+        /// Property for Search_Time_Count attribute
+        /// </summary>
+        public int? Search_Time_Count { get; set; }
+
         /// <summary>
         /// Property for Result_Count attribute
         /// </summary>

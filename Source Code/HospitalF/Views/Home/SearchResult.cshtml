@@ -5,6 +5,7 @@
 @model HospitalF.Models.HomeModels
 
 @{
+    ViewBag.Title = "Tìm kiếm bệnh viện - Kết quả tìm kiếm";
     IPagedList<HospitalEntity> hospitalList = (IPagedList<HospitalEntity>)ViewBag.HospitalList;
     string suggestionSentence = (string)@ViewBag.SuggestionSentence;
 }

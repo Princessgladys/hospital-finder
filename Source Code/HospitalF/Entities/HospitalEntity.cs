@@ -24,7 +24,12 @@ namespace HospitalF.Entities
         /// <summary>
         /// Property for Hospital_Type attribute
         /// <summary>
-        public int Hospital_Type { get; set; }
+        public int? Hospital_Type { get; set; }
+
+        /// <summary>
+        /// Property for Hospital_Type_Name attribute
+        /// <summary>
+        public string Hospital_Type_Name { get; set; }
 
         /// <summary>
         /// Property for Address attribute

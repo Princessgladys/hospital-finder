@@ -2,7 +2,21 @@
 
 @model HospitalF.Models.HospitalModel
 @{
-    ViewBag.Title = "Thêm mới bệnh viện";
+    ViewBag.Title = "Tìm kiếm bệnh viện - Thêm mới bệnh viện";
+}
+
+@section AddHospitalActive
+{
+class="active"
+}
+
+@section BreadCrumb 
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Thêm Mới Bệnh Viện</li>
+        <li>Nhập Liệu</li>
+    </ol>
 }
 
 <link href="~/Content/css/summernote/summernote.css" rel="stylesheet" />
@@ -358,7 +372,7 @@
                                     <div class="form-group">
                                         <label><strong>Từ khóa tìm kiếm</strong></label>
                                         <input class="form-control tagsinput" data-role="tagsinput"
-                                               name="TagsInput" id="TagsInput" />
+                                            name="TagsInput" id="TagsInput" />
                                         <div class="note">
                                             <strong>Chỉ dẫn:</strong> Từ khóa tìm kiếm giúp tối ưu hóa khả năng tìm kiếm của hệ thống.
                                         </div>
@@ -790,17 +804,15 @@
     @*Data validation*@
     $(document).ready(function () {
         $("*[type='radio']").click(function () {
-            if (this.value == "True")
-            {  
+            if (this.value == "True") {
                 $('#curing-time').show();
             }
-            else
-            {
+            else {
                 $('#AverageCuringTime').val('');
                 $('#curing-time').hide();
             }
         });
-        
+
 
         $('#confirm-button').click(function (e) {
             if ($("#address-message").text() == "@ErrorMessage.CEM017") {
