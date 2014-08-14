@@ -207,6 +207,7 @@
         });
         // Ngay kham datepicker
         $("#appointmentDate").datepicker({
+         
             dateFormat: "dd/mm/yy",
             prevText: '<i class="fa fa-chevron-left"></i>',
             nextText: '<i class="fa fa-chevron-right"></i>',
@@ -234,6 +235,7 @@
                     url: "@(Url.RouteUrl(Constants.LoadTimeCheckHealthAction))",
                     data: { "hospitalID": hospitalID, "doctorID": doctorID, "checkHealthDate": selectedItem },
                     success: function (data) {
+                       
                         ddlTimeCheckHealth.html('');
                         ddlTimeCheckHealth.append($('<option></option>').val(0).html("-- Xin chọn thời gian --"));
                         $.each(data, function (id, option) {
@@ -250,12 +252,13 @@
         }).datepicker("setDate", new Date());
 
         $("#birthdayDatetime").datepicker({
+            
             dateFormat: "dd/mm/yy",
             maxDate: new Date(currentYear, currentMonth, currentDate - 1),
             prevText: '<i class="fa fa-chevron-left"></i>',
             nextText: '<i class="fa fa-chevron-right"></i>'
         }).datepicker("setDate", new Date() - 1);
-        $("birthdayDatetime").select(function () {});
+      
     });
 
 </script>
@@ -351,6 +354,7 @@
                                    @placeholder = "Ngày sinh",
                                    @id = "birthdayDatetime"
                                })
+                                        <b class="tooltip tooltip-top-right"><i class="fa fa-calendar txt-color-teal"></i>Xin nhập ngày sinh</b>
                                     </label>
                                     <div class="note">Định dạng: dd/mm/yy</div>
                                 </section>
@@ -453,6 +457,7 @@
                                             @id = "appointmentDate",
                                             @placeholder = "Ngày khám"
                                         })
+                                        <b class="tooltip tooltip-top-right"><i class="fa fa-calendar txt-color-teal"></i>Xin nhập ngày khám</b>
                                     </label>
                                     <div class="note">Định dạng: dd/mm/yy</div>
                                 </section>
@@ -465,6 +470,7 @@
                                @id = "startTime",
                                @placeholder = "Thời gian khám"
                            })
+                                        <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>Xin nhập giờ khám</b>
                                     </label>
                                 </section>
                             </div>
@@ -500,3 +506,5 @@
             </div>
         </article>
     </div>
+</section>
+

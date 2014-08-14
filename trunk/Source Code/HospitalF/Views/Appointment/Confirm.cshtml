@@ -3,52 +3,69 @@
 @Scripts.Render("~/bundles/smartadminjquery")
 
 <h2>Confirm</h2>
+<div class="alert alert-danger fade in" style="display: none;"
+    id="error-alert">
+    <button class="close" data-dismiss="alert">
+        ×
+    </button>
+    <i class="fa-fw fa fa-times"></i>
+    <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
+</div>
+<div class="alert alert-success fade in" style="display: none;"
+    id="success-alert">
+    <button class="close" data-dismiss="alert">
+        ×
+    </button>
+    <i class="fa-fw fa fa-check"></i>
+    <strong>Thành công</strong> Thêm mới lịch hẹn thành công.
+</div>
+<div class="row">
+    <article class="col-sm-12 col-md-12 col-lg-7" style="margin-left: 20%;">
 
-<article class="col-sm-12 col-md-12 col-lg-7" style="margin-left: 20%;">
-
-    <!-- Widget ID (each widget will need unique ID)-->
-    <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
-        @using (Html.BeginForm(Constants.ConfirmAction, Constants.AppointmentController,
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            @using (Html.BeginForm(Constants.ConfirmAction, Constants.AppointmentController,
             FormMethod.Post, new { @class = "smart-form" }))
-        {
-            <div>
-                <img style="width: 100%;" src="~/Content/img/Appointment_Banner.jpg" />
-            </div>
-            <h3>Xác nhận cuộc hẹn</h3>
-            <div></div>
-            <div>
-                <fieldset>
-                    <div class="row" style="margin-left: 20%; margin-right: 10%;">
-                        <section class="col col-9">
-                            <label class="input">
-                                <i class="icon-append fa fa-lock"></i>
-                                @Html.TextBoxFor(m => m.ConfirmCode, new { @placeholder = "Mã xác nhận" })
-                                <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i>Xin nhập Mã xác nhận</b>
-                                <div class="note">Mã xác nhận được gửi qua tin nhắn điện thoại. Vui lòng kiểm tra điện thoại</div>
-                            </label>
-                        </section>
-                    </div>
-                    @*<section class="col col-8">
+            {
+                <div>
+                    <img style="width: 100%;" src="~/Content/img/Appointment_Banner.jpg" />
+                </div>
+                <h3>Xác nhận cuộc hẹn</h3>
+                <div></div>
+                <div>
+                    <fieldset>
+                        <div class="row" style="margin-left: 20%; margin-right: 10%;">
+                            <section class="col col-9">
+                                <label class="input">
+                                    <i class="icon-append fa fa-lock"></i>
+                                    @Html.TextBoxFor(m => m.ConfirmCode, new { @placeholder = "Mã xác nhận" })
+                                    <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i>Xin nhập Mã xác nhận</b>
+                                    <div class="note">Mã xác nhận được gửi qua tin nhắn điện thoại. Vui lòng kiểm tra điện thoại</div>
+                                </label>
+                            </section>
+                        </div>
+                        @*<section class="col col-8">
                         <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
                             style="display: none;" id="invalidIconUser">
                         <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
                             style="display: none;" id="validIconUser">
                         <span id="confirm"></span>
                     </section>*@
-                </fieldset>
-                @*</div>*@
-                <!-- end widget content -->
+                    </fieldset>
+                    @*</div>*@
+                    <!-- end widget content -->
 
-            </div>
+                </div>
             
-            <footer>
-                <button type="submit" class="btn btn-primary">
-                    Xác nhận
-                </button>
-            </footer>
-        }
-    </div>
-</article>
+                <footer>
+                    <button type="submit" class="btn btn-primary">
+                        Xác nhận
+                    </button>
+                </footer>
+            }
+        </div>
+    </article>
+</div>
 <style>
     .resizeIcon
     {
@@ -98,38 +115,39 @@
     @*Display notification*@
     function displayNotification() {
         // Add hospital
-        if ('@ViewBag.AddAppoitmentStatus' == '') {
+        if ('@ViewBag.CreateAppointmentStatus' == '') {
             return false;
         } else {
-            var returnValue = '@ViewBag.AddAppoitmentStatus';
+            var returnValue = '@ViewBag.CreateAppointmentStatus';
             returnValue = returnValue.split('-');
             var status = returnValue[0];
-            var phoneNo = returnValue[1];
+            var hospitalName = returnValue[1];
 
             if (status != 0) {
                 $("#success-alert").show();
-                setNotification("Mã xác nhận được gửi đến số điện thoại" + phoneNo + ". Vui lòng kiểm tra tin nhắn", 1);
+                setNotification("Thêm mới [" + hospitalName + "] thành công!", 1);
             } else {
                 $("#error-alert").show();
-                setNotification("Đặt lịch hẹn không thành công, xin hãy thử lại.", 3);
+                setNotification("Thêm mới [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
             }
         }
     }
 
     $(document).ready(function () {
         displayNotification();
+    });
 
-        var returnValue = '@ViewBag.AddHospitalStatus';
-        if (returnValue == false) {
-            $("#search-doctor-message").text("Mã xác nhận không đúng");
-            $("#invalidIconUser").show();
-            $("#validIconUser").hide();
-        }
-        if (returnValue == true) {
-            $("#search-doctor-message").text("Lịch hẹn khám đã được xác nhận");
-            $("#invalidIconUser").hide();
-            $("#validIconUser").show();
-        }
+    var returnValue = '@ViewBag.CreateAppointmentStatus';
+    if (returnValue == false) {
+        $("#search-doctor-message").text("Mã xác nhận không đúng");
+        $("#invalidIconUser").show();
+        $("#validIconUser").hide();
+    }
+    if (returnValue == true) {
+        $("#search-doctor-message").text("Lịch hẹn khám đã được xác nhận");
+        $("#invalidIconUser").hide();
+        $("#validIconUser").show();
+    }
     });
 
 </script>

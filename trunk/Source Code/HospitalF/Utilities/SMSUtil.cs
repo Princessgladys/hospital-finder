@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using HospitalF.Models;
+using HospitalF.Constant;
 
 namespace HospitalF.Utilities
 {
     public class SMSUtil
     {
-        const string APIKey = "899211D11D10709C5CC8F60BF121A6";//Dang ky tai khoan tai esms.vn de lay key
-        const string SecretKey = "470C5EC4CBFF896523B24B637DCFEE";
+        private static string APIKey = WebConfigurationManager.AppSettings[Constants.ESMSAPIKey];//Dang ky tai khoan tai esms.vn de lay key
+        private static string SecretKey = WebConfigurationManager.AppSettings[Constants.ESMSSecretKey];
 
 
         /// <summary>
@@ -132,6 +135,45 @@ namespace HospitalF.Utilities
                 }
             }
             return isExist;
+        }
+        #endregion
+
+        #region send email
+        /// <summary>
+        /// Handling sending an inform email to user
+        /// </summary>
+        /// <param name="senderEmail">Sender email address [From]</param>
+        /// <param name="senderEmailPassword">Sender email password</param>
+        /// <param name="subject">Subject of the email [Subject]</param>
+        /// <param name="content">Content of the email [Content]</param>
+        /// <param name="receiverEmail">Receiver email address [Tp]</param>
+        /// <param name="provider">Email service [Google][Yahoo][HotMail]...</param>
+        /// <returns>SmtpClient object</returns>
+        public static void SendEmailUsingGmail(string senderEmail, string senderEmailPassword, string subject,
+            string content, string receiverEmail, string provider)
+        {
+            // Declare SmtpClient variable
+            SmtpClient client = new SmtpClient(provider, 587);
+            // Declare NetworkCredential variable
+            NetworkCredential loginInfo = new NetworkCredential(senderEmail, senderEmailPassword);
+            // Declare MailMessage variable
+            MailMessage msg = new MailMessage();
+
+            // Assign value for MailMessage object
+            msg.From = new MailAddress(senderEmail);
+            msg.To.Add(new MailAddress(receiverEmail));
+            msg.Subject = subject;
+            msg.Body = content;
+            msg.IsBodyHtml = true;
+
+            // Assign value for SmtpClient object
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = loginInfo;
+
+            // Send email
+            client.Send(msg);
         }
         #endregion
     }

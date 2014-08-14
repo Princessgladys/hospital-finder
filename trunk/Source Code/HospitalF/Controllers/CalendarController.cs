@@ -8,12 +8,13 @@ using HospitalF.Constant;
 
 namespace HospitalF.Controllers
 {
-    public class CalendarController : Controller
+    public class CalendarController : SecurityBaseController
     {
         //
         // GET: /Calendar/
         [LayoutInjecter(Constants.HospitalUserLayout)]
-        //[Authorize(Roles = Constants.HospitalUserRoleName)]
+        //[Authorize(Roles=Constants.HospitalUserRoleName)]
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
         public ActionResult Index()
         {
             return View();
