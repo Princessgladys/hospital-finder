@@ -58,6 +58,10 @@ namespace HospitalF.Constant
         /// Name of Hospital controller
         /// </summary>
         public const string HospitalController = "Hospital";
+
+        /// <summary>
+        /// Name of Caledar controller
+        /// </summary>
         public const string CalendarController = "Calendar";
 
         /// <summary>
@@ -79,6 +83,16 @@ namespace HospitalF.Constant
         /// Name of CreateAppointmentAction
         /// </summary>
         public const string CreateAppointmentAction = "CreateAppointment";
+
+        /// <summary>
+        /// Name of AppointmentListAction
+        /// </summary>
+        public const string AppointmentListAction = "ListAppointment";
+
+        /// <summary>
+        /// Name of DisplayAppointmentListAction
+        /// </summary>
+        public const string DisplayAppointmentListAction = "DisplayAppointmentList";
 
         /// <summary>
         /// Name of GetDoctorBySpecialityAction
@@ -220,6 +234,11 @@ namespace HospitalF.Constant
         /// Name of AddAccount method in AccountController
         /// </summary>
         public const string AddAccountAction = "AddAccount";
+
+        /// <summary>
+        /// Name of AdminUpdateHospital method in HospitalController
+        /// </summary>
+        public const string AdminUpdateHospitalAction = "AdminUpdateHospital";
 
         /// <summary>
         /// Name of UpdateHospital method in HospitalController
@@ -891,6 +910,8 @@ namespace HospitalF.Constant
         /// Constant for SystemGMailPassword key in appSettings section of Web.config
         /// </summary>
         public const string GmailPassword = "SystemGMailPassword";
+
+        public const string ApplicationName = "ApplicationName";
 
         /// <summary>
         /// Constant for esmsAPIKey key in appSettings section of Web.config
