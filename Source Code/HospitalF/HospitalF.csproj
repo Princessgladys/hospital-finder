@@ -258,8 +258,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constant\Constants.cs" />
     <Compile Include="Constant\ErrorMessage.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AppointmentController.cs" />
+    <Compile Include="Controllers\AccountController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\DoctorController.cs" />
     <Compile Include="Controllers\DataController.cs" />
@@ -274,7 +275,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AppointmentModels.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\DoctorModels.cs" />
     <Compile Include="Models\HomeModels.cs" />
@@ -290,7 +290,6 @@
     <Compile Include="Utilities\DictionaryUtil.cs" />
     <Compile Include="Utilities\ExcelUtil.cs" />
     <Compile Include="Utilities\FileUtil.cs" />
-    <Compile Include="Utilities\GoogleCalendarUtil.cs" />
     <Compile Include="Utilities\HospitalUtil.cs" />
     <Compile Include="Utilities\LocationUtil.cs" />
     <Compile Include="Utilities\LoggingUtil.cs" />
