@@ -52,13 +52,13 @@ namespace HospitalF.Models
         #endregion
 
         #region load feedback type
-        public static List<FeedbackType> LoadFeedbackType()
+        public static async Task<List<FeedbackType>> LoadFeedbackTypeAsync()
         {
             List<FeedbackType> list = new List<FeedbackType>();
             FeedbackType fbt = null;
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                var result = (from fb in data.FeedbackTypes where fb.Is_Active == true select fb).ToList();
+                var result = await Task.Run(()=> (from fb in data.FeedbackTypes where fb.Is_Active == true select fb).ToList());
                 foreach (FeedbackType fb in result)
                 {
                     fbt = new FeedbackType();
@@ -72,7 +72,7 @@ namespace HospitalF.Models
         #endregion
         
         #region insert feedback
-        public async Task<int> InsertFeedbackAsync(FeedBackModels model)
+        public static async Task<int> InsertFeedbackAsync(FeedBackModels model)
         {
             int result = 0;
             using (LinqDBDataContext data = new LinqDBDataContext())
@@ -87,5 +87,7 @@ namespace HospitalF.Models
             return result;
         }
         #endregion
+
+       
     }
 }

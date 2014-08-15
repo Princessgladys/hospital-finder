@@ -196,7 +196,7 @@
             @{
                 string username = string.Empty;
                 string email = string.Empty;
-               
+
                 if (HospitalF.Models.SimpleSessionPersister.Username != null)
                 {
                     string[] userInfo = HospitalF.Models.SimpleSessionPersister.Username.
@@ -267,23 +267,43 @@
                 <li>
                     <a href="#"><i class="fa fa-lg fa-fw fa-inbox"></i><span class="menu-item-parent">Thống Kê</span></a>
                 </li>
+                @{
+                    int hospitalID = 0;
+                    if (HospitalF.Models.SimpleSessionPersister.Username != null)
+                    {
+                        string[] userInfo = HospitalF.Models.SimpleSessionPersister.Username.
+                           Split(Char.Parse(Constants.Minus));
+                        hospitalID = Int32.Parse(userInfo[3]);
+                    }
+                }
                 <li>
                     <a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Quản Lý Bệnh Viện</span></a>
                     <ul>
                         <li>
-                            @Html.ActionLink("Thông tin bệnh viện","Index","Hospital")
-                            
+                            @Html.ActionLink("Thông tin bệnh viện", Constants.UpdateHospitalAction, Constants.HospitalController, new {hospitalId=hospitalID},null)
+
                         </li>
                     </ul>
                 </li>
                 <li>
                     <a href="ajax/flot.html"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Thông Tin Chung</a>
                 </li>
-                <li><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">
-                            @Html.ActionLink("Quản lý lịch hẹn","Index","Calendar")
-                            
-                        </li><li>
-                    <a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Danh Sách Bác Sĩ</a>
+                <li><a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Quản lý lịch hẹn</a>
+                    <ul>
+                        <li>
+                            @Html.ActionLink("Danh sách lịch hẹn",Constants.AppointmentListAction,Constants.AppointmentController)
+
+                        </li>
+                        <li>
+                            @Html.ActionLink("Lịch hẹn trên Google Calendar",Constants.IndexAction,Constants.CalendarController)
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/Doctor/Index"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Danh Sách Bác Sĩ</a>
+                </li>
+                <li>
+                    <a href="/FeedBack/DisplayHospitalUserFeedBackList"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Danh Sách Phản Hồi</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-lg fa-fw fa-table"></i><span class="menu-item-parent">Quản Lý Tài Khoản</span></a>
@@ -329,9 +349,26 @@
 				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
 				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
 				</span> -->
+            @{
+                //int hospitalID = 0;
+              if (HospitalF.Models.SimpleSessionPersister.Username != null)
+              {
+                  string[] userInfo = HospitalF.Models.SimpleSessionPersister.Username.
+                     Split(Char.Parse(Constants.Minus));
+                  hospitalID = Int32.Parse(userInfo[3]);
+              }
+            }
+            <strong><a href="/Home/HospitalFeedBack?hospitalID=@hospitalID" data-toggle="modal" data-target="#addFeedback" id="add-feedback-button" float:="" right;"="">
+                <i class="fa fa-lg fa-comment-o"></i>&nbsp;Phản hồi</a></strong>
 
         </div>
         <!-- END RIBBON -->
+        <div class="modal fade" id="addFeedback" tabindex="-1"
+            role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content"></div>
+            </div>
+        </div>
 
         <!-- MAIN CONTENT -->
         <div id="content">
