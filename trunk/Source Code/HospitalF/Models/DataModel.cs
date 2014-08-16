@@ -380,8 +380,9 @@ namespace HospitalF.Models
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 count = (from h in data.Hospitals
-                         where h.Is_Active == true
-                         select h.Hospital_ID).Count();
+                         from u in data.Users
+                         where h.Is_Active == true && h.Hospital_ID == u.Hospital_ID
+                         select h.Hospital_ID).Distinct().Count();
             }
             return count;
         }

@@ -148,9 +148,8 @@ class="active"
                                         </tr>
                                     </thead>
                                     <tbody id="table-body">
-                                        @{
-    if (Model.Count == 0)
-    {
+                                        @if (Model.Count == 0)
+                                        {
                                             <tr>
                                                 <td colspan="5">Không có dữ liệu</td>
                                             </tr>
@@ -161,47 +160,47 @@ class="active"
                                             {
                                                 if (!string.IsNullOrEmpty(Model[n].HospitalName))
                                                 {
-                                                    @Html.TextBoxFor(m => m[n].HospitalName, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].HospitalID, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].HospitalTypeID, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].HospitalTypeName, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].OrdinaryStartTime, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].HolidayStartTime, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].IsAllowAppointment, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].AverageCuringTime, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].LocationAddress, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].StreetAddress, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].CityID, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].CityName, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].DistrictID, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].DistrictName, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].WardID, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].WardName, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].FullAddress, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].PhoneNo, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].PhoneNo2, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].PhoneNo3, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].Fax, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].HospitalEmail, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].Website, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].SpecialityName, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].ServiceName, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].FacilityName, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].TagsInput, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].Coordinate, new { @type = "hidden" })
-                                                    @Html.TextBoxFor(m => m[n].RecordStatus, new { @type = "hidden" })
-                                                    <tr>
-                                                        <td hidden>@Model[n].HospitalID</td>
-                                                        <td hidden>@Model[n].HospitalName</td>
-                                                        <td>@Model[n].HospitalID</td>
-                                                        <td>
-                                                            @Html.ActionLink(@Model[n].HospitalName,
+                                            @Html.TextBoxFor(m => m[n].HospitalName, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].HospitalID, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].HospitalTypeID, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].HospitalTypeName, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].OrdinaryStartTime, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].HolidayStartTime, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].IsAllowAppointment, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].AverageCuringTime, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].LocationAddress, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].StreetAddress, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].CityID, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].CityName, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].DistrictID, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].DistrictName, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].WardID, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].WardName, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].FullAddress, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].PhoneNo, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].PhoneNo2, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].PhoneNo3, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].Fax, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].HospitalEmail, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].Website, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].SpecialityName, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].ServiceName, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].FacilityName, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].TagsInput, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].Coordinate, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m[n].RecordStatus, new { @type = "hidden" })
+                                            <tr>
+                                                <td hidden>@Model[n].HospitalID</td>
+                                                <td hidden>@Model[n].HospitalName</td>
+                                                <td>@Model[n].HospitalID</td>
+                                                <td>
+                                                    @Html.ActionLink(@Model[n].HospitalName,
                                                                 Constants.UpdateHospitalAction, Constants.HospitalController,
                                                              new { hospitalId = @Model[n].HospitalID }, null)
-                                                        </td>
-                                                        <td>@Model[n].FullAddress</td>
-                                                        <td>@Model[n].HospitalTypeName</td>
-                                                    </tr>
+                                                </td>
+                                                <td>@Model[n].FullAddress</td>
+                                                <td>@Model[n].HospitalTypeName</td>
+                                            </tr>
                                                 }
                                             }
                                         }

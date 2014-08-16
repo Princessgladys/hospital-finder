@@ -16,6 +16,7 @@ namespace HospitalF.Controllers
 {
     public class AppointmentController : SecurityBaseController
     {
+        /*
         public static List<Speciality> specialityList = null;
         public static List<Doctor> doctorList = null;
         public static int[] workingDay = null;
@@ -376,5 +377,6 @@ namespace HospitalF.Controllers
 
         }
         #endregion
+         * */
     }
 }

@@ -1091,7 +1091,7 @@ namespace HospitalF.Controllers
                     if (User.IsInRole("3"))
                     {
                         List<string> adminGmailList = (from u in data.Users where u.Role_ID == 1 select u.Email).ToList();
-                        GoogleUtil.SendEmailToAdmin(currentEmail, adminGmailList, model.HospitalName, updatedContent);
+                        //GoogleUtil.SendEmailToAdmin(currentEmail, adminGmailList, model.HospitalName, updatedContent);
                     }
                     else
                     {
@@ -1099,7 +1099,7 @@ namespace HospitalF.Controllers
                                                               where u.Role_ID == 3
                                                                   && u.Hospital_ID == model.HospitalID
                                                               select u.Email).ToList();
-                        GoogleUtil.SendEmailToHospitalUser(currentEmail, hospitalUserGmailList, model.HospitalName, updatedContent);
+                        //GoogleUtil.SendEmailToHospitalUser(currentEmail, hospitalUserGmailList, model.HospitalName, updatedContent);
                     }
                 }
 
