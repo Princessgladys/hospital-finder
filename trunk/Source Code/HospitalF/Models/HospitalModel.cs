@@ -204,11 +204,6 @@ namespace HospitalF.Models
         public int RecordStatus { get; set; }
 
         /// <summary>
-        /// Get/Set value for property AverageCuringTime
-        /// </summary>
-        public int? AverageCuringTime { get; set; }
-
-        /// <summary>
         /// Get/Set value for property ServiceName
         /// </summary>
         public string ServiceName { get; set; }
@@ -265,7 +260,7 @@ namespace HospitalF.Models
         {
             string updatedContent = string.Empty;
             if (model.HospitalName != null || model.OrdinaryStartTime != null ||
-                model.HolidayStartTime != null || model.AverageCuringTime != null)
+                model.HolidayStartTime != null)
             {
                 updatedContent = updatedContent + "Basic information" + Constants.Comma;
             }
@@ -502,7 +497,7 @@ namespace HospitalF.Models
                         model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
                         model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment,
                         model.CreatedPerson, model.FullDescription, model.PersonInCharged,
-                        model.PhotoFilesPath, model.TagsInput, model.AverageCuringTime, speciality,
+                        model.PhotoFilesPath, model.TagsInput, speciality,
                         service, facility));
                 }
             }
@@ -547,7 +542,7 @@ namespace HospitalF.Models
                         model.HospitalEmail, model.Website, model.HolidayStartTime, model.HolidayEndTime,
                         model.OrdinaryStartTime, model.OrdinaryEndTime, model.Coordinate,
                         model.IsAllowAppointment, model.CreatedPerson, model.TagsInput,
-                        model.AverageCuringTime, model.SpecialityName, model.ServiceName,
+                        model.SpecialityName, model.ServiceName,
                         model.FacilityName));
                 }
             }

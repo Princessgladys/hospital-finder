@@ -72,7 +72,6 @@ namespace HospitalF.Models
         #endregion
         
         #region insert feedback
-        /*
         public async Task<int> InsertFeedbackAsync(FeedBackModels model)
         {
             int result = 0;
@@ -87,7 +86,6 @@ namespace HospitalF.Models
             }
             return result;
         }
-         * */
         #endregion
 
        

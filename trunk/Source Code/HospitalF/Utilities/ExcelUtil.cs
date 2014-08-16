@@ -65,15 +65,6 @@ namespace HospitalF.Utilities
                     model.HolidayStartTime = data[3];
                     Boolean.TryParse(data[4], out tempBoolean);
                     model.IsAllowAppointment = tempBoolean;
-                    Int32.TryParse(data[5], out tempInt);
-                    if (tempInt == 0)
-                    {
-                        model.AverageCuringTime = null;
-                    }
-                    else
-                    {
-                        model.AverageCuringTime = tempInt;
-                    }
                     model.LocationAddress = data[6];
                     model.StreetAddress = data[7];
                     Int32.TryParse(data[21], out tempInt);
