@@ -147,18 +147,6 @@ class="active"
                                     </div>
                                 </section>
 
-                                <div class="row" id="curing-time">
-                                    <section class="col col-6">
-                                        <label class="label">Thời gian khám trung bình một bệnh nhân <span style="color: red;">*</span></label>
-                                        <label class="input">
-                                            <i class="icon-append fa fa-clock-o"></i>
-                                            @Html.TextBoxFor(m => m.AverageCuringTime, new { @class = "form-control", @placeholder = "Thời gian khám trung bình", })
-                                            <b class="tooltip tooltip-top-right">Nhập thời gian khám trung bình một bệnh nhân</b>
-                                        </label>
-                                        <p class="note"><strong>Lưu ý:</strong> Khoảng thời gian được tính bằng phút.</p>
-                                    </section>
-                                </div>
-
                             </fieldset>
 
                             <fieldset>
@@ -803,17 +791,6 @@ class="active"
 
     @*Data validation*@
     $(document).ready(function () {
-        $("*[type='radio']").click(function () {
-            if (this.value == "True") {
-                $('#curing-time').show();
-            }
-            else {
-                $('#AverageCuringTime').val('');
-                $('#curing-time').hide();
-            }
-        });
-
-
         $('#confirm-button').click(function (e) {
             if ($("#address-message").text() == "@Html.Raw(ErrorMessage.CEM017)") {
                 $("#LocationAddress").focus();
@@ -941,10 +918,6 @@ class="active"
                 HolidayStartTime: {
                     required: true,
                     time: true
-                },
-                AverageCuringTime: {
-                    required: true,
-                    digit: true
                 }
             },
 
@@ -1008,10 +981,6 @@ class="active"
                 },
                 HolidayStartTime: {
                     required: '@string.Format(ErrorMessage.CEM001, Constants.HolidayTime)'
-                },
-                AverageCuringTime: {
-                    required: '@string.Format(ErrorMessage.CEM011, Constants.AverageCuringTime)',
-                    digit: '@string.Format(ErrorMessage.CEM005, Constants.AverageCuringTime)'
                 }
             },
 

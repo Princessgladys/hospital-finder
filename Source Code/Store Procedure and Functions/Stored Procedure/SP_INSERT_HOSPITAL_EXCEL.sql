@@ -24,7 +24,6 @@ CREATE PROCEDURE SP_INSERT_HOSPITAL_EXCEL
 	@IsAllowAppointment BIT,
 	@CreatedPerson INT,
 	@TagInput NVARCHAR(4000),
-	@AvgCuringTime INT,
 	@SpecialityList NVARCHAR(4000),
 	@ServiceList NVARCHAR(4000),
 	@FacilityList NVARCHAR(4000)
@@ -51,7 +50,6 @@ BEGIN
 			Ordinary_Start_Time,
 			Ordinary_End_Time,
 			Is_Allow_Appointment,
-			Avg_Curing_Time,
 			Coordinate,
 			Created_Person,
 			Is_Active
@@ -73,7 +71,6 @@ BEGIN
 			@OrdinaryStartTime,
 			@OrdinaryEndTime,
 			@IsAllowAppointment,
-			@AvgCuringTime,
 			@Coordinate,
 			@CreatedPerson,
 			'True'
