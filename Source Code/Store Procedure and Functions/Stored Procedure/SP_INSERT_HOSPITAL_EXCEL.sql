@@ -300,26 +300,26 @@ BEGIN
 		DECLARE @WordID INT = 0
 
 		IF (EXISTS(SELECT Word_ID
-				   FROM WordDictionary
+				   FROM Tag
 				   WHERE LOWER(Word) = LOWER(@HospitalName)))
 		BEGIN
 			SET @WordID = (SELECT Word_ID
-						   FROM WordDictionary
+						   FROM Tag
 						   WHERE LOWER(Word) = LOWER(@HospitalName))
 
-			INSERT INTO Word_Hospital
+			INSERT INTO Tag_Hospital
 			VALUES(@WordID, @HospitalID)
 		END
 		ELSE
 		BEGIN
-			INSERT INTO WordDictionary
+			INSERT INTO Tag
 			VALUES(@HospitalName, 3)
 
 			SET @WordID = (SELECT TOP 1 Word_ID
-						   FROM WordDictionary
+						   FROM Tag
 						   ORDER BY Word_ID DESC)
 
-			INSERT INTO Word_Hospital
+			INSERT INTO Tag_Hospital
 			VALUES(@WordID, @HospitalID)
 		END
 
@@ -335,18 +335,18 @@ BEGIN
 			IF (@TotalToken = 0)
 			BEGIN
 				IF (NOT EXISTS(SELECT Word_ID
-						   FROM WordDictionary
+						   FROM Tag
 						   WHERE LOWER(Word) = LOWER(@TagInput)))
 				BEGIN
-					INSERT INTO WordDictionary
+					INSERT INTO Tag
 					VALUES(@TagInput, 3)
 
 					SET @WordID = (SELECT TOP 1 Word_ID
-								   FROM WordDictionary
+								   FROM Tag
 								   ORDER BY Word_ID DESC)
 
 					-- INSERT TO WORD_HOSPITAL TABLE
-					INSERT INTO Word_Hospital
+					INSERT INTO Tag_Hospital
 					VALUES(@WordID, @HospitalID)
 				END
 			END
@@ -364,29 +364,29 @@ BEGIN
 					IF (@Token IS NOT NULL)
 					BEGIN
 						SET @WordID = (SELECT TOP 1 Word_ID
-									   FROM WordDictionary
+									   FROM Tag
 									   ORDER BY Word_ID DESC)
 
 						IF (EXISTS(SELECT Word_ID
-								   FROM WordDictionary
+								   FROM Tag
 								   WHERE LOWER(Word) = LOWER(@Token)))
 						BEGIN
 							SET @WordID = (SELECT Word_ID
-										   FROM WordDictionary
+										   FROM Tag
 										   WHERE LOWER(Word) = LOWER(@Token))
 						END
 						ELSE
 						BEGIN
-							INSERT INTO WordDictionary
+							INSERT INTO Tag
 							VALUES(@Token, 3)
 
 							SET @WordID = (SELECT TOP 1 Word_ID
-										   FROM WordDictionary
+										   FROM Tag
 										   ORDER BY Word_ID DESC)
 						END
 
 						-- INSERT TO WORD_HOSPITAL TABLE
-						INSERT INTO Word_Hospital
+						INSERT INTO Tag_Hospital
 						VALUES(@WordID, @HospitalID)
 					END
 

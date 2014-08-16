@@ -22,7 +22,7 @@ namespace HospitalF.Utilities
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
-                    (from w in data.WordDictionaries
+                    (from w in data.Tags
                      where w.Type == 1
                      select w.Word).ToList());
             }
@@ -38,7 +38,7 @@ namespace HospitalF.Utilities
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
-                    (from s in data.SentenceDictionaries
+                    (from s in data.SearchQueries
                      select s.Sentence).Distinct().ToList());
             }
         }
