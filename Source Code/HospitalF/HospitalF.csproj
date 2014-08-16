@@ -277,6 +277,7 @@
     </Compile>
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\DoctorModels.cs" />
+    <Compile Include="Models\FeedBackModels.cs" />
     <Compile Include="Models\HomeModels.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\HospitalModel.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="Utilities\DictionaryUtil.cs" />
     <Compile Include="Utilities\ExcelUtil.cs" />
     <Compile Include="Utilities\FileUtil.cs" />
+    <Compile Include="Utilities\GoogleUtil.cs" />
     <Compile Include="Utilities\HospitalUtil.cs" />
     <Compile Include="Utilities\LocationUtil.cs" />
     <Compile Include="Utilities\LoggingUtil.cs" />

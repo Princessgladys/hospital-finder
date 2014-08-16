@@ -460,7 +460,7 @@ namespace HospitalF.Controllers
             string email = string.Empty;
             FeedBackModels model = new FeedBackModels();
             Hospital hospital;
-            List<FeedbackType> feebackType = FeedBackModels.LoadFeedbackType();
+            List<FeedbackType> feebackType = await FeedBackModels.LoadFeedbackTypeAsync();
             ViewBag.FeedbackTypeList = new SelectList(feebackType, Constants.FeedbackType, Constants.FeedbackTypeName);
             hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
             model.HospitalName = hospital.Hospital_Name;

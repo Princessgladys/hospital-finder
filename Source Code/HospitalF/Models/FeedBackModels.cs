@@ -72,7 +72,7 @@ namespace HospitalF.Models
         #endregion
         
         #region insert feedback
-        public static async Task<int> InsertFeedbackAsync(FeedBackModels model)
+        public async Task<int> InsertFeedbackAsync(FeedBackModels model)
         {
             int result = 0;
             using (LinqDBDataContext data = new LinqDBDataContext())
