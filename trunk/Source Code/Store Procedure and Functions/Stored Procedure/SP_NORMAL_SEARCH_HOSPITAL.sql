@@ -52,7 +52,7 @@ BEGIN
 	DECLARE @NumOfHospitalFoundByExactlyTag INT = 0
 	SET @NumOfHospitalFoundByExactlyTag = (SELECT COUNT(*)
 										   FROM (SELECT Word_ID
-												 FROM WordDictionary
+												 FROM Tag
 												 WHERE @WhatPhrase LIKE  N'%' + Word + N'%' AND
 													   [Type] = 3) w)
 
@@ -64,7 +64,7 @@ BEGIN
 			SET @TempHospitalID = (SELECT h.Hospital_ID
 								   FROM (SELECT ROW_NUMBER()
 										 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
-										 FROM WordDictionary w, Word_Hospital wh
+										 FROM Tag w, Tag_Hospital wh
 										 WHERE @WhatPhrase LIKE  N'%' + Word + N'%' AND
 											   w.[Type] = 3 AND
 											   w.Word_ID = wh.Word_ID) AS h
@@ -94,7 +94,7 @@ BEGIN
 		SET @NumOfHospitalFoundByRelativeTag = 
 			(SELECT COUNT(*)
 			 FROM (SELECT DISTINCT wh.Hospital_ID
-				   FROM WordDictionary w, Word_Hospital wh
+				   FROM Tag w, Tag_Hospital wh
 				   WHERE w.[Type] = 3 AND
 						 FREETEXT (w.Word, @WhatPhrase) AND
 						 w.Word_ID = wh.Word_ID) n)
@@ -107,7 +107,7 @@ BEGIN
 				SET @TempHospitalID = (SELECT DISTINCT h.Hospital_ID
 									   FROM (SELECT ROW_NUMBER()
 											 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
-											 FROM WordDictionary w, Word_Hospital wh
+											 FROM Tag w, Tag_Hospital wh
 											 WHERE w.[Type] = 3 AND
 												   FREETEXT (w.Word,  @WhatPhrase) AND
 												   w.Word_ID = wh.Word_ID) AS h
@@ -142,7 +142,7 @@ BEGIN
 			SET @NumOfHospitalFoundByRelativeTag = 
 				(SELECT COUNT(*)
 				 FROM (SELECT Word_ID
-					   FROM WordDictionary
+					   FROM Tag
 					   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
 							 [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
 							 [Type] = 3) w)
@@ -155,7 +155,7 @@ BEGIN
 					SET @TempHospitalID = (SELECT h.Hospital_ID
 										   FROM (SELECT ROW_NUMBER()
 												 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
-												 FROM WordDictionary w, Word_Hospital wh
+												 FROM Tag w, Tag_Hospital wh
 												 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
 													   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
 													   [Type] = 3 AND

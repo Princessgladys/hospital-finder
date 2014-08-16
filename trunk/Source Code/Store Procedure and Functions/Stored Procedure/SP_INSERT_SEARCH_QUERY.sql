@@ -12,7 +12,7 @@ CREATE PROCEDURE SP_INSERT_SEARCH_QUERY
 )
 AS
 BEGIN
-	INSERT INTO SentenceDictionary(Sentence, Result_Count, Search_Date)
+	INSERT INTO SearchQuery(Sentence, Result_Count, Search_Date)
 	VALUES(@Search_Query, @Result_Count, @Search_Date)
 	RETURN @Result_Count
 END
