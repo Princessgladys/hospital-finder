@@ -11,148 +11,163 @@
 }
 
 <!-- MAIN CONTENT -->
-<div id="content-results" class="col-md-12 col-md-offset-0 well">
-    <div class="col-md-8">
-        @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal", @id = Constants.NormalSearchForm }))
-        {
-            <div class="input-group">
-                @Html.TextBox("SearchValue", null, new { @class = "form-control", placeholder = "Nhập thông tin tìm kiếm..." })
-                <div class="input-group-btn">
-                    <button class="btn btn-default btn-primary" type="submit"
-                            value="@Constants.NormalSearchForm" name="@Constants.Button"
-                            id="normal-search-button">
-                        <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
-                    </button>
-                </div>
-            </div>
-            <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
-        }
-        @if (string.IsNullOrEmpty(ViewBag.SearchType))
-        {
-            if (!string.IsNullOrEmpty(suggestionSentence))
-            {
-                suggestionSentence = suggestionSentence.Trim();
-<div class="col-md-12">
-                <p>
-                    Có phải bạn muốn tìm <i>
-                        @Html.ActionLink(suggestionSentence,
-                                Constants.SearchResultAction, Constants.HomeController,
-                                new { SearchValue = suggestionSentence }, null)
-            </i>
-                </p>
-            </div>
-            }
-            if (hospitalList.TotalItemCount == 0)
-            {
-<div class="col-md-12">
-                <p><strong>Không có kết quả tìm kiếm với từ khóa</strong> <span style="color: blue">@(ViewBag.SearchValue)</span></p>
-
-                <ul>
-                    <li>Xin bạn chắc chắn rằng tất cả các từ đều đúng chính tả.</li>
-                    <li>Hãy thử những từ khóa khác.</li>
-                </ul>
-            </div>
-            }
-        }
+<div id="content-results" class="col-md-12 well">
+    <div class="col-md-4">
+        <p>
+            <img src="../Content/img/HospitalF - Logo.png" alt="HospitalF" style="max-width: 100%; max-height: 100%;">
+        </p>
+        <p>
+            <span style="font-size: 12px;">timkiembenhvien.com © 2014 – <strong>Hệ thống <a href="/" target="_blank" title="Hệ thống tìm kiếm bệnh viện">tìm kiếm bệnh viện</a> hàng đầu Việt Nam</strong><br>
+                <strong>Văn phòng tại Tp. Hồ Chí Minh</strong>: Công viên phần mềm Quang Trung - STEC, Quận 12, Tp. Hồ Chí Minh, Việt Nam.
+                <br>
+                <strong>Văn phòng tại Hà Nội:</strong> Lầu 9, 70-72 Bà Triệu, Quận Hoàn Kiếm, Hà Nội.<br>
+                Điện thoại : (08) 3838 3838 | Email CSKH: <a href="mailto:hospitalf@gmail.com" target="_blank" title="Email Chăm sóc khách hàng">hospitalf@gmail.com</a></span>
+        </p>
     </div>
 
-    <div class="col-md-8">
-        <hr />
-        @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = ViewBag.SearchType }))
-        {
-            string button = ViewBag.SearchType;
-            if (Constants.LocationSearchForm.Equals(button))
+    <div class="col-md-8 no-padding">
+        <div class="col-md-12 no-padding">
+            @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal", @id = Constants.NormalSearchForm }))
             {
-            <fieldset>
-                <legend>Nhập thông tin vị trí</legend>
-                <div class="row">
-                    <label class="label col col-2">Tìm theo</label>
-                    <section class="col col-4">
-                        <label class="select">
-                            @Html.DropDownListFor(m => m.LocationType, (SelectList)ViewBag.LocationTypeList, new { @class = "form-control" })
-                            <i></i>
-                        </label>
-                    </section>
-                    <label class="label col col-2" id="CurrentLocationLabel">Vị trí cần tìm</label>
-                    <section class="col col-4" id="CurrentLocationSection">
-                        <label class="input">
-                            <i class="icon-append fa fa-location-arrow"></i>
-                            @Html.TextBoxFor(m => m.Position, new { @class = "form-control", @placeholder = "Vị trí cần tìm...", })
-                            @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
-                            <b class="tooltip tooltip-top-right">Nhập vị trí cần tìm</b>
-                        </label>
-                    </section>
-                    <label class="label col col-2">Bán kính</label>
-                    <section class="col col-4">
-                        <label class="select">
-                            @Html.DropDownListFor(m => m.Radius, (SelectList)ViewBag.RadiusList, new { @class = "form-control" })
-                            <i></i>
-                        </label>
-                    </section>
+                <div class="input-group">
+                    @Html.TextBox("SearchValue", null, new { @class = "form-control", placeholder = "Nhập thông tin tìm kiếm..." })
+                    <div class="input-group-btn">
+                        <button class="btn btn-default btn-primary" type="submit"
+                            value="@Constants.NormalSearchForm" name="@Constants.Button"
+                            id="normal-search-button">
+                            <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
+                        </button>
+                    </div>
                 </div>
-            </fieldset>
-            <footer>
-                <button class="btn btn-default btn-primary" type="submit" value="@(ViewBag.SearchType)" name="@(Constants.Button)">
-                    <i class="fa fa-search"></i>&nbsp;Tìm kiếm
-                </button>
-            </footer>
+                <p class="note"><strong>Ví dụ:</strong> chuyên khoa, tên bệnh viện, địa điểm...</p>
             }
-            else if (Constants.AdvancedSearchForm.Equals(button))
+            @if (string.IsNullOrEmpty(ViewBag.SearchType))
             {
-            <fieldset>
-                <legend>Nhập thông tin bệnh viện</legend>
-                <div class="row">
-                    <label class="label col col-2">Tỉnh / Thành phố</label>
-                    <section class="col col-4">
-                        <label class="select">
-                            @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
-                                                Constants.RequireCity, new { @class = "form-control" })
-                            <i></i>
-                        </label>
-                    </section>
-                    <label class="label col col-2">Quận / Huyện</label>
-                    <section class="col col-4">
-                        <label class="select">
-                            @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
-                                                Constants.RequireDistrict, new { @class = "form-control" })
-                            <i></i>
-                        </label>
-                    </section>
+                if (!string.IsNullOrEmpty(suggestionSentence))
+                {
+                    suggestionSentence = suggestionSentence.Trim();
+                <div class="col-md-12">
+                    <p>
+                        Có phải bạn muốn tìm <i>
+                            @Html.ActionLink(suggestionSentence,
+                                Constants.SearchResultAction, Constants.HomeController,
+                                new { SearchValue = suggestionSentence }, null)
+                        </i>
+                    </p>
                 </div>
-                <div class="row">
-                    <label class="label col col-2">Chuyên khoa</label>
-                    <section class="col col-4">
-                        <label class="select">
-                            @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
+                }
+                if (hospitalList.TotalItemCount == 0)
+                {
+                <div class="col-md-12">
+                    <p><strong>Không có kết quả tìm kiếm với từ khóa</strong> <span style="color: blue">@(ViewBag.SearchValue)</span></p>
+
+                    <ul>
+                        <li>Xin bạn chắc chắn rằng tất cả các từ đều đúng chính tả.</li>
+                        <li>Hãy thử những từ khóa khác.</li>
+                    </ul>
+                </div>
+                }
+            }
+        </div>
+
+        <div class="col-md-12 no-padding">
+            <hr />
+            @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = ViewBag.SearchType }))
+            {
+                string button = ViewBag.SearchType;
+                if (Constants.LocationSearchForm.Equals(button))
+                {
+                <fieldset>
+                    <legend>Nhập thông tin vị trí</legend>
+                    <div class="row">
+                        <label class="label col col-2">Tìm theo</label>
+                        <section class="col col-4">
+                            <label class="select">
+                                @Html.DropDownListFor(m => m.LocationType, (SelectList)ViewBag.LocationTypeList, new { @class = "form-control" })
+                                <i></i>
+                            </label>
+                        </section>
+                        <label class="label col col-2" id="CurrentLocationLabel">Vị trí cần tìm</label>
+                        <section class="col col-4" id="CurrentLocationSection">
+                            <label class="input">
+                                <i class="icon-append fa fa-location-arrow"></i>
+                                @Html.TextBoxFor(m => m.Position, new { @class = "form-control", @placeholder = "Vị trí cần tìm...", })
+                                @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
+                                <b class="tooltip tooltip-top-right">Nhập vị trí cần tìm</b>
+                            </label>
+                        </section>
+                        <label class="label col col-2">Bán kính</label>
+                        <section class="col col-4">
+                            <label class="select">
+                                @Html.DropDownListFor(m => m.Radius, (SelectList)ViewBag.RadiusList, new { @class = "form-control" })
+                                <i></i>
+                            </label>
+                        </section>
+                    </div>
+                </fieldset>
+                <footer>
+                    <button class="btn btn-default btn-primary" type="submit" value="@(ViewBag.SearchType)" name="@(Constants.Button)">
+                        <i class="fa fa-search"></i>&nbsp;Tìm kiếm
+                    </button>
+                </footer>
+                }
+                else if (Constants.AdvancedSearchForm.Equals(button))
+                {
+                <fieldset>
+                    <legend>Nhập thông tin bệnh viện</legend>
+                    <div class="row">
+                        <label class="label col col-2">Tỉnh / Thành phố</label>
+                        <section class="col col-4">
+                            <label class="select">
+                                @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
+                                                Constants.RequireCity, new { @class = "form-control" })
+                                <i></i>
+                            </label>
+                        </section>
+                        <label class="label col col-2">Quận / Huyện</label>
+                        <section class="col col-4">
+                            <label class="select">
+                                @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
+                                                Constants.RequireDistrict, new { @class = "form-control" })
+                                <i></i>
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <label class="label col col-2">Chuyên khoa</label>
+                        <section class="col col-4">
+                            <label class="select">
+                                @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
                                                 Constants.RequireSpeciality, new { @class = "form-control" })
-                            <i></i>
-                        </label>
-                    </section>
-                    <label class="label col col-2">Triệu chứng</label>
-                    <section class="col col-4">
-                        <label class="input">
-                            <i class="icon-append fa fa-plus-square"></i>
-                            @Html.TextBoxFor(m => m.DiseaseName, new
+                                <i></i>
+                            </label>
+                        </section>
+                        <label class="label col col-2">Triệu chứng</label>
+                        <section class="col col-4">
+                            <label class="input">
+                                <i class="icon-append fa fa-plus-square"></i>
+                                @Html.TextBoxFor(m => m.DiseaseName, new
                                        {
                                            @class = "form-control",
                                            @placeholder = "Triệu chứng...",
                                            @id = "disease-tag"
                                        })
-                            <b class="tooltip tooltip-top-right">Nhập triệu chứng bệnh</b>
-                        </label>
-                    </section>
-                </div>
-            </fieldset>
-            <footer>
-                <button class="btn btn-default btn-primary" type="submit" value="@(ViewBag.SearchType)" name="@(Constants.Button)">
-                    <i class="fa fa-search"></i>&nbsp;Tìm kiếm
-                </button>
-            </footer>
+                                <b class="tooltip tooltip-top-right">Nhập triệu chứng bệnh</b>
+                            </label>
+                        </section>
+                    </div>
+                </fieldset>
+                <footer>
+                    <button class="btn btn-default btn-primary" type="submit" value="@(ViewBag.SearchType)" name="@(Constants.Button)">
+                        <i class="fa fa-search"></i>&nbsp;Tìm kiếm
+                    </button>
+                </footer>
+                }
             }
-        }
+        </div>
     </div>
 
-    <div class="col-md-12">
+    <div class="col-md-12 no-padding">
         <hr />
         <div id="hospital-list-results" class="col-md-4 no-padding">
             @if (hospitalList.TotalItemCount > 0)

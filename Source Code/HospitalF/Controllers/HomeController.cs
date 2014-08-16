@@ -454,7 +454,7 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
-
+        /*
         public async Task<ActionResult> FeedBack(int hospitalID)
         {
             string email = string.Empty;
@@ -476,7 +476,8 @@ namespace HospitalF.Controllers
             }
             return PartialView(model);
         }
-
+         * */
+        /*
         [HttpPost]
         public async Task<ActionResult> FeedBack(FeedBackModels model)
         {
@@ -510,7 +511,7 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
-
+        */
         #region search doctor
         public async Task<ActionResult> SearchDoctor(string SpecialityID, string DoctorName, string HospitalID)
         {

@@ -31,7 +31,7 @@ class="active"
 <div class="row">
     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
         <h1 class="page-title txt-color-blueDark">
-            <i class="fa fa-pencil-square-o fa-fw "></i>
+            <i class="fa fa-pencil-square-o fa-fw "></i>&nbsp;
             Thêm mới bệnh viện
             <span>>
                 Nhập liệu
@@ -53,7 +53,7 @@ class="active"
         <button class="close" data-dismiss="alert">
             ×
         </button>
-        <i class="fa-fw fa fa-times"></i>
+        <i class="fa-fw fa fa-times"></i>&nbsp;
         <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
     </div>
     <div class="alert alert-success fade in" style="display: none;"
@@ -61,7 +61,7 @@ class="active"
         <button class="close" data-dismiss="alert">
             ×
         </button>
-        <i class="fa-fw fa fa-check"></i>
+        <i class="fa-fw fa fa-check"></i>&nbsp;
         <strong>Thành công</strong> Thêm mới bệnh viện thành công.
     </div>
     <!-- row -->
@@ -93,15 +93,15 @@ class="active"
                                 <legend>Thông tin căn bản</legend>
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Tên bệnh viện <font color="red">*</font></label>
+                                        <label class="label">Tên bệnh viện <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-home"></i>
                                             @Html.TextBoxFor(m => m.HospitalName, new { @placeholder = "Tên bệnh viện" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-home txt-color-teal"></i>Xin nhập Tên bệnh viện</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-home txt-color-teal"></i>&nbsp;Xin nhập Tên bệnh viện</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <label class="label">Loại bệnh viện <font color="red">*</font></label>
+                                        <label class="label">Loại bệnh viện <span style="color: red;">*</span></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.HospitalTypeList,
@@ -113,20 +113,20 @@ class="active"
 
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Giờ khám ngày thường <font color="red">*</font></label>
+                                        <label class="label">Giờ khám ngày thường <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.OrdinaryStartTime, new { @placeholder = "Giờ khám ngày thường", @id = "OrdinaryTime" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>Xin nhập Giờ khám ngày thường</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>&nbsp;Xin nhập Giờ khám ngày thường</b>
                                         </label>
                                         <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
                                     </section>
                                     <section class="col col-6">
-                                        <label class="label">Giờ khám ngày lễ và cuối tuần <font color="red">*</font></label>
+                                        <label class="label">Giờ khám ngày lễ và cuối tuần <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.HolidayStartTime, new { @placeholder = "Giờ khám ngày lễ và cuối tuần", @id = "HolidayTime" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>Xin nhập Giờ khám ngày lễ và cuối tuần</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>&nbsp;Xin nhập Giờ khám ngày lễ và cuối tuần</b>
                                         </label>
                                         <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
                                     </section>
@@ -149,11 +149,11 @@ class="active"
 
                                 <div class="row" id="curing-time">
                                     <section class="col col-6">
-                                        <label class="label">Thời gian khám trung bình một bệnh nhân <font color="red">*</font></label>
+                                        <label class="label">Thời gian khám trung bình một bệnh nhân <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-append fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.AverageCuringTime, new { @class = "form-control", @placeholder = "Thời gian khám trung bình", })
-                                            <b class="tooltip tooltip-top-right"><i class="icon-append fa fa-clock-o txt-color-teal"></i>Nhập thời gian khám trung bình một bệnh nhân</b>
+                                            <b class="tooltip tooltip-top-right">Nhập thời gian khám trung bình một bệnh nhân</b>
                                         </label>
                                         <p class="note"><strong>Lưu ý:</strong> Khoảng thời gian được tính bằng phút.</p>
                                     </section>
@@ -165,26 +165,26 @@ class="active"
                                 <legend>Địa chỉ</legend>
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Số địa chỉ <font color="red">*</font></label>
+                                        <label class="label">Số địa chỉ <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-building"></i>
                                             @Html.TextBoxFor(m => m.LocationAddress, new { @placeholder = "Số địa chỉ" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-building txt-color-teal"></i>Xin nhập Số địa chỉ</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-building txt-color-teal"></i>&nbsp;Xin nhập Số địa chỉ</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <label class="label">Tên đường <font color="red">*</font></label>
+                                        <label class="label">Tên đường <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-truck"></i>
                                             @Html.TextBoxFor(m => m.StreetAddress, new { @placeholder = "Tên đường" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-truck txt-color-teal"></i>Xin nhập Tên đường</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-truck txt-color-teal"></i>&nbsp;Xin nhập Tên đường</b>
                                         </label>
                                     </section>
                                 </div>
 
                                 <div class="row">
                                     <section class="col col-4">
-                                        <label class="label">Tỉnh / Thành phố <font color="red">*</font></label>
+                                        <label class="label">Tỉnh / Thành phố <span style="color: red;">*</span></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
@@ -202,7 +202,7 @@ class="active"
                                         </label>
                                     </section>
                                     <section class="col col-4">
-                                        <label class="label">Phường / Xã <font color="red">*</font></label>
+                                        <label class="label">Phường / Xã <span style="color: red;">*</span></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.WardID, (SelectList)ViewBag.WardList,
@@ -222,7 +222,7 @@ class="active"
 
                                 <div class="row">
                                     <section class="col col-8">
-                                        <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
+                                        <img src="../Content/img/loading-backup.gif" class="resizeIcon"
                                             style="display: none;" id="loaderIcon">
                                         <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
                                             style="display: none;" id="validIcon">
@@ -231,7 +231,7 @@ class="active"
                                         <span id="address-message"></span>
                                     </section>
                                     <section class="col col-4">
-                                        <a href="" class="btn btn-sm btn-success btn-next"
+                                        <a href="#" class="btn btn-sm btn-success btn-next"
                                             id="button-get-loction" style="float: right;">Lấy tọa độ từ địa chỉ
                                         </a>
                                     </section>
@@ -249,11 +249,11 @@ class="active"
                                 <legend>Thông tin liên lạc</legend>
                                 <div class="row">
                                     <section class="col col-4">
-                                        <label class="label">Số điện thoại chính <font color="red">*</font></label>
+                                        <label class="label">Số điện thoại chính <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Số điện thoại chính" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Xin nhập Số điện thoại bàn chính của bệnh viện</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>&nbsp;Xin nhập Số điện thoại bàn chính của bệnh viện</b>
                                         </label>
                                         <p class="note"><strong>Lưu ý:</strong> Không nhập khoảng trắng.</p>
                                     </section>
@@ -262,7 +262,7 @@ class="active"
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo2, new { @placeholder = "Số thay thế (nếu có)" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Nhập Số điện thoại bàn phụ (nếu có)</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>&nbsp;Nhập Số điện thoại bàn phụ (nếu có)</b>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -270,7 +270,7 @@ class="active"
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo3, new { @placeholder = "Số di động (nếu có)" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Nhập Số di động (nếu có)</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>&nbsp;Nhập Số di động (nếu có)</b>
                                         </label>
                                     </section>
                                 </div>
@@ -281,7 +281,7 @@ class="active"
                                         <label class="input">
                                             <i class="icon-prepend fa fa-envelope"></i>
                                             @Html.TextBoxFor(m => m.HospitalEmail, new { @placeholder = "Email bệnh viện", @type = "email" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-envelope txt-color-teal"></i>Xin nhập địa chỉ Email của bệnh viện</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-envelope txt-color-teal"></i>&nbsp;Xin nhập địa chỉ Email của bệnh viện</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -289,7 +289,7 @@ class="active"
                                         <label class="input">
                                             <i class="icon-prepend fa fa-globe"></i>
                                             @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-globe txt-color-teal"></i>Nhập địa chỉ Website của bệnh viện. Ví dụ: http://www.benhvien.com</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-globe txt-color-teal"></i>&nbsp;Nhập địa chỉ Website của bệnh viện. Ví dụ: http://www.benhvien.com</b>
                                         </label>
                                     </section>
                                 </div>
@@ -300,7 +300,7 @@ class="active"
                                         <label class="input">
                                             <i class="icon-prepend fa fa-male"></i>
                                             @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm", @type = "email" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-male txt-color-teal"></i>Xin nhập Email của người chịu trách nhiệm</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-male txt-color-teal"></i>&nbsp;Xin nhập Email của người chịu trách nhiệm</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -308,14 +308,14 @@ class="active"
                                         <label class="input">
                                             <i class="icon-prepend fa fa-fax"></i>
                                             @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax của bệnh viện" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-fax txt-color-teal"></i>Nhập số fax của bệnh viện (không nhập khoảng trắng)</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-fax txt-color-teal"></i>&nbsp;Nhập số fax của bệnh viện (không nhập khoảng trắng)</b>
                                         </label>
                                     </section>
                                 </div>
 
                                 <div class="row">
                                     <section class="col col-8">
-                                        <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
+                                        <img src="../Content/img/loading-backup.gif" class="resizeIcon"
                                             style="display: none;" id="loaderIconUser">
                                         <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
                                             style="display: none;" id="validIconUser">
@@ -458,13 +458,13 @@ class="active"
                                 <div class="btn-group">
                                     <a class="btn btn-sm btn-primary"
                                         id="save-button">
-                                        <i class="fa fa-check"></i>Lưu
+                                        <i class="fa fa-check"></i>&nbsp;Lưu
                                     </a>
                                 </div>
                                 <div class="btn-group">
                                     <a class="btn btn-sm btn-success"
                                         id="quit-button">
-                                        <i class="fa fa-times"></i>Thoát
+                                        <i class="fa fa-times"></i>&nbsp;Thoát
                                     </a>
                                 </div>
                             </div>
@@ -565,13 +565,13 @@ class="active"
                     data: { "email": email },
                     success: function (data) {
                         if (data.value == 1) {
-                            setUserNotificationMessage("@ErrorMessage.CEM019", 1);
+                            setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM019)", 1);
                         }
                         if (data.value == 2) {
-                            setUserNotificationMessage("@ErrorMessage.CEM020", 0);
+                            setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM020)", 0);
                         }
                         if (data.value == 0) {
-                            setUserNotificationMessage("@ErrorMessage.CEM021", 0);
+                            setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM021)", 0);
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -660,11 +660,11 @@ class="active"
 
         @*Check if coordinate has been changed*@
         $("#Coordinate").change(function () {
-            if ($("#address-message").text() == '@ErrorMessage.CEM014') {;
+            if ($("#address-message").text() == '@Html.Raw(ErrorMessage.CEM014)') {
                 $("#loaderIcon").hide();
                 $("#validIcon").show();
                 $("#invalidIcon").hide();
-                $("#address-message").text("@ErrorMessage.CEM018");
+                $("#address-message").text("@Html.Raw(ErrorMessage.CEM018)");
             }
         });
     });
@@ -709,23 +709,23 @@ class="active"
         // Check if hospital is valid
         var hospitalName = $("#HospitalName").val();
         if (locationAddress == "") {
-            setAddressNotificationMessage('@ErrorMessage.CEM015', 0);
+            setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM015)', 0);
             return false;
         }
         if (streetAddress == "") {
-            setAddressNotificationMessage("@ErrorMessage.CEM028", 0);
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM028)", 0);
             return false;
         }
         if (city == "") {
-            setAddressNotificationMessage("@ErrorMessage.CEM029", 0);
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM029)", 0);
             return false;
         }
         if (district == "") {
-            setAddressNotificationMessage("@ErrorMessage.CEM030", 0);
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM030)", 0);
             return false;
         }
         if (district == "") {
-            setAddressNotificationMessage("@ErrorMessage.CEM031", 0);
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM031)", 0);
             return false;
         }
 
@@ -746,15 +746,15 @@ class="active"
                 },
                 success: function (data) {
                     if (data.value == 1) {
-                        setAddressNotificationMessage('@ErrorMessage.CEM016', 1);
+                        setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM016)', 1);
                     } else {
-                        setAddressNotificationMessage('@ErrorMessage.CEM017', 0);
+                        setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM017)', 0);
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     $("#invalidIcon").show();
-                    $("#address-message").text("@ErrorMessage.CEM022");
-                    setNotification("@ErrorMessage.CEM022", 2);
+                    $("#address-message").text("@Html.Raw(ErrorMessage.CEM022)");
+                    setNotification("@Html.Raw(ErrorMessage.CEM022)", 2);
                 }
             });
             return false;
@@ -815,9 +815,9 @@ class="active"
 
 
         $('#confirm-button').click(function (e) {
-            if ($("#address-message").text() == "@ErrorMessage.CEM017") {
+            if ($("#address-message").text() == "@Html.Raw(ErrorMessage.CEM017)") {
                 $("#LocationAddress").focus();
-                setNotification("@ErrorMessage.CEM017", 2);
+                setNotification("@Html.Raw(ErrorMessage.CEM017)", 2);
                 return false;
             }
 
@@ -833,8 +833,8 @@ class="active"
                 $("#loaderIcon").hide();
                 $("#validIcon").hide();
                 $("#invalidIcon").show();
-                $("#address-message").text('@ErrorMessage.CEM014');
-                setNotification('@ErrorMessage.CEM014', 2);
+                $("#address-message").text('@Html.Raw(ErrorMessage.CEM014)');
+                setNotification('@Html.Raw(ErrorMessage.CEM014)', 2);
                 $('html, body').animate({ scrollTop: $('#FullAddress').offset().top }, 'fast');
                 return false;
             }
@@ -874,7 +874,7 @@ class="active"
             function (value, element, param) {
                 var a = param;
                 return this.optional(element) || value != $(param).val();
-            }, "@ErrorMessage.CEM025");
+            }, "@Html.Raw(ErrorMessage.CEM025)");
 
         $('#addHospitalForm').validate({
             // Rules for form validation
@@ -1029,7 +1029,7 @@ class="active"
             navigator.geolocation.getCurrentPosition(initializeMap);
         }
         else {
-            setNotification("@ErrorMessage.CEM026", 2);
+            setNotification("@Html.Raw(ErrorMessage.CEM026)", 2);
         }
 
         // Declare marker - Make it global so only one marker can be created
@@ -1081,13 +1081,13 @@ class="active"
         // Press button get location from address
         $("#button-get-loction").click(function () {
             if ($("#FullAddress").val().trim() == "") {
-                setAddressNotificationMessage('@ErrorMessage.CEM015', 0);
+                setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM015)', 0);
                 $("#LocationAddress").focus();
                 return false;
             }
 
-            if (($("#address-message").text() == '@ErrorMessage.CEM016') ||
-                ($("#address-message").text() == '@ErrorMessage.CEM014')) {
+            if (($("#address-message").text() == '@Html.Raw(ErrorMessage.CEM016)') ||
+                ($("#address-message").text() == '@Html.Raw(ErrorMessage.CEM014)')) {
                 getCoordinateFromAddress();
             }
             return false;
@@ -1118,7 +1118,7 @@ class="active"
             $("#loaderIcon").show();
             $("#validIcon").hide();
             $("#invalidIcon").hide();
-            $("#address-message").text("@ErrorMessage.CEM027");
+            $("#address-message").text("@Html.Raw(ErrorMessage.CEM027)");
 
             // Take full address
             var address = $("#FullAddress").val();
@@ -1155,10 +1155,10 @@ class="active"
                     $('#Coordinate').val(currentCoordinate).trigger('change');
 
                     // Display message
-                    setAddressNotificationMessage('@ErrorMessage.CEM016', 1);
+                    setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM016)', 1);
                 } else {
-                    setAddressNotificationMessage("@ErrorMessage.CEM032", 0);
-                    setNotification("@ErrorMessage.CEM032", 2);
+                    setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM032)", 0);
+                    setNotification("@Html.Raw(ErrorMessage.CEM032)", 2);
                 }
             });
             return false;
