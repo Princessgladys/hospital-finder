@@ -567,7 +567,7 @@ BEGIN
 			BEGIN
 				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
-					   h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
 				FROM Hospital h, @TempHospitalList temp
@@ -583,7 +583,7 @@ BEGIN
 			BEGIN
 				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
-					   h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
 				FROM Hospital h, @TempHospitalList temp
@@ -599,7 +599,7 @@ BEGIN
 			BEGIN
 				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
-					   h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
 				FROM Hospital h, @TempHospitalList temp
@@ -618,7 +618,7 @@ BEGIN
 			BEGIN
 				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
-					   h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
 				FROM Hospital h
@@ -635,7 +635,7 @@ BEGIN
 			BEGIN
 				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
-					   h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
 				FROM Hospital h
@@ -652,7 +652,7 @@ BEGIN
 			BEGIN
 				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
-					   h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
 				FROM Hospital h
@@ -671,7 +671,7 @@ BEGIN
 	BEGIN
 		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
 			   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
-			   h.Ordinary_End_Time, h.Coordinate, h.Short_Description, h.Full_Description,
+			   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 			   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 			   h.Rating
 		FROM Hospital h, @TempHospitalList temp
