@@ -12,7 +12,7 @@ BEGIN
 	SELECT h.Hospital_ID, h.Hospital_Name, h.Hospital_Type, h.[Address], h.Ward_ID, h.District_ID,
 		   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
 		   h.OrDinary_End_Time, h.Holiday_Start_Time, h.Holiday_End_Time, h.Rating_Count,
-		   h.Coordinate, h.Short_Description, h.Full_Description, h.Rating,
+		   h.Coordinate, h.Full_Description, h.Rating,
 		   h.Is_Allow_Appointment, h.Is_Active, h.Created_Person,
 		   c.City_Name, d.[Type] + ' '+  d.District_Name AS District_Name,
 		   w.[Type] + ' '  + w.Ward_Name AS Ward_Name

@@ -589,7 +589,6 @@ namespace HospitalF.Models
                             h.Holiday_End_Time.Value.Hours.ToString(Constants.Format2Digit) +
                             h.Holiday_End_Time.Value.Minutes.ToString(Constants.Format2Digit),
                          Coordinate = h.Coordinate,
-                         ShortDescription = h.Short_Description,
                          FullDescription = h.Full_Description,
                          IsAllowAppointment = (h.Is_Allow_Appointment != null) ? h.Is_Allow_Appointment.Value : false,
                          IsActive = (h.Is_Active != null) ? h.Is_Active.Value : false,

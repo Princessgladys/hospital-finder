@@ -133,9 +133,7 @@
                                             @Html.RadioButtonFor(m => m.IsAllowAppointment, false,
                                                 new {@id="NotAllow", @type = "radio", @name = "radio-inline" })
                                             <i></i>Không có dịch vụ đăng ký khám trực tuyến
-                                        </label><label class="input">
-                                            @Html.TextBoxFor(m => m.AverageCuringTime, new { @style="display:none;" })
-                                                </label>
+                                        </label>
                                     </div>
                                 </section>
 
@@ -513,22 +511,12 @@
         $(function ($) {
             $('#OrdinaryTime').mask('99:99 - 99:99', { placeholder: "x" });
             $('#HolidayTime').mask('99:99 - 99:99', { placeholder: "x" });
-            $('#AverageCuringTime').mask('99', {placeholder:"x"});
         });
 
         @*Take text value of hospital type drop down list*@
         $("#HospitalTypeID").change(function () {
             $('#HospitalTypeName').val($("#HospitalTypeID option:selected").text());
         });
-
-        $("#Allow").checked(function () {
-            $('#AverageCuringTime').show();
-        })
-
-        $("#NotAllow").checked(function () {
-            $('#AverageCuringTime').val("");
-            $('#AverageCuringTime').hide();
-        })
 
         @*AJAX for cascading District drop down list*@
         $("#CityID").change(function () {
