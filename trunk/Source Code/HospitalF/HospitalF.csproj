@@ -598,7 +598,9 @@
     <Content Include="Views\Calendar\Index.cshtml" />
     <Content Include="Views\Hospital\HospitalBasicInforUpdate.cshtml" />
     <Content Include="Views\Hospital\SpecialityServiceFacilityUpdate.cshtml" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Data\SearchQueryStatistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
