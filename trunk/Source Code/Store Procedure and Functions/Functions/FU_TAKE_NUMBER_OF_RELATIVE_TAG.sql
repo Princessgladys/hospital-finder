@@ -15,7 +15,7 @@ BEGIN
 
 	SELECT @NumberOfTag = (SELECT COUNT(*)
 						   FROM (SELECT w.Word_ID
-							     FROM WordDictionary w, Word_Hospital wh
+							     FROM Tag w, Tag_Hospital wh
 							     WHERE w.[Type] = 2 AND
 									   FREETEXT (w.Word, @WhatPhrase) AND
 									   w.Word_ID = wh.Word_ID AND
