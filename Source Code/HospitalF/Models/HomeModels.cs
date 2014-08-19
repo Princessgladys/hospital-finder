@@ -238,13 +238,14 @@ namespace HospitalF.Models
                 {
                     tempDistrictIndex = StringUtil.TakeMatchedStringPosition(
                          StringUtil.RemoveDiacriticMarks(queryStr),
+                         StringUtil.RemoveDiacriticMarks(district.Type.ToLower()) + Constants.WhiteSpace + 
                          StringUtil.RemoveDiacriticMarks(district.District_Name.ToLower()));
                     if (tempDistrictIndex != Constants.DefaultMatchingValue)
                     {
                         districtPosition = tempDistrictIndex;
                         this.DistrictID = district.District_ID;
                         this.DistrictName = district.District_Name;
-                        tempDistrict = district.District_Name;
+                        tempDistrict = district.Type + Constants.WhiteSpace + district.District_Name;
                         isDistrictFound = true;
                         break;
                     }
@@ -252,18 +253,13 @@ namespace HospitalF.Models
             }
 
             // Check if there is any city or district are found
-            if (isCityFound || isDistrictFound)
+            if (isCityFound)
             {
-                // Check to see whether City appears first or District appears First
-                if (cityPosition < districtPosition)
-                {
-                    return tempCity;
-                }
-
-                if (districtPosition < cityPosition)
-                {
-                    return tempDistrict;
-                }
+                return tempCity;
+            }
+            if (isDistrictFound)
+            {
+                return tempDistrict;
             }
 
             // Return null as default
@@ -453,6 +449,12 @@ namespace HospitalF.Models
             if (!string.IsNullOrEmpty(tempWhat))
             {
                 what = tempWhat.Trim().ToLower();
+            }
+
+            // Check if What phrase is equal to Where phrase
+            if (what.Equals(where))
+            {
+                what = string.Empty;
             }
 
             string a = string.Format("[{0}][{1}][{2}]", what, relation, where);
