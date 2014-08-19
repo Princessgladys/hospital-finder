@@ -708,4 +708,61 @@ VALUES
 	(N'Viêm vú ung thư'), -- UNG BƯỚU
 	(N'Vú tăng sản không điển hình'), -- UNG BƯỚU
 	(N'Ung thư dạ dày'), -- Tiêu hóa,UNG BƯỚU
-	(N'Ung thư gan') -- Tiêu hóa,UNG BƯỚU
+	(N'Ung thư gan'), -- Tiêu hóa,UNG BƯỚU
+	(N'Trật khớp'), -- CƠ XƯƠNG KHỚP
+	(N'Gãy xương'), -- CƠ XƯƠNG KHỚP
+	(N'Trật khớp khuỷu'), -- CƠ XƯƠNG KHỚP
+	(N'Sai khớp vai'), -- CƠ XƯƠNG KHỚP
+	(N'Sai khớp háng'), -- CƠ XƯƠNG KHỚP
+	(N'Gãy đầu trên xương cẳng tay'), --CƠ XƯƠNG KHỚP
+	(N'Gãy đầu dưới xương cẳng tay'), -- CƠ XƯƠNG KHỚP
+	(N'Gãy khung chậu'), -- CƠ XƯƠNG KHỚP
+	(N'Gãy xương bánh chè'), -- CƠ XƯƠNG KHỚP
+	(N'Gãy thân xương đùi'), -- CƠ XƯƠNG KHỚP
+	(N'Gãy cổ xương đùi'), -- CƠ XƯƠNG KHỚP
+	(N'Gãy thân xương cẳng tay'), -- CƠ XƯƠNG KHỚP
+	(N'Gãy thân xương cẳng chân'), -- CƠ XƯƠNG KHỚP
+	(N'Gãy xương bả vai'), -- CƠ XƯƠNG KHỚP
+	(N'Bệnh giả Gout'), -- CƠ XƯƠNG KHỚP
+	(N'Bệnh Paget xương'), -- CƠ XƯƠNG KHỚP
+	(N'Gout'), -- CƠ XƯƠNG KHỚP
+	(N'Gai xương'), -- CƠ XƯƠNG KHỚP
+	(N'Đau cổ'), -- CƠ XƯƠNG KHỚP
+	(N'Đau đầu gối'), -- CƠ XƯƠNG KHỚP
+	(N'Đau lưng'), -- CƠ XƯƠNG KHỚP
+	(N'Loãng xương'), -- CƠ XƯƠNG KHỚP
+	(N'Rách dây chằng trước khớp gối'), -- CƠ XƯƠNG KHỚP
+	(N'Thoát vị đĩa đệm'), -- CƠ XƯƠNG KHỚP
+	(N'Ung thư xương'), -- CƠ XƯƠNG KHỚP,UNG BƯỚU
+	(N'Viêm bao hoạt dịch'), -- CƠ XƯƠNG KHỚP
+	(N'Viêm gân'), -- CƠ XƯƠNG KHỚP
+	(N'Viêm gân bánh chè'), -- CƠ XƯƠNG KHỚP
+	(N'Viêm khớp'), -- CƠ XƯƠNG KHỚP
+	(N'Viêm khớp nhiễm khuẩn'), -- CƠ XƯƠNG KHỚP
+	(N'Viêm khớp phản ứng'), -- CƠ XƯƠNG KHỚP
+	(N'Viêm khớp vẩy nến'), -- CƠ XƯƠNG KHỚP
+	(N'Viêm xương tủy'), -- CƠ XƯƠNG KHỚP
+	(N'Vô mạch hoại tử'), -- CƠ XƯƠNG KHỚP
+	(N'Vỡ xương mắt cá chân'), -- CƠ XƯƠNG KHỚP
+	(N'Đởm lạc kết thạch'), -- Y HỌC CỔ TRUYỀN
+	(N'Đởm lạc cảm nhiễm'), -- Y HỌC CỔ TRUYỀN
+	(N'Động kinh'), -- Y HỌC CỔ TRUYỀN
+	(N'Đau thần kinh tọa'), -- Y HỌC CỔ TRUYỀN
+	(N'Xơ mỡ động mạch'), -- Y HỌC CỔ TRUYỀN
+	(N'Xơ gan'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm đại tràng mạn'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm tiểu cầu thận mãn tính'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm thận, tiểu cầu cấp tính'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm teo niêm mạc dạ dày mãn tính hay thoái hóa niêm mạc dạ dày'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm sinh dục nữ'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm phế quản cấp, mạn'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm não màng não lưu hành tính'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm não -tủy cấp'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm khớp phong thấp tính'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm gan mạn tính hoạt động'), -- Y HỌC CỔ TRUYỀN
+	(N'Viêm gan mạn'), -- Y HỌC CỔ TRUYỀN
+	(N'Vị nham'), -- Y HỌC CỔ TRUYỀN
+	(N'Cổ tử cung nham'), -- Y HỌC CỔ TRUYỀN
+	(N'Tiết niệu kết thạch'), -- Y HỌC CỔ TRUYỀN
+	(N'Tiết niệu lạc cảm nhiễm'), -- Y HỌC CỔ TRUYỀN
+	(N'Tim mạch và phong thấp nhiệt tính') -- Y HỌC CỔ TRUYỀN
