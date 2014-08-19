@@ -104,12 +104,12 @@ namespace HospitalF.Controllers
         /// GET: /Home/GetDeseaseBySpeciality
         /// </summary>
         /// <returns>ask[ActionResult] with JSON contains list of Setences</returns>
-        public async Task<ActionResult> LoadSuggestSentence()
+        public async Task<ActionResult> LoadSuggestSentence(string searchQuery)
         {
             try
             {
                 // Return list of sentences
-                List<string> sentenceDic = await DictionaryUtil.LoadSuggestSentenceAsync();
+                List<string> sentenceDic = await DictionaryUtil.LoadSuggestSentenceAsync(searchQuery.Trim());
                 return Json(sentenceDic, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
@@ -189,6 +189,7 @@ namespace HospitalF.Controllers
                 // Indicate which button is clicked
                 string button = Request[Constants.Button];
 
+                #region Normal Search
                 // Normal search form
                 if ((string.IsNullOrEmpty(button)) || Constants.NormalSearchForm.Equals(button))
                 {
@@ -204,30 +205,33 @@ namespace HospitalF.Controllers
                         }
                         // Analyze to GIR query
                         await model.GIRQueryAnalyzerAsync(model.SearchValue);
+
+                        // Search hospitals
+                        hospitalList = await model.NormalSearchHospital();
+                        pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
+                        // Search Query Statistic
+                        DataModel.StoreSearchQuery(model.SearchValue, hospitalList.Count);
                     }
-
-                    // Search hospitals
-                    hospitalList = await model.NormalSearchHospital();
-                    pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
-                    // Search Query Statistic
-                    DataModel.StoreSearchQuery(model.SearchValue, hospitalList.Count);
                 }
+                #endregion
 
+                #region Advanced Search
+                // Load list of cities
+                cityList = await LocationUtil.LoadCityAsync();
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+                // Load list of districts
+                districtList = new List<District>();
+                ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
+                // Load list of specialities
+                specialityList = await SpecialityUtil.LoadSpecialityAsync();
+                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+                // Load list of disease
+                diseaseList = new List<Disease>();
+                ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
                 // Advanced search form
                 if (Constants.AdvancedSearchForm.Equals(button))
                 {
-                    // Load list of cities
-                    cityList = await LocationUtil.LoadCityAsync();
-                    ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-                    // Load list of districts
-                    districtList = new List<District>();
-                    ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
-                    // Load list of specialities
-                    specialityList = await SpecialityUtil.LoadSpecialityAsync();
-                    ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-                    // Load list of disease
-                    diseaseList = new List<Disease>();
-                    ViewBag.DiseaseList = new SelectList(diseaseList, Constants.DiseaseID, Constants.DiseaseName);
+
 
                     ViewBag.DiseaseName = model.DiseaseName;
                     hospitalList = await model.AdvancedSearchHospital(model.CityID, model.DistrictID,
@@ -236,18 +240,16 @@ namespace HospitalF.Controllers
 
                     ViewBag.SearchType = Constants.AdvancedSearchForm;
                 }
+                #endregion
 
-                // Location search form
-                if (Constants.LocationSearchForm.Equals(button))
-                {
-                    ViewBag.SearchType = Constants.LocationSearchForm;
-                    List<SelectListItem> locationTypeListItem = new List<SelectListItem>()
+                #region Location Search
+                List<SelectListItem> locationTypeListItem = new List<SelectListItem>()
                                                                 {
                                                                     new SelectListItem {Value = "2", Text = "Nhập vị trí"},
                                                                     new SelectListItem {Value = "1", Text = "Vị trí hiện tại", }
                                                                 };
-                    ViewBag.LocationTypeList = new SelectList(locationTypeListItem, "Value", "Text", 2);
-                    List<SelectListItem> radiusListItem = new List<SelectListItem>()
+                ViewBag.LocationTypeList = new SelectList(locationTypeListItem, "Value", "Text", 2);
+                List<SelectListItem> radiusListItem = new List<SelectListItem>()
                                                                 {
                                                                     new SelectListItem {Value = "0.3", Text = "300 mét"},
                                                                     new SelectListItem {Value = "0.5", Text = "500 mét"},
@@ -258,7 +260,11 @@ namespace HospitalF.Controllers
                                                                     new SelectListItem {Value = "15", Text = "15 km"},
                                                                     new SelectListItem {Value = "20", Text = "20 km"}
                                                                 };
-                    ViewBag.RadiusList = new SelectList(radiusListItem, "Value", "Text", 0.3);
+                ViewBag.RadiusList = new SelectList(radiusListItem, "Value", "Text", 0.3);
+                // Location search form
+                if (Constants.LocationSearchForm.Equals(button))
+                {
+                    ViewBag.SearchType = Constants.LocationSearchForm;
 
                     // Search hospitals
                     double lat = 0;
@@ -273,7 +279,7 @@ namespace HospitalF.Controllers
                     }
 
                     double radius = model.Radius;
-                    
+
 
                     if (model.LocationType == 1)
                     {
@@ -291,7 +297,7 @@ namespace HospitalF.Controllers
 
                         if (!string.IsNullOrEmpty(position))
                         {
-                            string geoJsonResult = client.DownloadString(string.Concat("http://maps.googleapis.com/maps/api/geocode/json?address=", position));
+                            string geoJsonResult = client.DownloadString(string.Concat(Constants.GeoCodeJsonQuery, position));
                             // Json.Net is really helpful if you have to deal
                             // with Json from .Net http://json.codeplex.com/
                             JObject geoJsonObject = JObject.Parse(geoJsonResult);
@@ -303,7 +309,6 @@ namespace HospitalF.Controllers
                         }
 
                     }
-
                     hospitalList = await HomeModels.LocationSearchHospital(lat, lng, radius * 1000);
                     pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
                     string distanceMatrixUrl = string.Concat("http://maps.googleapis.com/maps/api/distancematrix/json?origins=", lat, ",", lng, "&destinations=");
@@ -327,6 +332,7 @@ namespace HospitalF.Controllers
                     }
 
                 }
+                #endregion
 
                 // Transfer list of hospitals to Search Result page
 
@@ -518,7 +524,7 @@ namespace HospitalF.Controllers
             try
             {
                 int tempSpecialityID, tempHospitalID;
-               List<Doctor> doctorList = new List<Doctor>();
+                List<Doctor> doctorList = new List<Doctor>();
                 ViewBag.Hospital = Int32.Parse(HospitalID);
                 if (SpecialityID == "")
                 {

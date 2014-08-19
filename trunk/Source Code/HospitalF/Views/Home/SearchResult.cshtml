@@ -12,20 +12,13 @@
 
 <!-- MAIN CONTENT -->
 <div id="content-results" class="col-md-12 well">
-    <div class="col-md-4">
+    <div class="col-md-2">
         <p>
             <img src="../Content/img/HospitalF - Logo.png" alt="HospitalF" style="max-width: 100%; max-height: 100%;">
         </p>
-        <p>
-            <span style="font-size: 12px;">timkiembenhvien.com © 2014 – <strong>Hệ thống <a href="/" target="_blank" title="Hệ thống tìm kiếm bệnh viện">tìm kiếm bệnh viện</a> hàng đầu Việt Nam</strong><br>
-                <strong>Văn phòng tại Tp. Hồ Chí Minh</strong>: Công viên phần mềm Quang Trung - STEC, Quận 12, Tp. Hồ Chí Minh, Việt Nam.
-                <br>
-                <strong>Văn phòng tại Hà Nội:</strong> Lầu 9, 70-72 Bà Triệu, Quận Hoàn Kiếm, Hà Nội.<br>
-                Điện thoại : (08) 3838 3838 | Email CSKH: <a href="mailto:hospitalf@gmail.com" target="_blank" title="Email Chăm sóc khách hàng">hospitalf@gmail.com</a></span>
-        </p>
     </div>
 
-    <div class="col-md-8 no-padding">
+    <div class="col-md-10 no-padding">
         <div class="col-md-12 no-padding">
             @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "form-horizontal", @id = Constants.NormalSearchForm }))
             {
@@ -72,6 +65,116 @@
 
         <div class="col-md-12 no-padding">
             <hr />
+            @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = ViewBag.SearchType }))
+            {
+                string button = ViewBag.SearchType;
+                <div class="panel-group smart-accordion-default" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" @(Constants.LocationSearchForm.Equals(button) ? string.Empty : "class=collapsed")>
+                                <i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>Tìm Kiếm Theo Vị Trí </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse @(Constants.LocationSearchForm.Equals(button) ? "in" : string.Empty)">
+                            <div class="panel-body no-padding">
+                                <fieldset>
+                                    <legend>Nhập thông tin vị trí</legend>
+                                    <div class="row">
+                                        <label class="label col col-2">Tìm theo</label>
+                                        <section class="col col-4">
+                                            <label class="select">
+                                                @Html.DropDownListFor(m => m.LocationType, (SelectList)ViewBag.LocationTypeList, new { @class = "form-control" })
+                                                <i></i>
+                                            </label>
+                                        </section>
+                                        <label class="label col col-2" id="CurrentLocationLabel">Vị trí cần tìm</label>
+                                        <section class="col col-4" id="CurrentLocationSection">
+                                            <label class="input">
+                                                <i class="icon-append fa fa-location-arrow"></i>
+                                                @Html.TextBoxFor(m => m.Position, new { @class = "form-control", @placeholder = "Vị trí cần tìm...", })
+                                                @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
+                                                <b class="tooltip tooltip-top-right">Nhập vị trí cần tìm</b>
+                                            </label>
+                                        </section>
+                                        <label class="label col col-2">Bán kính</label>
+                                        <section class="col col-4">
+                                            <label class="select">
+                                                @Html.DropDownListFor(m => m.Radius, (SelectList)ViewBag.RadiusList, new { @class = "form-control" })
+                                                <i></i>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <button class="btn btn-default btn-primary" type="submit" value="@(Constants.LocationSearchForm)" name="@(Constants.Button)">
+                                        <i class="fa fa-search"></i>&nbsp;Tìm kiếm
+                                    </button>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" @(Constants.AdvancedSearchForm.Equals(button) ? string.Empty : "class=collapsed")>
+                                <i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>Tìm Kiếm Nâng Cao </a></h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse @(Constants.AdvancedSearchForm.Equals(button) ? "in" : string.Empty)">
+                            <div class="panel-body no-padding">
+                                <fieldset>
+                                    <legend>Nhập thông tin bệnh viện</legend>
+                                    <div class="row">
+                                        <label class="label col col-2">Tỉnh / Thành phố</label>
+                                        <section class="col col-4">
+                                            <label class="select">
+                                                @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
+                                                Constants.RequireCity, new { @class = "form-control" })
+                                                <i></i>
+                                            </label>
+                                        </section>
+                                        <label class="label col col-2">Quận / Huyện</label>
+                                        <section class="col col-4">
+                                            <label class="select">
+                                                @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
+                                                Constants.RequireDistrict, new { @class = "form-control" })
+                                                <i></i>
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <label class="label col col-2">Chuyên khoa</label>
+                                        <section class="col col-4">
+                                            <label class="select">
+                                                @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
+                                                Constants.RequireSpeciality, new { @class = "form-control" })
+                                                <i></i>
+                                            </label>
+                                        </section>
+                                        <label class="label col col-2">Triệu chứng</label>
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                <i class="icon-append fa fa-plus-square"></i>
+                                                @Html.TextBoxFor(m => m.DiseaseName, new
+                                       {
+                                           @class = "form-control",
+                                           @placeholder = "Triệu chứng...",
+                                           @id = "disease-tag"
+                                       })
+                                                <b class="tooltip tooltip-top-right">Nhập triệu chứng bệnh</b>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <button class="btn btn-default btn-primary" type="submit" value="@(Constants.AdvancedSearchForm)" name="@(Constants.Button)">
+                                        <i class="fa fa-search"></i>&nbsp;Tìm kiếm
+                                    </button>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @*
             @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = ViewBag.SearchType }))
             {
                 string button = ViewBag.SearchType;
@@ -164,6 +267,7 @@
                 </footer>
                 }
             }
+            *@
         </div>
     </div>
 
@@ -263,14 +367,16 @@
             }
         });
 
-        $("#SearchValue").on('input', function () {
+        $("#SearchValue").on('keyup', function () {
             var statesProgress = $("#states-loading-search-progress");
             var availableTags = new Array();
+            var searchValue = $(this).val();
             statesProgress.show();
             $.ajax({
                 cache: false,
                 type: "GET",
                 url: "@(Url.RouteUrl(Constants.LoadSuggestSentenceAction))",
+                data: { searchQuery : searchValue},
                 success: function (data) {
                     $.each(data, function (id, option) {
                         availableTags.push(option);

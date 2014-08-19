@@ -1108,7 +1108,7 @@ namespace HospitalF.Constant
         /// <summary>
         /// Google api geographic code json latitude
         /// </summary>
-        public static string GeoCodeTatitude = "lat";
+        public static string GeoCodeLatitude = "lat";
 
         /// <summary>
         /// Google api geographic code json longitude

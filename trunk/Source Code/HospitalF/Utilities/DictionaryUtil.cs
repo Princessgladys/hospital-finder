@@ -32,13 +32,13 @@ namespace HospitalF.Utilities
         /// Load setence dictionary in database
         /// </summary>
         /// <returns>List[string] of setences</returns>
-        public static async Task<List<string>> LoadSuggestSentenceAsync()
+        public static async Task<List<string>> LoadSuggestSentenceAsync(string searchQuery)
         {
             // Return list of dictionary words
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 return await Task.Run(() =>
-                    (from s in data.SearchQueries
+                    (from s in data.SP_LOAD_SUGGEST_SEARCH_QUERY(searchQuery)
                      select s.Sentence).Distinct().ToList());
             }
         }
