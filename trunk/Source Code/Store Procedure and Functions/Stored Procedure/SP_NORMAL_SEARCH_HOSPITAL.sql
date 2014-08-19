@@ -5,7 +5,7 @@ IF OBJECT_ID('[SP_NORMAL_SEARCH_HOSPITAL]', 'P') IS NOT NULL
 	DROP PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
 GO
 CREATE PROCEDURE SP_NORMAL_SEARCH_HOSPITAL
-	@WhatPhrase NVARCHAR(128), -- ALWAYS NOT NULL
+	@WhatPhrase NVARCHAR(128),
 	@CityID INT,
 	@DistrictID INT
 AS
@@ -46,119 +46,73 @@ BEGIN
 									Hospital_ID INT,
 									[Priorty] INT)
 	
--- QUERY FROM TAG TABLE-----------------------------------------------------------------------
+	-- CHECK IF WHAT PHRASE IS NOT NULL
+	IF (@WhatPhrase IS NOT NULL)
+	BEGIN
+		-- QUERY FROM TAG TABLE-----------------------------------------------------------------------
 	
-	-- FIND EXACTLY MATCHING TAGS WORD
-	DECLARE @NumOfHospitalFoundByExactlyTag INT = 0
-	SET @NumOfHospitalFoundByExactlyTag = (SELECT COUNT(*)
-										   FROM (SELECT Word_ID
-												 FROM Tag
-												 WHERE @WhatPhrase LIKE  N'%' + Word + N'%' AND
-													   [Type] = 3) w)
+		-- FIND EXACTLY MATCHING TAGS WORD
+		DECLARE @NumOfHospitalFoundByExactlyTag INT = 0
+		SET @NumOfHospitalFoundByExactlyTag = (SELECT COUNT(*)
+											   FROM (SELECT Word_ID
+													 FROM Tag
+													 WHERE @WhatPhrase LIKE  N'%' + Word + N'%' AND
+														   [Type] = 3) w)
 
-	IF (@NumOfHospitalFoundByExactlyTag > 0)
-	BEGIN
-		SET @RowNum = 1
-		WHILE (@RowNum <= @NumOfHospitalFoundByExactlyTag)
-		BEGIN
-			SET @TempHospitalID = (SELECT h.Hospital_ID
-								   FROM (SELECT ROW_NUMBER()
-										 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
-										 FROM Tag w, Tag_Hospital wh
-										 WHERE @WhatPhrase LIKE  N'%' + Word + N'%' AND
-											   w.[Type] = 3 AND
-											   w.Word_ID = wh.Word_ID) AS h
-								   WHERE RowNumber = @RowNum)
-
-			-- TAKE RATING POINT
-			SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
-
-			-- TAKE RATING COUNT NUMBER
-			SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
-
-			-- INSERT TO @TempHospitalList
-			INSERT INTO @TempHospitalList
-			SELECT @TempHospitalID, @ExactlyPriorityOfTag +
-						@RatingPoint * @PriorityOfRatingPoint +
-						@RatingCount * @PriorityOfRatingCount
-
-			SET @RowNum += 1
-		END
-	END
-	-- FIND RELATIVE MATCHING TAGS WORD
-	ELSE
-	BEGIN
-		DECLARE @NumOfHospitalFoundByRelativeTag INT = 0
-
-		-- DIACRITIC VIETNAMSESE
-		SET @NumOfHospitalFoundByRelativeTag = 
-			(SELECT COUNT(*)
-			 FROM (SELECT DISTINCT wh.Hospital_ID
-				   FROM Tag w, Tag_Hospital wh
-				   WHERE w.[Type] = 3 AND
-						 FREETEXT (w.Word, @WhatPhrase) AND
-						 w.Word_ID = wh.Word_ID) n)
-
-		IF (@NumOfHospitalFoundByRelativeTag > 0)
+		IF (@NumOfHospitalFoundByExactlyTag > 0)
 		BEGIN
 			SET @RowNum = 1
-			WHILE (@RowNum <= @NumOfHospitalFoundByRelativeTag)
+			WHILE (@RowNum <= @NumOfHospitalFoundByExactlyTag)
 			BEGIN
-				SET @TempHospitalID = (SELECT DISTINCT h.Hospital_ID
+				SET @TempHospitalID = (SELECT h.Hospital_ID
 									   FROM (SELECT ROW_NUMBER()
 											 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
 											 FROM Tag w, Tag_Hospital wh
-											 WHERE w.[Type] = 3 AND
-												   FREETEXT (w.Word,  @WhatPhrase) AND
+											 WHERE @WhatPhrase LIKE  N'%' + Word + N'%' AND
+												   w.[Type] = 3 AND
 												   w.Word_ID = wh.Word_ID) AS h
 									   WHERE RowNumber = @RowNum)
-				
-				-- ADD ONLY HOSPITALS THAT HAS NOT BEEN APPEARED IN TEMPORARY LIST
-				IF (NOT EXISTS(SELECT Hospital_ID
-							   FROM @TempHospitalList
-							   WHERE Hospital_ID = @TempHospitalID))
-				BEGIN
-					-- TAKE RATING POINT
-					SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
 
-					-- TAKE RATING COUNT NUMBER
-					SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
+				-- TAKE RATING POINT
+				SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
 
-					-- INSERT TO @TempHospitalList
-					INSERT INTO @TempHospitalList
-					SELECT @TempHospitalID,
-						   (SELECT [dbo].FU_TAKE_NUMBER_OF_RELATIVE_TAG (@TempHospitalID, @WhatPhrase) *
-								   @RelativePriorityOfTag +
-								   CONVERT(INT, @RatingPoint * @PriorityOfRatingPoint) +
-								   @RatingCount * @PriorityOfRatingCount)
-				END
+				-- TAKE RATING COUNT NUMBER
+				SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
+
+				-- INSERT TO @TempHospitalList
+				INSERT INTO @TempHospitalList
+				SELECT @TempHospitalID, @ExactlyPriorityOfTag +
+							@RatingPoint * @PriorityOfRatingPoint +
+							@RatingCount * @PriorityOfRatingCount
 
 				SET @RowNum += 1
 			END
 		END
-		-- NON-DIACRITIC VIETNAMESE
+		-- FIND RELATIVE MATCHING TAGS WORD
 		ELSE
 		BEGIN
+			DECLARE @NumOfHospitalFoundByRelativeTag INT = 0
+
+			-- DIACRITIC VIETNAMSESE
 			SET @NumOfHospitalFoundByRelativeTag = 
 				(SELECT COUNT(*)
-				 FROM (SELECT Word_ID
-					   FROM Tag
-					   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
-							 [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
-							 [Type] = 3) w)
+				 FROM (SELECT DISTINCT wh.Hospital_ID
+					   FROM Tag w, Tag_Hospital wh
+					   WHERE w.[Type] = 3 AND
+							 FREETEXT (w.Word, @WhatPhrase) AND
+							 w.Word_ID = wh.Word_ID) n)
 
 			IF (@NumOfHospitalFoundByRelativeTag > 0)
 			BEGIN
 				SET @RowNum = 1
 				WHILE (@RowNum <= @NumOfHospitalFoundByRelativeTag)
 				BEGIN
-					SET @TempHospitalID = (SELECT h.Hospital_ID
+					SET @TempHospitalID = (SELECT DISTINCT h.Hospital_ID
 										   FROM (SELECT ROW_NUMBER()
 												 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
 												 FROM Tag w, Tag_Hospital wh
-												 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
-													   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
-													   [Type] = 3 AND
+												 WHERE w.[Type] = 3 AND
+													   FREETEXT (w.Word,  @WhatPhrase) AND
 													   w.Word_ID = wh.Word_ID) AS h
 										   WHERE RowNumber = @RowNum)
 				
@@ -176,8 +130,8 @@ BEGIN
 						-- INSERT TO @TempHospitalList
 						INSERT INTO @TempHospitalList
 						SELECT @TempHospitalID,
-							   (SELECT [dbo].FU_TAKE_NUMBER_OF_RELATIVE_TAG (@TempHospitalID, @NonDiacriticWhatPhrase) *
-									   @NonDiacriticPriorityOfTag +
+							   (SELECT [dbo].FU_TAKE_NUMBER_OF_RELATIVE_TAG (@TempHospitalID, @WhatPhrase) *
+									   @RelativePriorityOfTag +
 									   CONVERT(INT, @RatingPoint * @PriorityOfRatingPoint) +
 									   @RatingCount * @PriorityOfRatingCount)
 					END
@@ -185,85 +139,77 @@ BEGIN
 					SET @RowNum += 1
 				END
 			END
-		END
-	END
-
--- QUERY FROM SPECIALITY TABLE----------------------------------------------------------------
-
-	-- FIND EXACTLY SPECIALITY
-	DECLARE @NumOfHospitalFoundByExactlySpeciality INT = 0
-	SET @NumOfHospitalFoundByExactlySpeciality = (SELECT COUNT(*)
-												  FROM (SELECT Speciality_ID
-														FROM Speciality
-														WHERE @WhatPhrase LIKE  N'%' + Speciality_Name + N'%') s)
-
-	IF (@NumOfHospitalFoundByExactlySpeciality > 0)
-	BEGIN
-		SET @RowNum = 1
-		WHILE (@RowNum <= @NumOfHospitalFoundByExactlySpeciality)
-		BEGIN
-			SET @TempHospitalID = (SELECT h.Hospital_ID
-								   FROM (SELECT ROW_NUMBER()
-										 OVER (ORDER BY h.Hospital_ID ASC) AS RowNumber, h.Hospital_ID
-										 FROM Speciality s, Hospital h, Hospital_Speciality hs
-										 WHERE @WhatPhrase LIKE  N'%' + Speciality_Name + N'%' AND
-											   s.Speciality_ID = hs.Speciality_ID AND
-											   h.Hospital_ID = hs.Hospital_ID) AS h
-								   WHERE RowNumber = @RowNum)
-
-			-- CHECK IF HOSPITAL HAS BEED ADDED TO TEMPORARY LIST
-			IF (EXISTS(SELECT Hospital_ID
-						   FROM @TempHospitalList
-						   WHERE Hospital_ID = @TempHospitalID))
-			BEGIN
-				-- UPDATE VALUE OF PRIORITY
-				UPDATE @TempHospitalList
-				SET [Priorty] = (SELECT [Priorty]
-								 FROM @TempHospitalList
-								 WHERE Hospital_ID = @TempHospitalID) + @ExactlyPriorityOfSpeciality
-			END
+			-- NON-DIACRITIC VIETNAMESE
 			ELSE
-			BEGIN	
-				-- TAKE RATING POINT
-				SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
+			BEGIN
+				SET @NumOfHospitalFoundByRelativeTag = 
+					(SELECT COUNT(*)
+					 FROM (SELECT Word_ID
+						   FROM Tag
+						   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
+								 [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
+								 [Type] = 3) w)
 
-				-- TAKE RATING COUNT NUMBER
-				SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
+				IF (@NumOfHospitalFoundByRelativeTag > 0)
+				BEGIN
+					SET @RowNum = 1
+					WHILE (@RowNum <= @NumOfHospitalFoundByRelativeTag)
+					BEGIN
+						SET @TempHospitalID = (SELECT h.Hospital_ID
+											   FROM (SELECT ROW_NUMBER()
+													 OVER (ORDER BY wh.Hospital_ID ASC) AS RowNumber, wh.Hospital_ID
+													 FROM Tag w, Tag_Hospital wh
+													 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
+														   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Word) + N'%' AND
+														   [Type] = 3 AND
+														   w.Word_ID = wh.Word_ID) AS h
+											   WHERE RowNumber = @RowNum)
+				
+						-- ADD ONLY HOSPITALS THAT HAS NOT BEEN APPEARED IN TEMPORARY LIST
+						IF (NOT EXISTS(SELECT Hospital_ID
+									   FROM @TempHospitalList
+									   WHERE Hospital_ID = @TempHospitalID))
+						BEGIN
+							-- TAKE RATING POINT
+							SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
 
-				-- INSERT TO @TempHospitalList
-				INSERT INTO @TempHospitalList
-				SELECT @TempHospitalID, @ExactlyPriorityOfSpeciality +
-							@RatingPoint * @PriorityOfRatingPoint +
-							@RatingCount * @PriorityOfRatingCount
+							-- TAKE RATING COUNT NUMBER
+							SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
+
+							-- INSERT TO @TempHospitalList
+							INSERT INTO @TempHospitalList
+							SELECT @TempHospitalID,
+								   (SELECT [dbo].FU_TAKE_NUMBER_OF_RELATIVE_TAG (@TempHospitalID, @NonDiacriticWhatPhrase) *
+										   @NonDiacriticPriorityOfTag +
+										   CONVERT(INT, @RatingPoint * @PriorityOfRatingPoint) +
+										   @RatingCount * @PriorityOfRatingCount)
+						END
+
+						SET @RowNum += 1
+					END
+				END
 			END
-
-			SET @RowNum += 1
 		END
-	END
-	-- FIND RELATIVE MATCHING SPECIALITY
-	ELSE
-	BEGIN
-		DECLARE @NumOfHospitalFoundByRelativeSpeciality INT = 0
 
-		-- DIACRITIC VIETNAMSESE
-		SET @NumOfHospitalFoundByRelativeSpeciality = 
-				(SELECT COUNT(*)
-				 FROM (SELECT s.Speciality_ID
-					   FROM Speciality s, Hospital h, Hospital_Speciality hs
-					   WHERE FREETEXT (Speciality_Name, @WhatPhrase) AND
-							 s.Speciality_ID = hs.Speciality_ID AND
-							 h.Hospital_ID = hs.Hospital_ID) s)
+	-- QUERY FROM SPECIALITY TABLE----------------------------------------------------------------
 
-		IF (@NumOfHospitalFoundByRelativeSpeciality > 0)
+		-- FIND EXACTLY SPECIALITY
+		DECLARE @NumOfHospitalFoundByExactlySpeciality INT = 0
+		SET @NumOfHospitalFoundByExactlySpeciality = (SELECT COUNT(*)
+													  FROM (SELECT Speciality_ID
+															FROM Speciality
+															WHERE @WhatPhrase LIKE  N'%' + Speciality_Name + N'%') s)
+
+		IF (@NumOfHospitalFoundByExactlySpeciality > 0)
 		BEGIN
 			SET @RowNum = 1
-			WHILE (@RowNum <= @NumOfHospitalFoundByRelativeSpeciality)
+			WHILE (@RowNum <= @NumOfHospitalFoundByExactlySpeciality)
 			BEGIN
 				SET @TempHospitalID = (SELECT h.Hospital_ID
 									   FROM (SELECT ROW_NUMBER()
 											 OVER (ORDER BY h.Hospital_ID ASC) AS RowNumber, h.Hospital_ID
 											 FROM Speciality s, Hospital h, Hospital_Speciality hs
-											 WHERE FREETEXT (Speciality_Name, @WhatPhrase) AND
+											 WHERE @WhatPhrase LIKE  N'%' + Speciality_Name + N'%' AND
 												   s.Speciality_ID = hs.Speciality_ID AND
 												   h.Hospital_ID = hs.Hospital_ID) AS h
 									   WHERE RowNumber = @RowNum)
@@ -277,9 +223,7 @@ BEGIN
 					UPDATE @TempHospitalList
 					SET [Priorty] = (SELECT [Priorty]
 									 FROM @TempHospitalList
-									 WHERE Hospital_ID = @TempHospitalID) +
-									 [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY] (@TempHospitalID, @WhatPhrase) *
-									 @RelativePriorityOfSpeciality
+									 WHERE Hospital_ID = @TempHospitalID) + @ExactlyPriorityOfSpeciality
 				END
 				ELSE
 				BEGIN	
@@ -291,9 +235,7 @@ BEGIN
 
 					-- INSERT TO @TempHospitalList
 					INSERT INTO @TempHospitalList
-					SELECT @TempHospitalID,
-								[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY] (@TempHospitalID, @WhatPhrase) * 
-								@ExactlyPriorityOfSpeciality +
+					SELECT @TempHospitalID, @ExactlyPriorityOfSpeciality +
 								@RatingPoint * @PriorityOfRatingPoint +
 								@RatingCount * @PriorityOfRatingCount
 				END
@@ -301,15 +243,17 @@ BEGIN
 				SET @RowNum += 1
 			END
 		END
-		-- NON-DIACRITIC VIETNAMESE
+		-- FIND RELATIVE MATCHING SPECIALITY
 		ELSE
 		BEGIN
+			DECLARE @NumOfHospitalFoundByRelativeSpeciality INT = 0
+
+			-- DIACRITIC VIETNAMSESE
 			SET @NumOfHospitalFoundByRelativeSpeciality = 
 					(SELECT COUNT(*)
 					 FROM (SELECT s.Speciality_ID
 						   FROM Speciality s, Hospital h, Hospital_Speciality hs
-						   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
-								 [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' AND
+						   WHERE FREETEXT (Speciality_Name, @WhatPhrase) AND
 								 s.Speciality_ID = hs.Speciality_ID AND
 								 h.Hospital_ID = hs.Hospital_ID) s)
 
@@ -322,8 +266,7 @@ BEGIN
 										   FROM (SELECT ROW_NUMBER()
 												 OVER (ORDER BY h.Hospital_ID ASC) AS RowNumber, h.Hospital_ID
 												 FROM Speciality s, Hospital h, Hospital_Speciality hs
-												 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
-													   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' AND
+												 WHERE FREETEXT (Speciality_Name, @WhatPhrase) AND
 													   s.Speciality_ID = hs.Speciality_ID AND
 													   h.Hospital_ID = hs.Hospital_ID) AS h
 										   WHERE RowNumber = @RowNum)
@@ -338,8 +281,8 @@ BEGIN
 						SET [Priorty] = (SELECT [Priorty]
 										 FROM @TempHospitalList
 										 WHERE Hospital_ID = @TempHospitalID) +
-											   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY](@TempHospitalID, @NonDiacriticWhatPhrase) *
-											   @RelativePriorityOfSpeciality
+										 [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY] (@TempHospitalID, @WhatPhrase) *
+										 @RelativePriorityOfSpeciality
 					END
 					ELSE
 					BEGIN	
@@ -352,99 +295,98 @@ BEGIN
 						-- INSERT TO @TempHospitalList
 						INSERT INTO @TempHospitalList
 						SELECT @TempHospitalID,
-							   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY](@TempHospitalID, @NonDiacriticWhatPhrase) * 
-							   @ExactlyPriorityOfSpeciality +
-							   @RatingPoint * @PriorityOfRatingPoint +
-							   @RatingCount * @PriorityOfRatingCount
+									[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY] (@TempHospitalID, @WhatPhrase) * 
+									@ExactlyPriorityOfSpeciality +
+									@RatingPoint * @PriorityOfRatingPoint +
+									@RatingCount * @PriorityOfRatingCount
 					END
 
 					SET @RowNum += 1
 				END
 			END
-		END
-	END
-
--- QUERY FROM DISEASE TABLE-------------------------------------------------------------------
-
-	-- FIND EXACTLY DISEASE
-	DECLARE @NumOfHospitalFoundByExactlyDesease INT = 0
-	SET @NumOfHospitalFoundByExactlyDesease = (SELECT COUNT(*)
-											   FROM (SELECT Disease_ID
-													 FROM Disease
-													 WHERE @WhatPhrase LIKE  N'%' + Disease_Name + N'%') d)
-
-	IF (@NumOfHospitalFoundByExactlyDesease > 0)
-	BEGIN
-		SET @RowNum = 1
-		WHILE (@RowNum <= @NumOfHospitalFoundByExactlyDesease)
-		BEGIN
-			SET @TempHospitalID = (SELECT h.Hospital_ID
-								   FROM (SELECT ROW_NUMBER()
-										 OVER (ORDER BY h.Hospital_ID ASC) AS RowNumber, h.Hospital_ID
-										 FROM Disease d, Speciality_Disease sd,
-											  Hospital h, Hospital_Speciality hs
-										 WHERE @WhatPhrase LIKE  N'%' + Disease_Name + N'%' AND
-											   d.Disease_ID = sd.Disease_ID AND
-											   sd.Speciality_ID = hs.Speciality_ID AND
-											   h.Hospital_ID = hs.Hospital_ID) AS h
-								   WHERE RowNumber = @RowNum)
-
-			-- CHECK IF HOSPITAL HAS BEED ADDED TO TEMPORARY LIST
-			IF (EXISTS(SELECT Hospital_ID
-					   FROM @TempHospitalList
-					   WHERE Hospital_ID = @TempHospitalID))
-			BEGIN
-				-- UPDATE VALUE OF PRIORITY
-				UPDATE @TempHospitalList
-				SET [Priorty] = (SELECT [Priorty]
-								 FROM @TempHospitalList
-								 WHERE Hospital_ID = @TempHospitalID) + @ExactlyPriorityOfDisease
-			END
+			-- NON-DIACRITIC VIETNAMESE
 			ELSE
-			BEGIN	
-				-- TAKE RATING POINT
-				SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
+			BEGIN
+				SET @NumOfHospitalFoundByRelativeSpeciality = 
+						(SELECT COUNT(*)
+						 FROM (SELECT s.Speciality_ID
+							   FROM Speciality s, Hospital h, Hospital_Speciality hs
+							   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
+									 [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' AND
+									 s.Speciality_ID = hs.Speciality_ID AND
+									 h.Hospital_ID = hs.Hospital_ID) s)
 
-				-- TAKE RATING COUNT NUMBER
-				SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
+				IF (@NumOfHospitalFoundByRelativeSpeciality > 0)
+				BEGIN
+					SET @RowNum = 1
+					WHILE (@RowNum <= @NumOfHospitalFoundByRelativeSpeciality)
+					BEGIN
+						SET @TempHospitalID = (SELECT h.Hospital_ID
+											   FROM (SELECT ROW_NUMBER()
+													 OVER (ORDER BY h.Hospital_ID ASC) AS RowNumber, h.Hospital_ID
+													 FROM Speciality s, Hospital h, Hospital_Speciality hs
+													 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
+														   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' AND
+														   s.Speciality_ID = hs.Speciality_ID AND
+														   h.Hospital_ID = hs.Hospital_ID) AS h
+											   WHERE RowNumber = @RowNum)
 
-				-- INSERT TO @TempHospitalList
-				INSERT INTO @TempHospitalList
-				SELECT @TempHospitalID, @ExactlyPriorityOfDisease +
-							@RatingPoint * @PriorityOfRatingPoint +
-							@RatingCount * @PriorityOfRatingCount
+						-- CHECK IF HOSPITAL HAS BEED ADDED TO TEMPORARY LIST
+						IF (EXISTS(SELECT Hospital_ID
+									   FROM @TempHospitalList
+									   WHERE Hospital_ID = @TempHospitalID))
+						BEGIN
+							-- UPDATE VALUE OF PRIORITY
+							UPDATE @TempHospitalList
+							SET [Priorty] = (SELECT [Priorty]
+											 FROM @TempHospitalList
+											 WHERE Hospital_ID = @TempHospitalID) +
+												   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY](@TempHospitalID, @NonDiacriticWhatPhrase) *
+												   @RelativePriorityOfSpeciality
+						END
+						ELSE
+						BEGIN	
+							-- TAKE RATING POINT
+							SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
+
+							-- TAKE RATING COUNT NUMBER
+							SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
+
+							-- INSERT TO @TempHospitalList
+							INSERT INTO @TempHospitalList
+							SELECT @TempHospitalID,
+								   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY](@TempHospitalID, @NonDiacriticWhatPhrase) * 
+								   @ExactlyPriorityOfSpeciality +
+								   @RatingPoint * @PriorityOfRatingPoint +
+								   @RatingCount * @PriorityOfRatingCount
+						END
+
+						SET @RowNum += 1
+					END
+				END
 			END
-
-			SET @RowNum += 1
 		END
-	END
-	-- FIND RELATIVE MATCHING DISEASE
-	ELSE
-	BEGIN
-		DECLARE @NumOfHospitalFoundByRelativeDisease INT = 0
-		
-		-- DIACRITIC VIETNAMSESE
-		SET @NumOfHospitalFoundByRelativeDisease = 
-				(SELECT COUNT(*)
-				 FROM (SELECT d.Disease_ID
-					   FROM Disease d, Speciality_Disease sd,
-							Hospital h, Hospital_Speciality hs
-					   WHERE FREETEXT (Disease_Name, @WhatPhrase) AND
-							 d.Disease_ID = sd.Disease_ID AND
-							 sd.Speciality_ID = hs.Speciality_ID AND
-							 h.Hospital_ID = hs.Hospital_ID) d)
 
-		IF (@NumOfHospitalFoundByRelativeDisease > 0)
+	-- QUERY FROM DISEASE TABLE-------------------------------------------------------------------
+
+		-- FIND EXACTLY DISEASE
+		DECLARE @NumOfHospitalFoundByExactlyDesease INT = 0
+		SET @NumOfHospitalFoundByExactlyDesease = (SELECT COUNT(*)
+												   FROM (SELECT Disease_ID
+														 FROM Disease
+														 WHERE @WhatPhrase LIKE  N'%' + Disease_Name + N'%') d)
+
+		IF (@NumOfHospitalFoundByExactlyDesease > 0)
 		BEGIN
 			SET @RowNum = 1
-			WHILE (@RowNum <= @NumOfHospitalFoundByRelativeDisease)
+			WHILE (@RowNum <= @NumOfHospitalFoundByExactlyDesease)
 			BEGIN
 				SET @TempHospitalID = (SELECT h.Hospital_ID
 									   FROM (SELECT ROW_NUMBER()
 											 OVER (ORDER BY h.Hospital_ID ASC) AS RowNumber, h.Hospital_ID
 											 FROM Disease d, Speciality_Disease sd,
 												  Hospital h, Hospital_Speciality hs
-											 WHERE FREETEXT(Disease_Name, @WhatPhrase) AND
+											 WHERE @WhatPhrase LIKE  N'%' + Disease_Name + N'%' AND
 												   d.Disease_ID = sd.Disease_ID AND
 												   sd.Speciality_ID = hs.Speciality_ID AND
 												   h.Hospital_ID = hs.Hospital_ID) AS h
@@ -452,16 +394,14 @@ BEGIN
 
 				-- CHECK IF HOSPITAL HAS BEED ADDED TO TEMPORARY LIST
 				IF (EXISTS(SELECT Hospital_ID
-							   FROM @TempHospitalList
-							   WHERE Hospital_ID = @TempHospitalID))
+						   FROM @TempHospitalList
+						   WHERE Hospital_ID = @TempHospitalID))
 				BEGIN
 					-- UPDATE VALUE OF PRIORITY
 					UPDATE @TempHospitalList
 					SET [Priorty] = (SELECT [Priorty]
 									 FROM @TempHospitalList
-									 WHERE Hospital_ID = @TempHospitalID) +
-										   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE] (@TempHospitalID, @WhatPhrase) *
-										   @RelativePriorityOfDisease
+									 WHERE Hospital_ID = @TempHospitalID) + @ExactlyPriorityOfDisease
 				END
 				ELSE
 				BEGIN	
@@ -473,9 +413,7 @@ BEGIN
 
 					-- INSERT TO @TempHospitalList
 					INSERT INTO @TempHospitalList
-					SELECT @TempHospitalID,
-								[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE] (@TempHospitalID, @WhatPhrase) * 
-								@RelativePriorityOfDisease +
+					SELECT @TempHospitalID, @ExactlyPriorityOfDisease +
 								@RatingPoint * @PriorityOfRatingPoint +
 								@RatingCount * @PriorityOfRatingCount
 				END
@@ -483,19 +421,21 @@ BEGIN
 				SET @RowNum += 1
 			END
 		END
-		-- NON-DIACRITIC VIETNAMESE
+		-- FIND RELATIVE MATCHING DISEASE
 		ELSE
 		BEGIN
-			SET @NumOfHospitalFoundByRelativeSpeciality = 
+			DECLARE @NumOfHospitalFoundByRelativeDisease INT = 0
+		
+			-- DIACRITIC VIETNAMSESE
+			SET @NumOfHospitalFoundByRelativeDisease = 
 					(SELECT COUNT(*)
 					 FROM (SELECT d.Disease_ID
 						   FROM Disease d, Speciality_Disease sd,
 								Hospital h, Hospital_Speciality hs
-						   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
-							     [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%' AND
+						   WHERE FREETEXT (Disease_Name, @WhatPhrase) AND
 								 d.Disease_ID = sd.Disease_ID AND
 								 sd.Speciality_ID = hs.Speciality_ID AND
-								 h.Hospital_ID = hs.Hospital_ID) s)
+								 h.Hospital_ID = hs.Hospital_ID) d)
 
 			IF (@NumOfHospitalFoundByRelativeDisease > 0)
 			BEGIN
@@ -507,8 +447,7 @@ BEGIN
 												 OVER (ORDER BY h.Hospital_ID ASC) AS RowNumber, h.Hospital_ID
 												 FROM Disease d, Speciality_Disease sd,
 													  Hospital h, Hospital_Speciality hs
-												 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
-													   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%' AND
+												 WHERE FREETEXT(Disease_Name, @WhatPhrase) AND
 													   d.Disease_ID = sd.Disease_ID AND
 													   sd.Speciality_ID = hs.Speciality_ID AND
 													   h.Hospital_ID = hs.Hospital_ID) AS h
@@ -524,7 +463,7 @@ BEGIN
 						SET [Priorty] = (SELECT [Priorty]
 										 FROM @TempHospitalList
 										 WHERE Hospital_ID = @TempHospitalID) +
-											   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE](@TempHospitalID, @NonDiacriticWhatPhrase) *
+											   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE] (@TempHospitalID, @WhatPhrase) *
 											   @RelativePriorityOfDisease
 					END
 					ELSE
@@ -538,19 +477,84 @@ BEGIN
 						-- INSERT TO @TempHospitalList
 						INSERT INTO @TempHospitalList
 						SELECT @TempHospitalID,
-							   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE](@TempHospitalID, @NonDiacriticWhatPhrase) * 
-							   @RelativePriorityOfDisease +
-							   @RatingPoint * @PriorityOfRatingPoint +
-							   @RatingCount * @PriorityOfRatingCount
+									[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE] (@TempHospitalID, @WhatPhrase) * 
+									@RelativePriorityOfDisease +
+									@RatingPoint * @PriorityOfRatingPoint +
+									@RatingCount * @PriorityOfRatingCount
 					END
 
 					SET @RowNum += 1
 				END
 			END
-		END
-	END
+			-- NON-DIACRITIC VIETNAMESE
+			ELSE
+			BEGIN
+				SET @NumOfHospitalFoundByRelativeSpeciality = 
+						(SELECT COUNT(*)
+						 FROM (SELECT d.Disease_ID
+							   FROM Disease d, Speciality_Disease sd,
+									Hospital h, Hospital_Speciality hs
+							   WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
+									 [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%' AND
+									 d.Disease_ID = sd.Disease_ID AND
+									 sd.Speciality_ID = hs.Speciality_ID AND
+									 h.Hospital_ID = hs.Hospital_ID) s)
 
-----------------------------------------------------------------------------------------------
+				IF (@NumOfHospitalFoundByRelativeDisease > 0)
+				BEGIN
+					SET @RowNum = 1
+					WHILE (@RowNum <= @NumOfHospitalFoundByRelativeDisease)
+					BEGIN
+						SET @TempHospitalID = (SELECT h.Hospital_ID
+											   FROM (SELECT ROW_NUMBER()
+													 OVER (ORDER BY h.Hospital_ID ASC) AS RowNumber, h.Hospital_ID
+													 FROM Disease d, Speciality_Disease sd,
+														  Hospital h, Hospital_Speciality hs
+													 WHERE @NonDiacriticWhatPhrase LIKE  N'%' +
+														   [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%' AND
+														   d.Disease_ID = sd.Disease_ID AND
+														   sd.Speciality_ID = hs.Speciality_ID AND
+														   h.Hospital_ID = hs.Hospital_ID) AS h
+											   WHERE RowNumber = @RowNum)
+
+						-- CHECK IF HOSPITAL HAS BEED ADDED TO TEMPORARY LIST
+						IF (EXISTS(SELECT Hospital_ID
+									   FROM @TempHospitalList
+									   WHERE Hospital_ID = @TempHospitalID))
+						BEGIN
+							-- UPDATE VALUE OF PRIORITY
+							UPDATE @TempHospitalList
+							SET [Priorty] = (SELECT [Priorty]
+											 FROM @TempHospitalList
+											 WHERE Hospital_ID = @TempHospitalID) +
+												   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE](@TempHospitalID, @NonDiacriticWhatPhrase) *
+												   @RelativePriorityOfDisease
+						END
+						ELSE
+						BEGIN	
+							-- TAKE RATING POINT
+							SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
+
+							-- TAKE RATING COUNT NUMBER
+							SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
+
+							-- INSERT TO @TempHospitalList
+							INSERT INTO @TempHospitalList
+							SELECT @TempHospitalID,
+								   [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE](@TempHospitalID, @NonDiacriticWhatPhrase) * 
+								   @RelativePriorityOfDisease +
+								   @RatingPoint * @PriorityOfRatingPoint +
+								   @RatingCount * @PriorityOfRatingCount
+						END
+
+						SET @RowNum += 1
+					END
+				END
+			END
+		END
+
+	----------------------------------------------------------------------------------------------
+	END
 
 	-- CHECK IF WHERE PHRASE IS AVAILABLE
 	DECLARE @NumOfRecordInTemp INT = 0;
