@@ -1224,7 +1224,7 @@ namespace HospitalF.Controllers
                                     record.Coordinate = string.Format("{0}, {1}",
                                         geoJsonObject[Constants.GeoCodeResults].
                                             First[Constants.GeoCodeGemometry][Constants.GeoCodeLocation].
-                                            Value<double>(Constants.GeoCodeTatitude),
+                                            Value<double>(Constants.GeoCodeLatitude),
                                         geoJsonObject[Constants.GeoCodeResults].
                                             First[Constants.GeoCodeGemometry][Constants.GeoCodeLocation].
                                             Value<double>(Constants.GeoCodeLongitude));
