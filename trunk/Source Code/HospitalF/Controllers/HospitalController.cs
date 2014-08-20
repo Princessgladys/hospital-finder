@@ -1217,7 +1217,7 @@ namespace HospitalF.Controllers
                             if (!string.IsNullOrEmpty(record.HospitalName))
                             {
                                 geoJsonResult = client.DownloadString(string.Concat(
-                                    Constants.GeoCodeJsonQuery, record.HospitalName, ", ", record.FullAddress));
+                                    Constants.GeoCodeJsonQuery, record.HospitalName, Constants.Comma, record.FullAddress));
                                 JObject geoJsonObject = JObject.Parse(geoJsonResult);
                                 if (Constants.Ok.Equals(geoJsonObject.Value<string>(Constants.GeoCodeStatus)))
                                 {

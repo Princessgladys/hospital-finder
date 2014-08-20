@@ -47,7 +47,7 @@ BEGIN
 									[Priorty] INT)
 	
 	-- CHECK IF WHAT PHRASE IS NOT NULL
-	IF (@WhatPhrase IS NOT NULL)
+	IF (@WhatPhrase != '')
 	BEGIN
 		-- QUERY FROM TAG TABLE-----------------------------------------------------------------------
 	
