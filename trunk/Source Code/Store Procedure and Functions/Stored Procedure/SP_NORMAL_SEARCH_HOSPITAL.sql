@@ -191,7 +191,7 @@ BEGIN
 			END
 		END
 
-	-- QUERY FROM SPECIALITY TABLE----------------------------------------------------------------
+		-- QUERY FROM SPECIALITY TABLE----------------------------------------------------------------
 
 		-- FIND EXACTLY SPECIALITY
 		DECLARE @NumOfHospitalFoundByExactlySpeciality INT = 0
@@ -367,7 +367,7 @@ BEGIN
 			END
 		END
 
-	-- QUERY FROM DISEASE TABLE-------------------------------------------------------------------
+		-- QUERY FROM DISEASE TABLE-------------------------------------------------------------------
 
 		-- FIND EXACTLY DISEASE
 		DECLARE @NumOfHospitalFoundByExactlyDesease INT = 0
@@ -553,7 +553,7 @@ BEGIN
 			END
 		END
 
-	----------------------------------------------------------------------------------------------
+		----------------------------------------------------------------------------------------------
 	END
 
 	-- CHECK IF WHERE PHRASE IS AVAILABLE
@@ -566,6 +566,23 @@ BEGIN
 	BEGIN
 		IF (@NumOfRecordInTemp > 0)
 		BEGIN
+			-- CHECK IF BOTH CITY AND DISTRICT ARE NOT NULL
+			IF (@CityID != 0 AND @DistrictID != 0)
+			BEGIN
+				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
+					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
+					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
+					   h.Rating, h.Rating_Count
+				FROM Hospital h, @TempHospitalList temp
+				WHERE h.Hospital_ID = temp.Hospital_ID AND
+					  h.City_ID = @CityID AND
+					  h.District_ID = @DistrictID AND
+					  h.Is_Active = 'True'
+				ORDER BY temp.Priorty DESC
+				RETURN;
+			END
+
 			-- CHECK IF CITY IS NOT NULL
 			IF (@CityID != 0)
 			BEGIN
@@ -597,7 +614,9 @@ BEGIN
 				ORDER BY temp.Priorty DESC
 				RETURN;
 			END
-
+		END
+		ELSE
+		BEGIN
 			-- CHECK IF BOTH CITY AND DISTRICT ARE NOT NULL
 			IF (@CityID != 0 AND @DistrictID != 0)
 			BEGIN
@@ -606,17 +625,16 @@ BEGIN
 					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
-				FROM Hospital h, @TempHospitalList temp
-				WHERE h.Hospital_ID = temp.Hospital_ID AND
-					  h.City_ID = @CityID AND
+				FROM Hospital h
+				WHERE h.City_ID = @CityID AND
 					  h.District_ID = @DistrictID AND
 					  h.Is_Active = 'True'
-				ORDER BY temp.Priorty DESC
+				ORDER BY [dbo].[FU_TAKE_RATING_POINT] (h.Hospital_ID) +
+						 [dbo].[FU_TAKE_RATING_COUNT] (h.Hospital_ID) +
+						 @ExactlyPriorityOfCity + @ExactlyPriorityOfDistrict DESC
 				RETURN;
 			END
-		END
-		ELSE
-		BEGIN
+
 			-- CHECK IF CITY IS NOT NULL
 			IF (@CityID != 0)
 			BEGIN
@@ -648,24 +666,6 @@ BEGIN
 				ORDER BY [dbo].[FU_TAKE_RATING_POINT] (h.Hospital_ID) +
 						 [dbo].[FU_TAKE_RATING_COUNT] (h.Hospital_ID) +
 						 @ExactlyPriorityOfDistrict DESC
-				RETURN;
-			END
-
-			-- CHECK IF BOTH CITY AND DISTRICT ARE NOT NULL
-			IF (@CityID != 0 AND @DistrictID != 0)
-			BEGIN
-				SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
-					   h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
-					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
-					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
-					   h.Rating, h.Rating_Count
-				FROM Hospital h
-				WHERE h.City_ID = @CityID AND
-					  h.District_ID = @DistrictID AND
-					  h.Is_Active = 'True'
-				ORDER BY [dbo].[FU_TAKE_RATING_POINT] (h.Hospital_ID) +
-						 [dbo].[FU_TAKE_RATING_COUNT] (h.Hospital_ID) +
-						 @ExactlyPriorityOfCity + @ExactlyPriorityOfDistrict DESC
 				RETURN;
 			END
 		END
