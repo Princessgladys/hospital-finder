@@ -1211,7 +1211,7 @@ namespace HospitalF.Controllers
                         // Handle coordinate
                         foreach (HospitalModel record in hospitalList)
                         {
-                            if (!string.IsNullOrEmpty(record.HospitalName))
+                            if (record.RecordStatus == 1)
                             {
                                 geoJsonResult = client.DownloadString(string.Concat(
                                     Constants.GeoCodeJsonQuery, record.HospitalName, Constants.Comma, record.FullAddress));
