@@ -79,5 +79,23 @@ namespace HospitalF.Utilities
                      ).OrderBy(w => w.Ward_Name).ToList());
             }
         }
+
+        /// <summary>
+        /// Check if there is  similar hospital with name and address
+        /// are equal with given data from user
+        /// </summary>
+        /// <param name="hospitaName">Hospital name</param>
+        /// <param name="address">Full address</param>
+        /// <returns> 1: Not duplicated, 0: Duplicated</returns>
+        public static async Task<int> CheckValidHospitalWithAddress(string hospitaName, string address)
+        {
+            int result = 0;
+            // Return list of dictionary words
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() => data.SP_CHECK_NOT_DUPLICATED_HOSPITAL(hospitaName, address));
+            }
+            return result;
+        }
     }
 }

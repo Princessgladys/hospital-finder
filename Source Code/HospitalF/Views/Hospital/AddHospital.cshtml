@@ -689,11 +689,11 @@ class="active"
 
         $("#FullAddress").val(fullAddress);
 
-        checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress);
+        checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress, fullAddress);
     }
 
     @*Check if hospital and address information are not duplicated*@
-    function checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress) {
+    function checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress, fullAddress) {
         // Check if hospital is valid
         var hospitalName = $("#HospitalName").val();
         if (locationAddress == "") {
@@ -727,10 +727,8 @@ class="active"
                 type: "GET",
                 url: "@(Url.RouteUrl("CheckValidHospitalWithAddress"))",
                 data: {
-                    "address": locationAddress + " " + streetAddress,
-                    "cityId": $('#CityID').val(),
-                    "districtId": $('#DistrictID').val(),
-                    "wardId": $('#WardID').val()
+                    "hospitalName": hospitalName,
+                    "address": fullAddress
                 },
                 success: function (data) {
                     if (data.value == 1) {
