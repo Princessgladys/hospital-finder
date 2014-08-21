@@ -291,7 +291,6 @@
     <Compile Include="Utilities\DictionaryUtil.cs" />
     <Compile Include="Utilities\ExcelUtil.cs" />
     <Compile Include="Utilities\FileUtil.cs" />
-    <Compile Include="Utilities\GoogleUtil.cs" />
     <Compile Include="Utilities\HospitalUtil.cs" />
     <Compile Include="Utilities\LocationUtil.cs" />
     <Compile Include="Utilities\LoggingUtil.cs" />
