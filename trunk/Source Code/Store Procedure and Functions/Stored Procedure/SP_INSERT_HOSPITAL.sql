@@ -124,12 +124,6 @@ BEGIN
 					'True'
 				)
 
-				IF @@ROWCOUNT = 0
-				BEGIN
-					ROLLBACK TRAN T;
-					RETURN 0;
-				END
-
 				SET @RowNumber += 1
 			END
 		END
@@ -162,12 +156,6 @@ BEGIN
 					@Token,
 					'True'
 				)
-
-				IF @@ROWCOUNT = 0
-				BEGIN
-					ROLLBACK TRAN T;
-					RETURN 0;
-				END
 
 				SET @RowNumber += 1
 			END
@@ -202,12 +190,6 @@ BEGIN
 					'True'
 				)
 
-				IF @@ROWCOUNT = 0
-				BEGIN
-					ROLLBACK TRAN T;
-					RETURN 0;
-				END
-
 				SET @RowNumber += 1
 			END
 		END
@@ -220,12 +202,6 @@ BEGIN
 			WHERE [User_ID] = (SELECT [User_ID]
 							   FROM [User]
 							   WHERE Email = @PersonInChared)
-
-			IF @@ROWCOUNT = 0
-			BEGIN
-				ROLLBACK TRAN T;
-				RETURN 0;
-			END
 		END
 
 		-- INSERT TO PHOTO TABLE
@@ -261,12 +237,6 @@ BEGIN
 					@CreatedPerson,
 					'True'
 				)
-
-				IF @@ROWCOUNT = 0
-				BEGIN
-					ROLLBACK TRAN T;
-					RETURN 0;
-				END
 
 				SET @RowNumber += 1
 			END
@@ -339,12 +309,6 @@ BEGIN
 					INSERT INTO Tag
 					VALUES(@Token, 3)
 
-					IF @@ROWCOUNT = 0
-					BEGIN
-						ROLLBACK TRAN T;
-						RETURN 0;
-					END
-
 					SET @WordID = (SELECT TOP 1 Word_ID
 								   FROM Tag
 								   ORDER BY Word_ID DESC)
@@ -358,12 +322,6 @@ BEGIN
 				BEGIN
 					INSERT INTO Tag_Hospital
 					VALUES(@WordID, @HospitalID)
-				END
-
-				IF @@ROWCOUNT = 0
-				BEGIN
-					ROLLBACK TRAN T;
-					RETURN 0;
 				END
 
 				SET @RowNumber += 1
