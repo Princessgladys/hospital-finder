@@ -1,8 +1,22 @@
-﻿@model HospitalF.Models.HospitalModel
-@using HospitalF.Constant
+﻿@using HospitalF.Constant;
 
+@model HospitalF.Models.HospitalModel
 @{
     ViewBag.Title = "Cập nhật thông tin bệnh viện";
+}
+
+@section AddHospitalActive
+{
+    class="active"
+}
+
+@section BreadCrumb
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Thêm Mới Bệnh Viện</li>
+        <li>Nhập Liệu</li>
+    </ol>
 }
 
 <link href="~/Content/css/summernote/summernote.css" rel="stylesheet" />
@@ -11,25 +25,22 @@
 <script src="~/Scripts/dropzone/dropzone.js"></script>
 <link href="~/Scripts/dropzone/css/basic.css" rel="stylesheet" />
 <link href="~/Scripts/dropzone/css/dropzone.css" rel="stylesheet" />
+<script src="~/Content/js/plugin/bootstrap-taginput/bootstrap-tagsinput.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
 
 <div class="row">
     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
         <h1 class="page-title txt-color-blueDark">
-            <i class="fa fa-pencil-square-o fa-fw "></i>
-            Thêm mới bệnh viện
-            <span>
-                >
-                Nhập liệu
-            </span>
+            <i class="fa fa-pencil-square-o fa-fw "></i>&nbsp;
+            Thông tin bệnh viện
         </h1>
     </div>
 </div>
 
 <div class="alert alert-block alert-info">
-    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i> Nhập thông tin</h4>
+    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>&nbsp;Nhập thông tin</h4>
     <p>
-        Điền những thông tin cần thiết vào bản mẫu. Sau đó ấn xác nhận để tạo bệnh viện mới.
+        Chỉnh sửa thông tin theo bản mẫu. Sua đó ấn <code>Xác nhận</code> để cập nhật thông tin mới.
     </p>
 </div>
 
@@ -39,19 +50,19 @@
         <button class="close" data-dismiss="alert">
             ×
         </button>
-        <i class="fa-fw fa fa-times"></i>
-        <strong>Lỗi!</strong> thao tác không thành công. Xin vui lòng thử lại.
+        <i class="fa-fw fa fa-times"></i>&nbsp;
+        <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
     </div>
     <div class="alert alert-success fade in" style="display: none;"
          id="success-alert">
         <button class="close" data-dismiss="alert">
             ×
         </button>
-        <i class="fa-fw fa fa-check"></i>
+        <i class="fa-fw fa fa-check"></i>&nbsp;
         <strong>Thành công</strong> Cập nhật thông tin bệnh viện thành công.
     </div>
     <!-- row -->
-    <div class="row" id="main-content">
+    <div class="row">
         <!-- NEW WIDGET START -->
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
             <!-- Widget ID (each widget will need unique ID)-->
@@ -65,7 +76,7 @@
                  data-widget-collapsed="false"
                  data-widget-sortable="false">
                 <header>
-                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
                     <h2>Thông tin bệnh viện</h2>
                     <a href="" class="btn btn-sm btn-success btn-next"
                        style="float:right;" id="change-status-button">
@@ -77,21 +88,21 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
-                        @using (Html.BeginForm(Constants.UpdateHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "addHospitalForm", @enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "updateHospitalForm", @enctype = "multipart/form-data" }))
                         {
                             <fieldset>
                                 <legend>Thông tin căn bản</legend>
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Tên bệnh viện <font color="red">*</font></label>
+                                        <label class="label">Tên bệnh viện <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-home"></i>
                                             @Html.TextBoxFor(m => m.HospitalName, new { @placeholder = "Tên bệnh viện" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-home txt-color-teal"></i>Xin nhập Tên bệnh viện</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-home txt-color-teal"></i>&nbsp;Xin nhập Tên bệnh viện</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <label class="label">Loại bệnh viện <font color="red">*</font></label>
+                                        <label class="label">Loại bệnh viện <span style="color: red;">*</span></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.HospitalTypeList,
@@ -103,20 +114,20 @@
 
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Giờ khám ngày thường <font color="red">*</font></label>
+                                        <label class="label">Giờ khám ngày thường <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.OrdinaryStartTime, new { @placeholder = "Giờ khám ngày thường", @id = "OrdinaryTime" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>Xin nhập Giờ khám ngày thường</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>&nbsp;Xin nhập Giờ khám ngày thường</b>
                                         </label>
                                         <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
                                     </section>
                                     <section class="col col-6">
-                                        <label class="label">Giờ khám ngày lễ và cuối tuần <font color="red">*</font></label>
+                                        <label class="label">Giờ khám ngày lễ và cuối tuần <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-clock-o"></i>
                                             @Html.TextBoxFor(m => m.HolidayStartTime, new { @placeholder = "Giờ khám ngày lễ và cuối tuần", @id = "HolidayTime" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>Xin nhập Giờ khám ngày lễ và cuối tuần</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>&nbsp;Xin nhập Giờ khám ngày lễ và cuối tuần</b>
                                         </label>
                                         <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
                                     </section>
@@ -126,12 +137,12 @@
                                     <div class="inline-group">
                                         <label class="radio">
                                             @Html.RadioButtonFor(m => m.IsAllowAppointment, true,
-                                                new {@id="Allow", @type = "radio", @name = "radio-inline", @checked = "checked" })
+                                                new { @type = "radio", @name = "radio-inline", @checked = "checked" })
                                             <i></i>Cho phép đăng ký khám trực tuyến
                                         </label>
                                         <label class="radio">
                                             @Html.RadioButtonFor(m => m.IsAllowAppointment, false,
-                                                new {@id="NotAllow", @type = "radio", @name = "radio-inline" })
+                                                new { @type = "radio", @name = "radio-inline" })
                                             <i></i>Không có dịch vụ đăng ký khám trực tuyến
                                         </label>
                                     </div>
@@ -143,26 +154,26 @@
                                 <legend>Địa chỉ</legend>
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Số địa chỉ <font color="red">*</font></label>
+                                        <label class="label">Số địa chỉ <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-building"></i>
                                             @Html.TextBoxFor(m => m.LocationAddress, new { @placeholder = "Số địa chỉ" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-building txt-color-teal"></i>Xin nhập Số địa chỉ</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-building txt-color-teal"></i>&nbsp;Xin nhập Số địa chỉ</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <label class="label">Tên đường <font color="red">*</font></label>
+                                        <label class="label">Tên đường <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-truck"></i>
                                             @Html.TextBoxFor(m => m.StreetAddress, new { @placeholder = "Tên đường" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-truck txt-color-teal"></i>Xin nhập Tên đường</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-truck txt-color-teal"></i>&nbsp;Xin nhập Tên đường</b>
                                         </label>
                                     </section>
                                 </div>
 
                                 <div class="row">
                                     <section class="col col-4">
-                                        <label class="label">Tỉnh / thành phố <font color="red">*</font></label>
+                                        <label class="label">Tỉnh / Thành phố <span style="color: red;">*</span></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
@@ -180,7 +191,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-4">
-                                        <label class="label">Phường / Xã <font color="red">*</font></label>
+                                        <label class="label">Phường / Xã <span style="color: red;">*</span></label>
                                         <label class="select">
                                             <i></i>
                                             @Html.DropDownListFor(m => m.WardID, (SelectList)ViewBag.WardList,
@@ -200,7 +211,7 @@
 
                                 <div class="row">
                                     <section class="col col-8">
-                                        <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
+                                        <img src="../Content/img/loading-backup.gif" class="resizeIcon"
                                              style="display: none;" id="loaderIcon">
                                         <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
                                              style="display: none;" id="validIcon">
@@ -209,7 +220,7 @@
                                         <span id="address-message"></span>
                                     </section>
                                     <section class="col col-4">
-                                        <a href="" class="btn btn-sm btn-success btn-next"
+                                        <a href="#" class="btn btn-sm btn-success btn-next"
                                            id="button-get-loction" style="float: right;">
                                             Lấy tọa độ từ địa chỉ
                                         </a>
@@ -218,7 +229,7 @@
 
                                 <div class="row">
                                     <section class="col col-md-12">
-                                        <div id="google-map"></div>
+                                        <div id="google-map" tabindex="-1"></div>
                                     </section>
                                 </div>
                                 @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
@@ -228,11 +239,11 @@
                                 <legend>Thông tin liên lạc</legend>
                                 <div class="row">
                                     <section class="col col-4">
-                                        <label class="label">Số điện thoại chính <font color="red">*</font></label>
+                                        <label class="label">Số điện thoại chính <span style="color: red;">*</span></label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Số điện thoại chính" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Xin nhập Số điện thoại bàn chính của bệnh viện</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>&nbsp;Xin nhập Số điện thoại bàn chính của bệnh viện</b>
                                         </label>
                                         <p class="note"><strong>Lưu ý:</strong> Không nhập khoảng trắng.</p>
                                     </section>
@@ -241,7 +252,7 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo2, new { @placeholder = "Số thay thế (nếu có)" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Nhập Số điện thoại bàn phụ (nếu có)</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>&nbsp;Nhập Số điện thoại bàn phụ (nếu có)</b>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -249,7 +260,7 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-phone"></i>
                                             @Html.TextBoxFor(m => m.PhoneNo3, new { @placeholder = "Số di động (nếu có)" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>Nhập Số di động (nếu có)</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>&nbsp;Nhập Số di động (nếu có)</b>
                                         </label>
                                     </section>
                                 </div>
@@ -260,7 +271,7 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-envelope"></i>
                                             @Html.TextBoxFor(m => m.HospitalEmail, new { @placeholder = "Email bệnh viện", @type = "email" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-envelope txt-color-teal"></i>Xin nhập địa chỉ Email của bệnh viện</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-envelope txt-color-teal"></i>&nbsp;Xin nhập địa chỉ Email của bệnh viện</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -268,18 +279,18 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-globe"></i>
                                             @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-globe txt-color-teal"></i>Nhập địa chỉ Website của bệnh viện. Ví dụ: http://www.benhvien.com</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-globe txt-color-teal"></i>&nbsp;Nhập địa chỉ Website của bệnh viện. Ví dụ: http://www.benhvien.com</b>
                                         </label>
                                     </section>
                                 </div>
 
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Người chịu trách nhiệm chính <font color="red">*</font></label>
+                                        <label class="label">Người chịu trách nhiệm chính</label>
                                         <label class="input">
                                             <i class="icon-prepend fa fa-male"></i>
                                             @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm", @type = "email" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-male txt-color-teal"></i>Xin nhập Email của người chịu trách nhiệm</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-male txt-color-teal"></i>&nbsp;Xin nhập Email của người chịu trách nhiệm</b>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -287,14 +298,14 @@
                                         <label class="input">
                                             <i class="icon-prepend fa fa-fax"></i>
                                             @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax của bệnh viện" })
-                                            <b class="tooltip tooltip-top-right"><i class="fa fa-fax txt-color-teal"></i>Nhập số fax của bệnh viện (không nhập khoảng trắng)</b>
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-fax txt-color-teal"></i>&nbsp;Nhập số fax của bệnh viện (không nhập khoảng trắng)</b>
                                         </label>
                                     </section>
                                 </div>
 
                                 <div class="row">
                                     <section class="col col-8">
-                                        <img src="../Content/img/ajax-loader.gif" class="resizeIcon"
+                                        <img src="../Content/img/loading-backup.gif" class="resizeIcon"
                                              style="display: none;" id="loaderIconUser">
                                         <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
                                              style="display: none;" id="validIconUser">
@@ -315,44 +326,48 @@
                                 <div class="row">
                                     <div class="form-group">
                                         <label><strong>Danh sách chuyên ngành</strong></label>
-                                        <select class="select2 select2-offscreen" id="SelectedSpecialities" multiple="multiple" name="SelectedSpecialities" style="width:100%" tabindex="-1">
+                                        <select class="select2 select2-offscreen" id="SelectedSpecialities"
+                                                multiple="multiple" name="SelectedSpecialities"
+                                                style="width:100%" tabindex="-1">
                                             @{
-                            if (Model.SelectedSpecialities.Count() == 0)
-                            {
-                                foreach (var speciality in Model.SpecialityList)
-                                {
-                                    <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
-                                }
-                            }
-                            else if (Model.SpecialityList.Count() == Model.SelectedSpecialities.Count())
-                            {
-                                foreach (var speciality in Model.SpecialityList)
-                                {
-                                    <option value="@speciality.Speciality_ID" selected="selected">@speciality.Speciality_Name</option>
-                                }
-                            }
-                            else
-                            {
-                                int isInserted = 0;
+                                                if (Model.SelectedSpecialities.Count() == 0)
+                                                {
+                                                    foreach (var speciality in Model.SpecialityList)
+                                                    {
+                                                        <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
+                                                    }
+                                                }
+                                                else if (Model.SpecialityList.Count() == Model.SelectedSpecialities.Count())
+                                                {
+                                                    foreach (var speciality in Model.SpecialityList)
+                                                    {
+                                                        <option value="@speciality.Speciality_ID"
+                                                                selected="selected">@speciality.Speciality_Name</option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    int isInserted = 0;
 
-                                foreach (var speciality in Model.SpecialityList)
-                                {
-                                    isInserted = 0;
-                                    foreach (var value in Model.SelectedSpecialities)
-                                    {
-                                        if (speciality.Speciality_ID.ToString().Equals(value))
-                                        {
-                                            <option value="@speciality.Speciality_ID" selected="selected">@speciality.Speciality_Name</option>
-                                            isInserted = 1;
-                                            break;
-                                        }
-                                    }
-                                    if (isInserted == 0)
-                                    {
-                                        <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
-                                    }
-                                }
-                            }
+                                                    foreach (var speciality in Model.SpecialityList)
+                                                    {
+                                                        isInserted = 0;
+                                                        foreach (var value in Model.SelectedSpecialities)
+                                                        {
+                                                            if (speciality.Speciality_ID.ToString().Equals(value))
+                                                            {
+                                                                <option value="@speciality.Speciality_ID"
+                                                                        selected="selected">@speciality.Speciality_Name</option>
+                                                                isInserted = 1;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (isInserted == 0)
+                                                        {
+                                                            <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
+                                                        }
+                                                    }
+                                                }
                                             }
                                         </select>
                                         <div class="note">
@@ -389,7 +404,8 @@
                                     <div class="form-group">
                                         <label><strong>Từ khóa tìm kiếm</strong></label>
                                         <input class="form-control tagsinput" data-role="tagsinput"
-                                               name="TagsInput" id="TagsInput" />
+                                               name="TagsInput" id="TagsInput"
+                                               value="@Model.TagsInput" />
                                         <div class="note">
                                             <strong>Chỉ dẫn:</strong> Từ khóa tìm kiếm giúp tối ưu hóa khả năng tìm kiếm của hệ thống.
                                         </div>
@@ -401,22 +417,24 @@
                                 <legend>Hình ảnh</legend>
                                 <div class="dropzone dropzone-previews" id="my-awesome-dropzone"></div>
                             </fieldset>
-                            
+
                             <fieldset>
                                 <legend>Miêu tả</legend>
-                                <div id="summernote"></div>
+                                <div id="summernote">
+                                    @Html.Raw(Model.FullDescription)
+                                </div>
                             </fieldset>
 
                             <footer>
-                                <button class="btn" type="reset">
+                                <button class="btn" type="reset"
+                                        id="reset-button">
                                     <i class="fa fa-refresh"></i>&nbsp;
                                     Nhập lại
                                 </button>
-                                <a class="btn btn-sm btn-success btn-next" id="edit-description">
-                                    <i class="fa fa-edit"></i>&nbsp;
-                                    Thay đổi thông tin bệnh viện
-                                </a>
-                                @Html.TextAreaFor(m => m.FullDescription, new { @style = "display:none;" })
+                                <button class="btn btn-primary" type="submit" id="confirm-button">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Xác nhận
+                                </button>
                             </footer>
                         }
                     </div>
@@ -483,20 +501,20 @@
     @*Display notification*@
     function displayNotification() {
         // Add hospital
-        if ('@ViewBag.UpdateHospitalStatus' == '') {
+        if ('@ViewBag.AddHospitalStatus' == '') {
             return false;
         } else {
-            var returnValue = '@ViewBag.UpdateHospitalStatus';
+            var returnValue = '@ViewBag.AddHospitalStatus';
             returnValue = returnValue.split('-');
             var status = returnValue[0];
             var hospitalName = returnValue[1];
 
             if (status != 0) {
                 $("#success-alert").show();
-                setNotification("Thông tin của [" + hospitalName + "] được cập nhật thành công!", 1);
+                setNotification("Cập nhật thông tin bệnh viện [" + hospitalName + "] thành công!", 1);
             } else {
                 $("#error-alert").show();
-                setNotification("không cập nhật được thông tin của [" + hospitalName + "], xin vui lòng thử lại sau.", 3);
+                setNotification("Cập nhật thông tin bệnh viện [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
             }
         }
     }
@@ -507,6 +525,47 @@
 
     var timeoutReference;
     $(document).ready(function () {
+        @*Check if user email is existed in database*@
+        $("#PersonInCharged").on('input', function () {
+            var email = $(this).val();
+            $("#loaderIconUser").show();
+
+            if (email.trim().length != 0) {
+                if (timeoutReference) clearTimeout(timeoutReference);
+                timeoutReference = setTimeout(function () {
+                    $.ajax({
+                        cache: false,
+                        type: "GET",
+                        url: "@(Url.RouteUrl("CheckValidUserWithEmail"))",
+                        data: { "email": email },
+                        success: function (data) {
+                            if (data.value == 1) {
+                                setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM019)", 1);
+                            }
+                            if (data.value == 2) {
+                                setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM020)", 0);
+                            }
+                            if (data.value == 0) {
+                                setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM021)", 0);
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                        }
+                    });
+                }, 1500);
+            } else {
+                $("#loaderIconUser").hide();
+                $("#validIconUser").hide();
+                $("#invalidIconUser").hide();
+                $("#user-message").text('');
+                $('#PersonInCharged').css('background', 'inherit');
+                $('#PersonInCharged').css('border-color', 'inherit');
+                $("#add-new-user-button").hide();
+            }
+
+            return false;
+        });
+
         @*Format textbox data*@
         $(function ($) {
             $('#OrdinaryTime').mask('99:99 - 99:99', { placeholder: "x" });
@@ -585,8 +644,11 @@
 
         @*Check if coordinate has been changed*@
         $("#Coordinate").change(function () {
-            if ($("#address-message").text() == "Xin hãy chọn địa điểm bệnh viện trên bản đồ.") {;
-                setAddressNotificationMessage("Địa điểm đã được xác định", 1);
+            if ($("#address-message").text() == '@Html.Raw(ErrorMessage.CEM014)') {
+                $("#loaderIcon").hide();
+                $("#validIcon").show();
+                $("#invalidIcon").hide();
+                $("#address-message").text("@Html.Raw(ErrorMessage.CEM018)");
             }
         });
     });
@@ -623,31 +685,31 @@
 
         $("#FullAddress").val(fullAddress);
 
-        checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress);
+        checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress, fullAddress);
     }
 
     @*Check if hospital and address information are not duplicated*@
-    function checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress) {
+    function checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress, fullAddress) {
         // Check if hospital is valid
         var hospitalName = $("#HospitalName").val();
         if (locationAddress == "") {
-            setAddressNotificationMessage("Thiếu thông tin Địa chỉ.", 0);
+            setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM015)', 0);
             return false;
         }
         if (streetAddress == "") {
-            setAddressNotificationMessage("Thiếu thông tin Tên đường.", 0);
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM028)", 0);
             return false;
         }
         if (city == "") {
-            setAddressNotificationMessage("Thiếu thông tin Tỉnh / thành phố.", 0);
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM029)", 0);
             return false;
         }
         if (district == "") {
-            setAddressNotificationMessage("Thiếu thông tin Quận / huyện.", 0);
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM030)", 0);
             return false;
         }
         if (district == "") {
-            setAddressNotificationMessage("Thiếu thông tin Phường / xã.", 0);
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM031)", 0);
             return false;
         }
 
@@ -661,22 +723,20 @@
                 type: "GET",
                 url: "@(Url.RouteUrl("CheckValidHospitalWithAddress"))",
                 data: {
-                    "address": locationAddress + " " + streetAddress,
-                    "cityId": $('#CityID').val(),
-                    "districtId": $('#DistrictID').val(),
-                    "wardId": $('#WardID').val()
+                    "hospitalName": hospitalName,
+                    "address": fullAddress
                 },
                 success: function (data) {
                     if (data.value == 1) {
-                        setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
+                        setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM016)', 1);
                     } else {
-                        setAddressNotificationMessage("Địa chỉ trùng lắp với bệnh viện khác.", 0);
+                        setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM017)', 0);
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     $("#invalidIcon").show();
-                    $("#address-message").text("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.");
-                    setNotification("Không kiểm tra được thông tin địa chỉ. Xin hãy thử lại sau.", 2);
+                    $("#address-message").text("@Html.Raw(ErrorMessage.CEM022)");
+                    setNotification("@Html.Raw(ErrorMessage.CEM022)", 2);
                 }
             });
             return false;
@@ -702,57 +762,60 @@
         }
     }
 
+    @*Set user message notification*@
+    function setUserNotificationMessage(message, mode) {
+        if (mode == 1) {
+            $("#loaderIconUser").hide();
+            $("#validIconUser").show();
+            $("#invalidIconUser").hide();
+            $("#user-message").text(message);
+            $('#PersonInCharged').css('background', '#f0fff0');
+            $('#PersonInCharged').css('border-color', '#7DC27D');
+            $("#add-new-user-button").hide();
+        } else {
+            $("#loaderIconUser").hide();
+            $("#validIconUser").hide();
+            $("#invalidIconUser").show();
+            $("#user-message").text(message);
+            $('#PersonInCharged').css('background', '#fff0f0');
+            $('#PersonInCharged').css('border-color', '#A90329');
+            $("#add-new-user-button").show();
+        }
+    }
+
     @*Data validation*@
     $(document).ready(function () {
-        $('#confirm-button').click(function () {
-            var city = "";
-            if (($('#CityID').val() != null) && ($('#CityID').val() != '')) {
-                city = ", " + $("#CityID option:selected").text();
-            }
-            var district = "";
-            if (($('#DistrictID').val() != null) && ($("#DistrictID").val() != '')) {
-                district = ", " + $("#DistrictID option:selected").text();
-            }
-            var ward = "";
-            if (($('#WardID').val() != null) && ($("#WardID").val() != '')) {
-                ward = ", " + $("#WardID option:selected").text();
-            }
-            var locationAddress = $("#LocationAddress").val();
-            var streetAddress = $("#StreetAddress").val();
-            var fullAddress = $("#FullAddress").val();
-
-            if ((locationAddress == "") ||
-            (streetAddress == "") || (city == "") ||
-            (district == "") || (ward == "")) {
-                $("#LocationAddress").focus();
-                setNotification("Thiếu thông tin địa chỉ.", 2);
-                return false;
-            } else if ($("#address-message").text() == "Địa chỉ trùng lắp với bệnh viện khác.") {
-                $("#LocationAddress").focus();
-                setNotification("Địa chỉ trùng lắp với bệnh viện khác.", 2);
-                return false;
-            }
-
-            var coordinate = $("#Coordinate").val();
-            if (coordinate.trim() == "") {
-                setAddressNotificationMessage("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 0);
-                setNotification("Xin hãy chọn địa điểm bệnh viện trên bản đồ.", 2);
-                $("google-map").focus();
-                return false;
-            } else if ($("#invalidIconUser").is(":visible")) {
-                $("#PersonInCharged").focus();
-                setNotification("Người chịu trách nhiệm không phù hợp", 2);
-                $("#PersonInCharged").focus();
+        $('#reset-button').click(function (e) {
+            if (confirm('Bạn có muốn nhập lại dữ liệu từ ban đầu?')) {
+                $('#updateHospitalForm').trigger("reset");
+                $('#HospitalName').focus();
             } else {
-                var dz = Dropzone.forElement("#my-awesome-dropzone");
-                if (dz.getQueuedFiles().length > 0) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    dz.processQueue();
-                }
-                $("#FullDescription").val($('#summernote').code());
-                $('#addHospitalForm').submit();
+                return false;
             }
+        });
+
+        $('#confirm-button').click(function (e) {
+            if ($("#address-message").text() == "@Html.Raw(ErrorMessage.CEM017)") {
+                $("#LocationAddress").focus();
+                setNotification("@Html.Raw(ErrorMessage.CEM017)", 2);
+                return false;
+            }
+
+            if ($("#invalidIconUser").is(":visible")) {
+                $("#PersonInCharged").focus();
+                setNotification("Người chịu trách nhiệm không phù hợp.", 2);
+                $("#PersonInCharged").focus();
+                return false;
+            }
+
+            var dz = Dropzone.forElement("#my-awesome-dropzone");
+            if (dz.getQueuedFiles().length > 0) {
+                e.preventDefault();
+                e.stopPropagation();
+                dz.processQueue();
+            }
+            $("#FullDescription").val($('#summernote').code());
+            $('#updateHospitalForm').submit();
         });
 
         $.validator.addMethod("time",
@@ -769,25 +832,20 @@
                 }
 
                 return false;
-            }, "Thời gian không phù hợp.");
-
-        $.validator.addMethod("locationAddress",
-            function (value, element) {
-                return /^[a-zA-Z0-9/]*$/.test(value);
-            }, "Giá trị không được chứa khoảng trắng và ký tự đặc biệt.");
+            }, "@ErrorMessage.CEM023");
 
         $.validator.addMethod("phone",
             function (value, element) {
-                return /^[0-9()]*$/.test(value);
-            }, "Số điện thoại không phù hợp.");
+                return /^[0-9() ]*$/.test(value);
+            }, "@string.Format(ErrorMessage.CEM005, Constants.PhoneNo)");
 
         $.validator.addMethod("notEqual",
             function (value, element, param) {
                 var a = param;
                 return this.optional(element) || value != $(param).val();
-            }, "Email phụ không được trùng với Email chính.");
+            }, "@Html.Raw(ErrorMessage.CEM025)");
 
-        $('#add-hospital-form').validate({
+        $('#updateHospitalForm').validate({
             // Rules for form validation
             rules: {
                 HospitalName: {
@@ -800,8 +858,7 @@
                 },
                 LocationAddress: {
                     required: true,
-                    maxlength: 10,
-                    locationAddress: true
+                    maxlength: 32
                 },
                 StreetAddress: {
                     required: true,
@@ -835,6 +892,9 @@
                 Email: {
                     email: true
                 },
+                PersonInCharged: {
+                    email: true
+                },
                 Website: {
                     url: true
                 },
@@ -865,8 +925,7 @@
                 },
                 LocationAddress: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.LocationAddress)',
-                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.LocationAddress, 10)',
-                    locationAddress: '@string.Format(ErrorMessage.CEM013, Constants.LocationAddress)'
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.LocationAddress, 32)'
                 },
                 StreetAddress: {
                     required: '@string.Format(ErrorMessage.CEM011, Constants.StreetAddress)',
@@ -896,6 +955,9 @@
                     digits: '@string.Format(ErrorMessage.CEM005, Constants.MobilePhone)'
                 },
                 Email: {
+                    email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
+                },
+                PersonInCharged: {
                     email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
                 },
                 Website: {
@@ -928,7 +990,7 @@
             navigator.geolocation.getCurrentPosition(initializeMap);
         }
         else {
-            setNotification("Trình duyệt không hỗ trợ xác định vị trí.", 2);
+            setNotification("@Html.Raw(ErrorMessage.CEM026)", 2);
         }
 
         // Declare marker - Make it global so only one marker can be created
@@ -994,13 +1056,13 @@
         // Press button get location from address
         $("#button-get-loction").click(function () {
             if ($("#FullAddress").val().trim() == "") {
-                setAddressNotificationMessage("Thiếu thông tin địa chỉ.", 0);
+                setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM015)', 0);
                 $("#LocationAddress").focus();
                 return false;
             }
 
-            if (($("#address-message").text() == "Địa chỉ phù hợp.") ||
-                ($("#address-message").text() == "Xin hãy chọn địa điểm bệnh viện trên bản đồ.")) {
+            if (($("#address-message").text() == '@Html.Raw(ErrorMessage.CEM016)') ||
+                ($("#address-message").text() == '@Html.Raw(ErrorMessage.CEM014)')) {
                 getCoordinateFromAddress();
             }
             return false;
@@ -1031,7 +1093,7 @@
             $("#loaderIcon").show();
             $("#validIcon").hide();
             $("#invalidIcon").hide();
-            $("#address-message").text("Đang xử lý thông tin.");
+            $("#address-message").text("@Html.Raw(ErrorMessage.CEM027)");
 
             // Take full address
             var address = $("#FullAddress").val();
@@ -1068,30 +1130,14 @@
                     $('#Coordinate').val(currentCoordinate).trigger('change');
 
                     // Display message
-                    setAddressNotificationMessage("Địa chỉ phù hợp.", 1);
+                    setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM016)', 1);
                 } else {
-                    setAddressNotificationMessage("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 0);
-                    setNotification("Không xác định được vị trí, hãy thử lại với địa chỉ khác.", 2);
+                    setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM032)", 0);
+                    setNotification("@Html.Raw(ErrorMessage.CEM032)", 2);
                 }
             });
             return false;
         }
-    });
-
-    @*Hopsital description*@
-    $(document).ready(function () {
-        $('#edit-description').click(function () {
-            if ($("#partial-description").is(":visible")) {
-                if (confirm('Lưu thông tin trước khi thoát, mọi thông tin chưa lưu sẽ không có hiệu lực!')) {
-                    $('.summernote').destroy();
-                    $("#partial-description").hide();
-                } else {
-                    return false;
-                }
-            } else {
-                $("#partial-description").show();
-            }
-        });
     });
 
     @*Summer note*@
@@ -1102,73 +1148,6 @@
             minHeight: null,
             maxHeight: null,
             focus: false
-        })
-    });
-
-    @*Change status button*@
-    $(document).ready(function () {
-        $('#change-status-button').on('click', function () {
-
-            var hospitalId = '@Model.HospitalID';
-            var hospitalName = $("#HospitalName").val();
-            var status = '@Model.IsActive';
-            var confirmMessage = "";
-            if (status == "True") {
-                confirmMessage = "Bạn có muốn ngừng [" + hospitalName + "] hay không?"
-            } else {
-                confirmMessage = "Bạn có muốn kích hoạt [" + hospitalName + "] hay không?"
-            }
-
-            if (confirm(confirmMessage)) {
-                $.ajax({
-                    cache: false,
-                    type: "GET",
-                    url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
-                    data: {
-                        "hospitalId": hospitalId
-                    },
-                    success: function (data) {
-                        if (data.value == 1) {
-                            if (status == "True") {
-                                notif({
-                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái thành Ngừng hoạt động",
-                                    type: "success",
-                                    width: 600,
-                                    position: "center",
-                                    fade: true,
-                                    multiline: true
-                                });
-                                $("#main-content").hide();
-                                $("#success-alert").show();
-                            } else {
-                                notif({
-                                    msg: "[" + hospitalName + "] đã thay đổi trạng thái Hoạt động trở lại",
-                                    type: "success",
-                                    width: 600,
-                                    position: "center",
-                                    fade: true,
-                                    multiline: true
-                                });
-                            }
-                        } else {
-
-                        }
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        notif({
-                            msg: "Không thể thay đổi trạng thái của [" + hospitalName + "]",
-                            type: "error",
-                            width: 600,
-                            position: "center",
-                            fade: true,
-                            multiline: true
-                        });
-                    }
-                });
-            } else {
-                return false;
-            }
-            return false;
         });
     });
 
@@ -1180,7 +1159,7 @@
             maxFiles: 10,
             parallelUploads: 10,
             maxfilesexceeded: function (file) {
-                setNotification("Không thể tải nhiều hơn 10 hình.", 2);
+                setNotification("@string.Format(@ErrorMessage.CEM033, 10.ToString())", 2);
             },
             maxFilesize: 5,
             acceptedFiles: "image/jpeg,image/png,image/jpg,image/gif",
@@ -1194,12 +1173,13 @@
             }
         });
     });
+
 </script>
 
 <style>
     #google-map {
-        height: 300px;
-        width: 687px;
+        height: 400px;
+        width: 100%;
     }
 
     .resizeIcon {

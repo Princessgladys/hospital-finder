@@ -1007,7 +1007,7 @@ namespace HospitalF.Controllers
         /// <param name="hospitalId">Hospital ID</param>
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles = Constants.AdministratorRoleName+","+Constants.HospitalUserRoleName)]
+        [Authorize(Roles = Constants.AdministratorRoleName + Constants.Comma + Constants.HospitalUserRoleName)]
         public async Task<ActionResult> UpdateHospital(int hospitalId)
         {
             HospitalModel model = new HospitalModel();
@@ -1048,34 +1048,13 @@ namespace HospitalF.Controllers
 
                 //Load list of specialities
                 model.SpecialityList = await SpecialityUtil.LoadSpecialityAsync();
-                //ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
 
                 //Load list of services
                 serviceList = await ServiceFacilityUtil.LoadServiceAsync();
-                foreach (var service in serviceList)
-                {
-                    foreach (var selectValue in model.SelectedServices)
-                    {
-                        if (service.Value.Equals(selectValue))
-                        {
-                            service.Selected = true;
-                        }
-                    }
-                }
                 ViewBag.ServiceList = serviceList;
 
                 // Load list of facilitites
                 facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
-                foreach (var facility in facilityList)
-                {
-                    foreach (var selectValue in model.SelectedFacilities)
-                    {
-                        if (facility.Value.Equals(selectValue))
-                        {
-                            facility.Selected = true;
-                        }
-                    }
-                }
                 ViewBag.FacilityList = facilityList;
 
                 #endregion
@@ -1097,7 +1076,7 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [HttpPost]
         [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles = Constants.AdministratorRoleName + "," + Constants.HospitalUserRoleName)]
+        [Authorize(Roles = Constants.AdministratorRoleName + Constants.Comma + Constants.HospitalUserRoleName)]
         [ValidateInput(false)]
         public async Task<ActionResult> UpdateHospital(HospitalModel model, List<HttpPostedFileBase> file)
         {
