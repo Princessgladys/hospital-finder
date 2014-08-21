@@ -704,19 +704,15 @@ namespace HospitalF.Controllers
         /// Check if there is  similar hospital with name and address
         /// are equal with given data from user
         /// </summary>
-        /// <param name="locationAddress">Location address</param>
-        /// <param name="cityId">City ID</param>
-        /// <param name="districtId">District ID</param>
-        /// <param name="wardId">Ward ID</param>
+        /// <param name="hospitalName">Hospital name</param>
+        /// <param name="address">Full Address</param>
         /// <returns> 1: Not duplicated, 0: Duplicated</returns>
-        public async Task<ActionResult> CheckValidHospitalWithAddress(string address,
-            int cityId, int districtId, int wardId)
+        public async Task<ActionResult> CheckValidHospitalWithAddress(string hospitalName, string address)
         {
             try
             {
                 HospitalModel model = new HospitalModel();
-                int result = await model.CheckValidHospitalWithAddress(address,
-                    cityId, districtId, wardId);
+                int result = await LocationUtil.CheckValidHospitalWithAddress(hospitalName, address);
                 return Json(new { value = result }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception exception)
