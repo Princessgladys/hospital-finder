@@ -67,3 +67,5 @@ DECLARE	@return_value float
 EXEC	@return_value = [SP_RATE_HOSPITAL] 3, 20, 1
 SELECT	'Return Value' = @return_value
 GO
+
+EXEC [SP_RATE_HOSPITAL] 84, 450, 5
