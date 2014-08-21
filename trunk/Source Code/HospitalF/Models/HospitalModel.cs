@@ -578,12 +578,12 @@ namespace HospitalF.Models
 
                 #endregion
 
-                #region Load list of persons in charged
+                #region Load persons in charged
 
-                model.SelectedPersonInCharged = await Task.Run(() =>
+                model.PersonInCharged = await Task.Run(() =>
                     (from u in data.Users
                      where u.Hospital_ID.Equals(hospitalId)
-                     select u.User_ID.ToString()).ToList());
+                     select u.Email).FirstOrDefault());
 
                 #endregion
 
@@ -596,21 +596,46 @@ namespace HospitalF.Models
 
                 #endregion
 
-                #region Load list of services
+                //#region Load list of services
 
-                model.SelectedServices = await Task.Run(() =>
-                    (from hs in data.Hospital_Services
-                     where hs.Hospital_ID.Equals(hospitalId)
-                     select hs.Service_ID.ToString()).ToList());
+                //model.SelectedServices = await Task.Run(() =>
+                //    (from hs in data.Hospital_Services
+                //     where hs.Hospital_ID.Equals(hospitalId)
+                //     select hs.Service_ID.ToString()).ToList());
 
-                #endregion
+                //#endregion
 
-                #region Load list of facilities
+                //#region Load list of facilities
 
-                model.SelectedFacilities = await Task.Run(() =>
-                    (from hf in data.Hospital_Facilities
-                     where hf.Hospital_ID.Equals(hospitalId)
-                     select hf.Facility_ID.ToString()).ToList());
+                //model.SelectedFacilities = await Task.Run(() =>
+                //    (from hf in data.Hospital_Facilities
+                //     where hf.Hospital_ID.Equals(hospitalId)
+                //     select hf.Facility_ID.ToString()).ToList());
+
+                //#endregion
+
+                #region Load list of tag keywords
+
+                List<string> tagKeyWords = await Task.Run(() =>
+                    (from t in data.Tags
+                     join th in data.Tag_Hospitals
+                     on t.Word_ID equals th.Word_ID
+                     where th.Hospital_ID.Equals(hospitalId)
+                     where th.Is_Active == true
+                     select t.Word).ToList());
+
+                for (int n = 0; n < tagKeyWords.Count; n++)
+                {
+                    if (n == (tagKeyWords.Count - 1))
+                    {
+                        model.TagsInput += tagKeyWords[n];
+                    }
+                    else
+                    {
+                        model.TagsInput += tagKeyWords[n] +
+                            Constants.Comma;
+                    }
+                }
 
                 #endregion
 
