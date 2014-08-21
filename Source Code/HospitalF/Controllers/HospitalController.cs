@@ -901,9 +901,34 @@ namespace HospitalF.Controllers
         {
             try
             {
-                // Prepare data
+                #region Prepare data
+
                 int result = 0;
                 model.CreatedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+
+                // Check if cooridnate is null
+                if (string.IsNullOrEmpty(model.Coordinate))
+                {
+                    WebClient client = new WebClient();
+                    string geoJsonResult = string.Empty;
+                    geoJsonResult = client.DownloadString(string.Concat(
+                                    Constants.GeoCodeJsonQuery, model.FullAddress));
+                    JObject geoJsonObject = JObject.Parse(geoJsonResult);
+                    if (Constants.Ok.Equals(geoJsonObject.Value<string>(Constants.GeoCodeStatus)))
+                    {
+                        model.Coordinate = string.Format("{0}, {1}",
+                            geoJsonObject[Constants.GeoCodeResults].
+                                First[Constants.GeoCodeGemometry][Constants.GeoCodeLocation].
+                                Value<double>(Constants.GeoCodeLatitude),
+                            geoJsonObject[Constants.GeoCodeResults].
+                                First[Constants.GeoCodeGemometry][Constants.GeoCodeLocation].
+                                Value<double>(Constants.GeoCodeLongitude));
+                    }
+                }
+
+                #endregion
+
+                #region Handle photo
 
                 // Take file path from session
                 List<string> filePath = new List<string>();
@@ -929,6 +954,10 @@ namespace HospitalF.Controllers
                 {
                     model.PhotoFilesPath = string.Empty;
                 }
+
+                #endregion
+
+                #region Insert hospital and return to view
 
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
@@ -956,6 +985,8 @@ namespace HospitalF.Controllers
                     ModelState.Clear();
                     return View();
                 }
+
+                #endregion
             }
             catch (Exception exception)
             {
