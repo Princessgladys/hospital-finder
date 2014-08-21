@@ -185,7 +185,7 @@ class="active"
                                                             @Html.ActionLink(@Model[n].HospitalName,
                                                                 Constants.ReviewHospitalDetailAction, Constants.HospitalController,
                                                                 new { hospitalId = @Model[n].HospitalID },
-                                                                new { @data_toggle="modal", @data_target="#viewHospitalDetail" })
+                                                                new { @data_toggle="modal", @data_target="#viewHospitalDetail"})
                                                         </td>
                                                         <td>@Model[n].FullAddress</td>
                                                         <td>@Model[n].HospitalTypeName</td>
@@ -262,8 +262,9 @@ class="active"
                                                         <td>@Model[n].HospitalID</td>
                                                         <td>
                                                             @Html.ActionLink(@Model[n].HospitalName,
-                                                                Constants.UpdateHospitalAction, Constants.HospitalController,
-                                                                new { hospitalId = @Model[n].HospitalID }, null)
+                                                                Constants.ReviewHospitalDetailAction, Constants.HospitalController,
+                                                                new { hospitalId = @Model[n].HospitalID },
+                                                                new { @data_toggle = "modal", @data_target = "#viewHospitalDetail" })
                                                         </td>
                                                         <td>@Model[n].FullAddress</td>
                                                         <td>@Model[n].HospitalTypeName</td>
@@ -323,7 +324,6 @@ class="active"
                                         }
                                     </tbody>
                                 </table>    
-
                                 <footer id="footer">
                                     <button class="btn btn-primary" type="submit" id="confirm-button"
                                         name="@Constants.Button" value="@Constants.ButtonConfirm"

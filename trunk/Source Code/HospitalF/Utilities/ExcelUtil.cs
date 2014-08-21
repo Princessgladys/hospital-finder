@@ -51,6 +51,7 @@ namespace HospitalF.Utilities
                 // Take data from file
                 // Check if required fields are missing
                 if (string.IsNullOrEmpty(data[0]) && string.IsNullOrEmpty(data[1]) &&
+                    string.IsNullOrEmpty(data[2]) && string.IsNullOrEmpty(data[3]) &&
                     string.IsNullOrEmpty(data[6]) && string.IsNullOrEmpty(data[7]) &&
                     string.IsNullOrEmpty(data[8]) && string.IsNullOrEmpty(data[9]) &&
                     string.IsNullOrEmpty(data[10]))
