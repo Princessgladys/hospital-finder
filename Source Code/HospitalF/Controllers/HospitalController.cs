@@ -1236,6 +1236,10 @@ namespace HospitalF.Controllers
                                             First[Constants.GeoCodeGemometry][Constants.GeoCodeLocation].
                                             Value<double>(Constants.GeoCodeLongitude));
                                 }
+                                else
+                                {
+                                    record.Coordinate = string.Format("{0}, {1}", Constants.hcmLatitude, Constants.hcmLongitude);
+                                }
                             } 
                         }
 

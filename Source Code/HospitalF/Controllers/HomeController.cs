@@ -176,11 +176,11 @@ namespace HospitalF.Controllers
         /// <summary>
         /// GET: /Home/Index
         /// </summary>
-        /// <param name="model">HomeModels</param>
+        /// <param name="model">HomeModel</param>
         /// <returns>Task[ActionResult]</returns>
         [HttpGet]
         [LayoutInjecter(Constants.HomeLayout)]
-        public async Task<ActionResult> SearchResult(HomeModels model, int page = 1)
+        public async Task<ActionResult> SearchResult(HomeModel model, int page = 1)
         {
             List<HospitalEntity> hospitalList = null;
             IPagedList<HospitalEntity> pagedHospitalList = null;
@@ -309,7 +309,7 @@ namespace HospitalF.Controllers
                         }
 
                     }
-                    hospitalList = await HomeModels.LocationSearchHospital(lat, lng, radius * 1000);
+                    hospitalList = await HomeModel.LocationSearchHospital(lat, lng, radius * 1000);
                     pagedHospitalList = hospitalList.ToPagedList(page, Constants.PageSize);
                     string distanceMatrixUrl = string.Concat("http://maps.googleapis.com/maps/api/distancematrix/json?origins=", lat, ",", lng, "&destinations=");
                     int index = 0;
@@ -372,17 +372,18 @@ namespace HospitalF.Controllers
                 HospitalEntity hospital = null;
                 if (hospitalId > 0)
                 {
-                    hospital = await HomeModels.LoadHospitalById(hospitalId);
+                    hospital = await HomeModel.LoadHospitalById(hospitalId);
                     if (hospital != null)
                     {
-                        hospital.Services = HomeModels.LoadServicesByHospitalId(hospitalId);
-                        hospital.Facilities = HomeModels.LoadFacillitiesByHospitalId(hospitalId);
-                        hospital.Specialities = HomeModels.LoadSpecialitiesByHospitalId(hospitalId);
+                        hospital.Services = HomeModel.LoadServicesByHospitalId(hospitalId);
+                        hospital.Facilities = HomeModel.LoadFacillitiesByHospitalId(hospitalId);
+                        hospital.Specialities = HomeModel.LoadSpecialitiesByHospitalId(hospitalId);
                         ViewBag.SpecialityList = new SelectList(hospital.Specialities, Constants.SpecialityID, Constants.SpecialityName);
                         ViewBag.RateActionStatus = TempData["RateActionStatus"];
                         ViewBag.RateActionMessage = TempData["RateActionMessage"];
+                        ViewBag.FeedbackStatus = TempData["FeedbackStatus"];
                         ViewBag.HospitalEntity = hospital;
-                        ViewBag.Photos = HomeModels.LoadPhotosByHospitalId(hospitalId);
+                        ViewBag.Photos = HomeModel.LoadPhotosByHospitalId(hospitalId);
                     }
                     else
                     {
@@ -442,9 +443,9 @@ namespace HospitalF.Controllers
 
                 string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
 
-                int userId = AccountModels.LoadUserIdByEmail(email);
+                int userId = AccountModel.LoadUserIdByEmail(email);
 
-                bool check = HomeModels.RateHospital(userId, id, score);
+                bool check = HomeModel.RateHospital(userId, id, score);
                 if (!check)
                 {
                     TempData["RateActionStatus"] = false;
@@ -460,56 +461,34 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
-        /*
-        public async Task<ActionResult> FeedBack(int hospitalID)
+
+        #region Feedback
+        public async Task<ActionResult> Feedback(FeedBackModel model, int hospitalId = 0)
         {
-            string email = string.Empty;
-            FeedBackModels model = new FeedBackModels();
-            Hospital hospital;
-            List<FeedbackType> feebackType = await FeedBackModels.LoadFeedbackTypeAsync();
-            ViewBag.FeedbackTypeList = new SelectList(feebackType, Constants.FeedbackType, Constants.FeedbackTypeName);
-            hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
-            model.HospitalName = hospital.Hospital_Name;
-            model.HospitalID = hospitalID;
-            // login user is normal user
-            if (User.IsInRole("2"))
+            List<FeedbackType> feebackTypeList = model.LoadFeedbeackTypeList();
+            if (hospitalId > 0)
             {
-                model.Email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+                HospitalEntity hospitalEntity = await HomeModel.LoadHospitalById(hospitalId);
+                feebackTypeList.RemoveAt(0);
+                ViewBag.FeedbackTypeList = new SelectList(feebackTypeList, Constants.FeedbackType, Constants.FeedbackTypeName);
+                model.Header = hospitalEntity.Hospital_Name;
+                model.HospitalID = hospitalId;
             }
-            else if (User.IsInRole("3"))
+            else
             {
-                model.Email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+                feebackTypeList.RemoveAt(1);
             }
+            model.Email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
             return PartialView(model);
         }
-         * */
-        /*
+
         [HttpPost]
-        public async Task<ActionResult> FeedBack(FeedBackModels model)
+        public async Task<ActionResult> FeedBack(FeedBackModel model)
         {
             try
             {
-                int result = 0;
-
-                // Return list of dictionary words
-                using (LinqDBDataContext data = new LinqDBDataContext())
-                {
-                    result = await model.InsertFeedbackAsync(model);
-                }
-
-                // Check returned result
-                if (result == 1)
-                {
-
-                    ViewBag.AddFeedbackStatus = 1.ToString();
-                    return RedirectToAction(Constants.HospitalAction, Constants.HomeController, new { hospitalId = model.HospitalID, redirect = "yes" });
-                }
-                else
-                {
-                    ViewBag.AddFeedbackStatus = 0.ToString();
-                    ModelState.Clear();
-                    return View();
-                }
+                TempData["FeedbackStatus"] = model.InsertNewFeedback();
+                return Redirect(Request.UrlReferrer.AbsoluteUri);
             }
             catch (Exception exception)
             {
@@ -517,7 +496,8 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
-        */
+        #endregion
+
         #region search doctor
         public async Task<ActionResult> SearchDoctor(string SpecialityID, string DoctorName, string HospitalID)
         {

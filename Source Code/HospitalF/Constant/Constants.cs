@@ -1131,6 +1131,14 @@ namespace HospitalF.Constant
         /// Value of HospitalF Facebook App_Id
         /// </summary>
         public const string FacebookAppId = "1403418919945133";
+        /// <summary>
+        /// Value of Ho Chi Minh city's latitude
+        /// </summary>
+        public const string hcmLatitude = "10.8230989";
+        /// <summary>
+        /// Value of Ho Chi Minh city's longitude
+        /// </summary>
+        public const string hcmLongitude = "106.6296638";
         #endregion
     }
 }

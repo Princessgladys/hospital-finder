@@ -16,7 +16,7 @@ namespace HospitalF.Models
     /// <summary>
     /// Class define properties for /Account/Login View
     /// </summary>
-    public class AccountModels
+    public class AccountModel
     {
         #region SonNX
 
@@ -92,7 +92,7 @@ namespace HospitalF.Models
         /// </summary>
         /// <param name="model">Account Model</param>
         /// <returns>1: Success, 0: Failed</returns>
-        public async Task<int> InsertHospitalUserAsync(AccountModels model)
+        public async Task<int> InsertHospitalUserAsync(AccountModel model)
         {
             int result = 0;
             // Return list of dictionary words
@@ -111,7 +111,7 @@ namespace HospitalF.Models
 
         #region VietLP
 
-        public static bool IsExistedUser(string email)
+        public static User LoadUserByEmail(string email)
         {
 
             using (LinqDBDataContext data = new LinqDBDataContext())
@@ -119,11 +119,7 @@ namespace HospitalF.Models
                 User user = (from u in data.Users
                              where u.Email.Equals(email.Trim())
                              select u).SingleOrDefault();
-                if (user != null)
-                {
-                    return true;
-                }
-                return false;
+                return user;
             }
 
         }
@@ -152,7 +148,8 @@ namespace HospitalF.Models
         {
 
             string email = jsonUserInfo.Value<string>("email");
-            if (!IsExistedUser(email))
+            User user = LoadUserByEmail(email);
+            if (user == null)
             {
                 string firstName = jsonUserInfo.Value<string>("first_name");
                 string lastName = jsonUserInfo.Value<string>("last_name");
@@ -175,7 +172,10 @@ namespace HospitalF.Models
                     }
                 }
             }
-
+            else if (user.Is_Active == false)
+            {
+                return false;
+            }
             string fullName = jsonUserInfo.Value<string>("name");
             SimpleSessionPersister.Username = email + Constants.Minus + fullName;
             SimpleSessionPersister.Role = Constants.UserRoleName;

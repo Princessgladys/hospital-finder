@@ -276,17 +276,17 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DataModel.cs" />
-    <Compile Include="Models\DoctorModels.cs" />
-    <Compile Include="Models\FeedBackModels.cs" />
-    <Compile Include="Models\HomeModels.cs" />
-    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\DoctorModel.cs" />
+    <Compile Include="Models\FeedBackModel.cs" />
+    <Compile Include="Models\HomeModel.cs" />
+    <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\HospitalModel.cs" />
     <Compile Include="Models\LinqDB.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LinqDB.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Models\SecurityModels.cs" />
+    <Compile Include="Models\SecurityModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\DictionaryUtil.cs" />
     <Compile Include="Utilities\ExcelUtil.cs" />
@@ -602,6 +602,7 @@
     </Content>
     <Content Include="Views\Data\SearchQueryStatistic.cshtml" />
     <Content Include="Views\Hospital\ReviewHospitalDetail.cshtml" />
+    <Content Include="Views\Home\Feedback.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

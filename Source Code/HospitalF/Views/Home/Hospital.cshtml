@@ -27,22 +27,6 @@
 }
 <!-- MAIN CONTENT -->
 
-<div class="alert alert-danger fade in" style="display: @errorMessage;"
-        id="error-alert">
-    <button class="close" data-dismiss="alert">
-        ×
-    </button>
-    <i class="fa-fw fa fa-times"></i>
-    <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
-</div>
-<div class="alert alert-success fade in" style="display: @successMessage;"
-        id="success-alert">
-    <button class="close" data-dismiss="alert">
-        ×
-    </button>
-    <i class="fa-fw fa fa-check"></i>
-    <strong>Thành công</strong> Góp ý phản hồi được gửi thành công.
-</div>
 <div id="content-results" class="col-md-12 col-md-offset-0 well">
     <div class="col-md-12">
         <div class="pull-left">
@@ -50,7 +34,7 @@
             <hr />
             <div class="contact-info">
                 <address>
-                    <strong>@(hospital.Hospital_Type_Name)</strong>
+                    <strong class="txt-color-blue">@(hospital.Hospital_Type_Name)</strong>
                     <br />
                     <strong>Địa chỉ</strong>: @(hospital.Address) <i class="fa fa-location-arrow"></i>
                     <br />
@@ -81,24 +65,31 @@
                     }
                 </div>
                 <p>Dựa trên <strong>@(hospital.Rating_Count != null ? hospital.Rating_Count : 0)</strong> bình chọn</p>
+                <p><strong><a data-toggle="modal" href="/Home/Feedback?hospitalId=@(hospital.Hospital_ID)" data-target="#feedbackModal">Phản hồi</a></strong></p>
             </div>
         </div>
+
+        <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+
         <div class="clearfix"></div>
         <hr />
     </div>
+
     <div class="col-md-12">
         <ul id="myTab1" class="nav nav-tabs bordered">
             <li class="active">
                 <a href="#s1" data-toggle="tab"><i class="fa fa-fw fa-lg fa-search"></i>&nbsp;Tổng quan</a>
             </li>
             <li>
-                <a href="#s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i>&nbsp;Chuyên khoa và dịch vụ</a>
+                <a href="#s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-th-list"></i>&nbsp;Lịch khám và dịch vụ</a>
             </li>
             <li>
-                <a id="s3-tab" href="#s3" data-toggle="tab"><i class="fa fa-fw fa-lg fa-file-image-o"></i>&nbsp;Hình ảnh</a>
-            </li>
-            <li>
-                <a id="s4-tab" href="#s4" data-toggle="tab"><i class="fa fa-fw fa-lg fa-hacker-news"></i>&nbsp;Các bác sĩ</a>
+                <a id="s4-tab" href="#s3" data-toggle="tab"><i class="fa fa-fw fa-lg fa-file-image-o"></i>&nbsp;Hình ảnh</a>
             </li>
         </ul>
         <div id="myTabContent1" class="tab-content padding-10">
@@ -228,15 +219,43 @@
             </div>
             <div class="tab-pane fade in" id="s2">
                 <div class="row">
-                    <div id="speciality-content" class="col-md-12">
-                        <h5 class="txt-color-blue">Chuyên khoa</h5>
+                    <div class="col-md-8">
+                        <h5 class="txt-color-blue">Lịch khám</h5>
                         <hr />
+                        <p>
+                            <strong>Chuyên khoa chính:</strong>
+                        </p>
                         <ul>
                             @foreach (HospitalF.Models.Speciality speciality in hospital.Specialities)
                             {
-                                <li><i class="fa fa-lg fa-medkit txt-color-green"></i>&nbsp;@(speciality.Speciality_Name)</li>
+                                <li>@(speciality.Speciality_Name)</li>
                             }
                         </ul>
+                        <p>
+                            <strong>Giờ khám bệnh</strong>
+                        </p>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Ngày thường (thứ Hai đến thứ Sáu):</td>
+                                    <td>từ <strong>@(hospital.Ordinary_Start_Time)</strong> đến <strong>@(hospital.Ordinary_End_Time)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Ngày lễ:</td>
+                                    <td>từ <strong>@(hospital.Holiday_Start_Time)</strong> đến <strong>@(hospital.Holiday_End_Time)</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            @if (hospital.Is_Allow_Appointment == true)
+                            {
+                                <strong>@(hospital.Hospital_Name) có hỗ trợ đặt lịch hẹn khám bệnh. Xin liên hệ số điện thoại: <span class="txt-color-blue">@(hospital.Phone_Number)</span></strong>
+                            }
+                            else
+                            {
+                                <strong>@(hospital.Hospital_Name) không hỗ trợ đặt lịch hẹn khám bệnh.</strong>
+                            }
+                        </p>
                     </div>
                     <div id="service-content" class="col-md-12">
                         <h5 class="txt-color-blue">Dịch vụ hỗ trợ</h5>
@@ -376,60 +395,6 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade in" id="s4">
-                <div class="row">
-                    <section class="col-md-7">
-                        <div>
-                            <h5 class="txt-color-blue">Các bác sĩ</h5>
-                            <hr />
-                        </div>
-                    </section>
-                    <section class="col-md-12">
-                        <fieldset>
-                            @using (Html.BeginForm(Constants.SearchDoctorAction, Constants.HomeController, FormMethod.Post))
-                            {
-                                <div class="well" style="width: 50%;">
-                                    <div class="input-group">
-                                        @Html.TextBoxFor(m => m.DoctorName, new
-                                   {
-                                       @type = "text",
-                                       @class = "form-control",
-                                       @placeholder = Constants.DoctorNameViet,
-                                       @style = "width:40%;"
-                                   })
-                                        @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
-                                                Constants.RequireSpeciality, new
-                                                {
-                                                    @class = "form-control",
-                                                    @style = "width: 60%;"
-                                                })
-                                        <div class="input-group-btn">
-                                            @Html.TextBoxFor(m => m.HospitalID, new { @style = "hidden" })
-                                            <button type="submit" class="btn btn-default btn-primary">
-                                                <i class="fa fa-search" id="Search"></i>&nbsp;
-                Tìm kiếm
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            <section class="col col-8">
-                                <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
-                                    style="display: none;" id="invalidIconUser">
-                                <span id="search-doctor-message"></span>
-                            </section>
-
-                            <div id="SearchResult">
-                                <br />
-                                <!--Search result display here-->
-
-                            </div>
-                            <!-- end widget -->
-                        </fieldset>
-
-                    </section>
-                </div>
-            </div>
         </div>
     </div>
     <div class="col-md-12">
@@ -546,15 +511,15 @@
                                 '<table class="table">' +
                                 '<thead>' +
                                 '<tr class="info">' +
-                                '<th><h5>' + '@(hospital.Hospital_Name)' + '</h5></th>' +
+                                '<th><h5 class="txt-color-blue">' + '@(hospital.Hospital_Name)' + '</h5></th>' +
                         '</tr>' +
                         '</thead>' +
                         '<tbody>' +
                         '<tr>' +
-                        '<td><i class="fa fa-lg fa-location-arrow"></i>&nbsp;' + '@(hospital.Address)' + '</td>' +
+                        '<td>' + '@(hospital.Address)' + '&nbsp;<i class="fa fa-lg fa-location-arrow"></i></td>' +
                         '</tr>' +
                         '<tr>' +
-                        '<td><i class="fa fa-lg fa-mobile"></i>&nbsp;' + '@(hospital.Phone_Number)' + '</td>' +
+                        '<td>' + '@(hospital.Phone_Number)' + '&nbsp;<i class="fa fa-lg fa-mobile"></i></td>' +
                         '</tr>' +
                         '</tbody>' +
                         '</table>' +
@@ -676,87 +641,16 @@
         });
     });
 </script>
-@*
-    <script type="text/javascript">
-        $(window).load(function () {
-            $('a[data-toggle=tab]').on('shown.bs.tab', function (e) {
-                $(window).trigger("resize");
-            });
-            $(window).resize(function () {
-                $container = $('.image-gallery');
-                $coloumn = $container.width() / 8;
-                $container.imagesLoaded(function () {
-                    $container.masonry({
-                        columnWidth: $coloumn,
-                        gutter: 0,
-                        itemSelector: '.image-box',
-                        isFitWidth: true
-                    });
-                });
-            });
-        });
-        $(document).ready(function () {
-            $('.close').click(function () {
-                $(this).parent().hide();
-            });
-            function rate(id, score) {
-                $.ajax({
-                    cache: false,
-                    type: "GET",
-                    url: "@(Url.Action(Constants.RateHospitalAction, Constants.HomeController))",
-                     data: { "id": id, "score": score },
-                     success: function (data) {
-                         if (data == "True") {
-                             $('.hover-star').rating('disable');
-                             $('.alert-info').hide();
-                             $('.alert-success').show();
-                             $('.alert-danger').hide();
-                         } else {
-                             $('.alert-info').hide();
-                             $('.alert-success').hide();
-                             $('.alert-danger').show();
-                         }
-                     },
-                     error: function (xhr, ajaxOptions, thrownError) {
-                         $('.alert-info').hide();
-                         $('.alert-success').hide();
-                         $('.alert-danger').show();
-                     }
-                 });
-             }
 
-             $('.hover-star').rating({
-                 focus: function (value, link) {
-                     var tip = $('#rate-tip');
-                     tip[0].data = tip[0].data || tip.html();
-                     tip.html(link.title || 'value: ' + value);
-                 },
-                 blur: function (value, link) {
-                     var tip = $('#rate-tip');
-                     $('#hover-test').html(tip[0].data || '');
-                 },
-                 callback: function (value, link) {
-                     var user = '@(User.Identity.Name.Split(Char.Parse(Constants.Minus))[0])';
-                                            if (user) {
-                                                rate('@(hospital.Hospital_ID)', value);
-                                            } else {
-                                                $('.alert-info').show();
-                                                $('.alert-success').hide();
-                                                $('.alert-danger').hide();
-                                            }
-                                        }
-                                    });
-         });
-    </script>
-    *@
 <div class="modal fade" id="addFeedback" tabindex="-1"
     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content"></div>
     </div>
 </div>
+
 <script type="text/javascript">
-    pageSetup();
+    pageSetUp();
     @*Add success notification*@
     function setNotification(message, type) {
         // Success
@@ -791,63 +685,29 @@
                 width: 600,
                 position: "center",
                 fade: true,
-                multiline: true
+                multiline: true,
+                time: 1000
             });
         }
     }
-    function displayNotification() {
-        // Add hospital
-        if ('@ViewBag.AddFeedbackStatus' == '') {
-            return false;
-        } else {
-            var returnValue = '@ViewBag.AddFeedbackStatus';
-            returnValue = returnValue.split('-');
-            var status = returnValue[0];
 
-            if (status != 0) {
-                $("#success-alert").show();
-                setNotification("Ý kiến phản hồi được gửi thành công!", 1);
+    @* Display notification messages *@
+    $(document).ready(function () {
+        var feedbackStatus = '@(ViewBag.FeedbackStatus)';
+        if (feedbackStatus) {
+            if (feedbackStatus == 'True') {
+                setNotification('Cám ơn bạn đã đóng góp ý kiến.', 1);
             } else {
-                $("#error-alert").show();
-                setNotification("Lỗi! Thao tác không thành công. Vui lòng thử lại!", 3);
+                setNotification('Đã có lỗi xảy ra trong quá trình xử lý thông tin. Mong quý vị thông cảm và thử lại sau vài phút.', 3);
             }
         }
-    }
-
-    $(document).ready(function () {
-        //displayNotification();
-        @*Check if user email is existed in database*@
-        $("#Search").click(function () {
-            var doctorname = $('#DoctorName').val();
-            var specialityid = $('#SpecialityID').val();
-            var hospitalid = $('#HospitalID').val();
-            if ((doctorname == '' && specialityid != 0) || (doctorname != '' && specialityid == 0) ||
-                (doctorname != '' && specialityid != 0)) {
-                var statesProgress = $("#states-loading-doctor-progress");
-                $("#search-doctor-message").text("");
-                $("#invalidIconUser").hide();
-                statesProgress.show();
-                $.ajax({
-                    cache: false,
-                    type: "GET",
-                    url: "@(Url.RouteUrl(Constants.SearchDoctorAction))",
-                    data: { doctorName: doctorname, specialityID: specialityid, hospitalID: hospitalid },
-                    success: function (data) {
-                        $('#SearchResult').replaceWith(data);
-                        statesProgress.hide();
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        $('#wid-id-1').replaceWith(data);
-                        statesProgress.hide();
-                    }
-                });
+        var rateActionStatus = '@(ViewBag.RateActionStatus)';
+        if (rateActionStatus) {
+            if (rateActionStatus == 'True') {
+                setNotification('Cám ơn bạn đã tham gia đánh giá.', 1);
             } else {
-                $("#search-doctor-message").text("Xin hãy nhập tên bác sĩ hoặc chọn một chuyên khoa");
-                $("#invalidIconUser").show();
-                return false;
+                setNotification('@(ViewBag.RateActionMessage)', 3);
             }
-        });
-
-
+        }
     });
 </script>

@@ -132,7 +132,7 @@ class="active"
                     <!-- widget content -->
                     <div class="widget-body">
                         <div class="col-md-12">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <h5>Danh sách 10 bệnh viện có điểm đánh giá cao nhất</h5>
                                 <hr />
                                 <table class="table table-bordered table-striped table-hover">
@@ -140,6 +140,8 @@ class="active"
                                         <tr>
                                             <th>STT</th>
                                             <th>Tên bệnh viện</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Số lượt bình chọn</th>
                                             <th>Điểm số</th>
                                         </tr>
                                     </thead>
@@ -151,12 +153,15 @@ class="active"
                                             <tr>
                                                 <td>@(++count)</td>
                                                 <td><strong>@(Html.ActionLink(hospital.Hospital_Name, Constants.HospitalAction, Constants.HomeController, new { hospitalId = hospital.Hospital_ID }, new { @target = "_blank" }))</strong></td>
+                                                <td>@(hospital.Address)</td>
+                                                <td>@(hospital.Rating_Count)</td>
                                                 <td>@(rate)</td>
                                             </tr>
                                         }
                                     </tbody>
                                 </table>
                             </div>
+                            @*
                             <div class="col-md-6">
                                 <h5>Danh sách số lượng lịch hẹn của bệnh viện</h5>
                                 <hr />
@@ -190,6 +195,7 @@ class="active"
                                         </div>
                                     </div>
                                 }
+                                
                                 @{ List<HospitalF.Models.Hospital> hospitals = ViewBag.TopTenHospitalAppointment;
                                    count = 0;
                                 }
@@ -220,6 +226,7 @@ class="active"
                                     <p><strong>Không có bệnh viện nào.</strong></p>
                                 }
                             </div>
+                                *@
                         </div>
                     </div>
                 </div>
@@ -306,8 +313,8 @@ class="active"
                 <text>
             data_pie[@(count++)] = {
                 label: "@(pair.Key)",
-                        data: @(pair.Value)
-                        }
+                data: @(pair.Value)
+                }
                 </text>
             }
 

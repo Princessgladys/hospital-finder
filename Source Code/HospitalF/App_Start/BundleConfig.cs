@@ -46,6 +46,7 @@ namespace HospitalF
                         "~/Content/css/jquery.rating.css",
                         "~/Content/css/blueimp-gallery.m.css",
                         "~/Content/css/bootstrap-image-gallery.css",
+                        "~/Content/css/notification/notifIt.css",
                         "~/Content/css/custom-home.css",
                         "~/Content/css/custom-font.css",
                         "~/Content/css/custom-hospital.css",
