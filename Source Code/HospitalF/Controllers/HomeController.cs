@@ -483,7 +483,7 @@ namespace HospitalF.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> FeedBack(FeedBackModel model)
+        public async Task<ActionResult> Feedback(FeedBackModel model)
         {
             try
             {
