@@ -1075,7 +1075,6 @@ namespace HospitalF.Controllers
                 // Prepare data
                 int result = 0;
                 string updatedContent = string.Empty;
-                bool flag=false;
                 model.CreatedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
 
                 // Return list of dictionary words
@@ -1196,6 +1195,8 @@ namespace HospitalF.Controllers
                 // Indicate which button is clicked
                 string button = Request[Constants.Button];
 
+                #region Button Upload
+
                 // Upload file
                 if (Constants.ButtonUpload.Equals(button))
                 {
@@ -1233,6 +1234,10 @@ namespace HospitalF.Controllers
                     }
                 }
 
+                #endregion
+
+                #region Button Confirm
+
                 // Add hospital list to data
                 if (Constants.ButtonConfirm.Equals(button))
                 {
@@ -1240,7 +1245,7 @@ namespace HospitalF.Controllers
                     {
                         foreach (HospitalModel record in model)
                         {
-                            if (record.RecordStatus != 0)
+                            if (record.RecordStatus == 1)
                             {
                                 record.CreatedPerson =
                                     Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
@@ -1252,6 +1257,8 @@ namespace HospitalF.Controllers
                     ViewBag.AddStatus = 1;
                     return View(new List<HospitalModel>());
                 }
+
+                #endregion
             }
             catch (Exception exception)
             {

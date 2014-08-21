@@ -49,8 +49,11 @@ namespace HospitalF.Utilities
                 model = new HospitalModel();
 
                 // Take data from file
-                model.HospitalName = data[0];
-                if (string.IsNullOrEmpty(data[0]))
+                // Check if required fields are missing
+                if (string.IsNullOrEmpty(data[0]) && string.IsNullOrEmpty(data[1]) &&
+                    string.IsNullOrEmpty(data[6]) && string.IsNullOrEmpty(data[7]) &&
+                    string.IsNullOrEmpty(data[8]) && string.IsNullOrEmpty(data[9]) &&
+                    string.IsNullOrEmpty(data[10]))
                 {
                     model.RecordStatus = 0;
                     model.HospitalID = count;
@@ -58,6 +61,7 @@ namespace HospitalF.Utilities
                 }
                 else
                 {
+                    model.HospitalName = data[0];
                     Int32.TryParse(data[24], out tempInt);
                     model.HospitalTypeID = tempInt;
                     model.HospitalTypeName = data[1];
@@ -109,8 +113,17 @@ namespace HospitalF.Utilities
                     model.ServiceName = data[18];
                     model.FacilityName = data[19];
                     model.TagsInput = data[20];
-                    model.RecordStatus = 1;
                     model.HospitalID = count;
+
+                    // Check if hospital is duplicated
+                    if (await LocationUtil.CheckValidHospitalWithAddress(model.HospitalName, model.FullAddress) == 0)
+                    {
+                        model.RecordStatus = 2;
+                    }
+                    else
+                    {
+                        model.RecordStatus = 1;
+                    }
                 }
 
                 count++;

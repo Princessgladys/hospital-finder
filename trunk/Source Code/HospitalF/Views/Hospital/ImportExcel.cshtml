@@ -108,6 +108,14 @@ class="active"
 {
     <!-- widget grid -->
     <section id="data-table" class="">
+        <label class="select">
+            <select class="form-control" id="RecordStatus" name="RecordStatus">
+                <option value="1">Dữ liệu hợp lệ</option>
+                <option value="0">Dữ liệu không hợp lệ</option>
+                <option value="2">Dữ liệu trùng lắp</option>
+            </select>
+            <i></i>
+        </label>
         <!-- row -->
         <div class="row">
             <!-- NEW WIDGET START -->
@@ -138,7 +146,7 @@ class="active"
                         <div class="widget-body">
                             <p>Xác nhận thông tin và bấm <code>Xác nhận</code> để thêm mới danh sách bệnh viện</p>
                             <div class="table-responsive">
-                                <table class="table table-bordered tablesorter" id="hospital-table">
+                                <table class="table table-bordered tablesorter" id="valid-hospital-table">
                                     <thead>
                                         <tr>
                                             <th>Dòng</th>
@@ -156,10 +164,12 @@ class="active"
                                         }
                                         else
                                         {
+                                            int count = 0;
                                             for (int n = 0; n < Model.Count; n++)
                                             {
-                                                if (!string.IsNullOrEmpty(Model[n].HospitalName))
+                                                if (Model[n].RecordStatus == 1)
                                                 {
+                                                    count += 1;
                                                     @Html.TextBoxFor(m => m[n].HospitalName, new { @type = "hidden" })
                                                     @Html.TextBoxFor(m => m[n].HospitalID, new { @type = "hidden" })
                                                     @Html.TextBoxFor(m => m[n].HospitalTypeID, new { @type = "hidden" })
@@ -202,10 +212,166 @@ class="active"
                                                     </tr>
                                                 }
                                             }
+                                            
+                                            if (count == 0)
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có dữ liệu</td>
+                                                </tr>
+                                            }
                                         }
                                     </tbody>
                                 </table>
-                                <footer>
+
+                                <table class="table table-bordered tablesorter" id="invalid-hospital-table"
+                                       style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>Dòng</th>
+                                            <th>Thông tin</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-body">
+                                        @if (Model.Count == 0)
+                                        {
+                                            <tr>
+                                                <td colspan="5">Không có dữ liệu</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            int count = 0;
+                                            for (int n = 0; n < Model.Count; n++)
+                                            {
+                                                if (Model[n].RecordStatus == 0)
+                                                {
+                                                    count += 1;
+                                                    @Html.TextBoxFor(m => m[n].HospitalName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalTypeID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalTypeName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].OrdinaryStartTime, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HolidayStartTime, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].IsAllowAppointment, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].LocationAddress, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].StreetAddress, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].CityID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].CityName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].DistrictID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].DistrictName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].WardID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].WardName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].FullAddress, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].PhoneNo, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].PhoneNo2, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].PhoneNo3, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].Fax, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalEmail, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].Website, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].SpecialityName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].ServiceName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].FacilityName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].TagsInput, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].Coordinate, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].RecordStatus, new { @type = "hidden" })
+                                                    <tr>
+                                                        <td hidden>@Model[n].HospitalID</td>
+                                                        <td hidden>@Model[n].HospitalName</td>
+                                                        <td>@Model[n].HospitalID</td>
+                                                        <td>Thiếu thông tin bệnh viện</td>
+                                                    </tr>
+                                                }
+                                            }
+
+                                            if (count == 0)
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có dữ liệu</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+
+                                <table class="table table-bordered tablesorter" id="duplicate-hospital-table"
+                                       style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th>Dòng</th>
+                                            <th>Tên bệnh viện</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Loại</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-body">
+                                        @if (Model.Count == 0)
+                                        {
+                                            <tr>
+                                                <td colspan="5">Không có dữ liệu</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            int count = 0;
+                                            for (int n = 0; n < Model.Count; n++)
+                                            {
+                                                if (Model[n].RecordStatus == 2)
+                                                {
+                                                    count += 1;
+                                                    @Html.TextBoxFor(m => m[n].HospitalName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalTypeID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalTypeName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].OrdinaryStartTime, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HolidayStartTime, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].IsAllowAppointment, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].LocationAddress, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].StreetAddress, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].CityID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].CityName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].DistrictID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].DistrictName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].WardID, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].WardName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].FullAddress, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].PhoneNo, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].PhoneNo2, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].PhoneNo3, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].Fax, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].HospitalEmail, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].Website, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].SpecialityName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].ServiceName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].FacilityName, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].TagsInput, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].Coordinate, new { @type = "hidden" })
+                                                    @Html.TextBoxFor(m => m[n].RecordStatus, new { @type = "hidden" })
+                                                    <tr>
+                                                        <td hidden>@Model[n].HospitalID</td>
+                                                        <td hidden>@Model[n].HospitalName</td>
+                                                        <td>@Model[n].HospitalID</td>
+                                                        <td>
+                                                            @Html.ActionLink(@Model[n].HospitalName,
+                                                                        Constants.UpdateHospitalAction, Constants.HospitalController,
+                                                                     new { hospitalId = @Model[n].HospitalID }, null)
+                                                        </td>
+                                                        <td>@Model[n].FullAddress</td>
+                                                        <td>@Model[n].HospitalTypeName</td>
+                                                    </tr>
+                                                }
+                                            }
+
+                                            if (count == 0)
+                                            {
+                                                <tr>
+                                                    <td colspan="5">Không có dữ liệu</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+
+                                <footer id="footer">
                                     <button class="btn btn-primary" type="submit" id="confirm-button"
                                         name="@Constants.Button" value="@Constants.ButtonConfirm"
                                         style="float:right;">
@@ -297,8 +463,35 @@ class="active"
                 setFileNotificationMessage("Tập tin phù hợp.", 1);
             }
         });
+
+        @*Record status drop down list change*@
+        $("#RecordStatus").change(function () {
+            displayRecordsBaseOnStatus();
+        });
     });
 
+    @*Set file message notification*@
+    function displayRecordsBaseOnStatus() {
+        var selectedItem = $("#RecordStatus").val();
+        if (selectedItem == 1) {
+            $("#valid-hospital-table").show();
+            $("#footer").show();
+            $("#invalid-hospital-table").hide();
+            $("#duplicate-hospital-table").hide();
+        }
+        if (selectedItem == 0) {
+            $("#valid-hospital-table").hide();
+            $("#footer").hide();
+            $("#invalid-hospital-table").show();
+            $("#duplicate-hospital-table").hide();
+        }
+        if (selectedItem == 2) {
+            $("#valid-hospital-table").hide();
+            $("#footer").hide();
+            $("#invalid-hospital-table").hide();
+            $("#duplicate-hospital-table").show();
+        }
+    }
 </script>
 
 <style>
