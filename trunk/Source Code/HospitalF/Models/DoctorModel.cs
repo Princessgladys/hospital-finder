@@ -5,7 +5,7 @@ using System.Web;
 
 namespace HospitalF.Models
 {
-    public class DoctorModels
+    public class DoctorModel
     {
         public int DoctorID { get; set; }
         public string FirstName { get; set; }

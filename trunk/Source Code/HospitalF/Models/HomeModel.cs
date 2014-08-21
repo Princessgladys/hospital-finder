@@ -14,7 +14,7 @@ using HospitalF.Entities;
 
 namespace HospitalF.Models
 {
-    public class HomeModels
+    public class HomeModel
     {
         #region Properties
 
@@ -171,7 +171,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for districts
                 if (!string.IsNullOrEmpty(district.District_Name) &&
-                    StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr), 
+                    StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr),
                         StringUtil.RemoveDiacriticMarks(district.District_Name.Trim().ToLower())))
                 {
                     this.DistrictID = district.District_ID;
@@ -238,7 +238,7 @@ namespace HospitalF.Models
                 {
                     tempDistrictIndex = StringUtil.TakeMatchedStringPosition(
                          StringUtil.RemoveDiacriticMarks(queryStr),
-                         StringUtil.RemoveDiacriticMarks(district.Type.ToLower()) + Constants.WhiteSpace + 
+                         StringUtil.RemoveDiacriticMarks(district.Type.ToLower()) + Constants.WhiteSpace +
                          StringUtil.RemoveDiacriticMarks(district.District_Name.ToLower()));
                     if (tempDistrictIndex != Constants.DefaultMatchingValue)
                     {
@@ -490,7 +490,7 @@ namespace HospitalF.Models
 
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
-            {             
+            {
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_NORMAL_SEARCH_HOSPITAL(whatPhrase.Trim().ToLower(),
                          cityId, districtId)
@@ -685,20 +685,20 @@ namespace HospitalF.Models
 
         public static List<FacilityEntity> LoadFacillitiesByHospitalId(int id)
         {
-            List<FacilityEntity> services = null;
+            List<FacilityEntity> facilities = null;
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                services = (from f in data.SP_LOAD_FACILITIES_BY_HOSPITAL_ID(id)
-                            select new FacilityEntity()
-                            {
-                                Facility_ID = f.Facility_ID,
-                                Facility_Name = f.Facility_Name,
-                                Type_ID = f.Type_ID,
-                                Type_Name = f.Type_Name,
-                                Is_Active = f.Is_Active
-                            }).ToList<FacilityEntity>();
+                facilities = (from f in data.SP_LOAD_FACILITIES_BY_HOSPITAL_ID(id)
+                              select new FacilityEntity()
+                              {
+                                  Facility_ID = f.Facility_ID,
+                                  Facility_Name = f.Facility_Name,
+                                  Type_ID = f.Type_ID,
+                                  Type_Name = f.Type_Name,
+                                  Is_Active = f.Is_Active
+                              }).ToList<FacilityEntity>();
             }
-            return services;
+            return facilities;
 
         }
 

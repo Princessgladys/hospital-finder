@@ -2,7 +2,7 @@
 @using HospitalF.Entities;
 @using PagedList.Mvc;
 @using PagedList;
-@model HospitalF.Models.HomeModels
+@model HospitalF.Models.HomeModel
 
 @{
     ViewBag.Title = "Tìm kiếm bệnh viện - Kết quả tìm kiếm";
@@ -608,15 +608,15 @@
                                         '<table class="table">' +
                                         '<thead>' +
                                         '<tr class="info">' +
-                                        '<th><h5>' + hospitalList[i].Hospital_Name + '</h5></th>' +
+                                        '<th><h5 class="txt-color-blue">' + hospitalList[i].Hospital_Name + '</h5></th>' +
                                         '</tr>' +
                                         '</thead>' +
                                         '<tbody>' +
                                         '<tr>' +
-                                        '<td><i class="fa fa-lg fa-location-arrow"></i>&nbsp;' + hospitalList[i].Address + '</td>' +
+                                        '<td>' + hospitalList[i].Address + '&nbsp;<i class="fa fa-lg fa-location-arrow"></i></td>' +
                                         '</tr>' +
                                         '<tr>' +
-                                        '<td><i class="fa fa-lg fa-mobile"></i>&nbsp;' + hospitalList[i].Phone_Number + '</td>' +
+                                        '<td>' + hospitalList[i].Phone_Number + '&nbsp;<i class="fa fa-lg fa-mobile"></i></td>' +
                                         '</tr>' +
                                         '</tbody>' +
                                         '</table>' +

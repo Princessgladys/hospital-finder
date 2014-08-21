@@ -14,7 +14,7 @@ namespace HospitalF.Controllers
     public class DoctorController : Controller
     {
 
-        public static DoctorModels DoctorModel = null;
+        public static DoctorModel DoctorModel = null;
 
         //
         // GET: /Doctor/
@@ -34,7 +34,7 @@ namespace HospitalF.Controllers
             int doctorID=1;
             int hospitalID = 68;
             Doctor doctor = new Doctor();
-            DoctorModel=new DoctorModels();
+            DoctorModel=new DoctorModel();
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 doctor = await Task.Run(()=>(
@@ -62,7 +62,7 @@ namespace HospitalF.Controllers
             return View(DoctorModel);
         }
 
-        public ActionResult UpdateDoctor(DoctorModels model)
+        public ActionResult UpdateDoctor(DoctorModel model)
         {
             return RedirectToAction(Constants.IndexAction,Constants.HospitalController);
         }

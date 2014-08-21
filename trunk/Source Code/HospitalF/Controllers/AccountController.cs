@@ -41,7 +41,7 @@ namespace HospitalF.Controllers
             try
             {
                 // Check if an account is valid or not
-                bool checkLogin = AccountModels.CheckLogin(email, password);
+                bool checkLogin = AccountModel.CheckLogin(email, password);
 
                 if (checkLogin)
                 {
@@ -91,7 +91,7 @@ namespace HospitalF.Controllers
                 // with Json from .Net http://json.codeplex.com/
                 JObject jsonUserInfo = JObject.Parse(jsonResult);
 
-                bool checkFacebookLogin = AccountModels.CheckFacebookLogin(jsonUserInfo);
+                bool checkFacebookLogin = AccountModel.CheckFacebookLogin(jsonUserInfo);
 
                 string returlUrl = "/";
 
@@ -172,7 +172,7 @@ namespace HospitalF.Controllers
                 int result = 0;
 
                 // Prepare data
-                AccountModels model = new AccountModels();
+                AccountModel model = new AccountModel();
                 model.Email = email;
                 model.SecondaryEmail = secondEmail;
                 model.FirstName = firstName;

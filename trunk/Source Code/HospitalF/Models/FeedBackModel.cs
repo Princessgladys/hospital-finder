@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web;
 
 namespace HospitalF.Models
 {
-    public class FeedBackModels
+    public class FeedBackModel
     {
-        #region properties
+        #region Properties
 
         /// <summary>
         /// Get/set value for property FeedbackID
@@ -51,43 +52,39 @@ namespace HospitalF.Models
 
         #endregion
 
-        #region load feedback type
-        public static async Task<List<FeedbackType>> LoadFeedbackTypeAsync()
+        public bool InsertNewFeedback()
         {
-            List<FeedbackType> list = new List<FeedbackType>();
-            FeedbackType fbt = null;
-            using (LinqDBDataContext data = new LinqDBDataContext())
+            using (TransactionScope ts = new TransactionScope())
             {
-                var result = await Task.Run(()=> (from fb in data.FeedbackTypes where fb.Is_Active == true select fb).ToList());
-                foreach (FeedbackType fb in result)
+                using (LinqDBDataContext data = new LinqDBDataContext())
                 {
-                    fbt = new FeedbackType();
-                    fbt.Type_ID = fb.Type_ID;
-                    fbt.Type_Name = fb.Type_Name;
-                    list.Add(fbt);
+                    Feedback newFeedback = new Feedback()
+                    {
+                       Header = this.Header,
+                       Feedback_Content = this.FeedbackContent,
+                       Feedback_Type = this.FeedbackType,
+                       Email = this.Email,
+                       Hospital_ID = this.HospitalID,
+                       Created_Date = DateTime.Now,
+                       Is_Response = false
+                    };
+                    data.Feedbacks.InsertOnSubmit(newFeedback);
+                    data.SubmitChanges();
+                    ts.Complete();
+                    return true;
                 }
-                return list;
             }
         }
-        #endregion
-        
-        #region insert feedback
-        public async Task<int> InsertFeedbackAsync(FeedBackModels model)
-        {
-            int result = 0;
-            using (LinqDBDataContext data = new LinqDBDataContext())
-            {
-                if (model.FeedbackType != 3 && model.FeedbackType != 4)
-                {
-                    model.HospitalID = 0;
-                }
-                result = await Task.Run(() => data.SP_INSERT_FEEDBACK(model.Header,
-                    model.FeedbackContent, model.FeedbackType, model.Email, model.HospitalID));
-            }
-            return result;
-        }
-        #endregion
 
-       
+        public List<FeedbackType> LoadFeedbeackTypeList()
+        {
+            List<FeedbackType> feedbackTypeList = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                feedbackTypeList = (from ft in data.FeedbackTypes
+                                    select ft).ToList<FeedbackType>();
+            }
+            return feedbackTypeList;
+        }
     }
 }
