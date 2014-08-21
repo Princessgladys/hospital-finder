@@ -379,7 +379,8 @@ class="active"
                             </fieldset>
                             
                             <footer>
-                                <button class="btn" type="reset">
+                                <button class="btn" type="reset"
+                                        id="reset-button">
                                     <i class="fa fa-refresh"></i>&nbsp;
                                     Nhập lại
                                 </button>
@@ -407,67 +408,6 @@ class="active"
     <div class="modal-dialog">
         <div class="modal-content"></div>
     </div>
-</div>
-
-<div id="partial-description" style="display: none">
-    <!-- widget grid -->
-    <section id="widget-grid-partial" class="">
-        <!-- row -->
-        <div class="row">
-            <!-- NEW WIDGET START -->
-            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
-                <!-- Widget ID (each widget will need unique ID)-->
-                <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0-partial"
-                    data-widget-colorbutton="false"
-                    data-widget-editbutton="false"
-                    data-widget-togglebutton="false"
-                    data-widget-deletebutton="false"
-                    data-widget-fullscreenbutton="false"
-                    data-widget-custombutton="false"
-                    data-widget-collapsed="false"
-                    data-widget-sortable="false">
-                    <header>
-                        <span class="widget-icon"><i class="fa fa-pencil"></i></span>
-                        @*<h2>Thông tin bệnh viện</h2>*@
-                    </header>
-                    <!-- widget div-->
-                    <div>
-                        <!-- widget edit box -->
-                        <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-                        </div>
-                        <!-- end widget edit box -->
-                        <!-- widget content -->
-                        <div class="widget-body no-padding">
-
-                            <div id="summernote"></div>
-
-                            <div class="widget-footer smart-form">
-                                <div class="btn-group">
-                                    <a class="btn btn-sm btn-primary"
-                                        id="save-button">
-                                        <i class="fa fa-check"></i>&nbsp;Lưu
-                                    </a>
-                                </div>
-                                <div class="btn-group">
-                                    <a class="btn btn-sm btn-success"
-                                        id="quit-button">
-                                        <i class="fa fa-times"></i>&nbsp;Thoát
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end widget content -->
-                    </div>
-                    <!-- end widget div -->
-                </div>
-                <!-- end widget -->
-            </article>
-            <!-- WIDGET END -->
-        </div>
-        <!-- end row -->
-    </section>
-    <!-- end widget grid -->
 </div>
 
 <script type="text/javascript">
@@ -544,28 +484,38 @@ class="active"
             var email = $(this).val();
             $("#loaderIconUser").show();
 
-            if (timeoutReference) clearTimeout(timeoutReference);
-            timeoutReference = setTimeout(function () {
-                $.ajax({
-                    cache: false,
-                    type: "GET",
-                    url: "@(Url.RouteUrl("CheckValidUserWithEmail"))",
-                    data: { "email": email },
-                    success: function (data) {
-                        if (data.value == 1) {
-                            setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM019)", 1);
+            if (email.trim().length != 0) {
+                if (timeoutReference) clearTimeout(timeoutReference);
+                timeoutReference = setTimeout(function () {
+                    $.ajax({
+                        cache: false,
+                        type: "GET",
+                        url: "@(Url.RouteUrl("CheckValidUserWithEmail"))",
+                        data: { "email": email },
+                        success: function (data) {
+                            if (data.value == 1) {
+                                setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM019)", 1);
+                            }
+                            if (data.value == 2) {
+                                setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM020)", 0);
+                            }
+                            if (data.value == 0) {
+                                setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM021)", 0);
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
                         }
-                        if (data.value == 2) {
-                            setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM020)", 0);
-                        }
-                        if (data.value == 0) {
-                            setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM021)", 0);
-                        }
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                    }
-                });
-            }, 1500);
+                    });
+                }, 1500);
+            } else {
+                $("#loaderIconUser").hide();
+                $("#validIconUser").hide();
+                $("#invalidIconUser").hide();
+                $("#user-message").text('');
+                $('#PersonInCharged').css('background', 'inherit');
+                $('#PersonInCharged').css('border-color', 'inherit');
+                $("#add-new-user-button").hide();
+            }
 
             return false;
         });
@@ -789,6 +739,15 @@ class="active"
 
     @*Data validation*@
     $(document).ready(function () {
+        $('#reset-button').click(function (e) {
+            if (confirm('Bạn có muốn nhập lại dữ liệu từ ban đầu?')) {
+                $('#addHospitalForm').trigger("reset");
+                $('#HospitalName').focus();
+            } else {
+                return false;
+            }
+        });
+
         $('#confirm-button').click(function (e) {
             if ($("#address-message").text() == "@Html.Raw(ErrorMessage.CEM017)") {
                 $("#LocationAddress").focus();
@@ -800,17 +759,6 @@ class="active"
                 $("#PersonInCharged").focus();
                 setNotification("Người chịu trách nhiệm không phù hợp.", 2);
                 $("#PersonInCharged").focus();
-                return false;
-            }
-
-            var coordinate = $("#Coordinate").val();
-            if (coordinate.trim() == "") {
-                $("#loaderIcon").hide();
-                $("#validIcon").hide();
-                $("#invalidIcon").show();
-                $("#address-message").text('@Html.Raw(ErrorMessage.CEM014)');
-                setNotification('@Html.Raw(ErrorMessage.CEM014)', 2);
-                $('html, body').animate({ scrollTop: $('#FullAddress').offset().top }, 'fast');
                 return false;
             }
 
@@ -842,8 +790,8 @@ class="active"
 
         $.validator.addMethod("phone",
             function (value, element) {
-                return /^[0-9()]*$/.test(value);
-            }, "@string.Format(ErrorMessage.CEM005, Constants.Email)");
+                return /^[0-9() ]*$/.test(value);
+            }, "@string.Format(ErrorMessage.CEM005, Constants.PhoneNo)");
 
         $.validator.addMethod("notEqual",
             function (value, element, param) {
