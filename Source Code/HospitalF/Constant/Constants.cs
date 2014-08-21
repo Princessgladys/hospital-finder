@@ -236,6 +236,11 @@ namespace HospitalF.Constant
         public const string AddAccountAction = "AddAccount";
 
         /// <summary>
+        /// Name of ReviewHospitalDetail method in HospitalController
+        /// </summary>
+        public const string ReviewHospitalDetailAction = "ReviewHospitalDetail";
+
+        /// <summary>
         /// Name of AdminUpdateHospital method in HospitalController
         /// </summary>
         public const string AdminUpdateHospitalAction = "AdminUpdateHospital";

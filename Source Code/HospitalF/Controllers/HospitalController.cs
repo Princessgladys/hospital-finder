@@ -1230,6 +1230,8 @@ namespace HospitalF.Controllers
                         }
 
                         // Return list of hospital to view
+                        // Add to session and return
+                        Session.Add(Constants.HospitalExcelSession, hospitalList);
                         return View(hospitalList);
                     }
                 }
@@ -1243,6 +1245,9 @@ namespace HospitalF.Controllers
                 {
                     if (model != null)
                     {
+                        // Create a list to determine which hospital is
+                        List<HospitalModel> resultList = new List<HospitalModel>();
+
                         foreach (HospitalModel record in model)
                         {
                             if (record.RecordStatus == 1)
@@ -1255,6 +1260,7 @@ namespace HospitalF.Controllers
                     }
 
                     ViewBag.AddStatus = 1;
+                    Session.Add(Constants.HospitalExcelSession, null);
                     return View(new List<HospitalModel>());
                 }
 
@@ -1267,6 +1273,29 @@ namespace HospitalF.Controllers
             }
 
             return View();
+        }
+
+        #endregion
+
+        #region Review Hospital Detail
+
+        /// <summary>
+        /// Load paritial view Review Hospital Detail
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public ActionResult ReviewHospitalDetail(int hospitalId)
+        {
+            List<HospitalModel> hospitalList = (List<HospitalModel>) Session[Constants.HospitalExcelSession];
+            foreach (HospitalModel hospital in hospitalList)
+            {
+                if (hospital.HospitalID == hospitalId)
+                {
+                    return PartialView(Constants.ReviewHospitalDetailAction, hospital);
+                }
+            }
+            return PartialView(Constants.ReviewHospitalDetailAction);
         }
 
         #endregion
