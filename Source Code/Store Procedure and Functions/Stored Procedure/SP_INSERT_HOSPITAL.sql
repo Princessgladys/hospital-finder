@@ -283,8 +283,14 @@ BEGIN
 						   FROM Tag
 						   WHERE LOWER(Word) = LOWER(@HospitalName))
 
-			INSERT INTO Tag_Hospital
-			VALUES(@WordID, @HospitalID)
+			IF (NOT EXISTS(SELECT *
+						   FROM Tag_Hospital
+						   WHERE Hospital_ID = @HospitalID AND
+								 Word_ID = @WordID))
+			BEGIN
+				INSERT INTO Tag_Hospital
+				VALUES(@WordID, @HospitalID)
+			END
 		END
 		ELSE
 		BEGIN
@@ -345,8 +351,14 @@ BEGIN
 				END
 
 				-- INSERT TO WORD_HOSPITAL TABLE
-				INSERT INTO Tag_Hospital
-				VALUES(@WordID, @HospitalID)
+				IF (NOT EXISTS(SELECT *
+							   FROM Tag_Hospital
+							   WHERE Hospital_ID = @HospitalID AND
+									 Word_ID = @WordID))
+				BEGIN
+					INSERT INTO Tag_Hospital
+					VALUES(@WordID, @HospitalID)
+				END
 
 				IF @@ROWCOUNT = 0
 				BEGIN

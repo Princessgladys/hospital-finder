@@ -106,20 +106,26 @@ BEGIN
 
 				IF (@SpecialityId IS NOT NULL AND @SpecialityId != 0)
 				BEGIN
-					INSERT INTO Hospital_Speciality
-					(
-						Hospital_ID,
-						Speciality_ID,
-						Is_Main_Speciality,
-						Is_Active
-					)
-					VALUES
-					(
-						@HospitalID,
-						@SpecialityId,
-						'False',
-						'True'
-					)
+					IF (NOT EXISTS(SELECT *
+								   FROM Hospital_Speciality
+								   WHERE Hospital_ID = @HospitalID AND
+										 Speciality_ID = @SpecialityId))
+					BEGIN
+						INSERT INTO Hospital_Speciality
+						(
+							Hospital_ID,
+							Speciality_ID,
+							Is_Main_Speciality,
+							Is_Active
+						)
+						VALUES
+						(
+							@HospitalID,
+							@SpecialityId,
+							'False',
+							'True'
+						)
+					END
 				END
 			END
 			ELSE
@@ -138,20 +144,26 @@ BEGIN
 
 					IF (@SpecialityId IS NOT NULL AND @SpecialityId != 0)
 					BEGIN
-						INSERT INTO Hospital_Speciality
-						(
-							Hospital_ID,
-							Speciality_ID,
-							Is_Main_Speciality,
-							Is_Active
-						)
-						VALUES
-						(
-							@HospitalID,
-							@SpecialityId,
-							'False',
-							'True'
-						)
+						IF (NOT EXISTS(SELECT *
+								   FROM Hospital_Speciality
+								   WHERE Hospital_ID = @HospitalID AND
+										 Speciality_ID = @SpecialityId))
+						BEGIN
+							INSERT INTO Hospital_Speciality
+							(
+								Hospital_ID,
+								Speciality_ID,
+								Is_Main_Speciality,
+								Is_Active
+							)
+							VALUES
+							(
+								@HospitalID,
+								@SpecialityId,
+								'False',
+								'True'
+							)
+						END		
 					END
 
 					SET @RowNumber += 1
@@ -177,18 +189,24 @@ BEGIN
 
 				IF (@ServiceId IS NOT NULL AND @ServiceId != 0)
 				BEGIN
-					INSERT INTO Hospital_Service
-					(
-						Hospital_ID,
-						Service_ID,
-						Is_Active
-					)
-					VALUES
-					(
-						@HospitalID,
-						@ServiceId,
-						'True'
-					)
+					IF (NOT EXISTS(SELECT *
+								   FROM Hospital_Service
+								   WHERE Hospital_ID = @HospitalID AND
+										 Service_ID = @ServiceId))
+					BEGIN
+						INSERT INTO Hospital_Service
+						(
+							Hospital_ID,
+							Service_ID,
+							Is_Active
+						)
+						VALUES
+						(
+							@HospitalID,
+							@ServiceId,
+							'True'
+						)
+					END			
 				END	
 			END
 			ELSE
@@ -207,18 +225,24 @@ BEGIN
 
 					IF (@ServiceId IS NOT NULL AND @ServiceId != 0)
 					BEGIN
-						INSERT INTO Hospital_Service
-						(
-							Hospital_ID,
-							Service_ID,
-							Is_Active
-						)
-						VALUES
-						(
-							@HospitalID,
-							@ServiceId,
-							'True'
-						)
+						IF (NOT EXISTS(SELECT *
+								   FROM Hospital_Service
+								   WHERE Hospital_ID = @HospitalID AND
+										 Service_ID = @ServiceId))
+						BEGIN
+							INSERT INTO Hospital_Service
+							(
+								Hospital_ID,
+								Service_ID,
+								Is_Active
+							)
+							VALUES
+							(
+								@HospitalID,
+								@ServiceId,
+								'True'
+							)
+						END
 					END			
 
 					SET @RowNumber += 1
@@ -244,18 +268,24 @@ BEGIN
 
 				IF (@FacilityId IS NOT NULL AND @FacilityId != 0)
 				BEGIN
-					INSERT INTO Hospital_Facility
-					(
-						Hospital_ID,
-						Facility_ID,
-						Is_Active
-					)
-					VALUES
-					(
-						@HospitalID,
-						@FacilityId,
-						'True'
-					)
+					IF (NOT EXISTS(SELECT *
+								   FROM Hospital_Facility
+								   WHERE Hospital_ID = @HospitalID AND
+										 Facility_ID = @FacilityId))
+					BEGIN
+						INSERT INTO Hospital_Facility
+						(
+							Hospital_ID,
+							Facility_ID,
+							Is_Active
+						)
+						VALUES
+						(
+							@HospitalID,
+							@FacilityId,
+							'True'
+						)
+					END
 				END
 			END
 			ELSE
@@ -274,18 +304,24 @@ BEGIN
 
 					IF (@FacilityId IS NOT NULL AND @FacilityId != 0)
 					BEGIN
-						INSERT INTO Hospital_Facility
-						(
-							Hospital_ID,
-							Facility_ID,
-							Is_Active
-						)
-						VALUES
-						(
-							@HospitalID,
-							@FacilityId,
-							'True'
-						)
+						IF (NOT EXISTS(SELECT *
+								   FROM Hospital_Facility
+								   WHERE Hospital_ID = @HospitalID AND
+										 Facility_ID = @FacilityId))
+						BEGIN
+							INSERT INTO Hospital_Facility
+							(
+								Hospital_ID,
+								Facility_ID,
+								Is_Active
+							)
+							VALUES
+							(
+								@HospitalID,
+								@FacilityId,
+								'True'
+							)
+						END
 					END
 
 					SET @RowNumber += 1
@@ -304,8 +340,14 @@ BEGIN
 						   FROM Tag
 						   WHERE LOWER(Word) = LOWER(@HospitalName))
 
-			INSERT INTO Tag_Hospital
-			VALUES(@WordID, @HospitalID)
+			IF (NOT EXISTS(SELECT *
+						   FROM Tag_Hospital
+						   WHERE Hospital_ID = @HospitalID AND
+								 Word_ID = @WordID))
+			BEGIN
+				INSERT INTO Tag_Hospital
+				VALUES(@WordID, @HospitalID)
+			END
 		END
 		ELSE
 		BEGIN
@@ -332,8 +374,8 @@ BEGIN
 			IF (@TotalToken = 0)
 			BEGIN
 				IF (NOT EXISTS(SELECT Word_ID
-						   FROM Tag
-						   WHERE LOWER(Word) = LOWER(@TagInput)))
+							   FROM Tag
+							   WHERE LOWER(Word) = LOWER(@TagInput)))
 				BEGIN
 					INSERT INTO Tag
 					VALUES(@TagInput, 3)
@@ -383,8 +425,14 @@ BEGIN
 						END
 
 						-- INSERT TO WORD_HOSPITAL TABLE
-						INSERT INTO Tag_Hospital
-						VALUES(@WordID, @HospitalID)
+						IF (NOT EXISTS(SELECT *
+									   FROM Tag_Hospital
+									   WHERE Hospital_ID = @HospitalID AND
+											 Word_ID = @WordID))
+						BEGIN
+							INSERT INTO Tag_Hospital
+							VALUES(@WordID, @HospitalID)
+						END
 					END
 
 					SET @RowNumber += 1
