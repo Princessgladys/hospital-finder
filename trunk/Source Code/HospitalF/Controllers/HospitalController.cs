@@ -1091,22 +1091,7 @@ namespace HospitalF.Controllers
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
                     result = await model.UpdateHospitalAsync(model);
-                    updatedContent = await model.CheckModelIsUpdated(model);
-                    string currentEmail = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
-                    if (User.IsInRole("3"))
-                    {
-                        List<string> adminGmailList = (from u in data.Users where u.Role_ID == 1 select u.Email).ToList();
-                        //GoogleUtil.SendEmailToAdmin(currentEmail, adminGmailList, model.HospitalName, updatedContent);
-                    }
-                    else
-                    {
-                        List<string> hospitalUserGmailList = (from u in data.Users
-                                                              where u.Role_ID == 3
-                                                                  && u.Hospital_ID == model.HospitalID
-                                                              select u.Email).ToList();
-                        //GoogleUtil.SendEmailToHospitalUser(currentEmail, hospitalUserGmailList, model.HospitalName, updatedContent);
-                    }
-                }
+                }  
 
                 #region cascading dropdownlist
 
@@ -1117,40 +1102,13 @@ namespace HospitalF.Controllers
 
                 //Load list of specialities
                 model.SpecialityList = await SpecialityUtil.LoadSpecialityAsync();
-                //ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
 
                 //Load list of services
                 serviceList = await ServiceFacilityUtil.LoadServiceAsync();
-                if (model.SelectedServices != null)
-                {
-                    foreach (var service in serviceList)
-                    {
-                        foreach (var selectValue in model.SelectedServices)
-                        {
-                            if (service.Value.Equals(selectValue))
-                            {
-                                service.Selected = true;
-                            }
-                        }
-                    }
-                }
                 ViewBag.ServiceList = serviceList;
 
                 // Load list of facilitites
                 facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
-                if (model.SelectedFacilities != null)
-                {
-                    foreach (var facility in facilityList)
-                    {
-                        foreach (var selectValue in model.SelectedFacilities)
-                        {
-                            if (facility.Value.Equals(selectValue))
-                            {
-                                facility.Selected = true;
-                            }
-                        }
-                    }
-                }
                 ViewBag.FacilityList = facilityList;
 
                 #endregion
