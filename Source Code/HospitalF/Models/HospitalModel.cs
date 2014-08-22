@@ -540,7 +540,6 @@ namespace HospitalF.Models
 
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-
                 #region Load single hospital data
 
                 model = await Task.Run(() =>
@@ -621,7 +620,6 @@ namespace HospitalF.Models
                      join th in data.Tag_Hospitals
                      on t.Word_ID equals th.Word_ID
                      where th.Hospital_ID.Equals(hospitalId)
-                     where th.Is_Active == true
                      select t.Word).ToList());
 
                 for (int n = 0; n < tagKeyWords.Count; n++)
@@ -790,7 +788,7 @@ namespace HospitalF.Models
                     model.WardID, model.PhoneNo, model.Fax, model.HospitalEmail, model.Website,
                     model.HolidayStartTime, model.HolidayEndTime, model.OrdinaryStartTime,
                     model.OrdinaryEndTime, model.Coordinate, model.IsAllowAppointment, model.CreatedPerson,
-                    model.FullDescription, speciality, service, facility));
+                    model.FullDescription, speciality, service, facility, model.TagsInput));
             }
             return result;
         }
