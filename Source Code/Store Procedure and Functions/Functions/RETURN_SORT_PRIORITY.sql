@@ -15,6 +15,9 @@ BEGIN
 	DECLARE @Priority INT = 0
 
 	-- DEFINE PRIORITY OF SORT ORDER
+	DECLARE @PriorityOfRatingPoint INT = 1000
+	DECLARE @PriorityOfRatingCount INT = 10
+
 	DECLARE @ExactlyPriorityOfTag INT = 10000
 	DECLARE @ExactlyPriorityOfSpeciality INT = 10000
 	DECLARE @ExactlyPriorityOfDisease INT = 10000
@@ -40,6 +43,8 @@ BEGIN
 	DECLARE @NonDiacriticIndexOfSpeciality INT = 12
 	DECLARE @NonDiacriticIndexOfDisease INT = 13
 
+	DECLARE @AdvancedSearch INT = 99
+
 	-- RETURN PRIORITY OF EXACTLY TAG
 	SELECT @Priority = 
 		CASE @Index
@@ -60,6 +65,10 @@ BEGIN
 				THEN [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY] (@HospitalID, @WhatPhrase) * @NonDiacriticPriorityOfSpeciality
 			WHEN @NonDiacriticIndexOfDisease
 				THEN [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE] (@HospitalID, @WhatPhrase) * @NonDiacriticPriorityOfDisease
+
+			WHEN @AdvancedSearch THEN
+				CONVERT(INT, [dbo].[FU_TAKE_RATING_POINT] (@HospitalID) * @PriorityOfRatingPoint) +
+				CONVERT(INT, [dbo].[FU_TAKE_RATING_COUNT] (@HospitalID) * @PriorityOfRatingCount)
 		END
 
 	-- RETURN SORT PRIORTY

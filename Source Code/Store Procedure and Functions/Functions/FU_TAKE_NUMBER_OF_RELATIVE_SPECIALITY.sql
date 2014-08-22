@@ -11,6 +11,11 @@ CREATE FUNCTION [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY]
 RETURNS INT
 AS
 BEGIN
+	IF (@WhatPhrase IS NULL OR @WhatPhrase = '')
+	BEGIN
+		RETURN 0;
+	END
+
 	DECLARE @NumberOfSpeciality INT
 
 	SELECT @NumberOfSpeciality = (SELECT COUNT(*)
