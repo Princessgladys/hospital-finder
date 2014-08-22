@@ -379,18 +379,211 @@
                                 <div class="row">
                                     <div class="form-group">
                                         <label><strong>Danh sách dịch vụ</strong></label>
-                                        @Html.DropDownGroupListFor(m => m.SelectedServices,
-                                            (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList,
-                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                        @{
+                                            string isInsertedSelectedOption = 0.ToString();
+                                            string isInsertedOption = 0.ToString();
+                                            string previousOptGroup = string.Empty;
+                                            
+                                            if (Model.SelectedServices.Count() == 0)
+                                            {
+                                                @Html.DropDownGroupListFor(m => m.SelectedServices,
+                                                    (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList,
+                                                    new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                            }
+                                            else
+                                            {
+                                                <select id="SelectedServices" name="SelectedServices"
+                                                        multiple="multiple" style="width:100%" class="select2">
+                                                    @foreach (GroupedSelectListItem service in
+                                                         (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList)
+                                                    {
+                                                        if (string.Empty.Equals(previousOptGroup))
+                                                        {
+                                                            <optgroup label="@service.GroupName" value="@service.GroupKey">
+                                                                @if ("0".Equals(isInsertedSelectedOption))
+                                                                {
+                                                                    foreach (GroupedSelectListItem option in
+                                                                              (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList)
+                                                                    {
+                                                                        foreach (string selected in Model.SelectedServices)
+                                                                        {
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                selected.Equals(option.Value) && "0".Equals(isInsertedSelectedOption))
+                                                                            {
+                                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                                isInsertedSelectedOption = option.Value;
+                                                                                break;
+                                                                            }
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                selected.Equals(option.Value) && !option.Value.Equals(isInsertedSelectedOption))
+                                                                            {
+                                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                                isInsertedSelectedOption = option.Value;
+                                                                                break;
+                                                                            }
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                !selected.Equals(option.Value) && !option.Value.Equals(isInsertedOption))
+                                                                            {
+                                                                                <option value="@option.Value">@option.Text</option>
+                                                                                isInsertedOption = option.Value;
+                                                                            }
+                                                                        }
+                                                                        
+                                                                    }
+                                                                }
+                                                            </optgroup>
+                                                            previousOptGroup = service.GroupName;
+                                                        }
+                                                        else if (!previousOptGroup.Equals(service.GroupName))
+                                                        {
+                                                            isInsertedSelectedOption = 0.ToString();
+                                                            isInsertedOption = 0.ToString();
+                                                            previousOptGroup = string.Empty;
+                                                            <optgroup label="@service.GroupName" value="@service.GroupKey">
+                                                                @if ("0".Equals(isInsertedSelectedOption))
+                                                                {
+                                                                    foreach (GroupedSelectListItem option in
+                                                                              (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList)
+                                                                    {
+                                                                        foreach (string selected in Model.SelectedServices)
+                                                                        {
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                selected.Equals(option.Value) && "0".Equals(isInsertedSelectedOption))
+                                                                            {
+                                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                                isInsertedSelectedOption = option.Value;
+                                                                                break;
+                                                                            }
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                selected.Equals(option.Value) && !option.Value.Equals(isInsertedSelectedOption))
+                                                                            {
+                                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                                isInsertedSelectedOption = option.Value;
+                                                                                break;
+                                                                            }
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                !selected.Equals(option.Value) && !option.Value.Equals(isInsertedOption))
+                                                                            {
+                                                                                <option value="@option.Value">@option.Text</option>
+                                                                                isInsertedOption = option.Value;
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            </optgroup>
+                                                            previousOptGroup = service.GroupName;
+                                                        }
+                                                    }
+                                                </select>
+                                            }
+                                        }
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="form-group">
                                         <label><strong>Danh sách cơ sở vậy chất</strong></label>
-                                        @Html.DropDownGroupListFor(m => m.SelectedFacilities,
-                                            (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList,
-                                        new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                        
+                                        @{
+                                            isInsertedSelectedOption = 0.ToString();
+                                            isInsertedOption = 0.ToString();
+                                            previousOptGroup = string.Empty;
+
+                                            if (Model.SelectedFacilities.Count() == 0)
+                                            {
+                                                @Html.DropDownGroupListFor(m => m.SelectedFacilities,
+                                                    (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList,
+                                                    new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                                            }
+                                            else
+                                            {
+                                                <select id="SelectedFacilities" name="SelectedFacilities"
+                                                        multiple="multiple" style="width:100%" class="select2">
+                                                    @foreach (GroupedSelectListItem service in
+                                                         (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList)
+                                                    {
+                                                        if (string.Empty.Equals(previousOptGroup))
+                                                        {
+                                                            <optgroup label="@service.GroupName" value="@service.GroupKey">
+                                                                @if ("0".Equals(isInsertedSelectedOption))
+                                                                {
+                                                                    foreach (GroupedSelectListItem option in
+                                                                              (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList)
+                                                                    {
+                                                                        foreach (string selected in Model.SelectedFacilities)
+                                                                        {
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                selected.Equals(option.Value) && "0".Equals(isInsertedSelectedOption))
+                                                                            {
+                                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                                isInsertedSelectedOption = option.Value;
+                                                                                break;
+                                                                            }
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                selected.Equals(option.Value) && !option.Value.Equals(isInsertedSelectedOption))
+                                                                            {
+                                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                                isInsertedSelectedOption = option.Value;
+                                                                                break;
+                                                                            }
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                !selected.Equals(option.Value) && !option.Value.Equals(isInsertedOption))
+                                                                            {
+                                                                                <option value="@option.Value">@option.Text</option>
+                                                                                isInsertedOption = option.Value;
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            </optgroup>
+                                                                previousOptGroup = service.GroupName;
+                                                        }
+                                                        else if (!previousOptGroup.Equals(service.GroupName))
+                                                        {
+                                                            isInsertedSelectedOption = 0.ToString();
+                                                            isInsertedOption = 0.ToString();
+                                                            previousOptGroup = string.Empty;
+                                                            <optgroup label="@service.GroupName" value="@service.GroupKey">
+                                                                @if ("0".Equals(isInsertedSelectedOption))
+                                                                {
+                                                                    foreach (GroupedSelectListItem option in
+                                                                              (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList)
+                                                                    {
+                                                                        foreach (string selected in Model.SelectedFacilities)
+                                                                        {
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                selected.Equals(option.Value) && "0".Equals(isInsertedSelectedOption))
+                                                                            {
+                                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                                isInsertedSelectedOption = option.Value;
+                                                                                break;
+                                                                            }
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                selected.Equals(option.Value) && !option.Value.Equals(isInsertedSelectedOption))
+                                                                            {
+                                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                                isInsertedSelectedOption = option.Value;
+                                                                                break;
+                                                                            }
+                                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                                !selected.Equals(option.Value) && !option.Value.Equals(isInsertedOption))
+                                                                            {
+                                                                                <option value="@option.Value">@option.Text</option>
+                                                                                isInsertedOption = option.Value;
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            </optgroup>
+                                                                previousOptGroup = service.GroupName;
+                                                        }
+                                                    }
+                                                </select>
+                                            }
+}
                                         <div class="note">
                                             <strong>Chỉ dẫn:</strong> Cung cấp danh sách các dịch vụ và cơ sở vật chất góp phần làm tăng độ tin cậy của bệnh viện
                                         </div>

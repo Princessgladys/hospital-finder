@@ -596,23 +596,23 @@ namespace HospitalF.Models
 
                 #endregion
 
-                //#region Load list of services
+                #region Load list of services
 
-                //model.SelectedServices = await Task.Run(() =>
-                //    (from hs in data.Hospital_Services
-                //     where hs.Hospital_ID.Equals(hospitalId)
-                //     select hs.Service_ID.ToString()).ToList());
+                model.SelectedServices = await Task.Run(() =>
+                    (from hs in data.Hospital_Services
+                     where hs.Hospital_ID.Equals(hospitalId)
+                     select hs.Service_ID.ToString()).ToList());
 
-                //#endregion
+                #endregion
 
-                //#region Load list of facilities
+                #region Load list of facilities
 
-                //model.SelectedFacilities = await Task.Run(() =>
-                //    (from hf in data.Hospital_Facilities
-                //     where hf.Hospital_ID.Equals(hospitalId)
-                //     select hf.Facility_ID.ToString()).ToList());
+                model.SelectedFacilities = await Task.Run(() =>
+                    (from hf in data.Hospital_Facilities
+                     where hf.Hospital_ID.Equals(hospitalId)
+                     select hf.Facility_ID.ToString()).ToList());
 
-                //#endregion
+                #endregion
 
                 #region Load list of tag keywords
 
