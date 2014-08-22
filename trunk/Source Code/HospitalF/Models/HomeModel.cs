@@ -156,7 +156,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for cities
                 if (!string.IsNullOrEmpty(city.City_Name) &&
-                    StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr),
+                        StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr),
                         StringUtil.RemoveDiacriticMarks(city.City_Name.Trim().ToLower())))
                 {
                     this.CityID = city.City_ID;
@@ -171,7 +171,7 @@ namespace HospitalF.Models
             {
                 // Find matching result for districts
                 if (!string.IsNullOrEmpty(district.District_Name) &&
-                    StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr),
+                        StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr),
                         StringUtil.RemoveDiacriticMarks(district.District_Name.Trim().ToLower())))
                 {
                     this.DistrictID = district.District_ID;
@@ -456,6 +456,12 @@ namespace HospitalF.Models
             {
                 what = string.Empty;
             }
+
+            // Remove noise word in What phrase
+            what = what.Replace("bệnh viện", "");
+            what = what.Replace("benh vien", "");
+            what = what.Replace("khám", "");
+            what = what.Replace("bệnh", "");
 
             string a = string.Format("[{0}][{1}][{2}]", what, relation, where);
             int hospitalId = this.HospitalID;
