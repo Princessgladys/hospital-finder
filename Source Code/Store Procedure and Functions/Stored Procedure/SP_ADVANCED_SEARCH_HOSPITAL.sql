@@ -11,6 +11,21 @@ CREATE PROCEDURE SP_ADVANCED_SEARCH_HOSPITAL
 	@DiseaseName NVARCHAR(64)
 AS
 BEGIN
+	DECLARE @NumOfRecordInTemp INT = 0
+	DECLARE @RowNum INT = 1
+	DECLARE @TempHospitalID INT = 0
+
+	-- DEFINE TEMPORARY TABLE THAT CONTAIN LIST OF HOSPITALS
+	-- THAT CONTAIN SORT PRIORITY
+	DECLARE @TempHospitalList TABLE(ID INT IDENTITY(1,1) PRIMARY KEY,
+										Hospital_ID INT)
+						
+	-- DEFINE TEMPORARY TABLE THAT CONTAIN LIST OF HOSPITALS
+	-- THAT CONTAIN SORT PRIORITY
+	DECLARE @ResultHospitalList TABLE(ID INT IDENTITY(1,1) PRIMARY KEY,
+										Hospital_ID INT,
+										[Priority] INT)
+
 	-- SET DEFAULT VALUES FOR INPUT PARAMETERS
 	iF (@DistrictID = 0)
 		SET @DistrictID = NULL
@@ -24,12 +39,12 @@ BEGIN
 			SET @DiseaseName = NULL
 	END
 
-	DECLARE @DiseaseID INT = NULL
+	DECLARE @DiseaseID INT = 0
 	IF (@DiseaseName IS NOT NULL)
 		BEGIN
 			SET @DiseaseID = (SELECT Disease_ID
 							  FROM Disease
-							  WHERE Disease_Name LIKE (N'%' + @DiseaseName + N'%'))
+							  WHERE Disease_Name = (N'%' + @DiseaseName + N'%'))
 		END
 
 	-- SET VALUE FOR 'WHAT' and 'WHERE' PHRASE
@@ -42,11 +57,7 @@ BEGIN
 		SET @WhatPhrase = 1
 
 	DECLARE @SelectPhrase NVARCHAR(512) = NULL
-	SET @SelectPhrase = N'SELECT DISTINCT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,' +
-						N'h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,' +
-						N'h.Ordinary_End_Time, h.Coordinate, h.Full_Description,' +
-						N'h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,' +
-						N'h.Rating'
+	SET @SelectPhrase = N'SELECT DISTINCT h.Hospital_ID'
 
 	DECLARE @FromPhrase NVARCHAR(512) = NULL
 	SET @FromPhrase = N'FROM Hospital h'
@@ -55,9 +66,9 @@ BEGIN
 	SET @ConditionPhrase = N'WHERE h.Is_Active = ''True'''
 
 	DECLARE @OrderPhrase NVARCHAR(512)
-	SET @OrderPhrase = N'ORDER BY h.Hospital_Name'
+	SET @OrderPhrase = N'ORDER BY h.Hospital_ID ASC'
 
-	DECLARE @SqlQuery NVARCHAR(512) = NULL
+	DECLARE @SqlQuery NVARCHAR(MAX) = NULL
 
 	-- CASE THAT WHAT PHRASE IS NULL AND WHERE PHRASE HAVE VALUE(S)
 	IF (@WhatPhrase = 0)
@@ -71,16 +82,52 @@ BEGIN
 		SET @SqlQuery = @SelectPhrase + CHAR(13) + @FromPhrase + CHAR(13) +
 						@ConditionPhrase + CHAR(13) + @OrderPhrase
 
+		INSERT INTO @TempHospitalList
 		EXECUTE SP_EXECUTESQL @SqlQuery,
 							  N'@CityID INT, @DistrictID INT',
 							  @CityID, @DistrictID
+
+		-- ASSGIN PRIORITY
+		SELECT @NumOfRecordInTemp = (SELECT COUNT(*)
+									 FROM (SELECT Hospital_ID
+										   FROM @TempHospitalList) t)
+
+		IF (@NumOfRecordInTemp > 0)
+		BEGIN
+			SET @RowNum = 1
+			WHILE (@RowNum <= @NumOfRecordInTemp)
+			BEGIN
+				SELECT @TempHospitalID = (SELECT h.Hospital_ID
+										  FROM (SELECT ROW_NUMBER()
+												OVER (ORDER BY t.Hospital_ID ASC) AS RowNumber, t.Hospital_ID
+												FROM @TempHospitalList t) AS h
+										  WHERE RowNumber = @RowNum)
+
+				INSERT INTO @ResultHospitalList
+				SELECT @TempHospitalID,
+					   [dbo].[RETURN_SORT_PRIORITY] (@TempHospitalID, 99, NULL)
+
+				SET @RowNum += 1
+			END
+		END
+
+		-- QUERY HOSPITAL
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
+				h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
+				h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
+				h.Rating, h.Rating_Count
+		FROM Hospital h, @ResultHospitalList temp
+		WHERE h.Hospital_ID = temp.Hospital_ID
+		ORDER BY temp.[Priority] DESC
+
 		RETURN;
 	END
 	
 	-- CASE THAT WHAT PHRASE AND WHERE PHRASE HAVE VALUE
 	IF (@WhatPhrase = 1)
-	BEGIN		
-		SET @FromPhrase += CASE WHEN @DiseaseID IS NOT NULL
+	BEGIN
+		SET @FromPhrase += CASE WHEN @DiseaseID IS NOT NULL AND @DiseaseID != 0
 						   THEN N', Speciality_Disease sd'
 						   ELSE ''
 						   END;
@@ -92,11 +139,11 @@ BEGIN
 									 END
 						   END;
 
-		SET @ConditionPhrase += CASE WHEN @SpecialityID IS NOT NULL
+		SET @ConditionPhrase += CASE WHEN @SpecialityID IS NOT NULL AND @SpecialityID != 0
 								THEN N' AND hs.Speciality_ID = @SpecialityID'
 								ELSE ''
 								END;
-		SET @ConditionPhrase += CASE WHEN @DiseaseID IS NOT NULL
+		SET @ConditionPhrase += CASE WHEN @DiseaseID IS NOT NULL AND @DiseaseID != 0
 								THEN N' AND sd.Disease_ID = @DiseaseID' +
 									 N' AND hs.Speciality_ID = sd.Speciality_ID'
 								ELSE ''
@@ -118,9 +165,45 @@ BEGIN
 		SET @SqlQuery = @SelectPhrase + CHAR(13) + @FromPhrase + CHAR(13) +
 						@ConditionPhrase + CHAR(13) + @OrderPhrase
 
+		INSERT INTO @TempHospitalList
 		EXECUTE SP_EXECUTESQL @SqlQuery,
 							  N'@CityID INT, @DistrictID INT, @SpecialityID INT, @DiseaseID INT',
 							  @CityID, @DistrictID, @SpecialityID, @DiseaseID
+
+		-- ASSGIN PRIORITY
+		SELECT @NumOfRecordInTemp = (SELECT COUNT(*)
+									 FROM (SELECT Hospital_ID
+										   FROM @TempHospitalList) t)
+
+		IF (@NumOfRecordInTemp > 0)
+		BEGIN
+			SET @RowNum = 1
+			WHILE (@RowNum <= @NumOfRecordInTemp)
+			BEGIN
+				SELECT @TempHospitalID = (SELECT h.Hospital_ID
+										  FROM (SELECT ROW_NUMBER()
+												OVER (ORDER BY t.Hospital_ID ASC) AS RowNumber, t.Hospital_ID
+												FROM @TempHospitalList t) AS h
+										  WHERE RowNumber = @RowNum)
+
+				INSERT INTO @ResultHospitalList
+				SELECT @TempHospitalID,
+					   [dbo].[RETURN_SORT_PRIORITY] (@TempHospitalID, 99, NULL)
+
+				SET @RowNum += 1
+			END
+		END
+
+		-- QUERY HOSPITAL
+		SELECT h.Hospital_ID, h.Hospital_Name, h.[Address], h.Ward_ID, h.District_ID,
+				h.City_ID, h.Phone_Number, h.Fax, h.Email, h.Website, h.Ordinary_Start_Time,
+				h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
+				h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
+				h.Rating, h.Rating_Count
+		FROM Hospital h, @ResultHospitalList temp
+		WHERE h.Hospital_ID = temp.Hospital_ID
+		ORDER BY temp.[Priority] DESC
+
 		RETURN;
 	END
 END
