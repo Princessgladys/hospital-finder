@@ -457,12 +457,6 @@ namespace HospitalF.Models
                 what = string.Empty;
             }
 
-            // Remove noise word in What phrase
-            what = what.Replace("bệnh viện", "");
-            what = what.Replace("benh vien", "");
-            what = what.Replace("khám", "");
-            what = what.Replace("bệnh", "");
-
             string a = string.Format("[{0}][{1}][{2}]", what, relation, where);
             int hospitalId = this.HospitalID;
             string hospitalName = this.HospitalName;
@@ -509,16 +503,7 @@ namespace HospitalF.Models
                          District_ID = h.District_ID,
                          City_ID = h.City_ID,
                          Phone_Number = h.Phone_Number,
-                         Fax = h.Fax,
-                         Email = h.Email,
-                         Website = h.Website,
-                         Ordinary_Start_Time = h.Ordinary_Start_Time,
-                         Ordinary_End_Time = h.Ordinary_End_Time,
-                         Holiday_Start_Time = h.Holiday_Start_Time,
-                         Holiday_End_Time = h.Holiday_End_Time,
                          Coordinate = h.Coordinate,
-                         Description = h.Full_Description,
-                         Is_Allow_Appointment = h.Is_Allow_Appointment,
                          Is_Active = h.Is_Active,
                          Rating = h.Rating
                      }).ToList());
@@ -555,16 +540,7 @@ namespace HospitalF.Models
                          District_ID = h.District_ID,
                          City_ID = h.City_ID,
                          Phone_Number = h.Phone_Number,
-                         Fax = h.Fax,
-                         Email = h.Email,
-                         Website = h.Website,
-                         Ordinary_Start_Time = h.Ordinary_Start_Time,
-                         Ordinary_End_Time = h.Ordinary_End_Time,
-                         Holiday_Start_Time = h.Holiday_Start_Time,
-                         Holiday_End_Time = h.Holiday_End_Time,
                          Coordinate = h.Coordinate,
-                         Description = h.Full_Description,
-                         Is_Allow_Appointment = h.Is_Allow_Appointment,
                          Is_Active = h.Is_Active,
                          Rating = h.Rating
                      }).ToList());
@@ -610,7 +586,6 @@ namespace HospitalF.Models
                          Holiday_Start_Time = h.Holiday_Start_Time,
                          Holiday_End_Time = h.Holiday_End_Time,
                          Coordinate = h.Coordinate,
-                         Description = h.Full_Description,
                          Is_Allow_Appointment = h.Is_Allow_Appointment,
                          Is_Active = h.Is_Active,
                          Rating = h.Rating
