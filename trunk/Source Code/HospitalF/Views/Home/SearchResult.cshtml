@@ -450,7 +450,7 @@
         // Position
         var position = '@(Model.Coordinate)';
         // Radius
-        var radius = @(Model.Radius != null ? Model.Radius * 1000 : 0);
+        var radius = '@(Model.Radius != null ? Model.Radius * 1000 : 0)';
  
 
         function panToMarker(coordinate) {
