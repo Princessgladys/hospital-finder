@@ -723,27 +723,6 @@ VALUES
 	(N'Gãy thân xương cẳng tay'), -- CƠ XƯƠNG KHỚP
 	(N'Gãy thân xương cẳng chân'), -- CƠ XƯƠNG KHỚP
 	(N'Gãy xương bả vai'), -- CƠ XƯƠNG KHỚP
-	(N'Bệnh giả Gout'), -- CƠ XƯƠNG KHỚP
-	(N'Bệnh Paget xương'), -- CƠ XƯƠNG KHỚP
-	(N'Gout'), -- CƠ XƯƠNG KHỚP
-	(N'Gai xương'), -- CƠ XƯƠNG KHỚP
-	(N'Đau cổ'), -- CƠ XƯƠNG KHỚP
-	(N'Đau đầu gối'), -- CƠ XƯƠNG KHỚP
-	(N'Đau lưng'), -- CƠ XƯƠNG KHỚP
-	(N'Loãng xương'), -- CƠ XƯƠNG KHỚP
-	(N'Rách dây chằng trước khớp gối'), -- CƠ XƯƠNG KHỚP
-	(N'Thoát vị đĩa đệm'), -- CƠ XƯƠNG KHỚP
-	(N'Ung thư xương'), -- CƠ XƯƠNG KHỚP,UNG BƯỚU
-	(N'Viêm bao hoạt dịch'), -- CƠ XƯƠNG KHỚP
-	(N'Viêm gân'), -- CƠ XƯƠNG KHỚP
-	(N'Viêm gân bánh chè'), -- CƠ XƯƠNG KHỚP
-	(N'Viêm khớp'), -- CƠ XƯƠNG KHỚP
-	(N'Viêm khớp nhiễm khuẩn'), -- CƠ XƯƠNG KHỚP
-	(N'Viêm khớp phản ứng'), -- CƠ XƯƠNG KHỚP
-	(N'Viêm khớp vẩy nến'), -- CƠ XƯƠNG KHỚP
-	(N'Viêm xương tủy'), -- CƠ XƯƠNG KHỚP
-	(N'Vô mạch hoại tử'), -- CƠ XƯƠNG KHỚP
-	(N'Vỡ xương mắt cá chân'), -- CƠ XƯƠNG KHỚP
 	(N'Đởm lạc kết thạch'), -- Y HỌC CỔ TRUYỀN
 	(N'Đởm lạc cảm nhiễm'), -- Y HỌC CỔ TRUYỀN
 	(N'Động kinh'), -- Y HỌC CỔ TRUYỀN
