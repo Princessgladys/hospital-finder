@@ -16,7 +16,7 @@ BEGIN
 
 	-- DEFINE PRIORITY OF SORT ORDER
 	DECLARE @PriorityOfRatingPoint INT = 1000
-	DECLARE @PriorityOfRatingCount INT = 10
+	DECLARE @PriorityOfRatingCount INT = 100
 
 	DECLARE @ExactlyPriorityOfTag INT = 10000
 	DECLARE @ExactlyPriorityOfSpeciality INT = 10000
