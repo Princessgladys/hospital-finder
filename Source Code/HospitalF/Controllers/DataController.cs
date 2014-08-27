@@ -693,6 +693,31 @@ namespace HospitalF.Controllers
 
         #endregion
 
+        #region Disease
+
+        /// <summary>
+        /// GET: /Data/DiseaseList
+        /// </summary>
+        /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> DiseaseList(DataModel model, int? page)
+        {
+            try
+            {
+
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+
+            return View();
+        }
+
+        #endregion
+
         #region Statistic
         [LayoutInjecter(Constants.AdmidLayout)]
         [Authorize(Roles = Constants.AdministratorRoleName)]
