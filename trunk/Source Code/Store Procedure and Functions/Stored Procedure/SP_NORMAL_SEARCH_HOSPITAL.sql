@@ -35,7 +35,7 @@ BEGIN
 	DECLARE @ExactlyPriorityOfDistrict INT = 10000
 
 	DECLARE @PriorityOfRatingPoint INT = 1000
-	DECLARE @PriorityOfRatingCount INT = 10
+	DECLARE @PriorityOfRatingCount INT = 100
 
 	-- DEFINE SUPPORT VARIABLES
 	DECLARE @RowNum INT = 1
@@ -45,6 +45,15 @@ BEGIN
 	DECLARE @RatingCount INT
 	DECLARE @NonDiacriticWhatPhrase NVARCHAR(4000) =
 			[dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (@WhatPhrase)
+
+-- REMOVE NOISE WORD FROM WHAT PHRASE---------------------------------------------------------
+		
+	SET @WhatPhrase = REPLACE(@WhatPhrase, N'bệnh viện', N'')
+	SET @WhatPhrase = REPLACE(@WhatPhrase, N'bệnh', N'')
+	SET @WhatPhrase = REPLACE(REPLACE(REPLACE(@WhatPhrase,' ','<>'),'><',''),'<>',' ')
+	SET @NonDiacriticWhatPhrase = REPLACE(@NonDiacriticWhatPhrase, N'benh vien', N'')
+	SET @NonDiacriticWhatPhrase = REPLACE(@NonDiacriticWhatPhrase, N'benh', N'')
+	SET @NonDiacriticWhatPhrase = REPLACE(REPLACE(REPLACE(@NonDiacriticWhatPhrase,' ','<>'),'><',''),'<>',' ')
 
 	-- DEFINE TEMPORARY TABLE THAT CONTAIN LIST OF HOSPITALS
 	-- THAT CONTAINS MATCHED RESULT INDEX
@@ -112,15 +121,6 @@ BEGIN
 						w.Word_ID = wh.Word_ID
 			END
 		END
-
--- REMOVE NOISE WORD FROM WHAT PHRASE---------------------------------------------------------
-		
-		SET @WhatPhrase = REPLACE(@WhatPhrase, N'bệnh viện', N'')
-		SET @WhatPhrase = REPLACE(@WhatPhrase, N'bệnh', N'')
-		SET @WhatPhrase = REPLACE(REPLACE(REPLACE(@WhatPhrase,' ','<>'),'><',''),'<>',' ')
-		SET @NonDiacriticWhatPhrase = REPLACE(@NonDiacriticWhatPhrase, N'benh vien', N'')
-		SET @NonDiacriticWhatPhrase = REPLACE(@NonDiacriticWhatPhrase, N'benh', N'')
-		SET @NonDiacriticWhatPhrase = REPLACE(REPLACE(REPLACE(@NonDiacriticWhatPhrase,' ','<>'),'><',''),'<>',' ')
 
 -- QUERY FROM SPECIALITY TABLE----------------------------------------------------------------
 
@@ -308,6 +308,9 @@ BEGIN
 		END
 	END
 
+	SELECT * FROM @TempHospitalList ORDER BY Hospital_ID ASC
+	SELECT * FROM @ResultHospitalList ORDER BY [Priority] DESC
+
 	-- CHECK IF WHERE PHRASE IS AVAILABLE
 	IF (@WherePhrase != 0)
 	BEGIN
@@ -439,3 +442,9 @@ BEGIN
 		END		
 	END
 END
+
+EXEC SP_NORMAL_SEARCH_HOSPITAL N'bệnh biện chợ rẫy', 0, 0
+
+SELECT *
+FROM District
+WHERE City_ID = 79
