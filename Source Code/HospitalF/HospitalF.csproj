@@ -603,6 +603,7 @@
     <Content Include="Views\Data\SearchQueryStatistic.cshtml" />
     <Content Include="Views\Hospital\ReviewHospitalDetail.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
+    <Content Include="Views\Data\DiseaseList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
