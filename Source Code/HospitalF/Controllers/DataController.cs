@@ -25,7 +25,7 @@ namespace HospitalF.Controllers
         /// <summary>
         /// GET: /Data/ChangeServiceStatus
         /// </summary>
-        /// <param name="hospitalId">Service ID</param>
+        /// <param name="serviceId">Service ID</param>
         /// <returns>
         /// Task[ActionResult] with JSON contains value
         /// indicating update process is successful or not
@@ -697,6 +697,33 @@ namespace HospitalF.Controllers
         #region Disease
 
         /// <summary>
+        /// GET: /Data/ChangeDiseaseStatus
+        /// </summary>
+        /// <param name="diseaseId">Disease ID</param>
+        /// <returns>
+        /// Task[ActionResult] with JSON contains value
+        /// indicating update process is successful or not
+        /// 1: Successful
+        /// 0: Failed
+        /// 2: Disease has been mapped with another speciality
+        /// </returns>
+        public async Task<ActionResult> ChangeDiseaseStatus(int diseaseId)
+        {
+            try
+            {
+                DataModel model = new DataModel();
+                int result = await model.ChangeDiseaseStatusAsync(diseaseId);
+                TempData[Constants.ProcessStatusData] = result;
+                return Json(new { value = result }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
         /// GET: /Data/DiseaseList
         /// </summary>
         /// <returns>Task[ActionResult]</returns>
@@ -796,6 +823,62 @@ namespace HospitalF.Controllers
                 // Return value to view
                 pagedDiseaseList = diseaseList.ToPagedList(page.Value, Constants.PageSize);
                 return View(pagedDiseaseList);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Load paritial view Add Disease
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> AddDisease()
+        {
+            try
+            {
+                // Load list of service type
+                serviceTypeList = await ServiceFacilityUtil.LoadServiceTypeAsync();
+                ViewBag.ServiceTypeList = new SelectList(serviceTypeList, Constants.TypeID, Constants.TypeName);
+
+                return PartialView(Constants.AddDiseaseAction);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Add new Disease
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> AddDisease(DataModel model)
+        {
+            try
+            {
+                // Prepare data
+                int result = 0;
+                model.IsPostBack = true;
+                model.IsActive = true;
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.AddService(model);
+                }
+
+                // Return result
+                TempData[Constants.ProcessInsertData] = result;
+                return RedirectToAction(Constants.DisplayServiceAction, Constants.DataController, model);
             }
             catch (Exception exception)
             {

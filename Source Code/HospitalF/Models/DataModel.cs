@@ -378,6 +378,25 @@ namespace HospitalF.Models
             }
         }
 
+        /// <summary>
+        /// Change status of a specific disease
+        /// </summary>
+        /// <param name="serviceId">Disease ID</param>
+        /// <returns>1: Successful. 0: Failed</returns>
+        public async Task<int> ChangeDiseaseStatusAsync(int diseaseId)
+        {
+            int result = 0;
+
+            // Change disease status
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                result = await Task.Run(() =>
+                    data.SP_CHANGE_DISEASE_STATUS(diseaseId));
+            }
+
+            return result;
+        }
+
         #endregion
 
         #endregion
