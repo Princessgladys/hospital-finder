@@ -90,6 +90,11 @@ namespace HospitalF.Models
         /// </summary>
         public bool IsPostBack { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property SelectedSpecialities
+        /// </summary>
+        public List<string> SelectedSpecialities { get; set; }
+
         #endregion
 
         #region Method
@@ -395,6 +400,40 @@ namespace HospitalF.Models
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Add new disease
+        /// </summary>
+        /// <param name="diseaseName">Disease name</param>
+        /// <param name="specialityList">List of speciality ID</param>
+        /// <returns>1: Successful, 0: Failed</returns>
+        public async Task<int> AddDiseaseAsync(string diseaseName, List<string> specialityList)
+        {
+            // Speciality list
+            string speciality = string.Empty;
+            if ((specialityList != null) && (specialityList.Count != 0))
+            {
+                for (int n = 0; n < specialityList.Count; n++)
+                {
+                    if (n == (specialityList.Count - 1))
+                    {
+                        speciality += specialityList[n];
+                    }
+                    else
+                    {
+                        speciality += specialityList[n] +
+                            Constants.VerticalBar.ToString();
+                    }
+                }
+            }
+
+            // Insert new service to database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_INSERT_DISEASE(diseaseName, speciality));
+            }
         }
 
         #endregion

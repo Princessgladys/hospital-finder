@@ -734,7 +734,7 @@ namespace HospitalF.Controllers
             IPagedList<SP_TAKE_DISEASE_AND_TYPEResult> pagedDiseaseList = null;
             try
             {
-                // Load list of service type
+                // Load list of specialities
                 specialityList = await SpecialityUtil.LoadSpecialityAsync();
                 ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
 
@@ -841,9 +841,9 @@ namespace HospitalF.Controllers
         {
             try
             {
-                // Load list of service type
-                serviceTypeList = await ServiceFacilityUtil.LoadServiceTypeAsync();
-                ViewBag.ServiceTypeList = new SelectList(serviceTypeList, Constants.TypeID, Constants.TypeName);
+                //Load list of specialities
+                specialityList = await SpecialityUtil.LoadSpecialityAsync();
+                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
 
                 return PartialView(Constants.AddDiseaseAction);
             }
@@ -873,7 +873,7 @@ namespace HospitalF.Controllers
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
-                    result = await model.AddService(model);
+                    result = await model.AddDiseaseAsync(model.DiseaseName, model.SelectedSpecialities);
                 }
 
                 // Return result
