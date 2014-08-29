@@ -296,9 +296,19 @@ namespace HospitalF.Constant
         public const string DisplaySpecialityAction = "SpecialityList";
 
         /// <summary>
+        /// Name of DiseaseList method in DataController
+        /// </summary>
+        public const string DisplayDiseaseAction = "DiseaseList";
+
+        /// <summary>
         /// Name of ChangeSpecialityStatus method in DataController
         /// </summary>
         public const string ChangeSpecialityStatusAction = "ChangeSpecialityStatus";
+
+        /// <summary>
+        /// Name of ChangeDiseaseStatus method in DataController
+        /// </summary>
+        public const string ChangeDiseaseStatusAction = "ChangeDiseaseStatus";
 
         /// <summary>
         /// Name of UpdateSpeciality method in DataController
@@ -309,6 +319,16 @@ namespace HospitalF.Constant
         /// Name of AddSpeciality method in DataController
         /// </summary>
         public const string AddSpecialityAction = "AddSpeciality";
+
+        /// <summary>
+        /// Name of UpdateDisease method in DataController
+        /// </summary>
+        public const string UpdateDiseaseAction = "UpdateDisease";
+
+        /// <summary>
+        /// Name of AddDisease method in DataController
+        /// </summary>
+        public const string AddDiseaseAction = "AddDisease";
 
         /// <summary>
         /// Name of Statistic method in DataController

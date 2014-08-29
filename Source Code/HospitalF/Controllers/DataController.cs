@@ -18,6 +18,7 @@ namespace HospitalF.Controllers
         // Declare public list items for Drop down lists
         public static List<ServiceType> serviceTypeList = null;
         public static List<FacilityType> facilityTypeList = null;
+        public static List<Speciality> specialityList = null;
 
         #region Service
 
@@ -703,17 +704,76 @@ namespace HospitalF.Controllers
         [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> DiseaseList(DataModel model, int? page)
         {
+            IPagedList<SP_TAKE_DISEASE_AND_TYPEResult> pagedDiseaseList = null;
             try
             {
+                // Load list of service type
+                specialityList = await SpecialityUtil.LoadSpecialityAsync();
+                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
 
+                // Check if page parameter is null
+                if (page == null)
+                {
+                    page = 1;
+                }
+
+                #region Load data
+
+                // Load list of service
+                List<SP_TAKE_DISEASE_AND_TYPEResult> diseaseList =
+                    new List<SP_TAKE_DISEASE_AND_TYPEResult>();
+                if (model.IsPostBack == false)
+                {
+                    diseaseList = await model.LoadListOfDisease(null, true, 1, 0);
+                    ViewBag.CurrentStatus = true;
+                    ViewBag.CurrentMode = true;
+                    ViewBag.CurrentOption = true;
+                }
+                else
+                {
+                    //diseaseList = await model.LoadListOfDisease(
+                    //    model.ServiceName, model.TypeID, model.IsActive);
+                    ViewBag.CurrentStatus = model.IsActive;
+                }
+
+                #endregion
+
+                #region Display notification
+
+                // Pass value of previous adding service to view (if any)
+                if (TempData[Constants.ProcessInsertData] != null)
+                {
+                    ViewBag.AddStatus = (int)TempData[Constants.ProcessInsertData];
+                }
+
+                // Pass value of previous updating service to view (if any)
+                if (TempData[Constants.ProcessUpdateData] != null)
+                {
+                    ViewBag.UpdateStatus = (int)TempData[Constants.ProcessUpdateData];
+                }
+
+                // Pass value of previous updating service status to view (if any)
+                if (TempData[Constants.ProcessStatusData] != null)
+                {
+                    ViewBag.ChangeStatus = (int)TempData[Constants.ProcessStatusData];
+                }
+
+                #endregion
+
+                // Handle query string
+                NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
+                queryString.Remove(Constants.PageUrlRewriting);
+                ViewBag.Query = queryString.ToString();
+
+                // Return value to view
+                pagedDiseaseList = diseaseList.ToPagedList(page.Value, Constants.PageSize);
+                return View(pagedDiseaseList);
             }
             catch (Exception exception)
             {
                 LoggingUtil.LogException(exception);
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
-
-            return View();
         }
 
         #endregion
