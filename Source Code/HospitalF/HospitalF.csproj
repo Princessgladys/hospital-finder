@@ -269,9 +269,11 @@
     <Compile Include="Controllers\HospitalController.cs" />
     <Compile Include="Controllers\SecurityBaseController.cs" />
     <Compile Include="Entities\FacilityEntity.cs" />
+    <Compile Include="Entities\FeedbackEntity.cs" />
     <Compile Include="Entities\HospitalEntity.cs" />
     <Compile Include="Entities\SentenceDictionaryEntity.cs" />
     <Compile Include="Entities\ServiceEntity.cs" />
+    <Compile Include="Entities\UserEntity.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -605,6 +607,8 @@
     <Content Include="Views\Home\Feedback.cshtml" />
     <Content Include="Views\Data\DiseaseList.cshtml" />
     <Content Include="Views\Data\AddDisease.cshtml" />
+    <Content Include="Views\Data\Feedback.cshtml" />
+    <Content Include="Views\Data\UserList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

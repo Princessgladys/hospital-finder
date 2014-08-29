@@ -465,19 +465,22 @@ namespace HospitalF.Controllers
         #region Feedback
         public async Task<ActionResult> Feedback(FeedBackModel model, int hospitalId = 0)
         {
-            List<FeedbackType> feebackTypeList = model.LoadFeedbeackTypeList();
-            if (hospitalId > 0)
+            List<FeedbackType> feebackTypeList = FeedBackModel.LoadFeedbeackTypeList();
+            if (FeedBackModel.IsAssignedHospital(hospitalId))
             {
                 HospitalEntity hospitalEntity = await HomeModel.LoadHospitalById(hospitalId);
-                feebackTypeList.RemoveAt(0);
-                ViewBag.FeedbackTypeList = new SelectList(feebackTypeList, Constants.FeedbackType, Constants.FeedbackTypeName);
+                feebackTypeList.Remove(feebackTypeList.First());
+                feebackTypeList.Remove(feebackTypeList.First());
+                feebackTypeList.Remove(feebackTypeList.First());
                 model.Header = hospitalEntity.Hospital_Name;
                 model.HospitalID = hospitalId;
             }
             else
             {
-                feebackTypeList.RemoveAt(1);
+                feebackTypeList.Remove(feebackTypeList.Last());
+                feebackTypeList.Remove(feebackTypeList.Last());
             }
+            ViewBag.FeedbackTypeList = new SelectList(feebackTypeList, Constants.FeedbackType, Constants.FeedbackTypeName);
             model.Email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
             return PartialView(model);
         }

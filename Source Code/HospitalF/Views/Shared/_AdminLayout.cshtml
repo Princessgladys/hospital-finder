@@ -236,19 +236,13 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="/FeedBack/DisplayFeedbackList"><i class="fa fa-lg fa-fw fa-table"></i><span class="menu-item-parent">Danh sách phản hồi</span></a>
+                <li @RenderSection("FeedbackActive", false)>
+                    <a href="/Data/Feedback"><i class="fa fa-lg fa-fw fa-table"></i><span class="menu-item-parent">Danh sách phản hồi</span></a>
                 <li>
                     <a href="#"><i class="fa fa-lg fa-fw fa-user"></i><span class="menu-item-parent">Tài Khoản</span></a>
                     <ul>
-                        <li>
-                            <a href="#">Quản Lý Người Dùng</a>
-                        </li>
-                        <li>
-                            <a href="#">Phản Hồi</a>
-                        </li>
-                        <li>
-                            <a href="#">Thông Tin Tài Khoản</a>
+                        <li @RenderSection("UserListActive", false)>
+                            <a href="/Data/UserList">Quản Lý Người Dùng</a>
                         </li>
                         <li>
                             <a href="#">Đổi Mật Khẩu</a>

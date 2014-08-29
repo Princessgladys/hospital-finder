@@ -9,12 +9,12 @@ namespace HospitalF.Entities
     {
         #region Facility property
         /// <summary>
-        /// Property for Service_ID attribute
+        /// Property for Facility_ID attribute
         /// </summary>
         public int Facility_ID { get; set; }
 
         /// <summary>
-        /// Property for Service_Name attribute
+        /// Property for Facility_Name attribute
         /// </summary>
         public string Facility_Name { get; set; }
         /// <summary>

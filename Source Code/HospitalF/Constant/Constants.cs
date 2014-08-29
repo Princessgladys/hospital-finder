@@ -231,6 +231,11 @@ namespace HospitalF.Constant
         public const string FeedbackAction = "FeedBack";
 
         /// <summary>
+        /// Name of UserListAction in DataController
+        /// </summary>
+        public const string UserListAction = "UserList";
+
+        /// <summary>
         /// Name of AddAccount method in AccountController
         /// </summary>
         public const string AddAccountAction = "AddAccount";

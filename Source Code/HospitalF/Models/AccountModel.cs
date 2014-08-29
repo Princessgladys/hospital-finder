@@ -10,6 +10,8 @@ using HospitalF.Constant;
 using Newtonsoft.Json.Linq;
 using HospitalF.Utilities;
 using HospitalF.Controllers;
+using System.Collections.Generic;
+using HospitalF.Entities;
 
 namespace HospitalF.Models
 {
@@ -193,6 +195,72 @@ namespace HospitalF.Models
                               select u.User_ID).SingleOrDefault();
                 return userId;
             }
+        }
+
+        public static List<UserEntity> LoadUser(string email, int userRole, int userStatus, string exclusiveEmail)
+        {
+            List<UserEntity> userList = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                userList = (from u in data.Users
+                            where u.Email != exclusiveEmail &&
+                                  (userRole == 0 || u.Role_ID == userRole) &&
+                                  (userStatus == 0 || u.Is_Active == (userStatus == 1 ? true : false)) &&
+                                  u.Email.Contains(email)
+                            select new UserEntity()
+                            {
+                                User_ID = u.User_ID,
+                                Email = u.Email,
+                                User_Role_Name = u.Role.Role_Name,
+                                Is_Active = u.Is_Active
+                            }).ToList<UserEntity>();
+            }
+            return userList;
+        }
+
+        public static List<Role> LoadUserRole()
+        {
+            List<Role> roleList = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                roleList = (from r in data.Roles
+                            select r).ToList<Role>();
+            }
+            return roleList;
+        }
+
+        public static bool ActivateUser(int userId)
+        {
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                User user = (from u in data.Users
+                             where u.User_ID == userId
+                             select u).SingleOrDefault();
+                if (user != null)
+                {
+                    user.Is_Active = true;
+                    data.SubmitChanges();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool DeactivateUser(int userId)
+        {
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                User user = (from u in data.Users
+                             where u.User_ID == userId
+                             select u).SingleOrDefault();
+                if (user != null)
+                {
+                    user.Is_Active = false;
+                    data.SubmitChanges();
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion
