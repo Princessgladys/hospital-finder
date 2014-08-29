@@ -604,6 +604,7 @@
     <Content Include="Views\Hospital\ReviewHospitalDetail.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
     <Content Include="Views\Data\DiseaseList.cshtml" />
+    <Content Include="Views\Data\AddDisease.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
