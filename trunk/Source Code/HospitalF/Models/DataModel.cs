@@ -337,6 +337,29 @@ namespace HospitalF.Models
 
         #endregion
 
+        #region Disease
+
+        /// <summary>
+        /// Load list of disease base on input conditions
+        /// </summary>
+        /// <param name="diseaseName">Disease name</param>
+        /// <param name="isActive">Status</param>
+        /// <param name="mode">Mode</param>
+        /// <param name="specialityID">Speciality ID</param>
+        /// <returns></returns>
+        public async Task<List<SP_TAKE_DISEASE_AND_TYPEResult>> LoadListOfDisease(
+            string diseaseName, bool isActive, int mode, int specialityID)
+        {
+            // Search for suitable hospitals in database
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_TAKE_DISEASE_AND_TYPE(diseaseName, isActive, mode, specialityID).ToList());
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Static Method

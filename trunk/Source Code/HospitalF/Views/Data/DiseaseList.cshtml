@@ -1,5 +1,464 @@
-﻿@{
-    ViewBag.Title = "DiseaseList";
+﻿@using HospitalF.Constant
+@using PagedList.Mvc
+@using PagedList;
+@using HospitalF.Models
+
+@model IPagedList<SP_TAKE_DISEASE_AND_TYPEResult>
+
+@{
+    ViewBag.Title = "Tìm kiếm bệnh viện - Danh sách bệnh - triệu chứng";
 }
 
-<h2>DiseaseList</h2>
+@section DiseaseListActive
+{
+    class="active"
+}
+
+@section BreadCrumb
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Dữ Liệu</li>
+        <li>Loại bệnh</li>
+    </ol>
+}
+
+@using (Html.BeginForm(Constants.DisplayDiseaseAction, Constants.DataController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
+{
+    <div class="row">
+        <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+            <h1 class="page-title txt-color-blueDark">
+                <i class="fa fa-table fa-fw "></i>
+                Danh sách bệnh / triệu chứng
+            </h1>
+        </div>
+    </div>
+
+    <label class="select">
+        <select class="form-control" id="Option" name="Option">
+            @{
+                bool option = (bool)ViewBag.CurrentOption;
+                if (option)
+                {
+                    <option value="true" selected>Đã có chuyên khoa</option>
+                    <option value="false">Chưa có chuyên khoa</option>
+                }
+                else
+                {
+                    <option value="true">Đã có chuyên khoa</option>
+                    <option value="false" selected>Thuộc nhiều chuyên khoa</option>
+                }
+            }
+        </select>
+        <i></i>
+    </label>
+    
+    <label class="select">
+        @Html.DropDownList("SpecialityID", (SelectList)ViewBag.SpecialityList,
+                "Tất cả các chuyên khoa", new { @class = "form-control" })
+        <i></i>
+    </label>
+    
+    <label class="select">
+        <select class="form-control" id="TypeID" name="TypeID">
+            @{
+                bool mode = (bool)ViewBag.CurrentMode;
+                if (mode)
+                {
+                    <option value="true" selected>Thuộc một chuyên khoa</option>
+                    <option value="false">Thuộc nhiều chuyên khoa</option>
+                }
+                else
+                {
+                    <option value="true">Thuộc một chuyên khoa</option>
+                    <option value="false" selected>Thuộc nhiều chuyên khoa</option>
+                }
+            }
+        </select>
+        <i></i>
+    </label>
+    
+    <label class="select">
+        <select class="form-control" id="IsActive" name="IsActive">
+            @{
+                bool isActive = (bool)ViewBag.CurrentStatus;
+                if (isActive)
+                {
+                    <option value="true" selected>Đang lưu hành</option>
+                    <option value="false">Ngưng lưu hành</option>
+                }
+                else
+                {
+                    <option value="true">Đang lưu hành</option>
+                    <option value="false" selected>Ngưng lưu hành</option>
+                }
+            }
+        </select>
+        <i></i>
+    </label>
+
+    <a href="/Data/AddDisease" class="btn btn-sm btn-success btn-next"
+       id="add-button" data-toggle="modal" data-target="#AddDisease">
+        Thêm bệnh / triệu chứng
+    </a>
+
+    <div class="well">
+        <div class="input-group">
+            @Html.TextBox("IsPostBack", true, new { @type = "hidden" })
+            @Html.TextBox("DiseaseName", null, new
+            {
+                @placeholder = "Tìm kiếm tên bệnh / triệu chứng",
+                @class = "form-control",
+                @id = "disease-name-search"
+            })
+            <div class="input-group-btn">
+                <button class="btn btn-default btn-primary" type="submit"
+                        value="@Constants.NormalSearchForm" name="@Constants.Button"
+                        id="normal-search-button">
+                    <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="alert alert-danger fade in" style="display: none;"
+     id="error-alert">
+    <button class="close" data-dismiss="alert">
+        ×
+    </button>
+    <i class="fa-fw fa fa-times"></i>
+    <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
+</div>
+<div class="alert alert-success fade in" style="display: none;"
+     id="success-alert">
+    <button class="close" data-dismiss="alert">
+        ×
+    </button>
+    <i class="fa-fw fa fa-check"></i>
+    <strong>Thành công</strong> Thao tác thành công.
+</div>
+
+<div class="modal fade" id="addDisease" tabindex="-1"
+     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateDisease" tabindex="-1"
+     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                 data-widget-colorbutton="false"
+                 data-widget-editbutton="false"
+                 data-widget-togglebutton="false"
+                 data-widget-deletebutton="false"
+                 data-widget-fullscreenbutton="false"
+                 data-widget-custombutton="false"
+                 data-widget-collapsed="false"
+                 data-widget-sortable="false">
+
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                    <h2>Danh sách</h2>
+
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <p>Chọn thông tin phù hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> bệnh hoặc triệu chứng trong hệ thống</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered tablesorter" id="disease-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên bệnh / triệu chứng</th>
+                                        <th>Chuyên khoa</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    @{
+                                        if (Model.Count == 0)
+                                        {
+                                            <tr>
+                                                <td colspan="5">Không có dữ liệu</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            foreach (var disease in Model)
+                                            {
+                                                <tr>
+                                                    <td hidden>@disease.Disease_ID</td>
+                                                    <td hidden>@disease.Disease_Name</td>
+                                                    <td hidden>@disease.Is_Active</td>
+                                                    <td>
+                                                        <a href="/Data/UpdateDisease?diseaseId=@disease.Disease_ID"
+                                                           id="update-button" data-toggle="modal" data-target="#updateDisease">
+                                                            @disease.Disease_Name
+                                                        </a>
+                                                    </td>
+                                                    <td>@disease.Speciality_Name</td>
+                                                    <td>@(@disease.Is_Active.Value ? "Đang lưu hành" : "Ngưng hoạt động")</td>
+                                                    <td>
+                                                        <a href="" class="btn btn-sm btn-success btn-next">
+                                                            @(disease.Is_Active.Value ? "Ngừng" : "Lưu hành")
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="paging">
+                            @{
+                                if (Model.Count != 0)
+                                {
+                                    @Html.PagedListPager(Model, page => Url.Content(Constants.DisplayDiseaseAction + "?" +
+                                        ViewBag.Query + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                                }
+                            }
+                        </div>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+</section>
+<!-- end widget grid -->
+
+<script type="text/javascript">
+
+    function setNotification(message, type) {
+        // Success
+        if (type == 1) {
+            notif({
+                msg: message,
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Warning
+        if (type == 2) {
+            notif({
+                msg: message,
+                type: "warning",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Error
+        if (type == 3) {
+            notif({
+                msg: message,
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+    }
+
+    @*Display notification*@
+    function displayAddNotification() {
+        // Add hospital
+        if ('@ViewBag.AddStatus' == '') {
+            return false;
+        } else {
+            var status = '@ViewBag.AddStatus';
+
+            if (status != '0') {
+                $("#success-alert").show();
+                setNotification("Thêm mới bệnh / triệu chứng thành công", 1);
+            } else {
+                $("#error-alert").show();
+                setNotification("Thêm mới bệnh / triệu chứng không thành công, xin hãy thử lại.", 3);
+            }
+        }
+    }
+
+    @*Display notification*@
+    function displayUpdateNotification() {
+        // Update hospital
+        if ('@ViewBag.UpdateStatus' == '') {
+            return false;
+        } else {
+            var status = '@ViewBag.UpdateStatus';
+
+            if (status != '0') {
+                $("#success-alert").show();
+                setNotification("Chỉnh sửa bệnh / triệu chứng thành công", 1);
+            } else {
+                $("#error-alert").show();
+                setNotification("Chỉnh sửa bệnh / triệu chứng không thành công, xin hãy thử lại.", 3);
+            }
+        }
+    }
+
+    @*Display notification*@
+    function displayStatusNotification() {
+        // Change status
+        if ('@ViewBag.ChangeStatus' == '') {
+            return false;
+        } else {
+            var status = '@ViewBag.ChangeStatus';
+
+            if (status != '0') {
+                $("#success-alert").show();
+                setNotification("Thay đổi trạng thái thành công", 1);
+            } else {
+                $("#error-alert").show();
+                setNotification("Thay đổi trạng thái không thành công, xin hãy thử lại.", 3);
+            }
+        }
+    }
+
+    @*Sort table*@
+    $(document).ready(function () {
+        $("#disease-table").tablesorter();
+        displayAddNotification();
+        displayUpdateNotification();
+        displayStatusNotification();
+    });
+
+    @*Update service status*@
+    $(document).ready(function () {
+        $('#disease-table .btn').on('click', function () {
+            var row = $(this).closest('tr');
+            var columns = row.find('td');
+            var valueInRow = "";
+            $.each(columns, function (i, item) {
+                valueInRow = valueInRow + item.innerHTML + '|';
+            });
+            var argument = valueInRow.split('|');
+            var diseaseId = argument[0];
+            var diseaseName = argument[1];
+            var status = argument[2];
+            var confirmMessage = "";
+            if (status == "True") {
+                confirmMessage = "Bạn có muốn ngừng bệnh / triệu chứng [" + diseaseName + "] hay không?"
+            } else {
+                confirmMessage = "Bạn có muốn lưu hành bệnh / triệu chứng [" + diseaseName + "] hay không?"
+            }
+
+            if (confirm(confirmMessage)) {
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.RouteUrl(Constants.ChangeDiseaseStatusAction))",
+                    data: {
+                        "diseaseId": diseaseId
+                    },
+                    success: function (data) {
+                        if (data.value == 1) {
+                            if (status == "True") {
+                                notif({
+                                    msg: "Bệnh / Triệu chứng [" + diseaseName + "] đã ngừng hoạt động",
+                                    type: "success",
+                                    width: 600,
+                                    position: "center",
+                                    fade: true,
+                                    multiline: true
+                                });
+                            } else {
+                                notif({
+                                    msg: "Bệnh / Triệu chứng [" + diseaseName + "] đã được lưu hành trở lại",
+                                    type: "success",
+                                    width: 600,
+                                    position: "center",
+                                    fade: true,
+                                    multiline: true
+                                });
+                            }
+                        } else {
+
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        notif({
+                            msg: "Không thể thay đổi trạng thái của bệnh / triệu chứng [" + diseaseName + "]",
+                            type: "error",
+                            width: 600,
+                            position: "center",
+                            fade: true,
+                            multiline: true
+                        });
+                    }
+                });
+            } else {
+                return false;
+            }
+
+            var numOfVisibleRows = $('#table-body').children('tr').length;
+            if ((numOfVisibleRows - 1) == 0) {
+                row.replaceWith('<tr><td colspan="5">Không có dữ liệu</td></tr>');
+                $('#paging').hide();
+            } else {
+                row.css("background-color", "#275b89");
+                row.fadeOut(400, function () {
+                    row.remove();
+                });
+            }
+            $('#disease-table').trigger('update');
+
+            //return false;
+        });
+    });
+
+    @*Display form elements*@
+    $(document).ready(function () {
+        var option = '@ViewBag.CurrentOption'
+        if (option = 'True') {
+            $("#SpecialityID").show();
+            $("#TypeID").show();
+        } else {
+            $("#SpecialityID").hide();
+            $("#TypeID").hide();
+        }
+
+        $("#Option").change(function () {
+            var selectedItem = $(this).val();
+            if (selectedItem == 'true') {
+                $("#SpecialityID").show();
+                $("#TypeID").show();
+            } else {
+                $("#SpecialityID").hide();
+                $("#TypeID").hide();
+            }
+        });
+    })
+
+</script>
