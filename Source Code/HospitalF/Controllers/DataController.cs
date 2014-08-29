@@ -726,14 +726,42 @@ namespace HospitalF.Controllers
                 {
                     diseaseList = await model.LoadListOfDisease(null, true, 1, 0);
                     ViewBag.CurrentStatus = true;
-                    ViewBag.CurrentMode = true;
+                    ViewBag.CurrentMode = 1;
                     ViewBag.CurrentOption = true;
                 }
                 else
                 {
-                    //diseaseList = await model.LoadListOfDisease(
-                    //    model.ServiceName, model.TypeID, model.IsActive);
+                    if (model.Option == false)
+                    {
+                        diseaseList = await model.LoadListOfDisease(
+                            model.DiseaseName, model.IsActive, 0, 0);
+                    }
+                    else
+                    {
+                        if (model.Mode == 1)
+                        {
+                            if (model.SpecialityID == 0)
+                            {
+                                diseaseList = await model.LoadListOfDisease(
+                                    model.DiseaseName, model.IsActive, 1, 0);
+                            }
+                            else
+                            {
+                                diseaseList = await model.LoadListOfDisease(
+                                    model.DiseaseName, model.IsActive, 2, model.SpecialityID);
+                            }
+                        }
+                        else
+                        {
+                            diseaseList = await model.LoadListOfDisease(
+                                    model.DiseaseName, model.IsActive, 3, 0);
+                        }
+                        
+                    }
+                    
                     ViewBag.CurrentStatus = model.IsActive;
+                    ViewBag.CurrentMode = model.Mode;
+                    ViewBag.CurrentOption = model.Option;
                 }
 
                 #endregion

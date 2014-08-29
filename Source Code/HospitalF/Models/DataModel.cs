@@ -46,6 +46,16 @@ namespace HospitalF.Models
         public string SpecialityName { get; set; }
 
         /// <summary>
+        /// Get/Set value for property DiseaseID
+        /// </summary>
+        public int DiseaseID { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property DiseaseName
+        /// </summary>
+        public string DiseaseName { get; set; }
+
+        /// <summary>
         /// Get/Set value for property IsMainSpeciality
         /// </summary>
         public bool IsMainSpeciality { get; set; }
@@ -64,6 +74,16 @@ namespace HospitalF.Models
         /// Get/Set value for property IsActive
         /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property Option
+        /// </summary>
+        public bool Option { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property Mode
+        /// </summary>
+        public int Mode { get; set; }
 
         /// <summary>
         /// Get/Set value for property IsActive

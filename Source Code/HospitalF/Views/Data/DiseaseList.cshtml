@@ -46,7 +46,26 @@
                 else
                 {
                     <option value="true">Đã có chuyên khoa</option>
-                    <option value="false" selected>Thuộc nhiều chuyên khoa</option>
+                    <option value="false" selected>Chưa có chuyên khoa</option>
+                }
+            }
+        </select>
+        <i></i>
+    </label>
+    
+    <label class="select">
+        <select class="form-control" id="Mode" name="Mode">
+            @{
+                int mode = (int)ViewBag.CurrentMode;
+                if (mode != 3)
+                {
+                    <option value="1" selected>Thuộc một chuyên khoa</option>
+                    <option value="3">Thuộc nhiều chuyên khoa</option>
+                }
+                else
+                {
+                    <option value="1">Thuộc một chuyên khoa</option>
+                    <option value="3" selected>Thuộc nhiều chuyên khoa</option>
                 }
             }
         </select>
@@ -56,25 +75,6 @@
     <label class="select">
         @Html.DropDownList("SpecialityID", (SelectList)ViewBag.SpecialityList,
                 "Tất cả các chuyên khoa", new { @class = "form-control" })
-        <i></i>
-    </label>
-    
-    <label class="select">
-        <select class="form-control" id="TypeID" name="TypeID">
-            @{
-                bool mode = (bool)ViewBag.CurrentMode;
-                if (mode)
-                {
-                    <option value="true" selected>Thuộc một chuyên khoa</option>
-                    <option value="false">Thuộc nhiều chuyên khoa</option>
-                }
-                else
-                {
-                    <option value="true">Thuộc một chuyên khoa</option>
-                    <option value="false" selected>Thuộc nhiều chuyên khoa</option>
-                }
-            }
-        </select>
         <i></i>
     </label>
     
@@ -217,7 +217,14 @@
                                                             @disease.Disease_Name
                                                         </a>
                                                     </td>
-                                                    <td>@disease.Speciality_Name</td>
+                                                    @if (!string.IsNullOrEmpty(disease.Speciality_Name))
+                                                    {
+                                                        <td>@disease.Speciality_Name</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>Không có chuyên khoa</td>
+                                                    }
                                                     <td>@(@disease.Is_Active.Value ? "Đang lưu hành" : "Ngưng hoạt động")</td>
                                                     <td>
                                                         <a href="" class="btn btn-sm btn-success btn-next">
@@ -441,22 +448,39 @@
     @*Display form elements*@
     $(document).ready(function () {
         var option = '@ViewBag.CurrentOption'
-        if (option = 'True') {
+        if (option == 'True') {
             $("#SpecialityID").show();
-            $("#TypeID").show();
+            $("#Mode").show();
         } else {
             $("#SpecialityID").hide();
-            $("#TypeID").hide();
+            $("#Mode").hide();
+        }
+
+        var mode = '@ViewBag.CurrentMode'
+        if (option == 'True' && mode == '1') {
+            $("#SpecialityID").show();
+        } else {
+            $("#SpecialityID").hide();
         }
 
         $("#Option").change(function () {
             var selectedItem = $(this).val();
             if (selectedItem == 'true') {
                 $("#SpecialityID").show();
-                $("#TypeID").show();
+                $("#Mode").show();
+                $("#Mode").val('1');
             } else {
                 $("#SpecialityID").hide();
-                $("#TypeID").hide();
+                $("#Mode").hide();
+            }
+        });
+
+        $("#Mode").change(function () {
+            var selectedItem = $(this).val();
+            if (selectedItem == 1) {
+                $("#SpecialityID").show();
+            } else {
+                $("#SpecialityID").hide();
             }
         });
     })
