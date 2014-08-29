@@ -32,6 +32,7 @@ namespace HospitalF.Controllers
         /// 1: Successful
         /// 0: Failed
         /// </returns>
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> ChangeServiceStatus(int serviceId)
         {
             try
@@ -264,6 +265,7 @@ namespace HospitalF.Controllers
         /// 1: Successful
         /// 0: Failed
         /// </returns>
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> ChangeFacilityStatus(int facilityId)
         {
             try
@@ -496,6 +498,7 @@ namespace HospitalF.Controllers
         /// 1: Successful
         /// 0: Failed
         /// </returns>
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> ChangeSpecialityStatus(int SpecialityId)
         {
             try
@@ -957,7 +960,103 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
 
-            
+
+        }
+        #endregion
+
+        #region Feedback
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public ActionResult Feedback(string sFromDate, string sToDate, int feedbackType = 0, int responseType = 0, int page = 1)
+        {
+            try
+            {
+                DateTime fromDate = new DateTime();
+                DateTime toDate = new DateTime();
+                if (string.IsNullOrEmpty(sFromDate) || string.IsNullOrEmpty(sToDate))
+                {
+                    DateTime today = DateTime.Today;
+                    fromDate = new DateTime(today.Year, today.Month - 1, 1);
+                    toDate = new DateTime(today.Year, today.Month, 1);
+                }
+                else
+                {
+                    fromDate = DateTime.ParseExact(sFromDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    toDate = DateTime.ParseExact(sToDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                }
+
+                ViewBag.FeedbackList = FeedBackModel.LoadAdministratorFeedback(fromDate, toDate, feedbackType, responseType).ToPagedList(page, Constants.PageSize);
+
+                ViewBag.FromDate = string.Format("{0:dd/MM/yyyy}", fromDate);
+                ViewBag.ToDate = string.Format("{0:dd/MM/yyyy}", toDate);
+
+                List<FeedbackType> feebackTypeList = FeedBackModel.LoadFeedbeackTypeList();
+                List<SelectListItem> feedbackTypeItemList = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "0", Text = "Tất cả loại phản hồi"},
+                                                                    new SelectListItem {Value = feebackTypeList[0].Type_ID.ToString(), Text = feebackTypeList[0].Type_Name},
+                                                                    new SelectListItem {Value = feebackTypeList[1].Type_ID.ToString(), Text = feebackTypeList[1].Type_Name},
+                                                                    new SelectListItem {Value = feebackTypeList[2].Type_ID.ToString(), Text = feebackTypeList[2].Type_Name},
+                                                                };
+                ViewBag.FeedbackTypeList = new SelectList(feedbackTypeItemList, "Value", "Text", feedbackType);
+                ViewBag.FeedbackType = feedbackType;
+
+                List<SelectListItem> responseItemList = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "0", Text = "Tất cả phản hồi"},
+                                                                    new SelectListItem {Value = "1", Text = "Đã duyệt"},
+                                                                    new SelectListItem {Value = "2", Text = "Chưa duyệt"}
+                                                                };
+                ViewBag.ResponseTypeList = new SelectList(responseItemList, "Value", "Text", responseType);
+                ViewBag.ResponseType = responseType;
+
+                return View();
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public ActionResult ApproveFeedback(int feedbackId = 0)
+        {
+            FeedBackModel.ApproveFeedback(feedbackId);
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
+
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public ActionResult UserList(string email = "", int userRole = 0, int userStatus = 0, int page = 1)
+        {
+            try
+            {
+                string exclusiveEmail = "";
+                if (SimpleSessionPersister.Username != null)
+                {
+                    exclusiveEmail = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
+                }
+                ViewBag.UserList = AccountModel.LoadUser(email, userRole, userStatus, exclusiveEmail).ToPagedList(page, Constants.PageSize);
+                List<Role> roleList = AccountModel.LoadUserRole();
+                ViewBag.RoleTypeList = new SelectList(roleList, "Role_ID", "Role_Name", userRole);
+                ViewBag.UserRole = userRole;
+                List<SelectListItem> statusItemList = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "0", Text = "Tất cả trạng thái"},
+                                                                    new SelectListItem {Value = "1", Text = "Đang hoạt động"},
+                                                                    new SelectListItem {Value = "2", Text = "Đã khóa"}
+                                                                };
+                ViewBag.StatusTypeList = new SelectList(statusItemList, "Value", "Text", userStatus);
+                ViewBag.UserStatus = userStatus;
+                ViewBag.Email = email;
+                return View();
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
         }
         #endregion
     }

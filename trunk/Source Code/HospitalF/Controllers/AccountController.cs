@@ -36,7 +36,7 @@ namespace HospitalF.Controllers
         /// <param name="password">Input password</param>
         /// <returns>Boolean value indicating an account is valid or not</returns>
         [HttpPost]
-        public ActionResult Login(string email, string password)
+        public ActionResult Login(string email, string password, bool remember = false)
         {
             try
             {
@@ -137,6 +137,18 @@ namespace HospitalF.Controllers
             }
         }
 
+        public ActionResult ActivateUser(int userId = 0)
+        {
+            AccountModel.ActivateUser(userId);
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
+
+        public ActionResult DeactivateUser(int userId = 0)
+        {
+            AccountModel.DeactivateUser(userId);
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
+
         #endregion
 
         #region SonNX
@@ -211,7 +223,6 @@ namespace HospitalF.Controllers
                 return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
-
         #endregion
     }
 }
