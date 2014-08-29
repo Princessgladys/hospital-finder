@@ -138,6 +138,14 @@
     <i class="fa-fw fa fa-check"></i>
     <strong>Thành công</strong> Thao tác thành công.
 </div>
+<div class="alert alert-warning fade in" style="display: none;"
+     id="warning-alert">
+    <button class="close" data-dismiss="alert">
+        ×
+    </button>
+    <i class="fa-fw fa fa-warning"></i>
+    <strong>Không thể hiện thực</strong> Thao tác không thành công. Xin vui lòng thử lại.
+</div>
 
 <div class="modal fade" id="addDisease" tabindex="-1"
      role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
@@ -343,12 +351,17 @@
         } else {
             var status = '@ViewBag.ChangeStatus';
 
-            if (status != '0') {
+            if (status == '1') {
                 $("#success-alert").show();
                 setNotification("Thay đổi trạng thái thành công", 1);
-            } else {
+            }
+            if (status == '0') {
                 $("#error-alert").show();
                 setNotification("Thay đổi trạng thái không thành công, xin hãy thử lại.", 3);
+            }
+            if (status == '2') {
+                $("#warning-alert").show();
+                setNotification("Bệnh / Triệu chứng đang tồn tại với một chuyên khoa", 2);
             }
         }
     }
@@ -392,56 +405,34 @@
                     success: function (data) {
                         if (data.value == 1) {
                             if (status == "True") {
-                                notif({
-                                    msg: "Bệnh / Triệu chứng [" + diseaseName + "] đã ngừng hoạt động",
-                                    type: "success",
-                                    width: 600,
-                                    position: "center",
-                                    fade: true,
-                                    multiline: true
-                                });
+                                setNotification("Bệnh / Triệu chứng [" + diseaseName + "] đã ngừng hoạt động", 1);
                             } else {
-                                notif({
-                                    msg: "Bệnh / Triệu chứng [" + diseaseName + "] đã được lưu hành trở lại",
-                                    type: "success",
-                                    width: 600,
-                                    position: "center",
-                                    fade: true,
-                                    multiline: true
+                                setNotification("Bệnh / Triệu chứng [" + diseaseName + "] đã được lưu hành trở lại", 1);
+                            }
+
+                            var numOfVisibleRows = $('#table-body').children('tr').length;
+                            if ((numOfVisibleRows - 1) == 0) {
+                                row.replaceWith('<tr><td colspan="5">Không có dữ liệu</td></tr>');
+                                $('#paging').hide();
+                            } else {
+                                row.css("background-color", "#275b89");
+                                row.fadeOut(400, function () {
+                                    row.remove();
                                 });
                             }
-                        } else {
-
+                            $('#disease-table').trigger('update');
+                        }
+                        if (data.value == 2) {
+                            setNotification("Bệnh / Triệu chứng [" + diseaseName + "] đang tồn tại với một chuyên khoa.", 2);
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        notif({
-                            msg: "Không thể thay đổi trạng thái của bệnh / triệu chứng [" + diseaseName + "]",
-                            type: "error",
-                            width: 600,
-                            position: "center",
-                            fade: true,
-                            multiline: true
-                        });
+                        setNotification("Không thể thay đổi trạng thái của bệnh / triệu chứng [" + diseaseName + "]",32);
                     }
                 });
             } else {
                 return false;
             }
-
-            var numOfVisibleRows = $('#table-body').children('tr').length;
-            if ((numOfVisibleRows - 1) == 0) {
-                row.replaceWith('<tr><td colspan="5">Không có dữ liệu</td></tr>');
-                $('#paging').hide();
-            } else {
-                row.css("background-color", "#275b89");
-                row.fadeOut(400, function () {
-                    row.remove();
-                });
-            }
-            $('#disease-table').trigger('update');
-
-            //return false;
         });
     });
 
