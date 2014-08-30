@@ -18,13 +18,12 @@ BEGIN
 
 	DECLARE @NumberOfSpeciality INT
 
-	SELECT @NumberOfSpeciality = (SELECT COUNT(*)
-								  FROM (SELECT s.Speciality_ID
-										FROM Speciality s, Hospital h, Hospital_Speciality hs
-										WHERE FREETEXT (Speciality_Name, @WhatPhrase) AND
-											  s.Speciality_ID = hs.Speciality_ID AND
-											  h.Hospital_ID = hs.Hospital_ID AND
-											  h.Hospital_ID = @HospitalID) s)
+	SELECT @NumberOfSpeciality = (SELECT COUNT(s.Speciality_ID)
+								  FROM Speciality s, Hospital h, Hospital_Speciality hs
+								  WHERE FREETEXT (Speciality_Name, @WhatPhrase) AND
+										s.Speciality_ID = hs.Speciality_ID AND
+										h.Hospital_ID = hs.Hospital_ID AND
+										h.Hospital_ID = @HospitalID)
 
 	IF (@NumberOfSpeciality IS NULL)
 		RETURN 0;
