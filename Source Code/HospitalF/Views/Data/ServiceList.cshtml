@@ -43,26 +43,22 @@ class="active"
     <label class="select">
         <select class="form-control" id="Type" name="IsActive">
             @{
-    bool isActive = (bool)ViewBag.CurrentStatus;
-    if (isActive)
-    {
-                <option value="true" selected>Đang hoạt động</option>
-                <option value="false">Ngưng hoạt động</option>
-    }
-    else
-    {
-                <option value="true">Đang hoạt động</option>
-                <option value="false" selected>Ngưng hoạt động</option>
-    }
+                bool isActive = (bool)ViewBag.CurrentStatus;
+                if (isActive)
+                {
+                            <option value="true" selected>Đang hoạt động</option>
+                            <option value="false">Ngưng hoạt động</option>
+                }
+                else
+                {
+                            <option value="true">Đang hoạt động</option>
+                            <option value="false" selected>Ngưng hoạt động</option>
+                }
             }
         </select>
 
         <i></i>
     </label>
-
-    <a href="/Data/AddService" class="btn btn-sm btn-success btn-next"
-        id="add-button" data-toggle="modal" data-target="#addService">Thêm dịch vụ
-    </a>
 
     <div class="well">
         <div class="input-group">
@@ -135,6 +131,11 @@ class="active"
                 <header>
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>Danh sách</h2>
+                    <a href="/Data/AddService" class="btn btn-primary"
+                       id="add-button" data-toggle="modal" data-target="#addService"
+                       style="float:right;">
+                        Thêm dịch vụ
+                    </a>
                 </header>
                 <!-- widget div-->
                 <div>
