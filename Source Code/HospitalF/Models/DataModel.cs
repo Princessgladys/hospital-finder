@@ -91,6 +91,11 @@ namespace HospitalF.Models
         public bool IsPostBack { get; set; }
 
         /// <summary>
+        /// Get/Set value for property SpecialityList
+        /// </summary>
+        public List<Speciality> SpecialityList { get; set; }
+
+        /// <summary>
         /// Get/Set value for property SelectedSpecialities
         /// </summary>
         public List<string> SelectedSpecialities { get; set; }
@@ -433,6 +438,72 @@ namespace HospitalF.Models
             {
                 return await Task.Run(() =>
                     data.SP_INSERT_DISEASE(diseaseName, speciality));
+            }
+        }
+
+        /// <summary>
+        /// Load disease by ID
+        /// </summary>
+        /// <param name="diseaseId">Disease ID</param>
+        /// <returns>DataModel</returns>
+        public async Task<DataModel> LoadDiseaseByIdAsync(int diseaseId)
+        {
+            DataModel model = new DataModel();
+ 
+            // Load disease by ID
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                model.SelectedSpecialities = await Task.Run(() =>
+                    (from sd in data.Speciality_Diseases
+                     where sd.Disease_ID.Equals(diseaseId)
+                     select sd.Speciality_ID.ToString()).ToList());
+
+                Disease disease = await Task.Run(() =>
+                    (from d in data.Diseases
+                     where d.Disease_ID.Equals(diseaseId)
+                     select d).SingleOrDefault());
+
+                model.DiseaseID = disease.Disease_ID;
+                model.DiseaseName = disease.Disease_Name;
+                model.IsActive = disease.Is_Active.Value;
+            }
+
+            return model;
+        }
+
+        /// <summary>
+        /// Update disease
+        /// </summary>
+        /// <param name="diseaseId">Disease ID</param>
+        /// <param name="diseaseName">Disease name</param>
+        /// <param name="specialityList">List of speciality ID</param>
+        /// <returns>1: Successful, 0: Failed</returns>
+        public async Task<int> UpdateDiseaseAsync(int diseaseId,
+            string diseaseName, List<string> specialityList)
+        {
+            // Speciality list
+            string speciality = string.Empty;
+            if ((specialityList != null) && (specialityList.Count != 0))
+            {
+                for (int n = 0; n < specialityList.Count; n++)
+                {
+                    if (n == (specialityList.Count - 1))
+                    {
+                        speciality += specialityList[n];
+                    }
+                    else
+                    {
+                        speciality += specialityList[n] +
+                            Constants.VerticalBar.ToString();
+                    }
+                }
+            }
+
+            // Update service information
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                return await Task.Run(() =>
+                    data.SP_UPDATE_DISEASE(diseaseId, diseaseName, speciality));
             }
         }
 

@@ -607,6 +607,7 @@
     <Content Include="Views\Home\Feedback.cshtml" />
     <Content Include="Views\Data\DiseaseList.cshtml" />
     <Content Include="Views\Data\AddDisease.cshtml" />
+    <Content Include="Views\Data\UpdateDisease.cshtml" />
     <Content Include="Views\Data\Feedback.cshtml" />
     <Content Include="Views\Data\UserList.cshtml" />
   </ItemGroup>

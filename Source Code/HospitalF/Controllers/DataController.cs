@@ -890,6 +890,68 @@ namespace HospitalF.Controllers
             }
         }
 
+        /// <summary>
+        /// Load paritial view Update Service
+        /// </summary>
+        /// <param name="diseaseId">Disease ID</param>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        public async Task<ActionResult> UpdateDisease(int diseaseId)
+        {
+            try
+            {
+                // Load service information
+                DataModel model = new DataModel();
+                model = await model.LoadDiseaseByIdAsync(diseaseId);
+
+                //Load list of specialities
+                model.SpecialityList = await SpecialityUtil.LoadSpecialityAsync();
+
+                return PartialView(Constants.UpdateDiseaseAction, model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Update Disease
+        /// </summary>
+        /// <param name="model">DataModel</param>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> UpdateDisease(DataModel model)
+        {
+            try
+            {
+                // Prepare data
+                int result = 0;
+                model.IsPostBack = false;
+                model.IsActive = true;
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.UpdateDiseaseAsync(model.DiseaseID,
+                        model.DiseaseName, model.SelectedSpecialities);
+                }
+
+                // Return result
+                TempData[Constants.ProcessUpdateData] = result;
+                return RedirectToAction(Constants.DisplayDiseaseAction, Constants.DataController, model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
         #endregion
 
         #region Statistic
