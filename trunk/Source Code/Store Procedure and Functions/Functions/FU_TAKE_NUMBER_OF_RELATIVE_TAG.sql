@@ -18,13 +18,12 @@ BEGIN
 
 	DECLARE @NumberOfTag INT
 
-	SELECT @NumberOfTag = (SELECT COUNT(*)
-						   FROM (SELECT w.Word_ID
-							     FROM Tag w, Tag_Hospital wh
-							     WHERE w.[Type] = 2 AND
-									   FREETEXT (w.Word, @WhatPhrase) AND
-									   w.Word_ID = wh.Word_ID AND
-									   wh.Hospital_ID = @HospitalID) w)
+	SELECT @NumberOfTag = (SELECT COUNT(w.Word_ID)
+						   FROM Tag w, Tag_Hospital wh
+						   WHERE w.[Type] = 3 AND
+								 FREETEXT (w.Word, @WhatPhrase) AND
+								 w.Word_ID = wh.Word_ID AND
+								 wh.Hospital_ID = @HospitalID)
 
 	IF (@NumberOfTag IS NULL)
 		RETURN 0;
