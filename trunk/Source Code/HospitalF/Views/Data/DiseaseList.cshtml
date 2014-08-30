@@ -96,12 +96,7 @@
         </select>
         <i></i>
     </label>
-
-    <a href="/Data/AddDisease" class="btn btn-sm btn-success btn-next"
-       id="add-button" data-toggle="modal" data-target="#addDisease">
-        Thêm bệnh / triệu chứng
-    </a>
-
+    
     <div class="well">
         <div class="input-group">
             @Html.TextBox("IsPostBack", true, new { @type = "hidden" })
@@ -181,7 +176,11 @@
                 <header>
                     <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                     <h2>Danh sách</h2>
-
+                    <a href="/Data/AddDisease" class="btn btn-primary"
+                       id="add-button" data-toggle="modal" data-target="#addDisease"
+                       style="float:right;">
+                        Thêm bệnh / triệu chứng
+                    </a>
                 </header>
                 <!-- widget div-->
                 <div>
