@@ -60,11 +60,6 @@ class="active"
         <i></i>
     </label>
 
-    <a href="/Data/AddFacility" class="btn btn-sm btn-success btn-next"
-       id="add-button" data-toggle="modal" data-target="#addFacility">
-        Thêm cơ sở vật chất
-    </a>
-
     <div class="well">
         <div class="input-group">
             @Html.TextBox("IsPostBack", true, new { @type = "hidden" })
@@ -132,10 +127,14 @@ class="active"
                  data-widget-custombutton="false"
                  data-widget-collapsed="false"
                  data-widget-sortable="false">
-
                 <header>
                     <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                     <h2>Danh sách</h2>
+                    <a href="/Data/AddFacility" class="btn btn-primary"
+                       id="add-button" data-toggle="modal" data-target="#addFacility"
+                       style="float:right;">
+                        Thêm cơ sở vật chất
+                    </a>
                 </header>
                 <!-- widget div-->
                 <div>
