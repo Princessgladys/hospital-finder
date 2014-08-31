@@ -46,15 +46,6 @@ BEGIN
 	DECLARE @NonDiacriticWhatPhrase NVARCHAR(4000) =
 			[dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE] (@WhatPhrase)
 
--- REMOVE NOISE WORD FROM WHAT PHRASE---------------------------------------------------------
-		
-	SET @WhatPhrase = REPLACE(@WhatPhrase, N'bệnh viện', N'')
-	SET @WhatPhrase = REPLACE(@WhatPhrase, N'bệnh', N'')
-	SET @WhatPhrase = REPLACE(REPLACE(REPLACE(@WhatPhrase,' ','<>'),'><',''),'<>',' ')
-	SET @NonDiacriticWhatPhrase = REPLACE(@NonDiacriticWhatPhrase, N'benh vien', N'')
-	SET @NonDiacriticWhatPhrase = REPLACE(@NonDiacriticWhatPhrase, N'benh', N'')
-	SET @NonDiacriticWhatPhrase = REPLACE(REPLACE(REPLACE(@NonDiacriticWhatPhrase,' ','<>'),'><',''),'<>',' ')
-
 	-- DEFINE TEMPORARY TABLE THAT CONTAIN LIST OF HOSPITALS
 	-- THAT CONTAINS MATCHED RESULT INDEX
 	DECLARE @TempHospitalList TABLE(ID INT IDENTITY(1,1) PRIMARY KEY,
@@ -64,25 +55,39 @@ BEGIN
 	-- CHECK IF WHAT PHRASE IS NOT NULL
 	IF (@WhatPhrase != '')
 	BEGIN
--- QUERY FROM TAG TABLE-----------------------------------------------------------------------
+	-- REMOVE NOISE WORD FROM WHAT PHRASE---------------------------------------------------------
+		
+	SET @WhatPhrase = REPLACE(@WhatPhrase, N'bệnh viện', N'')
+	SET @WhatPhrase = REPLACE(@WhatPhrase, N'bệnh', N'')
+	SET @WhatPhrase = REPLACE(@WhatPhrase, N'khám', N'')
+	SET @WhatPhrase = REPLACE(@WhatPhrase, N'chữa', N'')
+	SET @WhatPhrase = REPLACE(REPLACE(REPLACE(@WhatPhrase,' ','<>'),'><',''),'<>',' ')
+	SET @NonDiacriticWhatPhrase = REPLACE(@NonDiacriticWhatPhrase, N'benh vien', N'')
+	SET @NonDiacriticWhatPhrase = REPLACE(@NonDiacriticWhatPhrase, N'benh', N'')
+	SET @NonDiacriticWhatPhrase = REPLACE(@NonDiacriticWhatPhrase, N'kham', N'')
+	SET @NonDiacriticWhatPhrase = REPLACE(REPLACE(REPLACE(@NonDiacriticWhatPhrase,' ','<>'),'><',''),'<>',' ')
+
+	-- QUERY FROM TAG TABLE-----------------------------------------------------------------------
 	
 		-- FIND EXACTLY MATCHING TAGS WORD
 		DECLARE @NumOfHospitalFoundByExactlyTag INT = 0
 		SET @NumOfHospitalFoundByExactlyTag = (SELECT COUNT (Word_ID)
 											   FROM Tag
-											   WHERE (N'%' + Word + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
-													  N'%' + @WhatPhrase + N'%' LIKE N'%' + Word + N'%') AND
-													 [Type] = 3)
+											   WHERE [Type] = 3 AND
+													 (N'%' + Word + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
+													  N'%' + @WhatPhrase + N'%' LIKE N'%' + Word + N'%'))
 
 		IF (@NumOfHospitalFoundByExactlyTag > 0)
 		BEGIN
 			INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 			SELECT DISTINCT wh.Hospital_ID, @ExactlyIndexOfTag
 			FROM Tag w, Tag_Hospital wh
-			WHERE (N'%' + Word + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
-				   N'%' + @WhatPhrase + N'%' LIKE N'%' + Word + N'%') AND
+			WHERE w.Word_ID = wh.Word_ID AND 
 				  w.[Type] = 3 AND
-				  w.Word_ID = wh.Word_ID
+				  (N'%' + Word + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
+				   N'%' + @WhatPhrase + N'%' LIKE N'%' + Word + N'%')
+				  
+				  
 		END
 		-- FIND RELATIVE MATCHING TAGS WORD
 		ELSE
@@ -93,9 +98,9 @@ BEGIN
 			SET @NumOfHospitalFoundByRelativeTag = 
 				(SELECT DISTINCT  COUNT(wh.Hospital_ID)
 				 FROM Tag w, Tag_Hospital wh
-				 WHERE w.[Type] = 3 AND
-					   FREETEXT (w.Word, @WhatPhrase) AND
-					   w.Word_ID = wh.Word_ID)
+				 WHERE w.Word_ID = wh.Word_ID AND
+					   w.[Type] = 3 AND
+					   FREETEXT (w.Word, @WhatPhrase))
 
 			IF (@NumOfHospitalFoundByRelativeTag > 0)
 			BEGIN
@@ -103,9 +108,10 @@ BEGIN
 				INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 				SELECT DISTINCT wh.Hospital_ID, @RelativeIndexOfTag
 				FROM Tag w, Tag_Hospital wh
-				WHERE w.[Type] = 3 AND
-					  FREETEXT (w.Word,  @WhatPhrase) AND
-					  w.Word_ID = wh.Word_ID
+				WHERE w.Word_ID = wh.Word_ID AND 
+					  w.[Type] = 3 AND
+					  FREETEXT (w.Word,  @WhatPhrase)
+					  
 			END
 			-- NON-DIACRITIC VIETNAMESE
 			ELSE
@@ -113,23 +119,23 @@ BEGIN
 				INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 				SELECT DISTINCT wh.Hospital_ID, @NonDiacriticIndexOfTag
 				FROM Tag w, Tag_Hospital wh
-				WHERE (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](w.Word) + N'%' LIKE
-						N'%' + @NonDiacriticWhatPhrase + N'%' OR
-						N'%' + @NonDiacriticWhatPhrase + N'%' LIKE
-						N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](w.Word) + N'%') AND
-						[Type] = 3 AND
-						w.Word_ID = wh.Word_ID
+				WHERE w.Word_ID = wh.Word_ID AND
+					  [Type] = 3 AND
+					  (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](w.Word) + N'%' LIKE
+					   N'%' + @NonDiacriticWhatPhrase + N'%' OR
+					   N'%' + @NonDiacriticWhatPhrase + N'%' LIKE
+					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](w.Word) + N'%')		  
 			END
 		END
 
--- QUERY FROM SPECIALITY TABLE----------------------------------------------------------------
+	-- QUERY FROM SPECIALITY TABLE----------------------------------------------------------------
 
 		-- FIND EXACTLY SPECIALITY
 		DECLARE @NumOfHospitalFoundByExactlySpeciality INT = 0
 		SET @NumOfHospitalFoundByExactlySpeciality = (SELECT COUNT(Speciality_ID)
 													  FROM Speciality
-													  WHERE N'%' + @WhatPhrase + N'%' LIKE N'%' + Speciality_Name + N'%' OR
-															N'%' + Speciality_Name + N'%' LIKE N'%' + @WhatPhrase + N'%')
+													  WHERE N'%' + Speciality_Name + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
+															N'%' + @WhatPhrase + N'%' LIKE N'%' + Speciality_Name + N'%')
 
 		IF (@NumOfHospitalFoundByExactlySpeciality > 0)
 		BEGIN
@@ -137,10 +143,10 @@ BEGIN
 			INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 			SELECT DISTINCT h.Hospital_ID, @ExactlyIndexOfSpeciality
 			FROM Speciality s, Hospital h, Hospital_Speciality hs
-			WHERE (N'%' + @WhatPhrase + N'%' LIKE N'%' + Speciality_Name + N'%' OR
-				   N'%' + Speciality_Name + N'%' LIKE N'%' + @WhatPhrase + N'%') AND
-				  s.Speciality_ID = hs.Speciality_ID AND
-				  h.Hospital_ID = hs.Hospital_ID
+			WHERE h.Hospital_ID = hs.Hospital_ID AND
+				  hs.Speciality_ID = s.Speciality_ID AND
+				  (N'%' + Speciality_Name + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
+				   N'%' + @WhatPhrase + N'%' LIKE N'%' + Speciality_Name + N'%')
 		END
 		-- FIND RELATIVE MATCHING SPECIALITY
 		ELSE
@@ -151,9 +157,9 @@ BEGIN
 			SET @NumOfHospitalFoundByRelativeSpeciality = 
 					(SELECT COUNT(s.Speciality_ID)
 					 FROM Speciality s, Hospital h, Hospital_Speciality hs
-					 WHERE FREETEXT (Speciality_Name, @WhatPhrase) AND
-						   s.Speciality_ID = hs.Speciality_ID AND
-						   h.Hospital_ID = hs.Hospital_ID)
+					 WHERE h.Hospital_ID = hs.Hospital_ID AND
+						   hs.Speciality_ID = s.Speciality_ID AND 
+						   FREETEXT (Speciality_Name, @WhatPhrase))
 
 			IF (@NumOfHospitalFoundByRelativeSpeciality > 0)
 			BEGIN
@@ -161,9 +167,9 @@ BEGIN
 				INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 				SELECT DISTINCT h.Hospital_ID, @RelativeIndexOfSpeciality
 				FROM Speciality s, Hospital h, Hospital_Speciality hs
-				WHERE FREETEXT (Speciality_Name, @WhatPhrase) AND
-					  s.Speciality_ID = hs.Speciality_ID AND
-					  h.Hospital_ID = hs.Hospital_ID
+				WHERE h.Hospital_ID = hs.Hospital_ID AND
+					  hs.Speciality_ID = s.Speciality_ID AND 
+					  FREETEXT (Speciality_Name, @WhatPhrase)
 			END
 			-- NON-DIACRITIC VIETNAMESE
 			ELSE
@@ -171,23 +177,23 @@ BEGIN
 				INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 				SELECT DISTINCT h.Hospital_ID, @NonDiacriticIndexOfSpeciality
 				FROM Speciality s, Hospital h, Hospital_Speciality hs
-				WHERE (N'%' + @NonDiacriticWhatPhrase + N'%' LIKE 
-					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' OR
-					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' LIKE
-					   N'%' + @NonDiacriticWhatPhrase + N'%') AND
-					  s.Speciality_ID = hs.Speciality_ID AND
-					  h.Hospital_ID = hs.Hospital_ID
+				WHERE h.Hospital_ID = hs.Hospital_ID AND
+					  hs.Speciality_ID = s.Speciality_ID AND
+					  (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' LIKE
+					   N'%' + @NonDiacriticWhatPhrase + N'%'OR
+					   N'%' + @NonDiacriticWhatPhrase + N'%' LIKE 
+					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%')	  
 			END
 		END
 
--- QUERY FROM DISEASE TABLE-------------------------------------------------------------------
+	-- QUERY FROM DISEASE TABLE-------------------------------------------------------------------
 
 		-- FIND EXACTLY DISEASE
 		DECLARE @NumOfHospitalFoundByExactlyDesease INT = 0
 		SET @NumOfHospitalFoundByExactlyDesease = (SELECT COUNT(Disease_ID)
 												   FROM Disease
-												   WHERE N'%' + @WhatPhrase + N'%' LIKE N'%' + Disease_Name + N'%' OR
-														 N'%' + Disease_Name + N'%' LIKE N'%' + @WhatPhrase + N'%')
+												   WHERE N'%' + Disease_Name + N'%' LIKE N'%' + @WhatPhrase + N'%'OR
+														 N'%' + @WhatPhrase + N'%' LIKE N'%' + Disease_Name + N'%')
 
 		IF (@NumOfHospitalFoundByExactlyDesease > 0)
 		BEGIN
@@ -196,11 +202,11 @@ BEGIN
 			SELECT DISTINCT h.Hospital_ID, @ExactlyIndexOfDisease
 			FROM Disease d, Speciality_Disease sd,
 				 Hospital h, Hospital_Speciality hs
-			WHERE (N'%' + @WhatPhrase + N'%' LIKE N'%' + Disease_Name + N'%' OR
-				   N'%' + Disease_Name + N'%' LIKE N'%' + @WhatPhrase + N'%') AND
-				  d.Disease_ID = sd.Disease_ID AND
-				  sd.Speciality_ID = hs.Speciality_ID AND
-				  h.Hospital_ID = hs.Hospital_ID
+			WHERE h.Hospital_ID = hs.Hospital_ID AND
+				  hs.Speciality_ID = sd.Speciality_ID AND
+				  sd.Disease_ID = d.Disease_ID AND
+				  (N'%' + Disease_Name + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
+				   N'%' + @WhatPhrase + N'%' LIKE N'%' + Disease_Name + N'%') 
 		END
 		-- FIND RELATIVE MATCHING DISEASE
 		ELSE
@@ -212,10 +218,10 @@ BEGIN
 					(SELECT COUNT(d.Disease_ID)
 					 FROM Disease d, Speciality_Disease sd,
 						  Hospital h, Hospital_Speciality hs
-					 WHERE FREETEXT (Disease_Name, @WhatPhrase) AND
-						   d.Disease_ID = sd.Disease_ID AND
-						   sd.Speciality_ID = hs.Speciality_ID AND
-						   h.Hospital_ID = hs.Hospital_ID)
+					 WHERE h.Hospital_ID = hs.Hospital_ID AND
+						   hs.Speciality_ID = sd.Speciality_ID AND
+						   sd.Disease_ID = d.Disease_ID AND
+						   FREETEXT (Disease_Name, @WhatPhrase))
 
 			IF (@NumOfHospitalFoundByRelativeDisease > 0)
 			BEGIN
@@ -224,10 +230,10 @@ BEGIN
 				SELECT DISTINCT h.Hospital_ID, @RelativeIndexOfDisease 
 				FROM Disease d, Speciality_Disease sd,
 					 Hospital h, Hospital_Speciality hs
-				WHERE FREETEXT(Disease_Name, @WhatPhrase) AND
-					  d.Disease_ID = sd.Disease_ID AND
-					  sd.Speciality_ID = hs.Speciality_ID AND
-					  h.Hospital_ID = hs.Hospital_ID
+				WHERE h.Hospital_ID = hs.Hospital_ID AND
+					  hs.Speciality_ID = sd.Speciality_ID AND
+					  sd.Disease_ID = d.Disease_ID AND
+					  FREETEXT (Disease_Name, @WhatPhrase)
 			END
 			-- NON-DIACRITIC VIETNAMESE
 			ELSE
@@ -235,14 +241,14 @@ BEGIN
 				INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 				SELECT DISTINCT h.Hospital_ID, @NonDiacriticIndexOfDisease
 				FROM Disease d, Speciality_Disease sd,
-						Hospital h, Hospital_Speciality hs
-				WHERE (N'%' + @NonDiacriticWhatPhrase + N'%' LIKE 
-					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%' OR
-					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%' LIKE
-					   N'%' + @NonDiacriticWhatPhrase + N'%') AND
-					  d.Disease_ID = sd.Disease_ID AND
-					  sd.Speciality_ID = hs.Speciality_ID AND
-					  h.Hospital_ID = hs.Hospital_ID
+					 Hospital h, Hospital_Speciality hs
+				WHERE h.Hospital_ID = hs.Hospital_ID AND
+					  hs.Speciality_ID = sd.Speciality_ID AND
+					  sd.Disease_ID = d.Disease_ID AND
+					  (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%' LIKE
+					   N'%' + @NonDiacriticWhatPhrase + N'%' OR
+					   N'%' + @NonDiacriticWhatPhrase + N'%' LIKE 
+					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%')
 			END
 		END
 	END
@@ -250,66 +256,26 @@ BEGIN
 
 	-- DEFINE TEMPORARY TABLE THAT CONTAIN LIST OF HOSPITALS
 	-- THAT CONTAIN SORT PRIORITY
-	DECLARE @ResultHospitalList TABLE(ID INT IDENTITY(1,1) PRIMARY KEY,
-										Hospital_ID INT,
-										[Priority] INT)
+	DECLARE @ResultList TABLE(ID INT IDENTITY(1,1) PRIMARY KEY,
+							  Hospital_ID INT,
+							  [Priority] INT)
 
-	-- CHECK IF THERE IS AT LEAST ONE RECORD IN @TempHospitalList
+	---- CHECK IF THERE IS AT LEAST ONE RECORD IN @TempHospitalList
 	DECLARE @NumOfRecordInTemp INT = 0;
-	SELECT @NumOfRecordInTemp = (SELECT COUNT(*)
-								 FROM (SELECT Hospital_ID
-										FROM @TempHospitalList) t)
+	SELECT @NumOfRecordInTemp = (SELECT COUNT(Hospital_ID)
+								 FROM @TempHospitalList)
 	IF (@NumOfRecordInTemp > 0)
 	BEGIN
-		SET @RowNum = 1
-		WHILE (@RowNum <= @NumOfRecordInTemp)
-		BEGIN
-			SET @TempMatchedIndex = (SELECT h.[Index]
-									 FROM (SELECT ROW_NUMBER()
-										   OVER (ORDER BY t.Hospital_ID ASC) AS RowNumber, t.[Index]
-										   FROM @TempHospitalList t) AS h
-									 WHERE RowNumber = @RowNum)
-
-			SELECT @TempHospitalID = (SELECT h.Hospital_ID
-									  FROM (SELECT ROW_NUMBER()
-											OVER (ORDER BY t.Hospital_ID ASC) AS RowNumber, t.Hospital_ID
-											FROM @TempHospitalList t) AS h
-									  WHERE RowNumber = @RowNum)
-
-			-- CHECK IF HOSPITAL ID HAS BEEN EXISTED IN @ResultHospitalList
-			IF (NOT EXISTS (SELECT r.Hospital_ID
-							FROM @ResultHospitalList r
-							WHERE r.Hospital_ID = @TempHospitalID))
-			BEGIN
-				-- TAKE RATING POINT
-				SET @RatingPoint = [dbo].[FU_TAKE_RATING_POINT] (@TempHospitalID)
-
-				-- TAKE RATING COUNT NUMBER
-				SET @RatingCount = [dbo].[FU_TAKE_RATING_COUNT] (@TempHospitalID)
-
-				INSERT INTO @ResultHospitalList
-				SELECT @TempHospitalID,
-							[dbo].[RETURN_SORT_PRIORITY] (@TempHospitalID, @TempMatchedIndex, @WhatPhrase) +
-							CONVERT(INT, @RatingPoint * @PriorityOfRatingPoint) +
-							CONVERT(INT, @RatingCount * @PriorityOfRatingCount)
-			END
-			ELSE
-			BEGIN
-				-- UPDATE VALUE OF PRIORITY
-				UPDATE @ResultHospitalList
-				SET [Priority] = (SELECT [Priority]
-								  FROM @ResultHospitalList
-								  WHERE Hospital_ID = @TempHospitalID) +
-								 [dbo].[RETURN_SORT_PRIORITY] (@TempHospitalID, @TempMatchedIndex, @WhatPhrase)
-				WHERE Hospital_ID = @TempHospitalID
-			END
-
-			SET @RowNum += 1
-		END
+		INSERT INTO @ResultList
+		SELECT t.Hospital_ID,
+			   t.[Priority] + CONVERT(INT, [dbo].[FU_TAKE_RATING_POINT] (t.Hospital_ID) * @PriorityOfRatingPoint) +
+							  CONVERT(INT, [dbo].[FU_TAKE_RATING_COUNT] (t.Hospital_ID) * @PriorityOfRatingCount)
+		FROM (SELECT t.Hospital_ID, 
+					 SUM([dbo].[RETURN_SORT_PRIORITY]
+						(t.Hospital_ID, t.[Index], @WhatPhrase, @NonDiacriticWhatPhrase)) AS [Priority]
+			  FROM @TempHospitalList t
+			  GROUP BY t.Hospital_ID) t
 	END
-
-	SELECT * FROM @TempHospitalList ORDER BY Hospital_ID ASC
-	SELECT * FROM @ResultHospitalList ORDER BY [Priority] DESC
 
 	-- CHECK IF WHERE PHRASE IS AVAILABLE
 	IF (@WherePhrase != 0)
@@ -324,7 +290,7 @@ BEGIN
 					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
-				FROM Hospital h, @ResultHospitalList temp
+				FROM Hospital h, @ResultList temp
 				WHERE h.Hospital_ID = temp.Hospital_ID AND
 					  h.City_ID = @CityID AND
 					  h.District_ID = @DistrictID AND
@@ -341,7 +307,7 @@ BEGIN
 					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
-				FROM Hospital h, @ResultHospitalList temp
+				FROM Hospital h, @ResultList temp
 				WHERE h.Hospital_ID = temp.Hospital_ID AND
 					  h.City_ID = @CityID AND
 					  h.Is_Active = 'True'
@@ -357,7 +323,7 @@ BEGIN
 					   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 					   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 					   h.Rating, h.Rating_Count
-				FROM Hospital h, @ResultHospitalList temp
+				FROM Hospital h, @ResultList temp
 				WHERE h.Hospital_ID = temp.Hospital_ID AND
 					  h.District_ID = @DistrictID AND
 					  h.Is_Active = 'True'
@@ -430,7 +396,7 @@ BEGIN
 				   h.Ordinary_End_Time, h.Coordinate, h.Full_Description,
 				   h.Is_Allow_Appointment, h.Is_Active, h.Holiday_Start_Time, h.Holiday_End_Time,
 				   h.Rating
-			FROM Hospital h, @ResultHospitalList temp
+			FROM Hospital h, @ResultList temp
 			WHERE h.Hospital_ID = temp.Hospital_ID AND
 				  h.Is_Active = 'True'
 			ORDER BY temp.[Priority] DESC
@@ -442,9 +408,3 @@ BEGIN
 		END		
 	END
 END
-
-EXEC SP_NORMAL_SEARCH_HOSPITAL N'bệnh biện chợ rẫy', 0, 0
-
-SELECT *
-FROM District
-WHERE City_ID = 79

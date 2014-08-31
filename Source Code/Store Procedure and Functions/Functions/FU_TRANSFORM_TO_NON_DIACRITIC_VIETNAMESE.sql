@@ -5,7 +5,7 @@ IF OBJECT_ID('[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE]', 'FN') IS NOT NULL
 GO
 CREATE FUNCTION [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE]
 (
-      @strInput NVARCHAR(4000)
+	@strInput NVARCHAR(4000)
 )
 RETURNS NVARCHAR(4000)
 AS
@@ -15,44 +15,90 @@ BEGIN
     IF @strInput = ''
 		RETURN @strInput
 
-    DECLARE @RT NVARCHAR(4000)
-    DECLARE @DIACRITIC_CHARS NCHAR(136)
-    DECLARE @NON_DIACRITIC_CHARS NCHAR (136)
+    DECLARE @l_str NVARCHAR(4000);
+	SET @l_str = LTRIM(@strInput);
+	SET @l_str = LOWER(RTRIM(@l_str));
  
-    SET @DIACRITIC_CHARS = N'ăâđêôơưàảãạáằẳẵặắầẩẫậấèẻẽẹéềểễệếìỉĩịíòỏõọóồổỗộốờởỡợớùủũụúừửữựứỳỷỹỵý' +
-						   N'ĂÂĐÊÔƠƯÀẢÃẠÁẰẲẴẶẮẦẨẪẬẤÈẺẼẸÉỀỂỄỆẾÌỈĨỊÍÒỎÕỌÓỒỔỖỘỐỜỞỠỢỚÙỦŨỤÚỪỬỮỰỨỲỶỸỴÝ' +
-						   NCHAR(272) + NCHAR(208)
-
-    SET @NON_DIACRITIC_CHARS = N'aadeoouaaaaaaaaaaaaaaaeeeeeeeeeeiiiiiooooooooooooooouuuuuuuuuuyyyyy' +
-							   N'AADEOOUAAAAAAAAAAAAAAAEEEEEEEEEEIIIIIOOOOOOOOOOOOOOOUUUUUUUUUUYYYYYDD'
+	SET @l_str = REPLACE(@l_str, N'á', 'a');
  
-    DECLARE @COUNTER INT
-    DECLARE @COUNTER1 INT
-    SET @COUNTER = 1
+	SET @l_str = REPLACE(@l_str, N'à', 'a');
+	SET @l_str = REPLACE(@l_str, N'ả', 'a');
+	SET @l_str = REPLACE(@l_str, N'ã', 'a');
+	SET @l_str = REPLACE(@l_str, N'ạ', 'a');
  
-    WHILE (@COUNTER <= LEN(@strInput))
-    BEGIN  
-		SET @COUNTER1 = 1
-		WHILE (@COUNTER1 <= LEN(@DIACRITIC_CHARS) + 1)
-		BEGIN
-			IF UNICODE(SUBSTRING(@DIACRITIC_CHARS, @COUNTER1, 1)) =
-			   UNICODE(SUBSTRING(@strInput,@COUNTER ,1))
-				BEGIN          
-					IF @COUNTER = 1
-						SET @strInput = SUBSTRING(@NON_DIACRITIC_CHARS, @COUNTER1, 1) +
-										SUBSTRING(@strInput, @COUNTER + 1,LEN(@strInput) - 1)                  
-					ELSE
-						SET @strInput = SUBSTRING(@strInput, 1, @COUNTER - 1) +
-										SUBSTRING(@NON_DIACRITIC_CHARS, @COUNTER1, 1) +
-										SUBSTRING(@strInput, @COUNTER + 1, LEN(@strInput) - @COUNTER)
-						BREAK
-				END
-			SET @COUNTER1 = @COUNTER1 + 1
-		END
-	SET @COUNTER = @COUNTER + 1
-    END
-
-    SET @strInput = REPLACE(@strInput, ' ', ' ')
+	SET @l_str = REPLACE(@l_str, N'â', 'a');
+	SET @l_str = REPLACE(@l_str, N'ấ', 'a');
+	SET @l_str = REPLACE(@l_str, N'ầ', 'a');
+	SET @l_str = REPLACE(@l_str, N'ẩ', 'a');
+	SET @l_str = REPLACE(@l_str, N'ẫ', 'a');
+	SET @l_str = REPLACE(@l_str, N'ậ', 'a');
+ 
+	SET @l_str = REPLACE(@l_str, N'ă', 'a');
+	SET @l_str = REPLACE(@l_str, N'ắ', 'a');
+	SET @l_str = REPLACE(@l_str, N'ằ', 'a');
+	SET @l_str = REPLACE(@l_str, N'ẳ', 'a');
+	SET @l_str = REPLACE(@l_str, N'ẵ', 'a');
+	SET @l_str = REPLACE(@l_str, N'ặ', 'a');
+ 
+	SET @l_str = REPLACE(@l_str, N'é', 'e');
+	SET @l_str = REPLACE(@l_str, N'è', 'e');
+	SET @l_str = REPLACE(@l_str, N'ẻ', 'e');
+	SET @l_str = REPLACE(@l_str, N'ẽ', 'e');
+	SET @l_str = REPLACE(@l_str, N'ẹ', 'e');
+ 
+	SET @l_str = REPLACE(@l_str, N'ê', 'e');
+	SET @l_str = REPLACE(@l_str, N'ế', 'e');
+	SET @l_str = REPLACE(@l_str, N'ề', 'e');
+	SET @l_str = REPLACE(@l_str, N'ể', 'e');
+	SET @l_str = REPLACE(@l_str, N'ễ', 'e');
+	SET @l_str = REPLACE(@l_str, N'ệ', 'e');
+ 
+	SET @l_str = REPLACE(@l_str, N'í', 'i');
+	SET @l_str = REPLACE(@l_str, N'ì', 'i');
+	SET @l_str = REPLACE(@l_str, N'ỉ', 'i');
+	SET @l_str = REPLACE(@l_str, N'ĩ', 'i');
+	SET @l_str = REPLACE(@l_str, N'ị', 'i');
+ 
+	SET @l_str = REPLACE(@l_str, N'ó', 'o');
+	SET @l_str = REPLACE(@l_str, N'ò', 'o');
+	SET @l_str = REPLACE(@l_str, N'ỏ', 'o');
+	SET @l_str = REPLACE(@l_str, N'õ', 'o');
+	SET @l_str = REPLACE(@l_str, N'ọ', 'o');
+ 
+	SET @l_str = REPLACE(@l_str, N'ô', 'o');
+	SET @l_str = REPLACE(@l_str, N'ố', 'o');
+	SET @l_str = REPLACE(@l_str, N'ồ', 'o');
+	SET @l_str = REPLACE(@l_str, N'ổ', 'o');
+	SET @l_str = REPLACE(@l_str, N'ỗ', 'o');
+	SET @l_str = REPLACE(@l_str, N'ộ', 'o');
+ 
+	SET @l_str = REPLACE(@l_str, N'ơ', 'o');
+	SET @l_str = REPLACE(@l_str, N'ớ', 'o');
+	SET @l_str = REPLACE(@l_str, N'ờ', 'o');
+	SET @l_str = REPLACE(@l_str, N'ở', 'o');
+	SET @l_str = REPLACE(@l_str, N'ỡ', 'o');
+	SET @l_str = REPLACE(@l_str, N'ợ', 'o');
+ 
+	SET @l_str = REPLACE(@l_str, N'ú', 'u');
+	SET @l_str = REPLACE(@l_str, N'ù', 'u');
+	SET @l_str = REPLACE(@l_str, N'ủ', 'u');
+	SET @l_str = REPLACE(@l_str, N'ũ', 'u');
+	SET @l_str = REPLACE(@l_str, N'ụ', 'u');
+ 
+	SET @l_str = REPLACE(@l_str, N'ư', 'u');
+	SET @l_str = REPLACE(@l_str, N'ứ', 'u');
+	SET @l_str = REPLACE(@l_str, N'ừ', 'u');
+	SET @l_str = REPLACE(@l_str, N'ử', 'u');
+	SET @l_str = REPLACE(@l_str, N'ữ', 'u');
+	SET @l_str = REPLACE(@l_str, N'ự', 'u');
+ 
+	SET @l_str = REPLACE(@l_str, N'ý', 'y');
+	SET @l_str = REPLACE(@l_str, N'ỳ', 'y');
+	SET @l_str = REPLACE(@l_str, N'ỷ', 'y');
+	SET @l_str = REPLACE(@l_str, N'ỹ', 'y');
+	SET @l_str = REPLACE(@l_str, N'ỵ', 'y');
+ 
+	SET @l_str = REPLACE(@l_str, N'đ', 'd');
 
     RETURN @strInput
 END

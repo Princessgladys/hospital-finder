@@ -7,7 +7,8 @@ CREATE FUNCTION RETURN_SORT_PRIORITY
 (
 	@HospitalID INT,
 	@Index INT,
-	@WhatPhrase NVARCHAR(128)
+	@WhatPhrase NVARCHAR(128),
+	@NonDiacriticWhatPhrase NVARCHAR(128)
 )
 RETURNS INT
 AS
@@ -53,18 +54,18 @@ BEGIN
 			WHEN @ExactlyIndexOfDisease THEN @ExactlyPriorityOfDisease
 
 			WHEN @RelativeIndexOfTag THEN
-				[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_TAG] (@HospitalID, @WhatPhrase) * @RelativePriorityOfTag
+				[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_TAG] (@HospitalID, @WhatPhrase, 0) * @RelativePriorityOfTag
 			WHEN @RelativeIndexOfSpeciality THEN
-				[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY] (@HospitalID, @WhatPhrase) * @RelativePriorityOfSpeciality
+				[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY] (@HospitalID, @WhatPhrase, 0) * @RelativePriorityOfSpeciality
 			WHEN @RelativeIndexOfDisease THEN
-				[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE] (@HospitalID, @WhatPhrase) * @RelativePriorityOfDisease
+				[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE] (@HospitalID, @WhatPhrase, 0) * @RelativePriorityOfDisease
 
 			WHEN @NonDiacriticIndexOfTag THEN
-				[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_TAG] (@HospitalID, @WhatPhrase) * @NonDiacriticPriorityOfTag
+				[dbo].[FU_TAKE_NUMBER_OF_RELATIVE_TAG] (@HospitalID, @NonDiacriticWhatPhrase, 1) * @NonDiacriticPriorityOfTag
 			WHEN @NonDiacriticIndexOfSpeciality
-				THEN [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY] (@HospitalID, @WhatPhrase) * @NonDiacriticPriorityOfSpeciality
+				THEN [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_SPECIALITY] (@HospitalID, @NonDiacriticWhatPhrase, 1) * @NonDiacriticPriorityOfSpeciality
 			WHEN @NonDiacriticIndexOfDisease
-				THEN [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE] (@HospitalID, @WhatPhrase) * @NonDiacriticPriorityOfDisease
+				THEN [dbo].[FU_TAKE_NUMBER_OF_RELATIVE_DISEASE] (@HospitalID, @NonDiacriticWhatPhrase, 1) * @NonDiacriticPriorityOfDisease
 
 			WHEN @AdvancedSearch THEN
 				CONVERT(INT, [dbo].[FU_TAKE_RATING_POINT] (@HospitalID) * @PriorityOfRatingPoint) +
