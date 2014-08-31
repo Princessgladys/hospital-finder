@@ -29,542 +29,365 @@ namespace HospitalF.Controllers
         public static List<Doctor> doctorList = null;
         public static List<Speciality> specialityList = null;
 
-        #region AnhDTH
-
-        public static int hospitalID = 68;
-        public Hospital hospital = null;
-        public static HospitalModel HospitalModel = null;
-
-        #region load location
-        /// <summary>
-        /// Hospital/Loadcity
-        /// </summary>
-        /// <returns>Task<List<City>></returns>
-        public async Task<List<City>> LoadCity()
-        {
-            List<City> list = await LocationUtil.LoadCityAsync();
-            City city = null;
-            List<City> result = new List<City>();
-            foreach (City c in list)
-            {
-                city = new City();
-                city.City_ID = c.City_ID;
-                city.City_Name = c.Type + Constants.WhiteSpace + c.City_Name;
-                result.Add(city);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Hospital/LoadDistrict
-        /// </summary>
-        /// <param name="cityID">cityID</param>
-        /// <returns>Task<List<District>></returns>
-        public async Task<List<District>> LoadDistrict(int cityID)
-        {
-            List<District> list = await LocationUtil.LoadDistrictInCityAsync(cityID);
-            District district = null;
-            List<District> result = new List<District>();
-            foreach (District d in list)
-            {
-                district = new District();
-                district.District_ID = d.District_ID;
-                district.District_Name = d.Type + Constants.WhiteSpace + d.District_Name;
-                result.Add(district);
-            }
-            return result;
-        }
-        /// <summary>
-        /// Hospital/LoadWard
-        /// </summary>
-        /// <param name="districtID">districtID</param>
-        /// <returns>Task<List<Ward>></returns>
-        public async Task<List<Ward>> LoadWard(int districtID)
-        {
-            List<Ward> list = await LocationUtil.LoadWardInDistrictAsync(districtID);
-            Ward ward = null;
-            List<Ward> result = new List<Ward>();
-            foreach (Ward w in list)
-            {
-                ward = new Ward();
-                ward.Ward_ID = w.Ward_ID;
-                ward.Ward_Name = w.Type + Constants.WhiteSpace + w.Ward_Name;
-                result.Add(ward);
-            }
-            return result;
-        }
-        #endregion
-
-        //
-        // GET: /Hospital/
+        #region VietLP
         [LayoutInjecter(Constants.HospitalUserLayout)]
-        public async Task<ActionResult> Index()
-        {
-            HospitalModel = new HospitalModel();
-            hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalID);
-            hospitalTypeList = await HospitalUtil.LoadTypeInHospitalTypeAsync(hospitalID);
-
-            //assign value for model attributes
-            HospitalModel.HospitalID = hospitalID;
-            HospitalModel.HospitalName = hospital.Hospital_Name;
-            HospitalModel.FullAddress = hospital.Address;
-            HospitalModel.Website = hospital.Website;
-            HospitalModel.PhoneNo = hospital.Phone_Number;
-            HospitalModel.Fax = hospital.Fax;
-            HospitalModel.HospitalTypeName = HospitalModel.LoadHospitalTypeInList((int)hospital.Hospital_Type, hospitalTypeList);
-            DateTime start;
-            DateTime end;
-            if (hospital.Ordinary_Start_Time == null && hospital.Ordinary_End_Time == null)
-            {
-                //startTime = new TimeSpan(0, 0, 0);
-                HospitalModel.OrdinaryStartTime = null;
-            }
-            else
-            {
-                start = DateTime.Today + (TimeSpan)hospital.Ordinary_Start_Time;
-                end = DateTime.Today + (TimeSpan)hospital.Ordinary_End_Time;
-                HospitalModel.OrdinaryStartTime = start.ToString("HH:mm") + " - " + end.ToString("HH:mm");
-            }
-            if (hospital.Holiday_Start_Time == null && hospital.Holiday_End_Time == null)
-            {
-                //startTime = new TimeSpan(0, 0, 0);
-                HospitalModel.HolidayStartTime = null;
-            }
-            else
-            {
-                start = DateTime.Today + (TimeSpan)hospital.Holiday_Start_Time;
-                end = DateTime.Today + (TimeSpan)hospital.Holiday_End_Time;
-                HospitalModel.HolidayStartTime = start.ToString("HH:mm") + " - " + end.ToString("HH:mm");
-            }
-            if (hospital.Is_Allow_Appointment == null)
-            {
-                HospitalModel.IsAllowAppointment = false;
-            }
-            else
-            {
-                HospitalModel.IsAllowAppointment = true;
-            }
-
-            //load speciality of hospital
-            specialityList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
-            ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
-
-            //load facility of hospital
-            ViewBag.FacilityList = await ServiceFacilityUtil.LoadFacilityOfHospitalAsync(hospitalID);
-
-            //load service of hospital
-            ViewBag.ServiceList = await ServiceFacilityUtil.LoadServiceOfHospitalAsync(hospitalID);
-
-            return View(HospitalModel);
-        }
-
-        #region search doctor
-        public async Task<ActionResult> SearchDoctor(string SpecialityID, string DoctorName, string HospitalID)
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public async Task<ActionResult> DoctorList(string doctorName = "", int page = 1)
         {
             try
             {
-                int tempSpecialityID, tempHospitalID;
-                doctorList = new List<Doctor>();
-                ViewBag.Hospital = Int32.Parse(HospitalID);
-                if (SpecialityID == "")
+                int hospitalId = 0;
+                if (SimpleSessionPersister.Username != null)
                 {
-                    SpecialityID = "0";
+                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
+                    int? temp = AccountModel.LoadUserByEmail(email).Hospital_ID;
+                    if (temp == null)
+                    {
+                        temp = 0;
+                    }
+                    hospitalId = (int)temp;
                 }
-                if (!String.IsNullOrEmpty(SpecialityID) && Int32.TryParse(SpecialityID, out tempSpecialityID)
-                    && Int32.TryParse(HospitalID, out tempHospitalID))
-                {
-                    doctorList = await HospitalUtil.SearchDoctor(DoctorName, tempSpecialityID, tempHospitalID);
-                    ViewBag.DoctorList = doctorList;
-                    ViewBag.HospitalID = tempHospitalID;
-                }
-                return PartialView("SearchResult");
+                ViewBag.DoctorList = DoctorModel.LoadDoctorList(hospitalId, doctorName.Trim()).ToPagedList(page, Constants.PageSize);
+                ViewBag.DoctorName = doctorName;
+                ViewBag.DeactivateStatus = TempData["DeactivateStatus"];
+                return View();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                LoggingUtil.LogException(ex);
-                return RedirectToAction(Constants.SystemFailureHospitalUserAction, Constants.ErrorController);
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
-
         }
-        #endregion
 
-        #region update hospital basic information
-
-        /// <summary>
-        /// Get/Hospital/HospitalBasicInforUpdate
-        /// </summary>
-        /// <param name="hospitalId">hospitalID</param>
-        /// <returns>Task<ActionResult></returns>
         [HttpGet]
         [LayoutInjecter(Constants.HospitalUserLayout)]
-        public async Task<ActionResult> HospitalBasicInforUpdate(int hospitalId)
-        {
-            //int temphospitaID=Int32.Parse(hospitalId);
-            HospitalModel = new HospitalModel();
-            hospital = await HospitalUtil.LoadHospitalByHospitalIDAsync(hospitalId);
-
-            //assign value for model attributes
-            HospitalModel.HospitalID = hospitalId;
-            HospitalModel.HospitalName = hospital.Hospital_Name;
-            HospitalModel.FullAddress = hospital.Address;
-            HospitalModel.HospitalEmail = hospital.Email;
-            HospitalModel.Website = hospital.Website;
-            HospitalModel.PhoneNo = hospital.Phone_Number;
-            HospitalModel.Fax = hospital.Fax;
-
-            TimeSpan startTime;
-            TimeSpan endTime;
-            DateTime start;
-            DateTime end;
-            //ordinary time
-            if (hospital.Ordinary_Start_Time == null && hospital.Ordinary_End_Time == null)
-            {
-                //startTime = new TimeSpan(0, 0, 0);
-                HospitalModel.OrdinaryStartTime = null;
-            }
-            else
-            {
-                startTime = (TimeSpan)hospital.Ordinary_Start_Time;
-
-                endTime = (TimeSpan)hospital.Ordinary_End_Time;
-
-                start = DateTime.Today + startTime;
-                end = DateTime.Today + endTime;
-                HospitalModel.OrdinaryStartTime = start.ToString("HH:mm") + Constants.Minus + end.ToString("HH:mm");
-            }
-            // holiday time
-            if (hospital.Holiday_Start_Time == null && hospital.Holiday_End_Time == null)
-            {
-                HospitalModel.HolidayStartTime = null;
-            }
-            else
-            {
-                startTime = (TimeSpan)hospital.Holiday_Start_Time;
-                endTime = (TimeSpan)hospital.Holiday_End_Time;
-                start = DateTime.Today + startTime;
-                end = DateTime.Today + endTime;
-                HospitalModel.HolidayStartTime = start.ToString("HH:mm") + Constants.Minus + end.ToString("HH:mm");
-            }
-            //is allow appointment
-            if (hospital.Is_Allow_Appointment == null)
-            {
-                HospitalModel.IsAllowAppointment = false;
-            }
-            else
-            {
-                HospitalModel.IsAllowAppointment = true;
-            }
-
-            // Load list of cities
-            cityList = await LoadCity();
-            HospitalModel.CityID = (int)hospital.City_ID;
-            //foreach (City c in cityList)
-            //{
-            //    if (c.City_ID == hospital.City_ID)
-            //    {
-            //        model.CityName = c.City_Name;
-            //    }
-            //}
-            ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-
-            // Load list of districts
-            districtList = await LoadDistrict(HospitalModel.CityID);
-            HospitalModel.DistrictID = (int)hospital.District_ID;
-            //foreach (District d in districtList)
-            //{
-            //    if (d.District_ID == hospital.District_ID)
-            //    {
-            //        model.DistrictName = d.District_Name;
-            //    }
-            //}
-            ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
-
-            // Load list of districts
-            //wardList = new List<Ward>();
-            wardList = await LoadWard(HospitalModel.DistrictID);
-            HospitalModel.WardID = (int)hospital.Ward_ID;
-            //foreach (Ward w in wardList)
-            //{
-            //    if (w.Ward_ID == hospital.Ward_ID)
-            //    {
-            //        model.WardName = w.Ward_Name;
-            //    }
-            //}
-            ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
-            // Load list of hospital types
-
-            hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
-            SelectList typeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
-            HospitalModel.HospitalTypeID = (int)hospital.Hospital_Type;
-            ViewBag.HospitalTypeList = typeList;
-            return View(HospitalModel);
-        }
-
-        /// <summary>
-        /// Post/Hospital/HospitalBasicInforUpdate
-        /// </summary>
-        /// <param name="model">HospitalModel</param>
-        /// <returns>Task<ActionResult></returns>
-        [HttpPost]
-        public async Task<ActionResult> HospitalBasicInforUpdate(HospitalModel model)
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public async Task<ActionResult> AddDoctor()
         {
             try
             {
-                using (LinqDBDataContext data = new LinqDBDataContext())
+                DoctorModel model = new DoctorModel();
+                if (SimpleSessionPersister.Username != null)
                 {
-                    Hospital oldHospital = await Task.Run(() => (
-                        from h in data.Hospitals
-                        where h.Hospital_ID == model.HospitalID
-                        select h).FirstOrDefault());
-                    //full address
-                    if (model.StreetAddress != null)
-                    {
-                        model.FullAddress = string.Format("{0} {1}, {2}, {3}, {4}",
-                        model.LocationAddress, model.StreetAddress, model.WardName,
-                        model.DistrictName, model.CityName);
-                        oldHospital.Address = model.FullAddress;
-                    }
-
-                    oldHospital.City_ID = model.CityID;
-                    oldHospital.Ward_ID = model.WardID;
-                    oldHospital.District_ID = model.DistrictID;
-                    oldHospital.Hospital_Type = model.HospitalTypeID;
-                    oldHospital.Is_Allow_Appointment = model.IsAllowAppointment;
-
-                    // Holiday time
-                    string[] holidayTime = model.HolidayStartTime.Split(char.Parse(Constants.Minus));
-                    string holidayStartTime = holidayTime[0].Trim();
-                    model.HolidayStartTime = holidayStartTime;
-                    string holidayEndTime = holidayTime[1].Trim();
-                    model.HolidayEndTime = holidayEndTime;
-
-                    oldHospital.Holiday_Start_Time = TimeSpan.Parse(model.HolidayStartTime);
-                    oldHospital.Holiday_End_Time = TimeSpan.Parse(model.HolidayEndTime);
-
-                    // Ordinary time
-                    string[] OrdinaryTime = model.OrdinaryStartTime.Split(char.Parse(Constants.Minus));
-                    string ordinaryStartTime = OrdinaryTime[0].Trim();
-                    model.OrdinaryStartTime = ordinaryStartTime;
-                    string ordinaryEndTime = OrdinaryTime[1].Trim();
-                    model.OrdinaryEndTime = ordinaryEndTime;
-
-                    oldHospital.Ordinary_Start_Time = TimeSpan.Parse(model.OrdinaryStartTime);
-                    oldHospital.Ordinary_End_Time = TimeSpan.Parse(model.OrdinaryEndTime);
-
-                    //phone number
-                    string phoneNumber = model.PhoneNo;
-                    if (!string.IsNullOrEmpty(model.PhoneNo2))
-                    {
-                        phoneNumber += Constants.Slash + model.PhoneNo2;
-                    }
-                    if (!string.IsNullOrEmpty(model.PhoneNo3))
-                    {
-                        phoneNumber += Constants.Slash + model.PhoneNo3;
-                    }
-                    oldHospital.Phone_Number = phoneNumber;
-
-                    oldHospital.Email = model.HospitalEmail;
-                    oldHospital.Website = model.Website;
-                    oldHospital.Fax = model.Fax;
-                    data.SubmitChanges();
-                    return RedirectToAction("Index");
+                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
+                    int hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+                    HospitalEntity hospital = await HomeModel.LoadHospitalById(hospitalId);
+                    model.HospitalID = hospital.Hospital_ID;
+                    model.HospitalName = hospital.Hospital_Name;
                 }
+                List<SelectListItem> genderSelectListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "1", Text = "Nam"},
+                                                                    new SelectListItem {Value = "2", Text = "Nữ"}
+                                                                };
+                ViewBag.GenderTypeList = new SelectList(genderSelectListItem, "Value", "Text", 1);
+                List<SelectListItem> daySelectListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "2", Text = "Thứ Hai"},
+                                                                    new SelectListItem {Value = "3", Text = "Thứ Ba"},
+                                                                    new SelectListItem {Value = "4", Text = "Thứ Tư"},
+                                                                    new SelectListItem {Value = "5", Text = "Thứ Năm"},
+                                                                    new SelectListItem {Value = "6", Text = "Thứ Sáu"},
+                                                                    new SelectListItem {Value = "7", Text = "Thứ Bảy"},
+                                                                    new SelectListItem {Value = "8", Text = "Chủ Nhật"},
+                                                                };
+                ViewBag.DayTypeList = new SelectList(daySelectListItem, "Value", "Text");
+                //Load list of specialities
+                specialityList = await SpecialityUtil.LoadSpecialityAsync();
+                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+                return View(model);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                LoggingUtil.LogException(ex);
-                return RedirectToAction(Constants.SystemFailureHospitalUserAction, Constants.ErrorController);
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
-        #endregion
 
-        #region update speciality-service-facility
 
-        /// <summary>
-        /// Get/SpecialityServiceFacilityUpdate
-        /// </summary>
-        /// <param name="hospitalID">hospitalID</param>
-        /// <returns>Task<ActionResult></returns>
-        [LayoutInjecter(Constants.HospitalUserLayout)]
-        public async Task<ActionResult> SpecialityServiceFacilityUpdate(int hospitalID)
-        {
-            HospitalModel = new HospitalModel();
-            //Load list of specialities
-            List<Speciality> specialitySelectList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
-            List<String> selectList = new List<string>();
-            foreach (Speciality sp in specialitySelectList)
-            {
-                selectList.Add(sp.Speciality_ID.ToString());
-            }
-            specialityList = await SpecialityUtil.LoadSpecialityAsync();
-            MultiSelectList list = new MultiSelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName, selectList);
-            foreach (var speciality in list)
-            {
-                foreach (var selectValue in selectList)
-                {
-                    if (speciality.Value.Equals(selectValue))
-                    {
-                        speciality.Selected = true;
-                    }
-                }
-            }
-
-            ViewBag.SpecialityList = list;
-            HospitalModel.SelectedSpecialities = selectList;
-
-            //Load list of services
-            serviceList = await ServiceFacilityUtil.LoadServiceAsync();
-            List<ServiceEntity> serviceSelectList = await ServiceFacilityUtil.LoadServiceOfHospitalAsync(hospitalID);
-            selectList = new List<string>();
-            foreach (ServiceEntity se in serviceSelectList)
-            {
-                selectList.Add(se.Service_ID.ToString());
-            }
-            ViewBag.ServiceList = serviceList;
-            HospitalModel.SelectedServices = selectList;
-
-            // Load list of facilitites
-            facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
-            List<FacilityEntity> facilitySelectList = await ServiceFacilityUtil.LoadFacilityOfHospitalAsync(hospitalID);
-            selectList = new List<string>();
-            foreach (FacilityEntity fe in facilitySelectList)
-            {
-                selectList.Add(fe.Facility_ID.ToString());
-            }
-            HospitalModel.SelectedFacilities = selectList;
-            ViewBag.FacilityList = facilityList;
-            return View(HospitalModel);
-        }
-
-        /// <summary>
-        /// Post/SpecialityServiceFacilityUpdate
-        /// </summary>
-        /// <param name="model">HospitalModel</param>
-        /// <returns>Task<ActionResult></returns>
         [HttpPost]
         [LayoutInjecter(Constants.HospitalUserLayout)]
-        public async Task<ActionResult> SpecialityServiceFacilityUpdate(HospitalModel model)
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public async Task<ActionResult> AddDoctor(DoctorModel model)
         {
             try
             {
-                string speciality = string.Empty;
-                int result = 0;
-                List<Speciality> specialityList = await SpecialityUtil.LoadSpecialityByHospitalIDAsync(model.HospitalID);
-                string selectedvalue;
-                bool flag = false;
-                if ((model.SelectedSpecialities != null) && (model.SelectedSpecialities.Count != 0))
+                ViewBag.AddDoctorStatus = DoctorModel.InsertDoctor(model);
+                List<SelectListItem> genderSelectListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "1", Text = "Nam"},
+                                                                    new SelectListItem {Value = "2", Text = "Nữ"}
+                                                                };
+                ViewBag.GenderTypeList = new SelectList(genderSelectListItem, "Value", "Text", 1);
+                List<SelectListItem> daySelectListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "2", Text = "Thứ Hai"},
+                                                                    new SelectListItem {Value = "3", Text = "Thứ Ba"},
+                                                                    new SelectListItem {Value = "4", Text = "Thứ Tư"},
+                                                                    new SelectListItem {Value = "5", Text = "Thứ Năm"},
+                                                                    new SelectListItem {Value = "6", Text = "Thứ Sáu"},
+                                                                    new SelectListItem {Value = "7", Text = "Thứ Bảy"},
+                                                                    new SelectListItem {Value = "8", Text = "Chủ Nhật"},
+                                                                };
+                ViewBag.DayTypeList = new SelectList(daySelectListItem, "Value", "Text");
+                //Load list of specialities
+                specialityList = await SpecialityUtil.LoadSpecialityAsync();
+                ViewBag.SpecialityList = new SelectList(specialityList, Constants.SpecialityID, Constants.SpecialityName);
+                if ((bool)ViewBag.AddDoctorStatus)
                 {
-                    for (int n = 0; n < model.SelectedSpecialities.Count; n++)
-                    {
-                        selectedvalue = model.SelectedSpecialities[n];
-                        for (int index = 0; index < specialityList.Count; index++)
-                        {
-                            if (specialityList[index].Speciality_ID == Int32.Parse(selectedvalue))
-                            {
-                                flag = true;
-                            }
-                        }
-                        if (flag == false)
-                        {
-                            if (n == (model.SelectedSpecialities.Count - 1))
-                            {
-                                speciality += selectedvalue;
-                            }
-                            else
-                            {
-                                speciality += selectedvalue +
-                                    Constants.VerticalBar.ToString();
-                            }
-                        }
-                    }
-                }
-
-                // Service list
-                string service = string.Empty;
-                flag = false;
-                List<ServiceEntity> serviceList = await ServiceFacilityUtil.LoadServiceOfHospitalAsync(model.HospitalID);
-                if ((model.SelectedServices != null) && (model.SelectedServices.Count != 0))
-                {
-                    for (int n = 0; n < model.SelectedServices.Count; n++)
-                    {
-                        selectedvalue = model.SelectedServices[n];
-                        for (int index = 0; index < serviceList.Count; index++)
-                        {
-                            if (serviceList[index].Service_ID == Int32.Parse(selectedvalue))
-                            {
-                                flag = true;
-                            }
-                        }
-                        if (flag == false)
-                        {
-                            if (n == (model.SelectedServices.Count - 1))
-                            {
-                                service += model.SelectedServices[n];
-                            }
-                            else
-                            {
-                                service += model.SelectedServices[n] +
-                                    Constants.VerticalBar.ToString();
-                            }
-                        }
-                    }
-                }
-                // Facility list
-                string facility = string.Empty;
-                flag = false;
-                List<FacilityEntity> facilityList = await ServiceFacilityUtil.LoadFacilityOfHospitalAsync(model.HospitalID);
-                if ((model.SelectedFacilities != null) && (model.SelectedFacilities.Count != 0))
-                {
-                    for (int n = 0; n < model.SelectedFacilities.Count; n++)
-                    {
-                        selectedvalue = model.SelectedFacilities[n];
-                        for (int index = 0; index < facilityList.Count; index++)
-                        {
-                            if (facilityList[index].Facility_ID == Int32.Parse(selectedvalue))
-                            {
-                                flag = true;
-                            }
-                        }
-                        if (flag == false)
-                        {
-                            if (n == (model.SelectedFacilities.Count - 1))
-                            {
-                                facility += model.SelectedFacilities[n];
-                            }
-                            else
-                            {
-                                facility += model.SelectedFacilities[n] +
-                                    Constants.VerticalBar.ToString();
-                            }
-                        }
-
-                    }
-                }
-                using (LinqDBDataContext data = new LinqDBDataContext())
-                {
-                    result = data.SP_UPDATE_SPECIALITY_SERVICE_FACILITY(model.HospitalID, speciality, service, facility);
-                }
-                if (result != 0)
-                {
-                    //ViewBag.AddHospitalStatus = 0.ToString() + Constants.Minus + model.HospitalName;
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    ViewBag.AddHospitalStatus = 1.ToString() + Constants.Minus + model.HospitalName;
                     ModelState.Clear();
                     return View();
                 }
+                return View(model);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                LoggingUtil.LogException(ex);
-                return RedirectToAction(Constants.SystemFailureHospitalUserAction, Constants.ErrorController);
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
             }
         }
 
-        #endregion
+        [HttpGet]
+        [LayoutInjecter(Constants.HospitalUserLayout)]
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public async Task<ActionResult> UpdateDoctor(int doctorId = 0)
+        {
+            try
+            {
+                DoctorModel model = new DoctorModel();
+                int hospitalId = 0;
+                if (SimpleSessionPersister.Username != null)
+                {
+                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
+                    hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+                    HospitalEntity hospital = await HomeModel.LoadHospitalById(hospitalId);
+                    model.HospitalID = hospital.Hospital_ID;
+                    model.HospitalName = hospital.Hospital_Name;
+                }
 
+                DoctorEntity doctor = DoctorModel.LoadDoctorById(doctorId, hospitalId);
+                if (doctor != null)
+                {
+                    model.DoctorID = doctor.Doctor_ID;
+                    model.FirstName = doctor.First_Name;
+                    model.LastName = doctor.Last_Name;
+                    model.Gender = doctor.Gender == true ? 1 : 2;
+                    model.Degree = doctor.Degree;
+                    model.Experience = doctor.Experience;
+                    List<int> selectedSpecilityList = new List<int>();
+                    foreach (Speciality specility in doctor.Specialities)
+                    {
+                        selectedSpecilityList.Add(specility.Speciality_ID);
+                    }
+                    model.SpecialityList = selectedSpecilityList;
+                    if (doctor.Working_Day != null)
+                    {
+                        model.WorkingDay = doctor.Working_Day.Split(',').Select(n => Convert.ToInt32(n)).ToList<int>();
+                    }
+                    else
+                    {
+                        model.WorkingDay = new List<int>();
+                    }
+                }
+                else
+                {
+                    model.SpecialityList = new List<int>();
+                    model.WorkingDay = new List<int>();
+                }
+                List<SelectListItem> genderSelectListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "1", Text = "Nam"},
+                                                                    new SelectListItem {Value = "2", Text = "Nữ"}
+                                                                };
+                ViewBag.GenderTypeList = new SelectList(genderSelectListItem, "Value", "Text", model.Gender);
+                List<SelectListItem> daySelectListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "2", Text = "Thứ Hai"},
+                                                                    new SelectListItem {Value = "3", Text = "Thứ Ba"},
+                                                                    new SelectListItem {Value = "4", Text = "Thứ Tư"},
+                                                                    new SelectListItem {Value = "5", Text = "Thứ Năm"},
+                                                                    new SelectListItem {Value = "6", Text = "Thứ Sáu"},
+                                                                    new SelectListItem {Value = "7", Text = "Thứ Bảy"},
+                                                                    new SelectListItem {Value = "8", Text = "Chủ Nhật"},
+                                                                };
+                ViewBag.DayTypeList = daySelectListItem;
+                //Load list of specialities
+                specialityList = await SpecialityUtil.LoadSpecialityAsync();
+                ViewBag.SpecialityList = specialityList;
+                return View(model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        [HttpPost]
+        [LayoutInjecter(Constants.HospitalUserLayout)]
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public async Task<ActionResult> UpdateDoctor(DoctorModel model)
+        {
+            try
+            {
+                int hospitalId = 0;
+                if (SimpleSessionPersister.Username != null)
+                {
+                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
+                    hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+                    HospitalEntity hospital = await HomeModel.LoadHospitalById(hospitalId);
+                    model.HospitalID = hospital.Hospital_ID;
+                    model.HospitalName = hospital.Hospital_Name;
+                }
+
+                List<SelectListItem> genderSelectListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "1", Text = "Nam"},
+                                                                    new SelectListItem {Value = "2", Text = "Nữ"}
+                                                                };
+                ViewBag.GenderTypeList = new SelectList(genderSelectListItem, "Value", "Text", model.Gender);
+                List<SelectListItem> daySelectListItem = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "2", Text = "Thứ Hai"},
+                                                                    new SelectListItem {Value = "3", Text = "Thứ Ba"},
+                                                                    new SelectListItem {Value = "4", Text = "Thứ Tư"},
+                                                                    new SelectListItem {Value = "5", Text = "Thứ Năm"},
+                                                                    new SelectListItem {Value = "6", Text = "Thứ Sáu"},
+                                                                    new SelectListItem {Value = "7", Text = "Thứ Bảy"},
+                                                                    new SelectListItem {Value = "8", Text = "Chủ Nhật"},
+                                                                };
+                ViewBag.DayTypeList = daySelectListItem;
+                //Load list of specialities
+                specialityList = await SpecialityUtil.LoadSpecialityAsync();
+                ViewBag.SpecialityList = specialityList;
+
+                ViewBag.UpdateDoctorStatus = DoctorModel.UpdateDoctor(model);
+
+                return View(model);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        [LayoutInjecter(Constants.HospitalUserLayout)]
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public ActionResult Feedback(string sFromDate, string sToDate, int feedbackType = 0, int responseType = 0, int page = 1)
+        {
+            try
+            {
+                int hospitalId = 0;
+                if (SimpleSessionPersister.Username != null)
+                {
+                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
+                    hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+                }
+                DateTime fromDate = new DateTime();
+                DateTime toDate = new DateTime();
+                if (string.IsNullOrEmpty(sFromDate) || string.IsNullOrEmpty(sToDate))
+                {
+                    DateTime today = DateTime.Today;
+                    fromDate = new DateTime(today.Year, today.Month - 1, 1);
+                    toDate = new DateTime(today.Year, today.Month, 1);
+                }
+                else
+                {
+                    fromDate = DateTime.ParseExact(sFromDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    toDate = DateTime.ParseExact(sToDate + " 23:59:59", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                }
+
+                ViewBag.FeedbackList = FeedBackModel.LoadHospitalUserFeedback(fromDate, toDate, feedbackType, responseType, hospitalId).ToPagedList(page, Constants.PageSize);
+
+                ViewBag.FromDate = string.Format("{0:dd/MM/yyyy}", fromDate);
+                ViewBag.ToDate = string.Format("{0:dd/MM/yyyy}", toDate);
+
+                List<FeedbackType> feebackTypeList = FeedBackModel.LoadFeedbeackTypeList();
+                List<SelectListItem> feedbackTypeItemList = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "0", Text = "Tất cả loại phản hồi"},
+                                                                    new SelectListItem {Value = feebackTypeList[0].Type_ID.ToString(), Text = feebackTypeList[0].Type_Name},
+                                                                    new SelectListItem {Value = feebackTypeList[1].Type_ID.ToString(), Text = feebackTypeList[1].Type_Name},
+                                                                    new SelectListItem {Value = feebackTypeList[2].Type_ID.ToString(), Text = feebackTypeList[2].Type_Name},
+                                                                };
+                ViewBag.FeedbackTypeList = new SelectList(feedbackTypeItemList, "Value", "Text", feedbackType);
+                ViewBag.FeedbackType = feedbackType;
+
+                List<SelectListItem> responseItemList = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem {Value = "0", Text = "Tất cả phản hồi"},
+                                                                    new SelectListItem {Value = "1", Text = "Đã duyệt"},
+                                                                    new SelectListItem {Value = "2", Text = "Chưa duyệt"}
+                                                                };
+                ViewBag.ResponseTypeList = new SelectList(responseItemList, "Value", "Text", responseType);
+                ViewBag.ResponseType = responseType;
+                ViewBag.ApproveStatus = TempData["ApproveStatus"];
+                return View();
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public ActionResult ApproveFeedback(int feedbackId = 0)
+        {
+            int hospitalId = 0;
+            if (SimpleSessionPersister.Username != null)
+            {
+                string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
+                hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+            }
+            TempData["ApproveStatus"] = FeedBackModel.ApproveHospitalUserFeedback(feedbackId, hospitalId);
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
+
+        [LayoutInjecter(Constants.HospitalUserLayout)]
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public ActionResult SearchQueryStatistic(string sFromDate, string sToDate, int page = 1)
+        {
+            try
+            {
+                DateTime fromDate = new DateTime();
+                DateTime toDate = new DateTime();
+                if (string.IsNullOrEmpty(sFromDate) || string.IsNullOrEmpty(sToDate))
+                {
+                    DateTime today = DateTime.Today;
+                    fromDate = new DateTime(today.Year, today.Month - 1, 1);
+                    toDate = new DateTime(today.Year, today.Month, 1);
+                }
+                else
+                {
+                    fromDate = DateTime.ParseExact(sFromDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    toDate = DateTime.ParseExact(sToDate + " 23:59:59", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                }
+                ViewBag.SearchQueryStatistic = DataModel.SearchQueryStatistic(fromDate, toDate).ToPagedList(page, Constants.PageSize + 5);
+                ViewBag.FromDate = string.Format("{0:dd/MM/yyyy}", fromDate);
+                ViewBag.ToDate = string.Format("{0:dd/MM/yyyy}", toDate);
+                return View();
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public ActionResult DeactivateDoctor(int doctorId)
+        {
+            int hospitalId = 0;
+            if (SimpleSessionPersister.Username != null)
+            {
+                string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
+                hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+            }
+            TempData["DeactivateStatus"] = DoctorModel.DeactivateDoctor(doctorId, hospitalId);
+            return Redirect(Request.UrlReferrer.AbsoluteUri);
+        }
         #endregion
 
         #region SonNX
@@ -1091,7 +914,7 @@ namespace HospitalF.Controllers
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
                     result = await model.UpdateHospitalAsync(model);
-                }  
+                }
 
                 #region cascading dropdownlist
 
@@ -1198,7 +1021,7 @@ namespace HospitalF.Controllers
                                 {
                                     record.Coordinate = string.Format("{0}, {1}", Constants.hcmLatitude, Constants.hcmLongitude);
                                 }
-                            } 
+                            }
                         }
 
                         // Return list of hospital to view
@@ -1259,7 +1082,7 @@ namespace HospitalF.Controllers
         [Authorize(Roles = Constants.AdministratorRoleName)]
         public ActionResult ReviewHospitalDetail(int hospitalId)
         {
-            List<HospitalModel> hospitalList = (List<HospitalModel>) Session[Constants.HospitalExcelSession];
+            List<HospitalModel> hospitalList = (List<HospitalModel>)Session[Constants.HospitalExcelSession];
             foreach (HospitalModel hospital in hospitalList)
             {
                 if (hospital.HospitalID == hospitalId)

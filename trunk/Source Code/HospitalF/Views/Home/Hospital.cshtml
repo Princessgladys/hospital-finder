@@ -25,6 +25,7 @@
         }
     }
 }
+
 <!-- MAIN CONTENT -->
 
 <div id="content-results" class="col-md-12 col-md-offset-0 well">
@@ -66,13 +67,6 @@
                 </div>
                 <p>Dựa trên <strong>@(hospital.Rating_Count != null ? hospital.Rating_Count : 0)</strong> bình chọn</p>
                 <p><strong><a data-toggle="modal" href="/Home/Feedback?hospitalId=@(hospital.Hospital_ID)" data-target="#feedbackModal">Phản hồi</a></strong></p>
-            </div>
-        </div>
-
-        <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                </div>
             </div>
         </div>
 
@@ -171,7 +165,8 @@
                                     {
                                         <div class="form-group">
                                             <label><strong class="txt-color-red">Vui lòng nhập mã bảo mật bên dưới</strong></label>
-                                            @Html.Recaptcha(language: "vi")
+                                            <div id="recapcha">
+                                            </div>
                                         </div>          
                                     }
                                 </fieldset>
@@ -651,6 +646,7 @@
 
 <script type="text/javascript">
     pageSetUp();
+
     @*Add success notification*@
     function setNotification(message, type) {
         // Success
@@ -693,14 +689,6 @@
 
     @* Display notification messages *@
     $(document).ready(function () {
-        var feedbackStatus = '@(ViewBag.FeedbackStatus)';
-        if (feedbackStatus) {
-            if (feedbackStatus == 'True') {
-                setNotification('Cám ơn bạn đã đóng góp ý kiến.', 1);
-            } else {
-                setNotification('Đã có lỗi xảy ra trong quá trình xử lý thông tin. Mong quý vị thông cảm và thử lại sau vài phút.', 3);
-            }
-        }
         var rateActionStatus = '@(ViewBag.RateActionStatus)';
         if (rateActionStatus) {
             if (rateActionStatus == 'True') {
@@ -710,4 +698,11 @@
             }
         }
     });
+
+    Recaptcha.create("6LdtmfcSAAAAAG_B70ytdUBGpHMqwU_w_x19VizT", "recapcha",
+                        {
+                            theme: "red",
+                            callback: Recaptcha.focus_response_field
+                        }
+                    );
 </script>

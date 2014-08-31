@@ -1,0 +1,243 @@
+﻿@using HospitalF.Constant;
+@using HospitalF.Entities;
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Tìm kiếm bệnh viện -Danh sách bác sĩ";
+    IPagedList<DoctorEntity> doctorList = (IPagedList<DoctorEntity>)ViewBag.DoctorList;
+}
+
+@section DoctorListActive 
+{
+class="active"
+}
+
+@section BreadCrumb 
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Quản Lý Bác Sĩ</li>
+        <li>Danh Sách Bác Sĩ</li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-table fa-fw "></i>
+            Danh sách bác sĩ
+        </h1>
+    </div>
+</div>
+
+<div class="well">
+    @using (Html.BeginForm(Constants.DoctorListAction, Constants.HospitalController, FormMethod.Get, new { @id = Constants.NormalSearchForm }))
+    {
+        <div class="input-group">
+            @Html.TextBox("doctorName", null, new
+            {
+                @placeholder = "Tìm kiếm tên bác sĩ",
+                @class = "form-control",
+                @id = "doctor-name-search"
+            })
+            <div class="input-group-btn">
+                <button class="btn btn-default btn-primary" type="submit">
+                    <i class="fa fa-search"></i>&nbsp;Tìm Kiếm
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                data-widget-colorbutton="false"
+                data-widget-editbutton="false"
+                data-widget-togglebutton="false"
+                data-widget-deletebutton="false"
+                data-widget-fullscreenbutton="false"
+                data-widget-custombutton="false"
+                data-widget-collapsed="false"
+                data-widget-sortable="false">
+
+                <header>
+                    <span class="widget-icon"><i class="fa fa-table"></i></span>
+                    <h2>Danh sách</h2>
+                    <a href="/Hospital/AddDoctor" class="btn btn-primary pull-right">Thêm mới bác sĩ</a>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <p>Chọn thông tin phù hợp và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> bác sĩ thuộc bệnh viện</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered tablesorter" id="doctor-table">
+                                <thead>
+                                    <tr>
+                                        <th>Hình ảnh</th>
+                                        <th>Họ tên</th>
+                                        <th>Chuyên khoa</th>
+                                        <th>Chứng chỉ / Bằng cấp</th>
+                                        <th>Kinh nghiệm</th>
+                                        <th>Lịch làm việc</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    @if (doctorList.Count == 0)
+                                    {
+                                        <tr>
+                                            <td colspan="6">Không có dữ liệu</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        foreach (DoctorEntity doctor in doctorList)
+                                        {
+                                        <tr>
+                                            <td>
+                                                @if (doctor.Photo != null)
+                                                {
+                                                    <img style="width:150px; height:150px" alt="@(doctor.Photo.Caption)" src="@(doctor.Photo.File_Path)">
+                                                }
+                                                else
+                                                {
+                                                    <img style="width:150px; height:150px" alt="" src="@(doctor.Gender == true ? "../Content/img/avatars/doctor_ logo.jpg" : "../Content/img/avatars/avatar-doctor.jpg")">
+                                                }
+                                            </td>
+                                            <td><a href="/Hospital/UpdateDoctor?doctorId=@(doctor.Doctor_ID)">@(doctor.Last_Name + " " + doctor.First_Name)</a></td>
+                                            <td>
+                                                @foreach (HospitalF.Models.Speciality speciality in doctor.Specialities)
+                                                {
+                                                    <strong>@(speciality.Speciality_Name), </strong>
+                                                }
+                                            </td>
+                                            <td>@(doctor.Degree)</td>
+                                            <td>@(doctor.Experience)</td>
+                                            <td>
+                                                @if (doctor.Working_Day != null)
+                                                {
+                                                    List<int> workingDayList = doctor.Working_Day.Split(',').Select(n => Convert.ToInt32(n)).ToList<int>();
+                                                    foreach (int day in workingDayList)
+                                                    {
+                                                        switch (day)
+                                                        {
+                                                            case 2:
+                                                    <span>Thứ Hai, </span>
+                                                                break;
+                                                            case 3:
+                                                    <span>Thứ Ba, </span>
+                                                                break;
+                                                            case 4:
+                                                    <span>Thứ Tư, </span>
+                                                                break;
+                                                            case 5:
+                                                    <span>Thứ Năm, </span>
+                                                                break;
+                                                            case 6:
+                                                    <span>Thứ Sáu, </span>
+                                                                break;
+                                                            case 7:
+                                                    <span>Thứ Bảy, </span>
+                                                                break;
+                                                            case 8:
+                                                    <span>Chủ Nhật</span>
+                                                                break;
+                                                            default:
+                                                                break;
+
+                                                        }
+                                                    }
+                                                }
+                                            </td>
+                                            @if (doctor.Is_Active == true)
+                                            {
+                                                <td><a onclick="javascript:return confirm('Bạn có muốn xóa bác sĩ [@(doctor.Last_Name + " " + doctor.First_Name)] hay không?')" href="/Hospital/DeactivateDoctor?doctorId=@(doctor.Doctor_ID)" class="btn btn-danger">Xóa</a></td>
+                                            }
+                                            else
+                                            {
+                                                <td></td>
+                                            }
+                                        </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <hr>
+                                @Html.PagedListPager(doctorList, page => Url.Content(Constants.DoctorListAction + "?doctorName=" + ViewBag.DoctorName + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<script type="text/javascript">
+    function setNotification(message, type) {
+        // Success
+        if (type == 1) {
+            notif({
+                msg: message,
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Warning
+        if (type == 2) {
+            notif({
+                msg: message,
+                type: "warning",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Error
+        if (type == 3) {
+            notif({
+                msg: message,
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true,
+                time: 1000
+            });
+        }
+    }
+
+    @*Sort table*@
+    $(document).ready(function () {
+        $("#doctor-table").tablesorter();
+
+        var deactivateDoctorStatus = '@(ViewBag.DeactivateStatus)';
+        if (changeUserStatus) {
+            if (changeUserStatus == 'True') {
+                setNotification('Đã xóa bác sĩ.', 1);
+            } else {
+                setNotification('Đã có lỗi xảy ra. Vui lòng thử lại.', 3);
+            }
+        }
+    });
+</script>

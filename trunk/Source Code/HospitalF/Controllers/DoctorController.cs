@@ -46,7 +46,7 @@ namespace HospitalF.Controllers
             DoctorModel.Fullname = doctor.Last_Name + " " + doctor.First_Name;
             DoctorModel.Experience = doctor.Experience;
             DoctorModel.Degree = doctor.Degree;
-            DoctorModel.WorkingDay = doctor.Working_Day;
+            //DoctorModel.WorkingDay = doctor.Working_Day;
             //specialiy of doctor
             List<Speciality> SpecialityList = null;
             SpecialityList=await SpecialityUtil.LoadSpecialityInDoctorSpeciality(doctorID);
@@ -57,7 +57,7 @@ namespace HospitalF.Controllers
             }
             SpecialityList=await SpecialityUtil.LoadSpecialityByHospitalIDAsync(hospitalID);
             ViewBag.SpecialityList = new SelectList(SpecialityList, Constants.SpecialityID, Constants.SpecialityName);
-            DoctorModel.SelectedSpecialities = specialityList;
+            //DoctorModel.SelectedSpecialities = specialityList;
 
             return View(DoctorModel);
         }

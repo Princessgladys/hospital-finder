@@ -163,6 +163,9 @@ namespace HospitalF.Controllers
                                                                     new SelectListItem {Value = "20", Text = "20 km"}
                                                                 };
                 ViewBag.RadiusList = new SelectList(radiusListItem, "Value", "Text", 0.3);
+
+                ViewBag.FeedbackStatus = TempData["FeedbackStatus"];
+                ViewBag.FeedbackMessage = TempData["FeedbackMessage"];
             }
             catch (Exception exception)
             {
@@ -246,7 +249,7 @@ namespace HospitalF.Controllers
                 List<SelectListItem> locationTypeListItem = new List<SelectListItem>()
                                                                 {
                                                                     new SelectListItem {Value = "2", Text = "Nhập vị trí"},
-                                                                    new SelectListItem {Value = "1", Text = "Vị trí hiện tại", }
+                                                                    new SelectListItem {Value = "1", Text = "Vị trí hiện tại"}
                                                                 };
                 ViewBag.LocationTypeList = new SelectList(locationTypeListItem, "Value", "Text", 2);
                 List<SelectListItem> radiusListItem = new List<SelectListItem>()
@@ -347,6 +350,9 @@ namespace HospitalF.Controllers
                 {
                     ViewBag.SearchValue = model.SearchValue;
                 }
+
+                ViewBag.FeedbackStatus = TempData["FeedbackStatus"];
+                ViewBag.FeedbackMessage = TempData["FeedbackMessage"];
             }
             catch (Exception exception)
             {
@@ -382,6 +388,7 @@ namespace HospitalF.Controllers
                         ViewBag.RateActionStatus = TempData["RateActionStatus"];
                         ViewBag.RateActionMessage = TempData["RateActionMessage"];
                         ViewBag.FeedbackStatus = TempData["FeedbackStatus"];
+                        ViewBag.FeedbackMessage = TempData["FeedbackMessage"];
                         ViewBag.HospitalEntity = hospital;
                         ViewBag.Photos = HomeModel.LoadPhotosByHospitalId(hospitalId);
                     }
@@ -490,6 +497,23 @@ namespace HospitalF.Controllers
         {
             try
             {
+                RecaptchaVerificationHelper recaptchaHelper = this.GetRecaptchaVerificationHelper();
+
+                if (String.IsNullOrEmpty(recaptchaHelper.Response))
+                {
+                    TempData["FeedbackStatus"] = false;
+                    TempData["FeedbackMessage"] = "Vui lòng nhập mã bảo mật bên dưới.";
+                    return Redirect(Request.UrlReferrer.AbsoluteUri);
+                }
+
+                RecaptchaVerificationResult recaptchaResult = recaptchaHelper.VerifyRecaptchaResponse();
+
+                if (recaptchaResult != RecaptchaVerificationResult.Success)
+                {
+                    TempData["FeedbackStatus"] = false;
+                    TempData["FeedbackMessage"] = "Vui lòng nhập lại mã bảo mật bên dưới.";
+                    return Redirect(Request.UrlReferrer.AbsoluteUri);
+                }
                 TempData["FeedbackStatus"] = model.InsertNewFeedback();
                 return Redirect(Request.UrlReferrer.AbsoluteUri);
             }

@@ -65,7 +65,7 @@ namespace HospitalF.Models
                         Feedback_Content = this.FeedbackContent,
                         Feedback_Type = this.FeedbackType,
                         Email = this.Email,
-                        Hospital_ID = this.HospitalID,
+                        Hospital_ID = (this.HospitalID != 0 ? (int?)this.HospitalID : null),
                         Created_Date = DateTime.Now,
                         Is_Response = false
                     };
@@ -115,6 +115,33 @@ namespace HospitalF.Models
             return feedbackList;
         }
 
+        public static List<FeedbackEntity> LoadHospitalUserFeedback(DateTime fromDate, DateTime toDate, int feedbackType, int responseType, int hospialId)
+        {
+            List<FeedbackEntity> feedbackList = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                feedbackList = (from f in data.Feedbacks
+                                from ft in data.FeedbackTypes
+                                where f.Feedback_Type == ft.Type_ID && ft.Is_Active == true &&
+                                      fromDate <= f.Created_Date && f.Created_Date <= toDate &&
+                                      (f.Feedback_Type == 4 || f.Feedback_Type == 5) && // Only Type_ID == 4 and Type_ID == 5
+                                      (feedbackType == 0 || f.Feedback_Type == feedbackType) &&
+                                      (responseType == 0 || f.Is_Response == (responseType == 1 ? true : false)) &&
+                                      f.Hospital_ID == hospialId
+                                select new FeedbackEntity()
+                                {
+                                    Feedback_ID = f.Feedback_ID,
+                                    Header = f.Header,
+                                    Feedback_Content = f.Feedback_Content,
+                                    Email = f.Email,
+                                    Feedback_Type = ft.Type_Name,
+                                    Created_Date = f.Created_Date,
+                                    Is_Response = f.Is_Response
+                                }).ToList<FeedbackEntity>();
+            }
+            return feedbackList;
+        }
+
         public static bool IsAssignedHospital(int hospitalId)
         {
             using (LinqDBDataContext data = new LinqDBDataContext())
@@ -130,12 +157,32 @@ namespace HospitalF.Models
             return false;
         }
 
-        public static bool ApproveFeedback(int feedbackId)
+        public static bool ApproveAdministratorFeedback(int feedbackId)
         {
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
                 Feedback feedback = (from f in data.Feedbacks
-                                     where f.Feedback_ID == feedbackId
+                                     where f.Feedback_ID == feedbackId &&
+                                     (f.Feedback_Type == 1 || f.Feedback_Type == 2 || f.Feedback_Type == 3)
+                                     select f).SingleOrDefault();
+                if (feedback != null)
+                {
+                    feedback.Is_Response = true;
+                    data.SubmitChanges();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool ApproveHospitalUserFeedback(int feedbackId, int hospitalId)
+        {
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                Feedback feedback = (from f in data.Feedbacks
+                                     where f.Feedback_ID == feedbackId &&
+                                           f.Hospital_ID == hospitalId &&
+                                           (f.Feedback_Type == 4 || f.Feedback_Type == 5)
                                      select f).SingleOrDefault();
                 if (feedback != null)
                 {

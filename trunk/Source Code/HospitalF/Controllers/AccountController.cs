@@ -137,15 +137,17 @@ namespace HospitalF.Controllers
             }
         }
 
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public ActionResult ActivateUser(int userId = 0)
         {
-            AccountModel.ActivateUser(userId);
+            TempData["ChangeUserStatus"] = AccountModel.ActivateUser(userId);
             return Redirect(Request.UrlReferrer.AbsoluteUri);
         }
 
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public ActionResult DeactivateUser(int userId = 0)
         {
-            AccountModel.DeactivateUser(userId);
+            TempData["ChangeUserStatus"] = AccountModel.DeactivateUser(userId);
             return Redirect(Request.UrlReferrer.AbsoluteUri);
         }
 

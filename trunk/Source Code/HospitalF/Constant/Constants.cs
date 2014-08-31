@@ -105,11 +105,6 @@ namespace HospitalF.Constant
         public const string SearchDoctorAction = "SearchDoctor";
 
         /// <summary>
-        /// Name of UpdateDoctorAction
-        /// </summary>
-        public const string UpdateDoctorAction = "UpdateDoctor";
-
-        /// <summary>
         /// Name of GetWorkingDayAction
         /// </summary>
         public const string GetWorkingDayAction = "GetWorkingDay";
@@ -214,6 +209,21 @@ namespace HospitalF.Constant
         /// Name of AddHospital method in HospitalController
         /// </summary>
         public const string AddHospitalAction = "AddHospital";
+
+        /// <summary>
+        /// Name of DoctorList method in HospitalController
+        /// </summary>
+        public const string DoctorListAction = "DoctorList";
+
+        /// <summary>
+        /// Name of AddDoctor method in HospitalController
+        /// </summary>
+        public const string AddDoctorAction = "AddDoctor";
+
+        /// <summary>
+        /// Name of UpdateDoctor method in HospitalController
+        /// </summary>
+        public const string UpdateDoctorAction = "UpdateDoctor";
 
         /// <summary>
         /// Name of HospitalAction in HomeController
