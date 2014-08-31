@@ -1,5 +1,6 @@
 ﻿@using HospitalF.Constant
 @using System.Collections.Generic
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -81,87 +82,27 @@
 
     <!-- MAIN APP JS FILE -->
     <script src="../Content/js/app.js"></script>
+
+    <!-- SORT TABLE -->
+    <script src="../Content/js/plugin/datatables/jquery.tablesorter.js"></script>
+
+    <!-- NOTIFICATION -->
+    <script src="../Content/js/notification/notifIt.js"></script>
+
+    <!-- CONFIRM DIALOG -->
+    <script src="../Content/js/plugin/confirm/jquery.confirm.js"></script>
+
+    <!-- AVATAR -->
+    <script src="../Content/js/avatar.js"></script>
+
+    <!-- TAGS INPUT -->
+    <script src="~/Content/js/plugin/bootstrap-taginput/bootstrap-tagsinput.js"></script>
 </head>
-<body>
+<body style="font-family: Arial;">
     <!-- HEADER -->
     <header id="header">
         <div id="logo-group">
-
-            <!-- END LOGO PLACEHOLDER -->
-            <!-- Note: The activity badge color changes when clicked and resets the number to 0
-				Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
-            <span id="activity" class="activity-dropdown"><i class="fa fa-user"></i><b class="badge">21 </b></span>
-
-            <!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
-            <div class="ajax-dropdown">
-
-                <!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
-                <div class="btn-group btn-group-justified" data-toggle="buttons">
-                    <label class="btn btn-default">
-                        <input type="radio" name="activity" id="ajax/notify/mail.html">
-                        Msgs (14)
-                    </label>
-                    <label class="btn btn-default">
-                        <input type="radio" name="activity" id="ajax/notify/notifications.html">
-                        notify (3)
-                    </label>
-                    <label class="btn btn-default">
-                        <input type="radio" name="activity" id="ajax/notify/tasks.html">
-                        Tasks (4)
-                    </label>
-                </div>
-
-                <!-- notification content -->
-                <div class="ajax-notifications custom-scroll">
-
-                    <div class="alert alert-transparent">
-                        <h4>Click a button to show messages here</h4>
-                        This blank page message helps protect your privacy, or you can show the first message here automatically.
-                    </div>
-
-                    <i class="fa fa-lock fa-4x fa-border"></i>
-
-                </div>
-                <!-- end notification content -->
-
-                <!-- footer: refresh area -->
-                <span>Last updated on: 12/12/2013 9:43AM
-						<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
-                            <i class="fa fa-refresh"></i>
-                        </button>
-                </span>
-                <!-- end footer -->
-
-            </div>
-            <!-- END AJAX-DROPDOWN -->
         </div>
-
-        <!-- projects dropdown -->
-        <div id="project-context">
-
-            <span class="label">Projects:</span>
-            <span id="project-selector" class="popover-trigger-element dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>
-
-            <!-- Suggestion: populate this list with fetch and push technique -->
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="javascript:void(0);">Online e-merchant management system - attaching integration with the iOS</a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);">Notes on pipeline upgradee</a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);">Assesment Report for merchant account</a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                    <a href="javascript:void(0);"><i class="fa fa-power-off"></i>Clear</a>
-                </li>
-            </ul>
-            <!-- end dropdown-menu-->
-
-        </div>
-        <!-- end projects dropdown -->
 
         <!-- pulled right: nav area -->
         <div class="pull-right">
@@ -173,13 +114,13 @@
 
             <!-- fullscreen button -->
             <div id="fullscreen" class="btn-header transparent pull-right">
-                <span><a href="javascript:void(0);" onclick="launchFullscreen(document.documentElement);" title="Full Screen"><i class="fa fa-fullscreen"></i></a></span>
+                <span><a href="javascript:void(0);" onclick="launchFullscreen(document.documentElement);" title="Full Screen"><i class="fa fa-arrows-alt"></i></a></span>
             </div>
             <!-- end fullscreen button -->
 
             <!-- logout button -->
             <div id="#" class="btn-header transparent pull-right">
-                <span><a href="/"><i class="fa fa-sign-out"></i></a></span>
+                <span><a href="/@(Constants.AccountController)/@(Constants.LogoutAction)"><i class="fa fa-sign-out"></i></a></span>
             </div>
             <!-- end logout button -->
         </div>
@@ -201,7 +142,7 @@
                     email = userInfo[0];
                 }
             }
-            <span id="project-selector" data-toggle="dropdown">@username<i class="fa fa-angle-down"></i></span>
+            <span id="project-selector" data-toggle="dropdown">@(username)&nbsp;<i class="fa fa-angle-down"></i></span>
 
             <!-- Suggestion: populate this list with fetch and push technique -->
             <ul class="dropdown-menu">
@@ -235,9 +176,7 @@
 
                 <a href="javascript:void(0);" id="show-shortcut">
                     <img src="../Content/img/avatars/sunny.png" alt="me" class="online" />
-                    <span>Lê Phước Việt
-                    </span>
-                    <i class="fa fa-angle-down"></i>
+                    <span>@(email)</span>
                 </a>
 
             </span>
@@ -257,61 +196,23 @@
 				-->
 
             <ul>
-                <li class="">
-                    <a href="ajax/dashboard.html" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i><span class="menu-item-parent">Quản Lý Phòng Khám</span></a>
+                <li>
+                    <a href="#"><i class="fa fa-lg fa-fw fa-hospital-o"></i><span class="menu-item-parent">Thông tin bệnh viện</span></a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-lg fa-fw fa-inbox"></i><span class="menu-item-parent">Thống Kê</span></a>
-                </li>
-                @{
-                    int hospitalID = 0;
-                    if (HospitalF.Models.SimpleSessionPersister.Username != null)
-                    {
-                        string[] userInfo = HospitalF.Models.SimpleSessionPersister.Username.
-                           Split(Char.Parse(Constants.Minus));
-                        hospitalID = Int32.Parse(userInfo[3]);
-                    }
-                }
-                <li>
-                    <a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Quản Lý Bệnh Viện</span></a>
+                    <a href="#"><i class="fa fa-lg fa-fw fa-user"></i><span class="menu-item-parent">Quản Lý Bác Sĩ</span></a>
                     <ul>
-                        <li>
-                            @Html.ActionLink("Thông tin bệnh viện", Constants.UpdateHospitalAction, Constants.HospitalController, new {hospitalId=hospitalID},null)
-
-                        </li>
+                        <li @RenderSection("DoctorListActive", false)><a href="/Hospital/DoctorList"><span class="menu-item-parent">Danh Sách Bác Sĩ</span></a></li>
+                        <li @RenderSection("AddDoctorActive", false)><a href="/Hospital/AddDoctor"><span class="menu-item-parent">Thêm Mới Bác Sĩ</span></a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="ajax/flot.html"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Thông Tin Chung</a>
+                <li @RenderSection("SearchQueryStatisticActive", false)>
+                    <a href="/Hospital/SearchQueryStatistic"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Từ Khóa Tìm Kiếm</span></a>
                 </li>
-                <li><a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Quản lý lịch hẹn</a>
-                    <ul>
-                        <li>
-                            @Html.ActionLink("Danh sách lịch hẹn",Constants.AppointmentListAction,Constants.AppointmentController)
-
-                        </li>
-                        <li>
-                            @Html.ActionLink("Lịch hẹn trên Google Calendar",Constants.IndexAction,Constants.CalendarController)
-                        </li>
-                    </ul>
-                </li>
+                <li @RenderSection("FeedbackActive", false)>
+                    <a href="/Hospital/Feedback"><i class="fa fa-lg fa-fw fa-table"></i><span class="menu-item-parent">Danh sách phản hồi</span></a>
                 <li>
-                    <a href="/Doctor/Index"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Danh Sách Bác Sĩ</a>
-                </li>
-                <li>
-                    <a href="/FeedBack/DisplayHospitalUserFeedBackList"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i><span class="menu-item-parent">Danh Sách Phản Hồi</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-lg fa-fw fa-table"></i><span class="menu-item-parent">Quản Lý Tài Khoản</span></a>
-                    <ul>
-                        <li>
-                            <a href="#">Thông Tin Tài Khoản</a>
-
-                        </li>
-                        <li>
-                            <a href="ajax/datatables.html">Đổi Mật Khẩu</a>
-                        </li>
-                    </ul>
+                    <a href="#"><i class="fa fa-lg fa-fw fa-key"></i><span class="menu-item-parent">Đổi Mật Khẩu</span></a>
                 </li>
 
             </ul>
@@ -330,9 +231,9 @@
             <span class="ribbon-button-alignment"><span id="refresh" class="btn btn-ribbon" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true" data-reset-msg="Would you like to RESET all your saved widgets and clear LocalStorage?"><i class="fa fa-refresh"></i></span></span>
 
             <!-- breadcrumb -->
-            <ol class="breadcrumb">
-                <!-- This is auto generated -->
-            </ol>
+
+            @RenderSection("BreadCrumb", false)
+
             <!-- end breadcrumb -->
 
             <!-- You can also add more buttons to the
@@ -345,93 +246,19 @@
 				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
 				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
 				</span> -->
-            @{
-                //int hospitalID = 0;
-              if (HospitalF.Models.SimpleSessionPersister.Username != null)
-              {
-                  string[] userInfo = HospitalF.Models.SimpleSessionPersister.Username.
-                     Split(Char.Parse(Constants.Minus));
-                  hospitalID = Int32.Parse(userInfo[3]);
-              }
-            }
-            <strong><a href="/Home/HospitalFeedBack?hospitalID=@hospitalID" data-toggle="modal" data-target="#addFeedback" id="add-feedback-button" float:="" right;"="">
-                <i class="fa fa-lg fa-comment-o"></i>&nbsp;Phản hồi</a></strong>
 
         </div>
         <!-- END RIBBON -->
-        <div class="modal fade" id="addFeedback" tabindex="-1"
-            role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content"></div>
-            </div>
-        </div>
 
         <!-- MAIN CONTENT -->
-        <div id="content">
+        <div id="content" style="opacity: 1; font-family: Arial;">
             @RenderBody()
         </div>
         <!-- END MAIN CONTENT -->
 
     </div>
     <!-- END MAIN PANEL -->
-    <!-- #PAGE FOOTER -->
-    <div class="page-footer">
-        <div class="row">
-            <div class="col-xs-12 col-sm-6">
-                <span class="txt-color-white">SmartAdmin WebApp © 2013-2014</span>
-            </div>
 
-            <div class="col-xs-6 col-sm-6 text-right hidden-xs">
-                <div class="txt-color-white inline-block">
-                    <i class="txt-color-blueLight hidden-mobile">Last account activity <i class="fa fa-clock-o"></i><strong>52 mins ago &nbsp;</strong> </i>
-                    <div class="btn-group dropup">
-                        <button class="btn btn-xs dropdown-toggle bg-color-blue txt-color-white" data-toggle="dropdown">
-                            <i class="fa fa-link"></i><span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu pull-right text-left">
-                            <li>
-                                <div class="padding-5">
-                                    <p class="txt-color-darken font-sm no-margin">Download Progress</p>
-                                    <div class="progress progress-micro no-margin">
-                                        <div class="progress-bar progress-bar-success" style="width: 50%;"></div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <div class="padding-5">
-                                    <p class="txt-color-darken font-sm no-margin">Server Load</p>
-                                    <div class="progress progress-micro no-margin">
-                                        <div class="progress-bar progress-bar-success" style="width: 20%;"></div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <div class="padding-5">
-                                    <p class="txt-color-darken font-sm no-margin">Memory Load <span class="text-danger">*critical*</span></p>
-                                    <div class="progress progress-micro no-margin">
-                                        <div class="progress-bar progress-bar-danger" style="width: 70%;"></div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <div class="padding-5">
-                                    <button class="btn btn-block btn-default">refresh</button>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- end btn-group-->
-                </div>
-                <!-- end div-->
-            </div>
-            <!-- end col -->
-        </div>
-        <!-- end row -->
-    </div>
-    <!-- END FOOTER -->
     <!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
 		Note: These tiles are completely responsive,
 		you can add as many as you like

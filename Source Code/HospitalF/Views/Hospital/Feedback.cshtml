@@ -57,7 +57,7 @@ class="active"
                             <h5>Danh sách phản hồi từ người dùng</h5>
                             <hr />
                             <div class="col-md-12 no-padding">
-                                @using (Html.BeginForm(Constants.FeedbackAction, Constants.DataController, FormMethod.Get))
+                                @using (Html.BeginForm(Constants.FeedbackAction, Constants.HospitalController, FormMethod.Get))
                                 {
                                     <div class="row">
                                         <div class="col-md-2">
@@ -104,8 +104,8 @@ class="active"
                                             </div>
                                         </div>
                                     </div>
+                                    <p>Chọn thông tin và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> các phản hồi từ người dùng</p>
                                 }
-                                <p>Chọn thông tin và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> các phản hồi từ người dùng</p>
                             </div>
                             <hr />
                             <div class="col-md-12 no-padding">

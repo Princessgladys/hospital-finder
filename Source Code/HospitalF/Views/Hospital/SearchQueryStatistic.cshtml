@@ -4,12 +4,12 @@
 @using PagedList;
 
 @{
-    ViewBag.Title = "Tìm kiếm bệnh viện - Phản hồi";
-    IPagedList<FeedbackEntity> feedbackList = (IPagedList<FeedbackEntity>)ViewBag.FeedbackList;
+    ViewBag.Title = "Tìm kiếm bệnh viện - Thống kê từ khóa tìm kiếm";
+    IPagedList<SentenceDictionaryEntity> sdeList = (IPagedList<SentenceDictionaryEntity>)ViewBag.SearchQueryStatistic;
     int count = 0;
 }
 
-@section FeedbackActive 
+@section SearchQueryStatisticActive 
 {
 class="active"
 }
@@ -18,7 +18,7 @@ class="active"
 {
     <ol class="breadcrumb">
         <li>Trang Quản Lý</li>
-        <li>Phản Hồi</li>
+        <li>Từ khóa tìm kiếm</li>
     </ol>
 }
 
@@ -26,14 +26,13 @@ class="active"
     <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
         <h1 class="page-title txt-color-blueDark">
             <i class="fa fa-pencil-square-o fa-fw "></i>
-            Thống kê
+            Thống kê từ khóa tìm kiếm
         </h1>
     </div>
 </div>
 
 <section id="widget-grid" class="">
     <div class="row">
-        <!-- NEW WIDGET START -->
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
             <!-- Widget ID (each widget will need unique ID)-->
             <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
@@ -47,20 +46,20 @@ class="active"
                 data-widget-sortable="false">
                 <header>
                     <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                    <h2>Thông tin phản hồi từ người dùng</h2>
+                    <h2>Thông tin từ khóa tìm kiếm</h2>
                 </header>
                 <div>
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
-                        <div class="col-md-12 no-padding">
-                            <h5>Danh sách phản hồi từ người dùng</h5>
+                        <div class="col-md-12">
+                            <h5>Danh sách từ khóa tìm kiếm từ người dùng</h5>
                             <hr />
-                            <div class="col-md-12 no-padding">
-                                @using (Html.BeginForm(Constants.FeedbackAction, Constants.DataController, FormMethod.Get))
+                            <div class="col-md-8 no-padding">
+                                @using (Html.BeginForm(Constants.SearchQueryStatisticAction, Constants.HospitalController, FormMethod.Get))
                                 {
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <input class="form-control" id="from" name="sFromDate" type="text" placeholder="Từ ngày..." value="@(ViewBag.FromDate)">
@@ -69,29 +68,11 @@ class="active"
                                             </div>
                                         </div>
 
-                                        <div class="col-md-2">
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <input class="form-control" id="to" name="sToDate" type="text" placeholder="...đến ngày..." value="@(ViewBag.ToDate)">
                                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <div class="input-group" style="width: 100%">
-                                                    @Html.DropDownList("feedbackType", (SelectList)ViewBag.FeedbackTypeList, new { @class = "form-control" })
-                                                    <i></i>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <div class="input-group" style="width: 100%">
-                                                    @Html.DropDownList("responseType", (SelectList)ViewBag.ResponseTypeList, new { @class = "form-control" })
-                                                    <i></i>
                                                 </div>
                                             </div>
                                         </div>
@@ -104,55 +85,44 @@ class="active"
                                             </div>
                                         </div>
                                     </div>
+                                    <p>Chọn khoảng thời gian và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> các truy vấn từ người dùng</p>
                                 }
-                                <p>Chọn thông tin và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> các phản hồi từ người dùng</p>
                             </div>
                             <hr />
                             <div class="col-md-12 no-padding">
-                                @if (feedbackList.Count > 0)
+                                @if (sdeList.Count > 0)
                                 {
                                     <div class="table-responsive">
-
-                                        <table class="table table-bordered table-striped table-hover tablesorter" id="feedback-table">
+                                        <table class="table table-bordered table-striped table-hover tablesorter" id="statistic-table">
                                             <thead>
                                                 <tr>
                                                     <th>STT</th>
-                                                    <th>Tiêu đề</th>
-                                                    <th>Nội dung</th>
-                                                    <th>Người gửi</th>
-                                                    <th>Hành động</th>
+                                                    <th>Từ khóa</th>
+                                                    <th>Số lượt tìm kiếm</th>
+                                                    <th>Số kết quả</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (FeedbackEntity fe in feedbackList)
+                                                @foreach (HospitalF.Entities.SentenceDictionaryEntity sde in sdeList)
                                                 {
                                                     <tr>
                                                         <td>@(++count)</td>
-                                                        <td>@(fe.Header)</td>
-                                                        <td>@(fe.Feedback_Content)</td>
-                                                        <td><a href="mailto:@(fe.Email)">@(fe.Email)</a></td>
-                                                        @if (fe.Is_Response == false)
-                                                        {
-                                                            <td><a href="/Hospital/ApproveFeedback?feedbackId=@(fe.Feedback_ID)" class="btn btn-primary">Duyệt</a></td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td><strong>Đã duyệt</strong></td>
-                                                        }
+                                                        <td>@(sde.Sentence)</td>
+                                                        <td>@(sde.Search_Time_Count)</td>
+                                                        <td>@(sde.Result_Count)</td>
                                                     </tr>
                                                 }
                                             </tbody>
                                         </table>
-
                                     </div>
                                     <div class="text-center">
                                         <hr>
-                                        @Html.PagedListPager(feedbackList, page => Url.Content(Constants.FeedbackAction + "?sFromDate=" + ViewBag.FromDate + "&sToDate=" + ViewBag.ToDate + "&feedbackType=" + ViewBag.FeedbackType + "&responseType=" + ViewBag.ResponseType + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+                                        @Html.PagedListPager(sdeList, page => Url.Content(Constants.SearchQueryStatisticAction + "?sFromDate=" + ViewBag.FromDate + "&sToDate=" + ViewBag.ToDate + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
                                     </div>
                                 }
                                 else
                                 {
-                                    <p><strong>Không có phản hồi nào.</strong></p>
+                                    <p><strong>Không có bệnh viện nào.</strong></p>
                                 }
                             </div>
                         </div>
@@ -164,49 +134,10 @@ class="active"
 </section>
 
 <script type="text/javascript">
-    function setNotification(message, type) {
-        // Success
-        if (type == 1) {
-            notif({
-                msg: message,
-                type: "success",
-                width: 600,
-                position: "center",
-                fade: true,
-                multiline: true
-            });
-        }
-
-        // Warning
-        if (type == 2) {
-            notif({
-                msg: message,
-                type: "warning",
-                width: 600,
-                position: "center",
-                fade: true,
-                multiline: true
-            });
-        }
-
-        // Error
-        if (type == 3) {
-            notif({
-                msg: message,
-                type: "error",
-                width: 600,
-                position: "center",
-                fade: true,
-                multiline: true,
-                time: 1000
-            });
-        }
-    }
-
     $(document).ready(function () {
         pageSetUp();
 
-        $("#feedback-table").tablesorter();
+        $("#statistic-table").tablesorter();
         // Date Range Picker
         $("#from").datepicker({
             defaultDate: "dateToday",
@@ -233,14 +164,6 @@ class="active"
                 //$("#from").datepicker("option", "minDate", selectedDate);
             }
         });
-
-        var approveStatus = '@(ViewBag.ApproveStatus)';
-        if (approveStatus) {
-            if (approveStatus == 'True') {
-                setNotification('Đã duyệt phản hồi.', 1);
-            } else {
-                setNotification('Đã có lỗi xảy ra. Vui lòng thử lại.', 3);
-            }
-        }
     });
+
 </script>

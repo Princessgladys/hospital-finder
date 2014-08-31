@@ -72,8 +72,8 @@ class="active"
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <div class="input-group" style="width:100%">
-                                                    @Html.DropDownList("userRole",(SelectList)ViewBag.RoleTypeList, "Tất cả quyền",new { @class = "form-control"})
+                                                <div class="input-group" style="width: 100%">
+                                                    @Html.DropDownList("userRole", (SelectList)ViewBag.RoleTypeList, "Tất cả quyền", new { @class = "form-control" })
                                                     <i></i>
                                                 </div>
                                             </div>
@@ -81,13 +81,13 @@ class="active"
 
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <div class="input-group" style="width:100%">
-                                                    @Html.DropDownList("userStatus",(SelectList)ViewBag.StatusTypeList, new { @class = "form-control" })
+                                                <div class="input-group" style="width: 100%">
+                                                    @Html.DropDownList("userStatus", (SelectList)ViewBag.StatusTypeList, new { @class = "form-control" })
                                                     <i></i>
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <div class="input-group">
@@ -96,41 +96,46 @@ class="active"
                                             </div>
                                         </div>
                                     </div>
+                                    <p>Chọn thông tin và bấm <code>&lt;Tìm kiếm&gt;</code> để hiển thị <code>danh sách</code> các tài khoản</p>
                                 }
                             </div>
+                            <hr />
                             <div class="col-md-12 no-padding">
                                 @if (userList.Count > 0)
                                 {
-                                    <table class="table table-bordered table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>STT</th>
-                                                <th>Email</th>
-                                                <th>Loại</th>
-                                                <th>Trạng thái</th>
-                                                <th>Hành động</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (UserEntity user in userList)
-                                            {
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-hover tablesorter" id="user-table">
+                                            <thead>
                                                 <tr>
-                                                    <td>@(++count)</td>
-                                                    <td><a href="mailto:@(user.Email)">@(user.Email)</a></td>
-                                                    <td>@(user.User_Role_Name)</td>
-                                                    <td>@(user.Is_Active == true ? "Đang hoạt động" : "Đã khóa")</td>
-                                                    @if (user.Is_Active == false)
-                                                    {
-                                                        <td><a href="/Account/ActivateUser?userId=@(user.User_ID)" class="btn btn-primary">Kích hoạt</a></td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td><a href="/Account/DeactivateUser?userId=@(user.User_ID)" class="btn btn-danger">Khóa tài khoản</a></td>
-                                                    }
+                                                    <th>STT</th>
+                                                    <th>Email</th>
+                                                    <th>Loại</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Hành động</th>
                                                 </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (UserEntity user in userList)
+                                                {
+                                                    <tr>
+                                                        <td>@(++count)</td>
+                                                        <td><a href="mailto:@(user.Email)">@(user.Email)</a></td>
+                                                        <td>@(user.User_Role_Name)</td>
+                                                        <td>@(user.Is_Active == true ? "Đang hoạt động" : "Đã khóa")</td>
+                                                        @if (user.Is_Active == false)
+                                                        {
+                                                            <td><a onclick="javascript:return confirm('Bạn có muốn kích hoạt tài khoản [@(user.Email)] hay không?')" href="/Account/ActivateUser?userId=@(user.User_ID)" class="btn btn-primary">Kích hoạt</a></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td><a onclick="javascript:return confirm('Bạn có muốn khóa tài khoản [@(user.Email)] hay không?')" href="/Account/DeactivateUser?userId=@(user.User_ID)" class="btn btn-danger">Khóa tài khoản</a></td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
                                     <div class="text-center">
                                         <hr>
                                         @Html.PagedListPager(userList, page => Url.Content(Constants.UserListAction + "?email=" + ViewBag.Email + "&userRole=" + ViewBag.UserRole + "&userStatus=" + ViewBag.UserStatus + "&page=" + page), PagedListRenderOptions.OnlyShowFivePagesAtATime)
@@ -148,3 +153,56 @@ class="active"
         </article>
     </div>
 </section>
+
+<script type="text/javascript">
+    function setNotification(message, type) {
+        // Success
+        if (type == 1) {
+            notif({
+                msg: message,
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Warning
+        if (type == 2) {
+            notif({
+                msg: message,
+                type: "warning",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Error
+        if (type == 3) {
+            notif({
+                msg: message,
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true,
+                time: 1000
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        $("#user-table").tablesorter();
+        var changeUserStatus = '@(ViewBag.ChangeUserStatus)';
+        if (changeUserStatus) {
+            if (changeUserStatus == 'True') {
+                setNotification('Thao tác thành công.', 1);
+            } else {
+                setNotification('Đã có lỗi xảy ra. Vui lòng thử lại.', 3);
+            }
+        }
+    });
+</script>

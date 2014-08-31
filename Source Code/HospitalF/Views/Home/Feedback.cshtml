@@ -1,5 +1,7 @@
-﻿@using HospitalF.Constant
+﻿@using HospitalF.Constant;
+@using Recaptcha.Web.Mvc;
 @model HospitalF.Models.FeedBackModel
+
 
 <!-- Modal -->
 
@@ -9,6 +11,7 @@
     </button>
     <h4 class="modal-title">
         <img src="../Content/img/HospitalF - Logo.png" width="150" alt="HospitalF">
+        Phản hồi
     </h4>
 </div>
 <div class="modal-body no-padding">
@@ -22,7 +25,7 @@
 
             <section>
                 <div class="row">
-                    <label class="label col col-2">Email người gửi</label>
+                    <label class="label col col-2">Email người gửi <span style="color: red;">*</span></label>
                     <div class="col col-10">
                         <label class="input">
                             <i class="icon-append fa fa-user"></i>
@@ -34,7 +37,7 @@
 
             <section>
                 <div class="row">
-                    <label class="label col col-2">Tiêu đề</label>
+                    <label class="label col col-2">Tiêu đề <span style="color: red;">*</span></label>
                     <div class="col col-10">
                         <label class="input">
                             <i class="icon-append fa fa-header"></i>
@@ -58,12 +61,20 @@
 
             <section>
                 <div class="row">
-                    <label class="label col col-2">Phản hồi</label>
+                    <label class="label col col-2">Phản hồi <span style="color: red;">*</span></label>
                     <div class="col col-10">
                         <label class="textarea">
                             @Html.TextAreaFor(m => m.FeedbackContent)
                             <i></i>
                         </label>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="row">
+                    <label class="label col col-2">Mã bảo mật <span style="color: red;">*</span></label>
+                    <div class="col col-10" id="recapcha">
                     </div>
                 </div>
             </section>
@@ -122,4 +133,11 @@
             error.insertAfter(element.parent());
         }
     });
+
+    Recaptcha.create("6LdtmfcSAAAAAG_B70ytdUBGpHMqwU_w_x19VizT", "recapcha",
+                        {
+                            theme: "red",
+                            callback: Recaptcha.focus_response_field
+                        }
+                    );
 </script>

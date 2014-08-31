@@ -103,6 +103,9 @@
     <!-- MASONRY -->
     <script src="../Content/js/masonry.pkgd.m.js"></script>
     <script src="../Content/js/imagesloaded.pkgd.m.js"></script>
+
+    <!-- RECAPCHA -->
+    <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 </head>
 <body>
     <!-- HEADER -->
@@ -149,7 +152,7 @@
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="javascript:void(0);">Đăng xuất</a>
+                                @Html.ActionLink("Đăng xuất", Constants.LogoutAction, Constants.AccountController)
                             </li>
                         </ul>
                     </li>
@@ -317,6 +320,60 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
 
+    </script>
+
+    <script type="text/javascript">
+        @*Add success notification*@
+        function setNotification(message, type) {
+            // Success
+            if (type == 1) {
+                notif({
+                    msg: message,
+                    type: "success",
+                    width: 600,
+                    position: "center",
+                    fade: true,
+                    multiline: true
+                });
+            }
+
+            // Warning
+            if (type == 2) {
+                notif({
+                    msg: message,
+                    type: "warning",
+                    width: 600,
+                    position: "center",
+                    fade: true,
+                    multiline: true
+                });
+            }
+
+            // Error
+            if (type == 3) {
+                notif({
+                    msg: message,
+                    type: "error",
+                    width: 600,
+                    position: "center",
+                    fade: true,
+                    multiline: true,
+                    time: 1000
+                });
+            }
+        }
+
+        @* Display notification messages *@
+        $(document).ready(function () {
+            var feedbackStatus = '@(ViewBag.FeedbackStatus)';
+        if (feedbackStatus) {
+            if (feedbackStatus == 'True') {
+                setNotification('Cám ơn bạn đã đóng góp ý kiến.', 1);
+            } else {
+                setNotification('Sai mã bảo mật. Vui lòng thao tác lại.', 3);
+            }
+        }
+    });
     </script>
 </body>
 </html>

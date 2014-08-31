@@ -1044,7 +1044,7 @@ namespace HospitalF.Controllers
                 else
                 {
                     fromDate = DateTime.ParseExact(sFromDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                    toDate = DateTime.ParseExact(sToDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    toDate = DateTime.ParseExact(sToDate + " 23:59:59", "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
                 }
 
                 ViewBag.FeedbackList = FeedBackModel.LoadAdministratorFeedback(fromDate, toDate, feedbackType, responseType).ToPagedList(page, Constants.PageSize);
@@ -1071,7 +1071,7 @@ namespace HospitalF.Controllers
                                                                 };
                 ViewBag.ResponseTypeList = new SelectList(responseItemList, "Value", "Text", responseType);
                 ViewBag.ResponseType = responseType;
-
+                ViewBag.ApproveStatus = TempData["ApproveStatus"];
                 return View();
             }
             catch (Exception exception)
@@ -1084,7 +1084,7 @@ namespace HospitalF.Controllers
         [Authorize(Roles = Constants.AdministratorRoleName)]
         public ActionResult ApproveFeedback(int feedbackId = 0)
         {
-            FeedBackModel.ApproveFeedback(feedbackId);
+            TempData["ApproveStatus"] = FeedBackModel.ApproveAdministratorFeedback(feedbackId);
             return Redirect(Request.UrlReferrer.AbsoluteUri);
         }
 
@@ -1099,7 +1099,7 @@ namespace HospitalF.Controllers
                 {
                     exclusiveEmail = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
                 }
-                ViewBag.UserList = AccountModel.LoadUser(email, userRole, userStatus, exclusiveEmail).ToPagedList(page, Constants.PageSize);
+                ViewBag.UserList = AccountModel.LoadUser(email.Trim(), userRole, userStatus, exclusiveEmail).ToPagedList(page, Constants.PageSize);
                 List<Role> roleList = AccountModel.LoadUserRole();
                 ViewBag.RoleTypeList = new SelectList(roleList, "Role_ID", "Role_Name", userRole);
                 ViewBag.UserRole = userRole;
@@ -1112,6 +1112,7 @@ namespace HospitalF.Controllers
                 ViewBag.StatusTypeList = new SelectList(statusItemList, "Value", "Text", userStatus);
                 ViewBag.UserStatus = userStatus;
                 ViewBag.Email = email;
+                ViewBag.ChangeUserStatus = TempData["ChangeUserStatus"];
                 return View();
             }
             catch (Exception exception)

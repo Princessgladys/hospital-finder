@@ -496,6 +496,7 @@ namespace HospitalF.Models
                          cityId, districtId)
                      select new HospitalEntity()
                      {
+                         /*
                          Hospital_ID = h.Hospital_ID,
                          Hospital_Name = h.Hospital_Name,
                          Address = h.Address,
@@ -506,6 +507,7 @@ namespace HospitalF.Models
                          Coordinate = h.Coordinate,
                          Is_Active = h.Is_Active,
                          Rating = h.Rating
+                          * */
                      }).ToList());
             }
 
