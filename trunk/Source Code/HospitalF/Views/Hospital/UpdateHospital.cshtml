@@ -79,13 +79,13 @@
                 <header>
                     <span class="widget-icon"><i class="fa fa-edit"></i></span>
                     <h2>Thông tin bệnh viện</h2>
-                    <a href="" class="btn btn-sm btn-success btn-next"
+                    <a href="#" class="btn btn-sm btn-success btn-next"
                        style="float:right;" id="change-status-button">
                         @(Model.IsActive ? "Ngừng hoạt động" : "Kích hoạt")
                     </a>
                 </header>
                 <!-- widget div-->
-                <div>
+                <div id="update-content" style="display:none;">
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
@@ -654,6 +654,72 @@
 <script type="text/javascript">
     pageSetUp();
 
+    @*Update hospital status*@
+    $('#change-status-button').on('click', function () {
+        var hospitalId = '@Model.HospitalID';
+        var confirmMessage = "";
+        var status = "@Model.IsActive";
+        if (status == "True") {
+            confirmMessage = "Bạn có muốn ngừng [" + '@Html.Raw(@Model.HospitalName)' + "] hay không?"
+        } else {
+            confirmMessage = "Bạn có muốn kích hoạt [" + '@Html.Raw(@Model.HospitalName)' + "] hay không?"
+        }
+
+        if (confirm(confirmMessage)) {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.ChangeHospitalStatusAction))",
+                data: {
+                    "hospitalId": hospitalId
+                },
+                success: function (data) {
+                    if (data.value == 1) {
+                        if (status == "True") {
+                            notif({
+                                msg: "[" + '@Html.Raw(@Model.HospitalName)' + "] đã thay đổi trạng thái thành Ngừng hoạt động",
+                                type: "success",
+                                width: 600,
+                                position: "center",
+                                fade: true,
+                                multiline: true
+                            });
+                            $('#update-content').hide();
+                            $('a#change-status-button').text("Kích hoạt");
+                        } else {
+                            notif({
+                                msg: "[" + '@Html.Raw(@Model.HospitalName)' + "] đã thay đổi trạng thái Hoạt động trở lại",
+                                type: "success",
+                                width: 600,
+                                position: "center",
+                                fade: true,
+                                multiline: true
+                            });
+                            $('#update-content').show();
+                            $('#achange-status-button').text("Ngừng hoạt động");
+                        }
+                    } else {
+
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    notif({
+                        msg: "Không thể thay đổi trạng thái của [" + '@Html.Raw(@Model.HospitalName)' + "]",
+                        type: "error",
+                        width: 600,
+                        position: "center",
+                        fade: true,
+                        multiline: true
+                    });
+                }
+            });
+        } else {
+            return false;
+        }
+
+        return false;
+    });
+
     @*Add success notification*@
     function setNotification(message, type) {
         // Success
@@ -706,7 +772,7 @@
 
             if (status != 0) {
                 $("#success-alert").show();
-                setNotification("Cập nhật thông tin bệnh viện [" + hospitalName + "] thành công!", 1);
+                setNotification("Cập nhật thông tin bệnh viện [" + hospitalName + "] thành công!", 1);    
             } else {
                 $("#error-alert").show();
                 setNotification("Cập nhật thông tin bệnh viện [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
@@ -716,6 +782,11 @@
 
     $(document).ready(function () {
         displayNotification();
+        @*Display information base on IsActive status*@
+        var status = "@Model.IsActive";
+        if (status == "True") {
+            $('#update-content').show();
+        }
     });
 
     var timeoutReference;
