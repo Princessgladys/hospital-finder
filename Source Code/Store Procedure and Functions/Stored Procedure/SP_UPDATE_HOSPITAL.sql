@@ -6,7 +6,7 @@ IF OBJECT_ID('[SP_UPDATE_HOSPITAL]', 'P') IS NOT NULL
 	DROP PROCEDURE SP_UPDATE_HOSPITAL
 GO
 CREATE PROCEDURE SP_UPDATE_HOSPITAL
-	@HosptalID INT,
+	@HospitalID INT,
 	@HospitalName NVARCHAR(64),
 	@HospitalType INT,
 	@Address NVARCHAR(128),
@@ -28,13 +28,32 @@ CREATE PROCEDURE SP_UPDATE_HOSPITAL
 	@SpecialityList NVARCHAR(4000),
 	@ServiceList NVARCHAR(4000),
 	@FacilityList NVARCHAR(4000),
-	@TagInput NVARCHAR(4000)
+	@TagInput NVARCHAR(4000),
+	@PhotoList NVARCHAR(4000)
 AS
 BEGIN
 	BEGIN TRANSACTION T
 	BEGIN TRY
+		DECLARE @HospitalNameWordID INT =
+			(SELECT t.Word_ID
+			 FROM Tag_Hospital th, Tag t
+			 WHERE th.Hospital_ID = 90 AND
+				   t.Word = N'Nhà tui')
+
 		-- UPDATE HOSPITAL TABLE
 		BEGIN
+			DECLARE @OldHospitalName NVARCHAR(128) =
+				(SELECT Hospital_Name
+				 FROM Hospital
+				 WHERE Hospital_ID = @HospitalID)
+
+			IF (@OldHospitalName != @HospitalName)
+			BEGIN
+				UPDATE Tag
+				SET Word = @HospitalName
+				WHERE Word_ID = @HospitalNameWordID
+			END
+
 			UPDATE Hospital
 			SET Hospital_Name = @HospitalName,
 				Hospital_Type = @HospitalType,
@@ -53,7 +72,7 @@ BEGIN
 				Is_Allow_Appointment = @IsAllowAppointment,
 				Full_Description = @FullDescription,
 				Coordinate = @Coordinate
-			WHERE Hospital_ID = @HosptalID
+			WHERE Hospital_ID = @HospitalID
 
 			IF @@ROWCOUNT = 0
 			BEGIN
@@ -61,11 +80,6 @@ BEGIN
 				RETURN 0;
 			END
 		END
-
-		-- SELECT HOSPITAL ID
-		DECLARE @HospitalID INT = (SELECT TOP 1 Hospital_ID
-									FROM Hospital
-									ORDER BY Hospital_ID DESC)
 
 		-- UPDATE SPECIALITY TABLE
 		IF (@SpecialityList != '')
@@ -104,8 +118,7 @@ BEGIN
 								   WHERE [dbo].[FU_REMOVE_WHITE_SPACE] (Token) = 
 										 [dbo].[FU_REMOVE_WHITE_SPACE] (@TempSpecialityName)))
 					BEGIN
-						UPDATE Hospital_Speciality
-						SET Is_Active = 'False'
+						DELETE FROM Hospital_Speciality
 						WHERE Speciality_ID = @TempSpecialityID AND
 							  Hospital_ID = @HospitalID
 					END
@@ -126,25 +139,11 @@ BEGIN
 										   FROM [dbo].[FU_STRING_TOKENIZE] (@SpecialityList, '|') TokenList) AS TokenList
 									 WHERE RowNumber = @RowNumber)
 
-					IF (EXISTS(SELECT hs.Hospital_ID
-							   FROM Hospital_Speciality hs
-							   WHERE hs.Speciality_ID = @Token AND
-									 hs.Hospital_ID = @HospitalID))
-					BEGIN
-						-- CHECK STATUS OF SPECIALITY IN HOSPITAL
-						IF (EXISTS(SELECT hs.Hospital_ID
-								   FROM Hospital_Speciality hs
-								   WHERE hs.Speciality_ID = @Token AND
-										 hs.Hospital_ID = @HospitalID AND
-										 hs.Is_Active = 'False'))
-						BEGIN
-							UPDATE Hospital_Speciality
-							SET Is_Active = 'True'
-							WHERE Speciality_ID = @Token AND
-								  Hospital_ID = @HospitalID
-						END
-					END
-					ELSE
+					-- CHECK STATUS OF SPECIALITY IN HOSPITAL
+					IF (NOT EXISTS(SELECT hs.Hospital_ID
+									FROM Hospital_Speciality hs
+									WHERE hs.Speciality_ID = @Token AND
+											hs.Hospital_ID = @HospitalID))
 					BEGIN
 						-- INSERT NEW SPECIALITY
 						INSERT INTO Hospital_Speciality
@@ -166,6 +165,11 @@ BEGIN
 					SET @RowNumber += 1
 				END
 			END	
+		END
+		ELSE
+		BEGIN
+			DELETE FROM Hospital_Speciality
+			WHERE Hospital_ID = @HospitalID
 		END
 
 		-- UPDATE SERVICE TABLE
@@ -205,8 +209,7 @@ BEGIN
 								   WHERE [dbo].[FU_REMOVE_WHITE_SPACE] (Token) = 
 										 [dbo].[FU_REMOVE_WHITE_SPACE] (@TempServiceName)))
 					BEGIN
-						UPDATE Hospital_Service
-						SET Is_Active = 'False'
+						DELETE FROM Hospital_Service
 						WHERE Service_ID = @TempServiceID AND
 							  Hospital_ID = @HospitalID
 					END
@@ -227,25 +230,11 @@ BEGIN
 										 FROM [dbo].[FU_STRING_TOKENIZE] (@ServiceList, '|') TokenList) AS TokenList
 									 WHERE RowNumber = @RowNumber)
 
-					IF (EXISTS(SELECT hs.Hospital_ID
-							   FROM Hospital_Service hs
-							   WHERE hs.Service_ID = @Token AND
-									 hs.Hospital_ID = @HospitalID))
-					BEGIN
-						-- CHECK STATUS OF SERVICE IN HOSPITAL
-						IF (EXISTS(SELECT hs.Hospital_ID
-								   FROM Hospital_Service hs
-								   WHERE hs.Service_ID = @Token AND
-										 hs.Hospital_ID = @HospitalID AND
-										 hs.Is_Active = 'False'))
-						BEGIN
-							UPDATE Hospital_Service
-							SET Is_Active = 'True'
-							WHERE Service_ID = @Token AND
-								  Hospital_ID = @HospitalID
-						END
-					END
-					ELSE
+					-- CHECK STATUS OF SERVICE IN HOSPITAL
+					IF (NOT EXISTS(SELECT hs.Hospital_ID
+								FROM Hospital_Service hs
+								WHERE hs.Service_ID = @Token AND
+										hs.Hospital_ID = @HospitalID))
 					BEGIN
 						-- INSERT NEW SERVICE
 						INSERT INTO Hospital_Service
@@ -265,6 +254,11 @@ BEGIN
 					SET @RowNumber += 1
 				END
 			END
+		END
+		ELSE
+		BEGIN
+			DELETE FROM Hospital_Service
+			WHERE Hospital_ID = @HospitalID
 		END
 
 		-- UPDATE FACILITY TABLE
@@ -304,8 +298,7 @@ BEGIN
 								   WHERE [dbo].[FU_REMOVE_WHITE_SPACE] (Token) = 
 										 [dbo].[FU_REMOVE_WHITE_SPACE] (@TempFacilityName)))
 					BEGIN
-						UPDATE Hospital_Facility
-						SET Is_Active = 'False'
+						DELETE FROM Hospital_Facility
 						WHERE Facility_ID = @TempFacilityID AND
 							  Hospital_ID = @HospitalID
 					END
@@ -326,25 +319,11 @@ BEGIN
 										 FROM [dbo].[FU_STRING_TOKENIZE] (@FacilityList, '|') TokenList) AS TokenList
 									 WHERE RowNumber = @RowNumber)
 
-					IF (EXISTS(SELECT hs.Hospital_ID
-							   FROM Hospital_Facility hs
-							   WHERE hs.Facility_ID = @Token AND
-									 hs.Hospital_ID = @HospitalID))
-					BEGIN
-						-- CHECK STATUS OF SERVICE IN HOSPITAL
-						IF (EXISTS(SELECT hs.Hospital_ID
-								   FROM Hospital_Facility hs
-								   WHERE hs.Facility_ID = @Token AND
-										 hs.Hospital_ID = @HospitalID AND
-										 hs.Is_Active = 'False'))
-						BEGIN
-							UPDATE Hospital_Facility
-							SET Is_Active = 'True'
-							WHERE Facility_ID = @Token AND
-								  Hospital_ID = @HospitalID
-						END
-					END
-					ELSE
+					-- CHECK STATUS OF SERVICE IN HOSPITAL
+					IF (NOT EXISTS(SELECT hs.Hospital_ID
+								FROM Hospital_Facility hs
+								WHERE hs.Facility_ID = @Token AND
+										hs.Hospital_ID = @HospitalID))
 					BEGIN
 						-- INSERT NEW SERVICE
 						INSERT INTO Hospital_Facility
@@ -365,6 +344,11 @@ BEGIN
 				END
 			END
 		END
+		ELSE
+		BEGIN
+			DELETE FROM Hospital_Facility
+			WHERE Hospital_ID = @HospitalID
+		END
 
 		-- UPDATE TAG TABLE
 		IF (@TagInput != '')
@@ -377,7 +361,7 @@ BEGIN
 			DECLARE @TempWord NVARCHAR(256) = N''
 
 			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
-									FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList)
+								  FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList)
 
 			SELECT @TotalTag = (SELECT COUNT(Hospital_ID)
 								FROM Tag_Hospital
@@ -425,40 +409,72 @@ BEGIN
 										   FROM [dbo].[FU_STRING_TOKENIZE] (@TagInput, ',') TokenList) AS TokenList
 									 WHERE RowNumber = @RowNumber)
 
-					SET @TempWordID = (SELECT TOP 1 Word_ID
-									   FROM Tag
-									   ORDER BY Word_ID DESC)
-
-					IF (EXISTS(SELECT Word_ID
-							   FROM Tag
-							   WHERE LOWER(Word) = LOWER(@Token)))
-					BEGIN
-						SET @TempWordID = (SELECT Word_ID
-										   FROM Tag
-										   WHERE LOWER(Word) = LOWER(@Token))
-					END
-					ELSE
+					IF (NOT EXISTS(SELECT Word_ID
+								   FROM Tag
+								   WHERE LOWER(Word) = LOWER(@Token)))
 					BEGIN
 						INSERT INTO Tag
 						VALUES(@Token, 3)
 
-						SET @TempWordID = (SELECT TOP 1 Word_ID
-										   FROM Tag
-										   ORDER BY Word_ID DESC)
+						INSERT INTO Tag_Hospital
+						VALUES ((SELECT TOP 1 Word_ID
+								 FROM Tag
+								 WHERE Word = @Token), @HospitalID)
 					END
-
-					-- INSERT TO WORD_HOSPITAL TABLE
-					IF (NOT EXISTS(SELECT *
-								   FROM Tag_Hospital
-								   WHERE Hospital_ID = @HospitalID AND
-										 Word_ID = @TempWordID))
+					ELSE
 					BEGIN
 						INSERT INTO Tag_Hospital
-						VALUES(@TempWordID, @HospitalID)
+						VALUES ((SELECT Word_ID
+								 FROM Tag
+								 WHERE LOWER(Word) = LOWER(@Token)), @HospitalID)
 					END
 
 					SET @RowNumber += 1
 				END
+			END
+		END
+		ELSE
+		BEGIN
+			DELETE FROM Tag_Hospital
+			WHERE Hospital_ID = @HospitalID AND
+				  Word_ID != @HospitalNameWordID
+		END
+
+		-- UPDATE PHOTO TABLE
+		IF (@PhotoList != '')
+		BEGIN
+			SET @RowNumber = 1
+			SET @TotalToken = 0
+
+			SELECT @TotalToken = (SELECT COUNT(TokenList.ID)
+								  FROM [dbo].[FU_STRING_TOKENIZE] (@PhotoList, '|') TokenList)
+
+			WHILE (@RowNumber <= @TotalToken)
+			BEGIN
+				SELECT @Token = (SELECT TokenList.Token
+								 FROM (SELECT ROW_NUMBER()
+									   OVER (ORDER BY TokenList.ID ASC) AS RowNumber, TokenList.Token
+									   FROM [dbo].[FU_STRING_TOKENIZE] (@PhotoList, '|') TokenList) AS TokenList
+								 WHERE RowNumber = @RowNumber)
+
+				INSERT INTO Photo
+				(
+					File_Path,
+					Add_Date,
+					Hospital_ID,
+					Uploaded_Person,
+					Is_Active
+				)
+				VALUES
+				(
+					@Token,
+					GETDATE(),
+					@HospitalID,
+					@CreatedPerson,
+					'True'
+				)
+
+				SET @RowNumber += 1
 			END
 		END
 
