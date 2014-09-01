@@ -1,127 +1,1425 @@
-﻿@model HospitalF.Models.HospitalModel
-@using HospitalF.Constant
-@using HospitalF.Entities;
-@using HospitalF.Models
+﻿@using HospitalF.Constant;
+@using HospitalF.Models;
+
+@model HospitalF.Models.HospitalModel
 @{
     ViewBag.Title = "Thông tin bệnh viện";
 }
 
+@section HospitalDetailActive
+{
+    class="active"
+}
 
+@section BreadCrumb
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Thông Tin Bệnh Viện</li>
+    </ol>
+}
 
-@*popup dialog*@
-<script type="text/javascript" src="~/Content/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="~/Content/js/jquery.leanModal.min.js"></script>
-<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
-<link type="text/css" rel="stylesheet" href="~/Content/css/leanModel.css" />
+<link href="~/Content/css/summernote/summernote.css" rel="stylesheet" />
+<script src="~/Content/js/plugin/summernote/summernote.js"></script>
+<script src="~/Content/js/plugin/summernote/summernote-vi-VN.js"></script>
+<script src="~/Scripts/dropzone/dropzone.js"></script>
+<link href="~/Scripts/dropzone/css/basic.css" rel="stylesheet" />
+<link href="~/Scripts/dropzone/css/dropzone.css" rel="stylesheet" />
+<script src="~/Content/js/plugin/bootstrap-taginput/bootstrap-tagsinput.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&language=vi&sensor=false"></script>
 
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-pencil-square-o fa-fw "></i>&nbsp;
+            Thông tin bệnh viện
+        </h1>
+    </div>
+</div>
 
-<style>
-    .service-facility
-    {
-        width: 100%;
-        margin-left: 10px;
-    }
+<div class="alert alert-block alert-info">
+    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>&nbsp;Nhập thông tin</h4>
+    <p>
+        Chỉnh sửa thông tin theo bản mẫu. Sua đó ấn <code>Xác nhận</code> để cập nhật thông tin mới.
+    </p>
+</div>
 
-    .resizeIcon
-    {
-        width: 16px;
-        height: auto;
-    }
+<section id="widget-grid" class="">
+    <div class="alert alert-danger fade in" style="display: none;"
+         id="error-alert">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-times"></i>&nbsp;
+        <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
+    </div>
+    <div class="alert alert-success fade in" style="display: none;"
+         id="success-alert">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>&nbsp;
+        <strong>Thành công</strong> Cập nhật thông tin bệnh viện thành công.
+    </div>
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                 data-widget-colorbutton="false"
+                 data-widget-editbutton="false"
+                 data-widget-togglebutton="false"
+                 data-widget-deletebutton="false"
+                 data-widget-fullscreenbutton="false"
+                 data-widget-custombutton="false"
+                 data-widget-collapsed="false"
+                 data-widget-sortable="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Thông tin bệnh viện</h2>
+                </header>
+                <!-- widget div-->
+                <div id="update-content">
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        @using (Html.BeginForm(Constants.IndexAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "updateHospitalForm", @enctype = "multipart/form-data" }))
+                        {
+                            @Html.TextBoxFor(m => m.HospitalID, new { @type = "hidden" })
+                            <fieldset>
+                                <legend>Thông tin căn bản</legend>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Tên bệnh viện <span style="color: red;">*</span></label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-home"></i>
+                                            @Html.TextBoxFor(m => m.HospitalName, new { @placeholder = "Tên bệnh viện" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-home txt-color-teal"></i>&nbsp;Xin nhập Tên bệnh viện</b>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Loại bệnh viện <span style="color: red;">*</span></label>
+                                        <label class="select">
+                                            <i></i>
+                                            @Html.DropDownListFor(m => m.HospitalTypeID, (SelectList)ViewBag.HospitalTypeList,
+                                                Constants.RequireHospitalType, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.HospitalTypeName, new { @type = "hidden" })
+                                        </label>
+                                    </section>
+                                </div>
 
-    h2
-    {
-        margin: 0px 0px;
-    }
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Giờ khám ngày thường <span style="color: red;">*</span></label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-clock-o"></i>
+                                            @Html.TextBoxFor(m => m.OrdinaryStartTime, new { @placeholder = "Giờ khám ngày thường", @id = "OrdinaryTime" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>&nbsp;Xin nhập Giờ khám ngày thường</b>
+                                        </label>
+                                        <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Giờ khám ngày lễ và cuối tuần <span style="color: red;">*</span></label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-clock-o"></i>
+                                            @Html.TextBoxFor(m => m.HolidayStartTime, new { @placeholder = "Giờ khám ngày lễ và cuối tuần", @id = "HolidayTime" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-clock-o txt-color-teal"></i>&nbsp;Xin nhập Giờ khám ngày lễ và cuối tuần</b>
+                                        </label>
+                                        <p class="note"><strong>Định dạng:</strong> HH:mm - HH:mm</p>
+                                    </section>
+                                </div>
 
-    h5
-    {
-        margin-left: 20px;
-    }
+                                <section>
+                                    <div class="inline-group">
+                                        <label class="radio">
+                                            @Html.RadioButtonFor(m => m.IsAllowAppointment, true,
+                                                new { @type = "radio", @name = "radio-inline", @checked = "checked" })
+                                            <i></i>Cho phép đăng ký khám trực tuyến
+                                        </label>
+                                        <label class="radio">
+                                            @Html.RadioButtonFor(m => m.IsAllowAppointment, false,
+                                                new { @type = "radio", @name = "radio-inline" })
+                                            <i></i>Không có dịch vụ đăng ký khám trực tuyến
+                                        </label>
+                                    </div>
+                                </section>
 
-    div.dt-bottom-row
-    {
-        background: #fafafa;
-        font-size: 11px;
-        overflow: hidden;
-        padding: 5px 10px;
-        border-top: 1px solid #ccc;
-        -webkit-box-shadow: inset 0 1px #fff;
-        -ms-box-shadow: inset 0 1px #fff;
-        box-shadow: inset 0 1px #fff;
-    }
+                            </fieldset>
 
-    span.date
-    {
-        width: 26px;
-        height: 26px;
-        text-align: center;
-        line-height: 26px;
-        background: #ECE9E9;
-        font-size: 16px;
-        color: #296191;
-        display: block;
-        margin: 0 3px 3px 0;
-        float: left;
-    }
+                            <fieldset>
+                                <legend>Địa chỉ</legend>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Số địa chỉ <span style="color: red;">*</span></label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-building"></i>
+                                            @Html.TextBoxFor(m => m.LocationAddress, new { @placeholder = "Số địa chỉ" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-building txt-color-teal"></i>&nbsp;Xin nhập Số địa chỉ</b>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Tên đường <span style="color: red;">*</span></label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-truck"></i>
+                                            @Html.TextBoxFor(m => m.StreetAddress, new { @placeholder = "Tên đường" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-truck txt-color-teal"></i>&nbsp;Xin nhập Tên đường</b>
+                                        </label>
+                                    </section>
+                                </div>
 
-        span.date:nth-child(3n)
-        {
-            margin-right: 0;
-        }
+                                <div class="row">
+                                    <section class="col col-4">
+                                        <label class="label">Tỉnh / Thành phố <span style="color: red;">*</span></label>
+                                        <label class="select">
+                                            <i></i>
+                                            @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
+                                                Constants.RequireCity, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.CityName, new { @type = "hidden" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-4">
+                                        <label class="label">Quận / Huyện / Thị xã <font color="red">*</font></label>
+                                        <label class="select">
+                                            <i></i>
+                                            @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
+                                                Constants.RequireDistrict, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.DistrictName, new { @type = "hidden" })
+                                        </label>
+                                    </section>
+                                    <section class="col col-4">
+                                        <label class="label">Phường / Xã <span style="color: red;">*</span></label>
+                                        <label class="select">
+                                            <i></i>
+                                            @Html.DropDownListFor(m => m.WardID, (SelectList)ViewBag.WardList,
+                                                Constants.RequireWard, new { @class = "form-control" })
+                                            @Html.TextBoxFor(m => m.WardName, new { @type = "hidden" })
+                                        </label>
+                                    </section>
+                                </div>
 
-    legend
-    {
-        height: 50px;
-        font-size: 18px;
-    }
+                                <section>
+                                    <label class="label">Địa chỉ đầy đủ</label>
+                                    <label class="input">
+                                        <i class="icon-prepend fa fa-location-arrow"></i>
+                                        @Html.TextBoxFor(m => m.FullAddress, new { @placeholder = "Địa chỉ đầy đủ", @disabled = "disabled" })
+                                    </label>
+                                </section>
 
-    .btn-primary
-    {
-        float: right;
-    }
-</style>
+                                <div class="row">
+                                    <section class="col col-8">
+                                        <img src="../Content/img/loading-backup.gif" class="resizeIcon"
+                                             style="display: none;" id="loaderIcon">
+                                        <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
+                                             style="display: none;" id="validIcon">
+                                        <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
+                                             style="display: none;" id="invalidIcon">
+                                        <span id="address-message"></span>
+                                    </section>
+                                    <section class="col col-4">
+                                        <a href="#" class="btn btn-sm btn-success btn-next"
+                                           id="button-get-loction" style="float: right;">
+                                            Lấy tọa độ từ địa chỉ
+                                        </a>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-md-12">
+                                        <div id="google-map" tabindex="-1"></div>
+                                    </section>
+                                </div>
+                                @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Thông tin liên lạc</legend>
+                                <div class="row">
+                                    <section class="col col-4">
+                                        <label class="label">Số điện thoại chính <span style="color: red;">*</span></label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-phone"></i>
+                                            @Html.TextBoxFor(m => m.PhoneNo, new { @placeholder = "Số điện thoại chính" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>&nbsp;Xin nhập Số điện thoại bàn chính của bệnh viện</b>
+                                        </label>
+                                        <p class="note"><strong>Lưu ý:</strong> Không nhập khoảng trắng.</p>
+                                    </section>
+                                    <section class="col col-4">
+                                        <label class="label">Số điện thoại thay thế</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-phone"></i>
+                                            @Html.TextBoxFor(m => m.PhoneNo2, new { @placeholder = "Số thay thế (nếu có)" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>&nbsp;Nhập Số điện thoại bàn phụ (nếu có)</b>
+                                        </label>
+                                    </section>
+                                    <section class="col col-4">
+                                        <label class="label">Di động</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-phone"></i>
+                                            @Html.TextBoxFor(m => m.PhoneNo3, new { @placeholder = "Số di động (nếu có)" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-phone txt-color-teal"></i>&nbsp;Nhập Số di động (nếu có)</b>
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Email bệnh viện</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-envelope"></i>
+                                            @Html.TextBoxFor(m => m.HospitalEmail, new { @placeholder = "Email bệnh viện", @type = "email" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-envelope txt-color-teal"></i>&nbsp;Xin nhập địa chỉ Email của bệnh viện</b>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Trang web bệnh viện</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-globe"></i>
+                                            @Html.TextBoxFor(m => m.Website, new { @placeholder = "Nhập trang web của bệnh viện" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-globe txt-color-teal"></i>&nbsp;Nhập địa chỉ Website của bệnh viện. Ví dụ: http://www.benhvien.com</b>
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="label">Người chịu trách nhiệm chính</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-male"></i>
+                                            @Html.TextBoxFor(m => m.PersonInCharged, new { @placeholder = "Nhập Email của người chịu trách nhiệm", @type = "email" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-male txt-color-teal"></i>&nbsp;Xin nhập Email của người chịu trách nhiệm</b>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Số fax bệnh viện</label>
+                                        <label class="input">
+                                            <i class="icon-prepend fa fa-fax"></i>
+                                            @Html.TextBoxFor(m => m.Fax, new { @placeholder = "Nhập số fax của bệnh viện" })
+                                            <b class="tooltip tooltip-top-right"><i class="fa fa-fax txt-color-teal"></i>&nbsp;Nhập số fax của bệnh viện (không nhập khoảng trắng)</b>
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <div class="row">
+                                    <section class="col col-8">
+                                        <img src="../Content/img/loading-backup.gif" class="resizeIcon"
+                                             style="display: none;" id="loaderIconUser">
+                                        <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
+                                             style="display: none;" id="validIconUser">
+                                        <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
+                                             style="display: none;" id="invalidIconUser">
+                                        <span id="user-message"></span>
+                                        <a href="/Account/AddAccount"
+                                           data-toggle="modal" data-target="#addAccount"
+                                           id="add-new-user-button" style="display: none; float: right;">
+                                            Thêm mới người dùng
+                                        </a>
+                                    </section>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Thông tin chuyên môn</legend>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Danh sách chuyên ngành</strong></label>
+                                        <select class="select2 select2-offscreen" id="SelectedSpecialities"
+                                                multiple="multiple" name="SelectedSpecialities"
+                                                style="width:100%" tabindex="-1">
+                                            @{
+                            if (Model.SelectedSpecialities != null && Model.SelectedSpecialities.Count() == 0)
+                            {
+                                foreach (var speciality in Model.SpecialityList)
+                                {
+                                    <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
+                                }
+                            }
+                            else if (Model.SpecialityList.Count() == Model.SelectedSpecialities.Count())
+                            {
+                                foreach (var speciality in Model.SpecialityList)
+                                {
+                                    <option value="@speciality.Speciality_ID"
+                                            selected="selected">
+                                        @speciality.Speciality_Name
+                                        </option>
+                                }
+                            }
+                            else
+                            {
+                                int isInserted = 0;
+
+                                foreach (var speciality in Model.SpecialityList)
+                                {
+                                    isInserted = 0;
+                                    foreach (var value in Model.SelectedSpecialities)
+                                    {
+                                        if (speciality.Speciality_ID.ToString().Equals(value))
+                                        {
+                                            <option value="@speciality.Speciality_ID"
+                                                    selected="selected">
+                                                @speciality.Speciality_Name
+                                                </option>
+                                            isInserted = 1;
+                                            break;
+                                        }
+                                    }
+                                    if (isInserted == 0)
+                                    {
+                                        <option value="@speciality.Speciality_ID">@speciality.Speciality_Name</option>
+                                    }
+                                }
+                            }
+                                            }
+                                        </select>
+                                        <div class="note">
+                                            <strong>Chỉ dẫn:</strong> Danh sách chuyên ngành góp phần gia tăng việc tìm kiếm bệnh viện
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Danh sách dịch vụ</strong></label>
+                                        @{
+                            string isInsertedSelectedOption = 0.ToString();
+                            string isInsertedOption = 0.ToString();
+                            string previousOptGroup = string.Empty;
+
+                            if (Model.SelectedServices != null && Model.SelectedServices.Count() == 0)
+                            {
+                                @Html.DropDownGroupListFor(m => m.SelectedServices,
+                                                    (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList,
+                                                    new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                            }
+                            else
+                            {
+                                <select id="SelectedServices" name="SelectedServices"
+                                        multiple="multiple" style="width:100%" class="select2">
+                                    @foreach (GroupedSelectListItem service in
+                                                         (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList)
+                                    {
+                                        if (string.Empty.Equals(previousOptGroup))
+                                        {
+                                            <optgroup label="@service.GroupName" value="@service.GroupKey">
+                                                @if ("0".Equals(isInsertedSelectedOption))
+                                                {
+                                                    foreach (GroupedSelectListItem option in
+                                                              (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList)
+                                                    {
+                                                        foreach (string selected in Model.SelectedServices)
+                                                        {
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                selected.Equals(option.Value) && "0".Equals(isInsertedSelectedOption))
+                                                            {
+                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                isInsertedSelectedOption = option.Value;
+                                                                break;
+                                                            }
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                selected.Equals(option.Value) && !option.Value.Equals(isInsertedSelectedOption))
+                                                            {
+                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                isInsertedSelectedOption = option.Value;
+                                                                break;
+                                                            }
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                !selected.Equals(option.Value) && !option.Value.Equals(isInsertedOption))
+                                                            {
+                                                                <option value="@option.Value">@option.Text</option>
+                                                                isInsertedOption = option.Value;
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            </optgroup>
+                                                previousOptGroup = service.GroupName;
+                                        }
+                                        else if (!previousOptGroup.Equals(service.GroupName))
+                                        {
+                                            isInsertedSelectedOption = 0.ToString();
+                                            isInsertedOption = 0.ToString();
+                                            previousOptGroup = string.Empty;
+                                            <optgroup label="@service.GroupName" value="@service.GroupKey">
+                                                @if ("0".Equals(isInsertedSelectedOption))
+                                                {
+                                                    foreach (GroupedSelectListItem option in
+                                                              (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList)
+                                                    {
+                                                        foreach (string selected in Model.SelectedServices)
+                                                        {
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                selected.Equals(option.Value) && "0".Equals(isInsertedSelectedOption))
+                                                            {
+                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                isInsertedSelectedOption = option.Value;
+                                                                break;
+                                                            }
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                selected.Equals(option.Value) && !option.Value.Equals(isInsertedSelectedOption))
+                                                            {
+                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                isInsertedSelectedOption = option.Value;
+                                                                break;
+                                                            }
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                !selected.Equals(option.Value) && !option.Value.Equals(isInsertedOption))
+                                                            {
+                                                                <option value="@option.Value">@option.Text</option>
+                                                                isInsertedOption = option.Value;
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            </optgroup>
+                                                previousOptGroup = service.GroupName;
+                                        }
+                                    }
+                                </select>
+                            }
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Danh sách cơ sở vậy chất</strong></label>
+
+                                        @{
+                            isInsertedSelectedOption = 0.ToString();
+                            isInsertedOption = 0.ToString();
+                            previousOptGroup = string.Empty;
+
+                            if (Model.SelectedFacilities != null && Model.SelectedFacilities.Count() == 0)
+                            {
+                                @Html.DropDownGroupListFor(m => m.SelectedFacilities,
+                                                    (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList,
+                                                    new { @class = "select2", @style = "width:100%", @multiple = "multiple" })
+                            }
+                            else
+                            {
+                                <select id="SelectedFacilities" name="SelectedFacilities"
+                                        multiple="multiple" style="width:100%" class="select2">
+                                    @foreach (GroupedSelectListItem service in
+                                                         (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList)
+                                    {
+                                        if (string.Empty.Equals(previousOptGroup))
+                                        {
+                                            <optgroup label="@service.GroupName" value="@service.GroupKey">
+                                                @if ("0".Equals(isInsertedSelectedOption))
+                                                {
+                                                    foreach (GroupedSelectListItem option in
+                                                              (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList)
+                                                    {
+                                                        foreach (string selected in Model.SelectedFacilities)
+                                                        {
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                selected.Equals(option.Value) && "0".Equals(isInsertedSelectedOption))
+                                                            {
+                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                isInsertedSelectedOption = option.Value;
+                                                                break;
+                                                            }
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                selected.Equals(option.Value) && !option.Value.Equals(isInsertedSelectedOption))
+                                                            {
+                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                isInsertedSelectedOption = option.Value;
+                                                                break;
+                                                            }
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                !selected.Equals(option.Value) && !option.Value.Equals(isInsertedOption))
+                                                            {
+                                                                <option value="@option.Value">@option.Text</option>
+                                                                isInsertedOption = option.Value;
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            </optgroup>
+                                                previousOptGroup = service.GroupName;
+                                        }
+                                        else if (!previousOptGroup.Equals(service.GroupName))
+                                        {
+                                            isInsertedSelectedOption = 0.ToString();
+                                            isInsertedOption = 0.ToString();
+                                            previousOptGroup = string.Empty;
+                                            <optgroup label="@service.GroupName" value="@service.GroupKey">
+                                                @if ("0".Equals(isInsertedSelectedOption))
+                                                {
+                                                    foreach (GroupedSelectListItem option in
+                                                              (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList)
+                                                    {
+                                                        foreach (string selected in Model.SelectedFacilities)
+                                                        {
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                selected.Equals(option.Value) && "0".Equals(isInsertedSelectedOption))
+                                                            {
+                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                isInsertedSelectedOption = option.Value;
+                                                                break;
+                                                            }
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                selected.Equals(option.Value) && !option.Value.Equals(isInsertedSelectedOption))
+                                                            {
+                                                                <option value="@option.Value" selected>@option.Text</option>
+                                                                isInsertedSelectedOption = option.Value;
+                                                                break;
+                                                            }
+                                                            if (option.GroupName.Equals(service.GroupName) &&
+                                                                !selected.Equals(option.Value) && !option.Value.Equals(isInsertedOption))
+                                                            {
+                                                                <option value="@option.Value">@option.Text</option>
+                                                                isInsertedOption = option.Value;
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            </optgroup>
+                                                previousOptGroup = service.GroupName;
+                                        }
+                                    }
+                                </select>
+                            }
+                                        }
+                                        <div class="note">
+                                            <strong>Chỉ dẫn:</strong> Cung cấp danh sách các dịch vụ và cơ sở vật chất góp phần làm tăng độ tin cậy của bệnh viện
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Từ khóa</legend>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label><strong>Từ khóa tìm kiếm</strong></label>
+                                        <input class="form-control tagsinput" data-role="tagsinput"
+                                               name="TagsInput" id="TagsInput"
+                                               value="@Model.TagsInput" />
+                                        <div class="note">
+                                            <strong>Chỉ dẫn:</strong> Từ khóa tìm kiếm giúp tối ưu hóa khả năng tìm kiếm của hệ thống.
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Hình ảnh</legend>
+                                <div class="dropzone dropzone-previews" id="my-awesome-dropzone"></div>
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Miêu tả</legend>
+                                <div id="summernote">
+                                    @Html.Raw(Model.FullDescription)
+                                </div>
+                            </fieldset>
+
+                            <footer>
+                                <button class="btn" type="reset"
+                                        id="reset-button">
+                                    <i class="fa fa-refresh"></i>&nbsp;
+                                    Nhập lại
+                                </button>
+                                <button class="btn btn-primary" type="submit" id="confirm-button">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Xác nhận
+                                </button>
+                            </footer>
+                        }
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+    <!-- end row -->
+</section>
+
+<div class="modal fade" id="addAccount" tabindex="-1"
+     role="dialog" aria-labelledby="remoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
 <script type="text/javascript">
     pageSetUp();
-    $(function () {
-        $("#PhoneNo").mask("(99) 99999999");
-        $("#Fax").mask("(99) 99999999");
+
+    @*Add success notification*@
+    function setNotification(message, type) {
+        // Success
+        if (type == 1) {
+            notif({
+                msg: message,
+                type: "success",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Warning
+        if (type == 2) {
+            notif({
+                msg: message,
+                type: "warning",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+
+        // Error
+        if (type == 3) {
+            notif({
+                msg: message,
+                type: "error",
+                width: 600,
+                position: "center",
+                fade: true,
+                multiline: true
+            });
+        }
+    }
+
+    @*Display notification*@
+    function displayNotification() {
+        // Update hospital
+        if ('@ViewBag.UpdateHospitalStatus' == '') {
+            return false;
+        } else {
+            var returnValue = '@ViewBag.UpdateHospitalStatus';
+            returnValue = returnValue.split('-');
+            var status = returnValue[0];
+            var hospitalName = returnValue[1];
+
+            if (status != 0) {
+                $("#success-alert").show();
+                setNotification("Cập nhật thông tin bệnh viện [" + hospitalName + "] thành công!", 1);
+            } else {
+                $("#error-alert").show();
+                setNotification("Cập nhật thông tin bệnh viện [" + hospitalName + "] không thành công, xin hãy thử lại.", 3);
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        displayNotification();
     });
-    //search doctor
+
+    var timeoutReference;
     $(document).ready(function () {
         @*Check if user email is existed in database*@
-        $("#Search").click(function () {
-            var doctorname = $('#DoctorName').val();
-            var specialityid = $('#SpecialityID').val();
-            var hospitalid = $('#HospitalID').val();
-            if ((doctorname == '' && specialityid != 0) || (doctorname != '' && specialityid == 0) ||
-                (doctorname != '' && specialityid != 0)) {
-                var statesProgress = $("#states-loading-doctor-progress");
-                $("#search-doctor-message").text("");
-                $("#invalidIconUser").hide();
-                statesProgress.show();
-                $.ajax({
-                    cache: false,
-                    type: "GET",
-                    url: "@(Url.RouteUrl(Constants.SearchDoctorAction))",
-                    data: { doctorName: doctorname, specialityID: specialityid, hospitalID: hospitalid },
-                    success: function (data) {
-                        $('#SearchResult').replaceWith(data);
-                        statesProgress.hide();
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        $('#wid-id-1').replaceWith(data);
-                        statesProgress.hide();
-                    }
-                });
+        $("#PersonInCharged").on('input', function () {
+            var email = $(this).val();
+            $("#loaderIconUser").show();
+
+            if (email.trim().length != 0) {
+                if (timeoutReference) clearTimeout(timeoutReference);
+                timeoutReference = setTimeout(function () {
+                    $.ajax({
+                        cache: false,
+                        type: "GET",
+                        url: "@(Url.RouteUrl("CheckValidUserWithEmail"))",
+                        data: { "email": email },
+                        success: function (data) {
+                            if (data.value == 1) {
+                                setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM019)", 1);
+                            }
+                            if (data.value == 2) {
+                                setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM020)", 0);
+                            }
+                            if (data.value == 0) {
+                                setUserNotificationMessage("@Html.Raw(ErrorMessage.CEM021)", 0);
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                        }
+                    });
+                }, 1500);
             } else {
-                $("#search-doctor-message").text("Xin hãy nhập tên bác sĩ hoặc chọn một chuyên khoa");
-                $("#invalidIconUser").show();
+                $("#loaderIconUser").hide();
+                $("#validIconUser").hide();
+                $("#invalidIconUser").hide();
+                $("#user-message").text('');
+                $('#PersonInCharged').css('background', 'inherit');
+                $('#PersonInCharged').css('border-color', 'inherit');
+                $("#add-new-user-button").hide();
+            }
+
+            return false;
+        });
+
+        @*Format textbox data*@
+        $(function ($) {
+            $('#OrdinaryTime').mask('99:99 - 99:99', { placeholder: "x" });
+            $('#HolidayTime').mask('99:99 - 99:99', { placeholder: "x" });
+        });
+
+        @*Take text value of hospital type drop down list*@
+        $("#HospitalTypeID").change(function () {
+            $('#HospitalTypeName').val($("#HospitalTypeID option:selected").text());
+        });
+
+        @*AJAX for cascading District drop down list*@
+        $("#CityID").change(function () {
+            $('#CityName').val($("#CityID option:selected").text());
+            var selectedItem = $(this).val();
+            var ddlDistrict = $("#DistrictID");
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetDistrictByCityAction))",
+                data: { "cityId": selectedItem },
+                success: function (data) {
+                    ddlDistrict.html('');
+                    $.each(data, function (id, option) {
+                        ddlDistrict.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    $('#DistrictName').val($("#DistrictID option:selected").text());
+
+                    selectedItem = $("#DistrictID").val();
+                    var ddlWard = $("#WardID");
+                    $.ajax({
+                        cache: false,
+                        type: "GET",
+                        url: "@(Url.RouteUrl(Constants.GetWardByDistrictAction))",
+                        data: { "districtId": selectedItem },
+                        success: function (data) {
+                            ddlWard.html('');
+                            $.each(data, function (id, option) {
+                                ddlWard.append($('<option></option>').val(option.id).html(option.name));
+                            });
+                            $('#WardName').val($("#WardID option:selected").text());
+                            bindFullAddress()
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                        }
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                }
+            });
+        });
+
+        @*AJAX for cascading Ward drop down list*@
+        $("#DistrictID").change(function () {
+            var selectedItem = $(this).val();
+            var ddlWard = $("#WardID");
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl(Constants.GetWardByDistrictAction))",
+                data: { "districtId": selectedItem },
+                success: function (data) {
+                    ddlWard.html('');
+                    $.each(data, function (id, option) {
+                        ddlWard.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                    $('#DistrictName').val($("#DistrictID option:selected").text());
+                    $('#WardName').val($("#WardID option:selected").text());
+                    bindFullAddress();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                }
+            });
+        });
+
+        @*Check if coordinate has been changed*@
+        $("#Coordinate").change(function () {
+            if ($("#address-message").text() == '@Html.Raw(ErrorMessage.CEM014)') {
+                $("#loaderIcon").hide();
+                $("#validIcon").show();
+                $("#invalidIcon").hide();
+                $("#address-message").text("@Html.Raw(ErrorMessage.CEM018)");
+            }
+        });
+    });
+
+    @*Bind data for full address*@
+    $('#LocationAddress').on('input', function () {
+        bindFullAddress();
+    });
+    $('#StreetAddress').on('input', function () {
+        bindFullAddress();
+    });
+    $("#WardID").change(function () {
+        bindFullAddress();
+        $('#WardName').val($("#WardID option:selected").text());
+    });
+    function bindFullAddress() {
+        var city = "";
+        if (($('#CityID').val() != null) && ($('#CityID').val() != '')) {
+            city = ", " + $("#CityID option:selected").text();
+        }
+        var district = "";
+        if (($('#DistrictID').val() != null) && ($("#DistrictID").val() != '')) {
+            district = ", " + $("#DistrictID option:selected").text();
+        }
+        var ward = "";
+        if (($('#WardID').val() != null) && ($("#WardID").val() != '')) {
+            ward = ", " + $("#WardID option:selected").text();
+        }
+        var locationAddress = $("#LocationAddress").val();
+        var streetAddress = $("#StreetAddress").val();
+
+        var fullAddress = locationAddress + " " + streetAddress +
+            ward + district + city;
+
+        $("#FullAddress").val(fullAddress);
+
+        checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress, fullAddress);
+    }
+
+    @*Check if hospital and address information are not duplicated*@
+    function checkDuplicatedHospital(city, district, ward, locationAddress, streetAddress, fullAddress) {
+        // Check if hospital is valid
+        var hospitalName = $("#HospitalName").val();
+        if (locationAddress == "") {
+            setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM015)', 0);
+            return false;
+        }
+        if (streetAddress == "") {
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM028)", 0);
+            return false;
+        }
+        if (city == "") {
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM029)", 0);
+            return false;
+        }
+        if (district == "") {
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM030)", 0);
+            return false;
+        }
+        if (district == "") {
+            setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM031)", 0);
+            return false;
+        }
+
+        if ((locationAddress != "") &&
+            (streetAddress != "") && (city != "") &&
+            (district != "") && (ward != "")) {
+            $("#loaderIcon").show();
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("CheckValidHospitalWithAddress"))",
+                data: {
+                    "hospitalName": hospitalName,
+                    "address": fullAddress
+                },
+                success: function (data) {
+                    if (data.value == 1) {
+                        setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM016)', 1);
+                    } else {
+                        setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM017)', 0);
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $("#invalidIcon").show();
+                    $("#address-message").text("@Html.Raw(ErrorMessage.CEM022)");
+                    setNotification("@Html.Raw(ErrorMessage.CEM022)", 2);
+                }
+            });
+            return false;
+        }
+    }
+
+    @*Set address message notification*@
+    function setAddressNotificationMessage(message, mode) {
+        if (mode == 1) {
+            $("#loaderIcon").hide();
+            $("#validIcon").show();
+            $("#invalidIcon").hide();
+            $("#address-message").text(message);
+            $('#FullAddress').css('background', '#f0fff0');
+            $('#FullAddress').css('border-color', '#7DC27D');
+        } else {
+            $("#loaderIcon").hide();
+            $("#validIcon").hide();
+            $("#invalidIcon").show();
+            $("#address-message").text(message);
+            $('#FullAddress').css('background', '#fff0f0');
+            $('#FullAddress').css('border-color', '#A90329');
+        }
+    }
+
+    @*Set user message notification*@
+    function setUserNotificationMessage(message, mode) {
+        if (mode == 1) {
+            $("#loaderIconUser").hide();
+            $("#validIconUser").show();
+            $("#invalidIconUser").hide();
+            $("#user-message").text(message);
+            $('#PersonInCharged').css('background', '#f0fff0');
+            $('#PersonInCharged').css('border-color', '#7DC27D');
+            $("#add-new-user-button").hide();
+        } else {
+            $("#loaderIconUser").hide();
+            $("#validIconUser").hide();
+            $("#invalidIconUser").show();
+            $("#user-message").text(message);
+            $('#PersonInCharged').css('background', '#fff0f0');
+            $('#PersonInCharged').css('border-color', '#A90329');
+            $("#add-new-user-button").show();
+        }
+    }
+
+    @*Data validation*@
+    $(document).ready(function () {
+        $('#reset-button').click(function (e) {
+            if (confirm('Bạn có muốn nhập lại dữ liệu từ ban đầu?')) {
+                $('#updateHospitalForm').trigger("reset");
+                $('#HospitalName').focus();
+            } else {
                 return false;
             }
         });
 
-        // update doctor information
+        $('#confirm-button').click(function (e) {
+            if ($("#address-message").text() == "@Html.Raw(ErrorMessage.CEM017)") {
+                $("#LocationAddress").focus();
+                setNotification("@Html.Raw(ErrorMessage.CEM017)", 2);
+                return false;
+            }
 
+            if ($("#invalidIconUser").is(":visible")) {
+                $("#PersonInCharged").focus();
+                setNotification("Người chịu trách nhiệm không phù hợp.", 2);
+                $("#PersonInCharged").focus();
+                return false;
+            }
+
+            var dz = Dropzone.forElement("#my-awesome-dropzone");
+            if (dz.getQueuedFiles().length > 0) {
+                e.preventDefault();
+                e.stopPropagation();
+                dz.processQueue();
+            }
+            $("#FullDescription").val($('#summernote').code());
+            $('#updateHospitalForm').submit();
+        });
+
+        $.validator.addMethod("time",
+            function (value, element) {
+                var fullTime = value.split('-');
+                var startTime = fullTime[0].trim();
+                var endTime = fullTime[1].trim();
+
+                var startValue = parseInt(startTime.replace(':', ''), 10);
+                var endValue = parseInt(endTime.replace(':', ''), 10);
+
+                if ((startValue >= 0) && (endValue <= 2400) && (startValue < endValue)) {
+                    if (((startValue % 100 <= 59) && (startValue % 100 >= 0)) &&
+                        ((endValue % 100 <= 59) && (endValue % 100 >= 0))) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }, "@ErrorMessage.CEM023");
+
+        $.validator.addMethod("phone",
+            function (value, element) {
+                return /^[0-9() ]*$/.test(value);
+            }, "@string.Format(ErrorMessage.CEM005, Constants.PhoneNo)");
+
+        $.validator.addMethod("notEqual",
+            function (value, element, param) {
+                var a = param;
+                return this.optional(element) || value != $(param).val();
+            }, "@Html.Raw(ErrorMessage.CEM025)");
+
+        $('#updateHospitalForm').validate({
+            // Rules for form validation
+            rules: {
+                HospitalName: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 64
+                },
+                HospitalTypeID: {
+                    required: true
+                },
+                LocationAddress: {
+                    required: true,
+                    maxlength: 32
+                },
+                StreetAddress: {
+                    required: true,
+                    maxlength: 32
+                },
+                CityID: {
+                    required: true
+                },
+                DistrictID: {
+                    required: true
+                },
+                WardID: {
+                    required: true
+                },
+                PhoneNo: {
+                    required: true,
+                    minlength: 8,
+                    maxlength: 13,
+                    phone: true
+                },
+                PhoneNo2: {
+                    minlength: 8,
+                    maxlength: 13,
+                    phone: true
+                },
+                PhoneNo3: {
+                    minlength: 11,
+                    maxlength: 13,
+                    digits: true
+                },
+                Email: {
+                    email: true
+                },
+                PersonInCharged: {
+                    email: true
+                },
+                Website: {
+                    url: true
+                },
+                Fax: {
+                    minlength: 8,
+                    maxlength: 16,
+                    phone: true
+                },
+                OrdinaryStartTime: {
+                    required: true,
+                    time: true
+                },
+                HolidayStartTime: {
+                    required: true,
+                    time: true
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                HospitalName: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.HospitalName)',
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.HospitalName, 2)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.HospitalName, 64)'
+                },
+                HospitalTypeID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.HospitalType)'
+                },
+                LocationAddress: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.LocationAddress)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.LocationAddress, 32)'
+                },
+                StreetAddress: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.StreetAddress)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.StreetAddress, 32)'
+                },
+                CityID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.City)'
+                },
+                DistrictID: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.District)'
+                },
+                Ward: {
+                    required: '@string.Format(ErrorMessage.CEM011, Constants.Ward)'
+                },
+                PhoneNo: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.PhoneNo)',
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.PhoneNo, 8)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.PhoneNo, 13)'
+                },
+                PhoneNo2: {
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.AlternativePhone, 8)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.AlternativePhone, 13)',
+                },
+                PhoneNo3: {
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.MobilePhone, 11)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.MobilePhone, 13)',
+                    digits: '@string.Format(ErrorMessage.CEM005, Constants.MobilePhone)'
+                },
+                Email: {
+                    email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
+                },
+                PersonInCharged: {
+                    email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
+                },
+                Website: {
+                    url: '@string.Format(ErrorMessage.CEM005, Constants.Website)'
+                },
+                Fax: {
+                    minlength: '@string.Format(ErrorMessage.CEM012, Constants.Fax, 8)',
+                    maxlength: '@string.Format(ErrorMessage.CEM003, Constants.Fax, 16)',
+                    phone: '@string.Format(ErrorMessage.CEM005, Constants.Fax)'
+                },
+                OrdinaryStartTime: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.OrdinaryTime)'
+                },
+                HolidayStartTime: {
+                    required: '@string.Format(ErrorMessage.CEM001, Constants.HolidayTime)'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
+
+    @*Google map*@
+    $(document).ready(function () {
+        // Check if browser support identifying current location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(initializeMap);
+        }
+        else {
+            setNotification("@Html.Raw(ErrorMessage.CEM026)", 2);
+        }
+
+        // Declare marker - Make it global so only one marker can be created
+        var marker;
+        // Time out variable to prevent double click event creating new marker
+        var update_timeout = null;
+        // Declare variable to create Google map
+        var map;
+        // Variable to analyze coordinate from address
+        var geocoder;
+
+        // Display current location
+        function initializeMap(position) {
+            // Get current latitude and longitude
+            var coordinate = '@Model.Coordinate';
+            var latitude = coordinate.split(',')[0].trim();
+            var longitude = coordinate.split(',')[1].trim();
+            var currentLocation = new google.maps.LatLng(latitude, longitude);
+            geocoder = new google.maps.Geocoder();
+
+            // Initial map options
+            var mapOptions = {
+                zoom: 11,
+                center: currentLocation,
+                mapTypeControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            // Create the map, and place it in the HTML google-map div
+            map = new google.maps.Map(
+                document.getElementById("google-map"), mapOptions
+            );
+
+            marker = new google.maps.Marker({
+                position: currentLocation,
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP
+            });
+
+            // Allow create marker on click event after 300ms
+            google.maps.event.addListener(map, 'click', function (event) {
+                update_timeout = setTimeout(function () {
+                    placeMarker(event.latLng);
+                    // Get coordinate at the marker's location after clicking on map
+                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                    $('#Coordinate').val(currentCoordinate).trigger('change');
+                }, 300);
+            });
+
+            // Prevent double click event to create new marker
+            google.maps.event.addListener(map, 'dblclick', function (event) {
+                clearTimeout(update_timeout);
+            });
+
+            // Get coordinate at the marker's location after dragging process
+            google.maps.event.addListener(marker, 'dragend', function (event) {
+                var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                $('#Coordinate').val(currentCoordinate).trigger('change');
+            });
+        }
+
+        // Press button get location from address
+        $("#button-get-loction").click(function () {
+            if ($("#FullAddress").val().trim() == "") {
+                setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM015)', 0);
+                $("#LocationAddress").focus();
+                return false;
+            }
+
+            if (($("#address-message").text() == '@Html.Raw(ErrorMessage.CEM016)') ||
+                ($("#address-message").text() == '@Html.Raw(ErrorMessage.CEM014)')) {
+                getCoordinateFromAddress();
+            }
+            return false;
+        });
+
+        // Allow creating only one marker at a time
+        function placeMarker(location) {
+            if (marker) {
+                marker.setPosition(location);
+            } else {
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP
+                });
+
+                // Get coordinate at the marker's location after dragging process
+                google.maps.event.addListener(marker, 'dragend', function (event) {
+                    var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                    $('#Coordinate').val(currentCoordinate).trigger('change');
+                });
+            }
+        }
+
+        // Get coordinate from a specific address
+        function getCoordinateFromAddress() {
+            $("#loaderIcon").show();
+            $("#validIcon").hide();
+            $("#invalidIcon").hide();
+            $("#address-message").text("@Html.Raw(ErrorMessage.CEM027)");
+
+            // Take full address
+            var address = $("#FullAddress").val();
+            address = address + ", " + "Việt Nam";
+
+            // Query address from Google
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                // Check if address is understandable
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+
+                    // Check if marker is already existed
+                    if (marker != null) {
+                        marker.setMap(null);
+                    }
+
+                    // Create marker
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        draggable: true,
+                        animation: google.maps.Animation.DROP
+                    });
+
+                    // Get coordinate at the marker's location after dragging process
+                    google.maps.event.addListener(marker, 'dragend', function (event) {
+                        var currentCoordinate = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+                        $('#Coordinate').val(currentCoordinate).trigger('change');
+                    });
+
+                    // Set coordinate value
+                    var currentCoordinate = results[0].geometry.location.lat().toFixed(6) +
+                        ", " + results[0].geometry.location.lng().toFixed(6);
+                    $('#Coordinate').val(currentCoordinate).trigger('change');
+
+                    // Display message
+                    setAddressNotificationMessage('@Html.Raw(ErrorMessage.CEM016)', 1);
+                } else {
+                    setAddressNotificationMessage("@Html.Raw(ErrorMessage.CEM032)", 0);
+                    setNotification("@Html.Raw(ErrorMessage.CEM032)", 2);
+                }
+            });
+            return false;
+        }
+    });
+
+    @*Summer note*@
+    $(document).ready(function () {
+        $('#summernote').summernote({
+            lang: 'vi-VN',
+            height: 400,
+            minHeight: null,
+            maxHeight: null,
+            focus: false
+        });
+    });
+
+    @*Drop zone*@
+    $(document).ready(function () {
+        var myDropzoneOptions = {
+            url: "@Url.Action("SaveUploadFile")",
+            previewsContainer: ".dropzone-previews",
+            maxFiles: 10,
+            parallelUploads: 10,
+            maxfilesexceeded: function (file) {
+                setNotification("@string.Format(@ErrorMessage.CEM033, 10.ToString())", 2);
+            },
+            maxFilesize: 5,
+            acceptedFiles: "image/jpeg,image/png,image/jpg,image/gif",
+            uploadMultiple: true,
+            addRemoveLinks: true,
+            autoProcessQueue: false,
+            init: function () {
+                this.on("complete", function (data) {
+                    var res = eval('(' + data.xhr.responseText + ')');
+                });
+                this.on("removedfile", function (file) {
+                    $.ajax({
+                        cache: false,
+                        type: "GET",
+                        url: "@(Url.RouteUrl("DeleteUploadFile"))",
+                        data: {
+                            "id": file.id,
+                            "fileName": file.name,
+                            "type": 1
+                        },
+                        success: function (data) {
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            $("#invalidIcon").show();
+                            setNotification("Không thể cập nhật hình ảnh, xin vui lòng thử lại sau", 3);
+                        }
+                    });
+                });
+            }
+        }
+        var myDropzone = new Dropzone('#my-awesome-dropzone', myDropzoneOptions);
+        var mockFile = null;
+        var fileName = '';
+        @foreach (Photo photo in Model.PhotoList)
+        {
+            <text>
+                fileName = "@photo.File_Path".split('/')[2];
+                mockFile = { name: fileName, size: 12345, id: "@photo.Photo_ID" };
+                myDropzone.options.addedfile.call(myDropzone, mockFile);
+                myDropzone.options.thumbnail.call(myDropzone, mockFile, "@photo.File_Path");
+            </text>
+        }
     });
 
 </script>
+
+<style>
+    #google-map {
+        height: 400px;
+        width: 100%;
+    }
+
+    .resizeIcon {
+        width: 16px;
+        height: auto;
+    }
+
+    #dropZone {
+        background: gray;
+        border: black dashed 3px;
+        width: 200px;
+        padding: 50px;
+        text-align: center;
+        color: white;
+    }
+</style>
