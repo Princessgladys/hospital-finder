@@ -1368,6 +1368,24 @@
                 this.on("complete", function (data) {
                     var res = eval('(' + data.xhr.responseText + ')');
                 });
+                this.on("removedfile", function (file) {
+                    $.ajax({
+                        cache: false,
+                        type: "GET",
+                        url: "@(Url.RouteUrl("DeleteUploadFile"))",
+                        data: {
+                            "id": file.id,
+                            "fileName": file.name,
+                            "type": 1
+                        },
+                        success: function (data) {
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            $("#invalidIcon").show();
+                            setNotification("Không thể cập nhật hình ảnh, xin vui lòng thử lại sau", 3);
+                        }
+                    });
+                });
             }
         }
         var myDropzone = new Dropzone('#my-awesome-dropzone', myDropzoneOptions);
@@ -1377,7 +1395,7 @@
         {
             <text>
                 fileName = "@photo.File_Path".split('/')[2];
-                mockFile = { name: fileName, size: 12345 };
+                mockFile = { name: fileName, size: 12345, id: "@photo.Photo_ID" };
                 myDropzone.options.addedfile.call(myDropzone, mockFile);
                 myDropzone.options.thumbnail.call(myDropzone, mockFile, "@photo.File_Path");
             </text>

@@ -651,6 +651,28 @@ namespace HospitalF.Controllers
             return Json(new { Message = fName });
         }
 
+        /// <summary>
+        /// Delete file from server
+        /// </summary>
+        /// <param name="id">File ID</param>
+        /// <param name="fileName">File name</param>
+        /// <param name="type">File type. 1: Photo, 2: Excel</param>
+        /// <returns></returns>
+        public async Task<ActionResult> DeleteUploadFile(
+            int id, string fileName, int type)
+        {
+            try
+            {
+                int result = await FileUtil.DeleteFileFromServer(id, fileName, type);
+                return Json(new { value = result }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            } 
+        }
+
         #endregion
 
         #region Display Hospital List
