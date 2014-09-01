@@ -114,7 +114,7 @@ class="active"
                                                 }
                                                 else
                                                 {
-                                                    <img style="width:150px; height:150px" alt="" src="@(doctor.Gender == true ? "../Content/img/avatars/doctor_ logo.jpg" : "../Content/img/avatars/avatar-doctor.jpg")">
+                                                    <img style="width:150px; height:150px" alt="" src="@(doctor.Gender == true ? "../Content/img/avatars/male.jpg" : "../Content/img/avatars/female.jpg")">
                                                 }
                                             </td>
                                             <td><a href="/Hospital/UpdateDoctor?doctorId=@(doctor.Doctor_ID)">@(doctor.Last_Name + " " + doctor.First_Name)</a></td>

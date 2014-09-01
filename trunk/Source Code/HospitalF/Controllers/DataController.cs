@@ -786,9 +786,9 @@ namespace HospitalF.Controllers
                             diseaseList = await model.LoadListOfDisease(
                                     model.DiseaseName, model.IsActive, 3, 0);
                         }
-                        
+
                     }
-                    
+
                     ViewBag.CurrentStatus = model.IsActive;
                     ViewBag.CurrentMode = model.Mode;
                     ViewBag.CurrentOption = model.Option;
@@ -1095,10 +1095,9 @@ namespace HospitalF.Controllers
             try
             {
                 string exclusiveEmail = "";
-                if (SimpleSessionPersister.Username != null)
-                {
-                    exclusiveEmail = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
-                }
+
+                exclusiveEmail = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+
                 ViewBag.UserList = AccountModel.LoadUser(email.Trim(), userRole, userStatus, exclusiveEmail).ToPagedList(page, Constants.PageSize);
                 List<Role> roleList = AccountModel.LoadUserRole();
                 ViewBag.RoleTypeList = new SelectList(roleList, "Role_ID", "Role_Name", userRole);
