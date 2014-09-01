@@ -989,17 +989,81 @@ namespace HospitalF.Controllers
                 string updatedContent = string.Empty;
                 model.CreatedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
 
+                #region Handle photo
+
+                // Take file path from session
+                List<string> filePath = new List<string>();
+                if (Session[Constants.FileInSession] != null)
+                {
+                    filePath = (List<string>)Session[Constants.FileInSession];
+                    for (int n = 0; n < filePath.Count; n++)
+                    {
+                        if (n == (filePath.Count - 1))
+                        {
+                            model.PhotoFilesPath += filePath[n];
+                        }
+                        else
+                        {
+                            model.PhotoFilesPath += filePath[n] +
+                                Constants.VerticalBar.ToString();
+                        }
+                    }
+                    // Set photo session to null value
+                    Session[Constants.FileInSession] = null;
+                }
+                else
+                {
+                    model.PhotoFilesPath = string.Empty;
+                }
+
+                #endregion
+
                 // Return list of dictionary words
                 using (LinqDBDataContext data = new LinqDBDataContext())
                 {
                     result = await model.UpdateHospitalAsync(model);
                 }
 
+                // Check if insert process is success or not
+                if (result == 0)
+                {
+                    ViewBag.UpdateHospitalStatus = 0.ToString() + Constants.Minus + model.HospitalName;
+                }
+                else
+                {
+                    ViewBag.UpdateHospitalStatus = 1.ToString() + Constants.Minus + model.HospitalName;
+                }
+
+                model = await model.LoadSpecificHospital(model.HospitalID);
+
                 #region cascading dropdownlist
 
+                // Load list of cities
+                cityList = await LocationUtil.LoadCityAsync();
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
-                ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
-                ViewBag.WardList = new SelectList(wardList, Constants.WardID, Constants.WardName);
+
+                // Load list of districts
+                districtList = await LocationUtil.LoadDistrictInCityAsync(model.CityID);
+                var districtResult = (from d in districtList
+                                      select new
+                                      {
+                                          District_ID = d.District_ID,
+                                          District_Name = d.Type + Constants.WhiteSpace + d.District_Name
+                                      });
+                ViewBag.DistrictList = new SelectList(districtResult, Constants.DistrictID, Constants.DistrictName);
+
+                // Load list of districts
+                wardList = await LocationUtil.LoadWardInDistrictAsync(model.DistrictID);
+                var wardResult = (from w in wardList
+                                  select new
+                                  {
+                                      Ward_ID = w.Ward_ID,
+                                      Ward_Name = w.Type + Constants.WhiteSpace + w.Ward_Name
+                                  });
+                ViewBag.WardList = new SelectList(wardResult, Constants.WardID, Constants.WardName);
+
+                // Load list of hospital types
+                hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
                 ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
 
                 //Load list of specialities
@@ -1014,16 +1078,6 @@ namespace HospitalF.Controllers
                 ViewBag.FacilityList = facilityList;
 
                 #endregion
-
-                // Check if insert process is success or not
-                if (result == 0)
-                {
-                    ViewBag.UpdateHospitalStatus = 0.ToString() + Constants.Minus + model.HospitalName;
-                }
-                else
-                {
-                    ViewBag.UpdateHospitalStatus = 1.ToString() + Constants.Minus + model.HospitalName;
-                }
             }
             catch (Exception exception)
             {

@@ -89,8 +89,9 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body">
-                        @using (Html.BeginForm(Constants.AddHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "updateHospitalForm", @enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm(Constants.UpdateHospitalAction, Constants.HospitalController, FormMethod.Post, new { @class = "smart-form", @id = "updateHospitalForm", @enctype = "multipart/form-data" }))
                         {
+                            @Html.TextBoxFor(m => m.HospitalID, new { @type = "hidden" })
                             <fieldset>
                                 <legend>Thông tin căn bản</legend>
                                 <div class="row">
@@ -331,7 +332,7 @@
                                                 multiple="multiple" name="SelectedSpecialities"
                                                 style="width:100%" tabindex="-1">
                                             @{
-                                                if (Model.SelectedSpecialities.Count() == 0)
+                                                if (Model.SelectedSpecialities != null && Model.SelectedSpecialities.Count() == 0)
                                                 {
                                                     foreach (var speciality in Model.SpecialityList)
                                                     {
@@ -384,8 +385,8 @@
                                             string isInsertedSelectedOption = 0.ToString();
                                             string isInsertedOption = 0.ToString();
                                             string previousOptGroup = string.Empty;
-                                            
-                                            if (Model.SelectedServices.Count() == 0)
+
+                                            if (Model.SelectedServices != null && Model.SelectedServices.Count() == 0)
                                             {
                                                 @Html.DropDownGroupListFor(m => m.SelectedServices,
                                                     (IEnumerable<GroupedSelectListItem>)ViewBag.ServiceList,
@@ -491,7 +492,7 @@
                                             isInsertedOption = 0.ToString();
                                             previousOptGroup = string.Empty;
 
-                                            if (Model.SelectedFacilities.Count() == 0)
+                                            if (Model.SelectedFacilities != null && Model.SelectedFacilities.Count() == 0)
                                             {
                                                 @Html.DropDownGroupListFor(m => m.SelectedFacilities,
                                                     (IEnumerable<GroupedSelectListItem>)ViewBag.FacilityList,
@@ -694,11 +695,11 @@
 
     @*Display notification*@
     function displayNotification() {
-        // Add hospital
-        if ('@ViewBag.AddHospitalStatus' == '') {
+        // Update hospital
+        if ('@ViewBag.UpdateHospitalStatus' == '') {
             return false;
         } else {
-            var returnValue = '@ViewBag.AddHospitalStatus';
+            var returnValue = '@ViewBag.UpdateHospitalStatus';
             returnValue = returnValue.split('-');
             var status = returnValue[0];
             var hospitalName = returnValue[1];
