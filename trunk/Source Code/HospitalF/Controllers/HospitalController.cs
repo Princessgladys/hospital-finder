@@ -58,7 +58,6 @@ namespace HospitalF.Controllers
             }
         }
 
-        [HttpGet]
         [LayoutInjecter(Constants.HospitalUserLayout)]
         [Authorize(Roles = Constants.HospitalUserRoleName)]
         public async Task<ActionResult> AddDoctor()
