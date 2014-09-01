@@ -118,13 +118,12 @@ BEGIN
 			BEGIN
 				INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 				SELECT DISTINCT wh.Hospital_ID, @NonDiacriticIndexOfTag
-				FROM Tag w, Tag_Hospital wh
+				FROM [NON_DIACRITIC_TAG] w, Tag_Hospital wh
 				WHERE w.Word_ID = wh.Word_ID AND
-					  [Type] = 3 AND
-					  (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](w.Word) + N'%' LIKE
+					  (N'%' + w.Word + N'%' LIKE
 					   N'%' + @NonDiacriticWhatPhrase + N'%' OR
 					   N'%' + @NonDiacriticWhatPhrase + N'%' LIKE
-					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](w.Word) + N'%')		  
+					   N'%' + w.Word + N'%')		  
 			END
 		END
 
@@ -176,13 +175,13 @@ BEGIN
 			BEGIN
 				INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 				SELECT DISTINCT h.Hospital_ID, @NonDiacriticIndexOfSpeciality
-				FROM Speciality s, Hospital h, Hospital_Speciality hs
+				FROM [NON_DIACRITIC_SPECIALITY] s, Hospital h, Hospital_Speciality hs
 				WHERE h.Hospital_ID = hs.Hospital_ID AND
 					  hs.Speciality_ID = s.Speciality_ID AND
-					  (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' LIKE
+					  (N'%' + s.Speciality_Name + N'%' LIKE
 					   N'%' + @NonDiacriticWhatPhrase + N'%'OR
 					   N'%' + @NonDiacriticWhatPhrase + N'%' LIKE 
-					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%')	  
+					   N'%' + s.Speciality_Name + N'%')	  
 			END
 		END
 
@@ -201,9 +200,10 @@ BEGIN
 			INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 			SELECT DISTINCT h.Hospital_ID, @ExactlyIndexOfDisease
 			FROM Disease d, Speciality_Disease sd,
-				 Hospital h, Hospital_Speciality hs
+				 Hospital h, Hospital_Speciality hs, Speciality s
 			WHERE h.Hospital_ID = hs.Hospital_ID AND
-				  hs.Speciality_ID = sd.Speciality_ID AND
+				  hs.Speciality_ID = s.Speciality_ID AND
+				  s.Speciality_ID = sd.Speciality_ID AND
 				  sd.Disease_ID = d.Disease_ID AND
 				  (N'%' + Disease_Name + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
 				   N'%' + @WhatPhrase + N'%' LIKE N'%' + Disease_Name + N'%') 
@@ -217,9 +217,10 @@ BEGIN
 			SET @NumOfHospitalFoundByRelativeDisease = 
 					(SELECT COUNT(d.Disease_ID)
 					 FROM Disease d, Speciality_Disease sd,
-						  Hospital h, Hospital_Speciality hs
+						  Hospital h, Hospital_Speciality hs, Speciality s
 					 WHERE h.Hospital_ID = hs.Hospital_ID AND
-						   hs.Speciality_ID = sd.Speciality_ID AND
+						   hs.Speciality_ID = s.Speciality_ID AND
+						   s.Speciality_ID = sd.Speciality_ID AND
 						   sd.Disease_ID = d.Disease_ID AND
 						   FREETEXT (Disease_Name, @WhatPhrase))
 
@@ -229,9 +230,10 @@ BEGIN
 				INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 				SELECT DISTINCT h.Hospital_ID, @RelativeIndexOfDisease 
 				FROM Disease d, Speciality_Disease sd,
-					 Hospital h, Hospital_Speciality hs
+					 Hospital h, Hospital_Speciality hs, Speciality s
 				WHERE h.Hospital_ID = hs.Hospital_ID AND
-					  hs.Speciality_ID = sd.Speciality_ID AND
+					  hs.Speciality_ID = s.Speciality_ID AND
+					  s.Speciality_ID = sd.Speciality_ID AND
 					  sd.Disease_ID = d.Disease_ID AND
 					  FREETEXT (Disease_Name, @WhatPhrase)
 			END
@@ -240,15 +242,16 @@ BEGIN
 			BEGIN
 				INSERT INTO @TempHospitalList (Hospital_ID, [Index])
 				SELECT DISTINCT h.Hospital_ID, @NonDiacriticIndexOfDisease
-				FROM Disease d, Speciality_Disease sd,
-					 Hospital h, Hospital_Speciality hs
+				FROM [NON_DIACRITIC_DISEASE] d, Speciality_Disease sd,
+					 Hospital h, Hospital_Speciality hs, Speciality s
 				WHERE h.Hospital_ID = hs.Hospital_ID AND
-					  hs.Speciality_ID = sd.Speciality_ID AND
+					  hs.Speciality_ID = s.Speciality_ID AND
+					  s.Speciality_ID = sd.Speciality_ID AND
 					  sd.Disease_ID = d.Disease_ID AND
-					  (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%' LIKE
+					  (N'%' + d.Disease_Name + N'%' LIKE
 					   N'%' + @NonDiacriticWhatPhrase + N'%' OR
 					   N'%' + @NonDiacriticWhatPhrase + N'%' LIKE 
-					   N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Disease_Name) + N'%')
+					   N'%' + d.Disease_Name + N'%')
 			END
 		END
 	END

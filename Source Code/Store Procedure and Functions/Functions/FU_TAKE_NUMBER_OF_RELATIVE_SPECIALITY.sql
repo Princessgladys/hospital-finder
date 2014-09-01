@@ -31,13 +31,13 @@ BEGIN
 	ELSE
 	BEGIN
 		SELECT @NumberOfSpeciality = (SELECT COUNT(s.Speciality_ID)
-									  FROM Speciality s, Hospital h, Hospital_Speciality hs
+									  FROM [NON_DIACRITIC_SPECIALITY] s, Hospital h, Hospital_Speciality hs
 									  WHERE h.Hospital_ID = @HospitalID AND
 											h.Hospital_ID = hs.Hospital_ID AND
 											hs.Speciality_ID = s.Speciality_ID AND
 											(N'%' + @WhatPhrase + N'%' LIKE 
-										     N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' OR
-										     N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](Speciality_Name) + N'%' LIKE
+										     N'%' + s.Speciality_Name + N'%' OR
+										     N'%' + s.Speciality_Name + N'%' LIKE
 										     N'%' + @WhatPhrase + N'%'))
 	END
 

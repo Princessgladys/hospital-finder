@@ -31,14 +31,13 @@ BEGIN
 	ELSE
 	BEGIN
 		SELECT @NumberOfTag = (SELECT COUNT(w.Word_ID)
-							   FROM Tag w, Tag_Hospital wh
+							   FROM [NON_DIACRITIC_TAG] w, Tag_Hospital wh
 							   WHERE wh.Hospital_ID = @HospitalID AND
 									 w.Word_ID = wh.Word_ID AND
-									 w.[Type] = 3 AND
-									 (N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](w.Word) + N'%' LIKE
+									 (N'%' + w.Word + N'%' LIKE
 								      N'%' + @WhatPhrase + N'%' OR
 								      N'%' + @WhatPhrase + N'%' LIKE
-								      N'%' + [dbo].[FU_TRANSFORM_TO_NON_DIACRITIC_VIETNAMESE](w.Word) + N'%'))
+								      N'%' + w.Word + N'%'))
 	END
 	
 	IF (@NumberOfTag IS NULL)

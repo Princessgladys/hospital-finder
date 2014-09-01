@@ -100,5 +100,5 @@ BEGIN
  
 	SET @l_str = REPLACE(@l_str, N'đ', 'd');
 
-    RETURN @strInput
+    RETURN @l_str
 END
