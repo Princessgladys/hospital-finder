@@ -106,5 +106,43 @@ namespace HospitalF.Utilities
             // Return new file name
             return newFileName + extension;
         }
+
+        /// <summary>
+        /// Delete file from server
+        /// </summary>
+        /// <param name="id">File ID</param>
+        /// <param name="fileName">File name</param>
+        /// <param name="type">File type. 1: Photo, 2: Excel</param>
+        /// <returns>1: Successful, 0: Failed</returns>
+        public static async Task<int> DeleteFileFromServer(
+            int id, string fileName,int type)
+        {
+            int result = 0;
+
+            // Check file type
+            if (type == 1)
+            {
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    Photo deleteFile = await Task.Run(() =>
+                        (from p
+                        in data.Photos
+                        where p.Photo_ID == id
+                        select p).SingleOrDefault());
+                    data.Photos.DeleteOnSubmit(deleteFile);
+                    result = data.GetChangeSet().Deletes.Count;
+                    data.SubmitChanges();   
+                    if (result != 0)
+                    {
+                        string fileLocation = WebConfigurationManager.AppSettings[Constants.PhotoFolder];
+                        string filePath = Path.Combine(fileLocation, fileName);
+                        File.Delete(filePath);
+                    }
+                }
+            }
+
+            // Return delete result
+            return result;
+        }
     }
 }

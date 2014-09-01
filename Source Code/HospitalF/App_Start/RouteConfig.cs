@@ -147,6 +147,11 @@ namespace HospitalF
                             "data/adddisease/",
                             new { controller = "Data", action = "AddDisease" },
                             new[] { "HospitalF.Controllers" });
+
+            routes.MapRoute("DeleteUploadFile",
+                            "hospital/deleteuploadfile/",
+                            new { controller = "Data", action = "DeleteUploadFile" },
+                            new[] { "HospitalF.Controllers" });
         }
     }
 }
