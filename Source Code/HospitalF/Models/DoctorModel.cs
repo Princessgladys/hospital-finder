@@ -20,6 +20,7 @@ namespace HospitalF.Models
         public string Experience { get; set; }
         public int PhotoID { get; set; }
         public string PhotoFilePath { get; set; }
+        public int UploadedPerson { get; set; }
         public int SpecialityID { get; set; }
         public string SpecialityName { get; set; }
         public List<int> SpecialityList { get; set; }
@@ -78,19 +79,36 @@ namespace HospitalF.Models
                     {
                         workingDay = workingDay + wd + ',';
                     }
-                    workingDay = workingDay.Substring(0, workingDay.Length - 1);
+                    if (workingDay.Length > 0)
+                    {
+                        workingDay = workingDay.Substring(0, workingDay.Length - 1);
+                    }
                     Doctor doctor = new Doctor()
                                     {
-                                        First_Name = model.FirstName != null ? model.FirstName.Trim() : model.FirstName,
-                                        Last_Name = model.LastName != null ? model.LastName.Trim() : model.LastName,
+                                        First_Name = model.FirstName,
+                                        Last_Name = model.LastName,
                                         Gender = model.Gender == 1 ? true : false,
-                                        Degree = model.Degree != null ? model.Degree.Trim() : model.Degree,
-                                        Experience = model.Experience != null ? model.Experience.Trim() : model.Experience,
-                                        Working_Day = workingDay,
+                                        Degree = model.Degree,
+                                        Experience = model.Experience,
+                                        Working_Day = string.IsNullOrEmpty(workingDay) ? null : workingDay,
                                         Is_Active = true
                                     };
                     data.Doctors.InsertOnSubmit(doctor);
                     data.SubmitChanges();
+
+                    Photo photo = new Photo()
+                    {
+                        File_Path = model.PhotoFilePath,
+                        Caption = model.LastName + " " + model.FirstName,
+                        Add_Date = DateTime.Now,
+                        Doctor_ID = doctor.Doctor_ID,
+                        Uploaded_Person = model.UploadedPerson,
+                        Is_Active = true
+                    };
+
+                    data.Photos.InsertOnSubmit(photo);
+                    data.SubmitChanges();
+
                     foreach (int specilityId in model.SpecialityList)
                     {
                         Doctor_Speciality ds = new Doctor_Speciality()
@@ -166,18 +184,21 @@ namespace HospitalF.Models
                     {
                         workingDay = workingDay + wd + ',';
                     }
-                    workingDay = workingDay.Substring(0, workingDay.Length - 1);
+                    if (workingDay.Length > 0)
+                    {
+                        workingDay = workingDay.Substring(0, workingDay.Length - 1);
+                    }
                     Doctor doctor = (from d in data.Doctors
                                      where d.Doctor_ID == model.DoctorID
                                      select d).SingleOrDefault();
                     if (doctor != null)
                     {
-                        doctor.First_Name = model.FirstName != null ? model.FirstName.Trim() : model.FirstName;
-                        doctor.Last_Name = model.LastName != null ? model.LastName.Trim() : model.LastName;
+                        doctor.First_Name = model.FirstName;
+                        doctor.Last_Name = model.LastName;
                         doctor.Gender = model.Gender == 1 ? true : false;
-                        doctor.Degree = model.Degree != null ? model.Degree.Trim() : model.Degree;
-                        doctor.Experience = model.Experience != null ? model.Experience.Trim() : model.Experience;
-                        doctor.Working_Day = workingDay;
+                        doctor.Degree = model.Degree;
+                        doctor.Experience = model.Experience;
+                        doctor.Working_Day = string.IsNullOrEmpty(workingDay) ? null : workingDay;
                         doctor.Is_Active = true;
                         data.SubmitChanges();
 
@@ -197,6 +218,31 @@ namespace HospitalF.Models
                                 Is_Active = true
                             };
                             data.Doctor_Specialities.InsertOnSubmit(ds);
+                            data.SubmitChanges();
+                        }
+
+                        Photo photo = (from p in data.Photos
+                                       where p.Doctor_ID == doctor.Doctor_ID
+                                       select p).SingleOrDefault();
+                        if (photo != null)
+                        {
+                            photo.File_Path = model.PhotoFilePath;
+                            photo.Uploaded_Person = model.UploadedPerson;
+                            data.SubmitChanges();
+                        }
+                        else
+                        {
+                            Photo newPhoto = new Photo()
+                            {
+                                File_Path = model.PhotoFilePath,
+                                Caption = model.LastName + " " + model.FirstName,
+                                Add_Date = DateTime.Now,
+                                Doctor_ID = doctor.Doctor_ID,
+                                Uploaded_Person = model.UploadedPerson,
+                                Is_Active = true
+                            };
+
+                            data.Photos.InsertOnSubmit(newPhoto);
                             data.SubmitChanges();
                         }
                     }

@@ -72,6 +72,7 @@ class="active"
                                             @Html.TextBoxFor(m => m.HospitalName, new { @placeholder = "Tên bệnh viện", @disabled = "disabled" })
                                             @Html.TextBoxFor(m => m.HospitalID, new { @type = "hidden" })
                                             @Html.TextBoxFor(m => m.DoctorID, new { @type = "hidden" })
+                                            @Html.TextBoxFor(m => m.UploadedPerson, new { @type = "hidden" })
                                         </label>
                                     </section>
 
@@ -210,10 +211,12 @@ class="active"
                                             <div class="button">
                                                 <input id="avatar" type="file" name="file">Duyệt
                                             </div>
-                                            <input type="text" placeholder="Chọn ảnh đại diện..." readonly="">
+                                            <input type="text" placeholder="Chọn ảnh đại diện..." readonly="" value="@(Model.PhotoFilePath)">
                                         </label>
                                     </section>
-                                    <div id="holder"></div>
+                                    <div id="holder">
+                                        <img src="@(Model.PhotoFilePath)"/>
+                                    </div>
                                     <div class="text-center">
                                         <strong class="txt-color-blue">Xem trước ảnh đại diện</strong>
                                     </div>

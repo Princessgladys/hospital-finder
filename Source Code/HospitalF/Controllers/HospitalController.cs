@@ -37,16 +37,15 @@ namespace HospitalF.Controllers
             try
             {
                 int hospitalId = 0;
-                if (SimpleSessionPersister.Username != null)
+
+                string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+                int? temp = AccountModel.LoadUserByEmail(email).Hospital_ID;
+                if (temp == null)
                 {
-                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
-                    int? temp = AccountModel.LoadUserByEmail(email).Hospital_ID;
-                    if (temp == null)
-                    {
-                        temp = 0;
-                    }
-                    hospitalId = (int)temp;
+                    temp = 0;
                 }
+                hospitalId = (int)temp;
+
                 ViewBag.DoctorList = DoctorModel.LoadDoctorList(hospitalId, doctorName.Trim()).ToPagedList(page, Constants.PageSize);
                 ViewBag.DoctorName = doctorName;
                 ViewBag.DeactivateStatus = TempData["DeactivateStatus"];
@@ -67,14 +66,14 @@ namespace HospitalF.Controllers
             try
             {
                 DoctorModel model = new DoctorModel();
-                if (SimpleSessionPersister.Username != null)
-                {
-                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
-                    int hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
-                    HospitalEntity hospital = await HomeModel.LoadHospitalById(hospitalId);
-                    model.HospitalID = hospital.Hospital_ID;
-                    model.HospitalName = hospital.Hospital_Name;
-                }
+
+                string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+                model.UploadedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+                int hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+                HospitalEntity hospital = await HomeModel.LoadHospitalById(hospitalId);
+                model.HospitalID = hospital.Hospital_ID;
+                model.HospitalName = hospital.Hospital_Name;
+
                 List<SelectListItem> genderSelectListItem = new List<SelectListItem>()
                                                                 {
                                                                     new SelectListItem {Value = "1", Text = "Nam"},
@@ -112,6 +111,49 @@ namespace HospitalF.Controllers
         {
             try
             {
+                // Upload Photo
+                HttpPostedFileBase file = Request.Files["file"];
+                if (file != null)
+                {
+                    if (file.ContentLength > 0)
+                    {
+                        if (file.ContentType.ToLower() == "image/jpg" ||
+                            file.ContentType.ToLower() == "image/jpeg" ||
+                            file.ContentType.ToLower() == "image/pjpeg" ||
+                            file.ContentType.ToLower() == "image/gif" ||
+                            file.ContentType.ToLower() == "image/x-png" ||
+                            file.ContentType.ToLower() == "image/png")
+                        {
+                            string filePath = (FileUtil.SaveFileToServer(file, Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]), 1));
+                            model.PhotoFilePath = filePath;
+                        }
+                    }
+                }
+
+                if (model.FirstName != null)
+                {
+                    model.FirstName.Trim();
+                }
+                if (model.LastName != null)
+                {
+                    model.LastName.Trim();
+                }
+                if (model.Degree != null)
+                {
+                    model.Degree.Trim();
+                }
+                if (model.Experience != null)
+                {
+                    model.Experience.Trim();
+                }
+                if (model.SpecialityList == null)
+                {
+                    model.SpecialityList = new List<int>();
+                }
+                if (model.WorkingDay == null)
+                {
+                    model.WorkingDay = new List<int>();
+                }
                 ViewBag.AddDoctorStatus = DoctorModel.InsertDoctor(model);
                 List<SelectListItem> genderSelectListItem = new List<SelectListItem>()
                                                                 {
@@ -156,14 +198,13 @@ namespace HospitalF.Controllers
             {
                 DoctorModel model = new DoctorModel();
                 int hospitalId = 0;
-                if (SimpleSessionPersister.Username != null)
-                {
-                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
-                    hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
-                    HospitalEntity hospital = await HomeModel.LoadHospitalById(hospitalId);
-                    model.HospitalID = hospital.Hospital_ID;
-                    model.HospitalName = hospital.Hospital_Name;
-                }
+
+                string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+                model.UploadedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+                hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+                HospitalEntity hospital = await HomeModel.LoadHospitalById(hospitalId);
+                model.HospitalID = hospital.Hospital_ID;
+                model.HospitalName = hospital.Hospital_Name;
 
                 DoctorEntity doctor = DoctorModel.LoadDoctorById(doctorId, hospitalId);
                 if (doctor != null)
@@ -174,6 +215,7 @@ namespace HospitalF.Controllers
                     model.Gender = doctor.Gender == true ? 1 : 2;
                     model.Degree = doctor.Degree;
                     model.Experience = doctor.Experience;
+                    model.PhotoFilePath = doctor.Photo != null ? doctor.Photo.File_Path : string.Empty;
                     List<int> selectedSpecilityList = new List<int>();
                     foreach (Speciality specility in doctor.Specialities)
                     {
@@ -230,15 +272,32 @@ namespace HospitalF.Controllers
         {
             try
             {
-                int hospitalId = 0;
-                if (SimpleSessionPersister.Username != null)
+                // Upload Photo
+                HttpPostedFileBase file = Request.Files["file"];
+                if (file != null)
                 {
-                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
-                    hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
-                    HospitalEntity hospital = await HomeModel.LoadHospitalById(hospitalId);
-                    model.HospitalID = hospital.Hospital_ID;
-                    model.HospitalName = hospital.Hospital_Name;
+                    if (file.ContentLength > 0)
+                    {
+                        if (file.ContentType.ToLower() == "image/jpg" ||
+                            file.ContentType.ToLower() == "image/jpeg" ||
+                            file.ContentType.ToLower() == "image/pjpeg" ||
+                            file.ContentType.ToLower() == "image/gif" ||
+                            file.ContentType.ToLower() == "image/x-png" ||
+                            file.ContentType.ToLower() == "image/png")
+                        {
+                            string filePath = (FileUtil.SaveFileToServer(file, Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]), 1));
+                            model.PhotoFilePath = filePath;
+                        }
+                    }
                 }
+
+                int hospitalId = 0;
+
+                string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+                hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+                HospitalEntity hospital = await HomeModel.LoadHospitalById(hospitalId);
+                model.HospitalID = hospital.Hospital_ID;
+                model.HospitalName = hospital.Hospital_Name;
 
                 List<SelectListItem> genderSelectListItem = new List<SelectListItem>()
                                                                 {
@@ -261,6 +320,30 @@ namespace HospitalF.Controllers
                 specialityList = await SpecialityUtil.LoadSpecialityAsync();
                 ViewBag.SpecialityList = specialityList;
 
+                if (model.FirstName != null)
+                {
+                    model.FirstName.Trim();
+                }
+                if (model.LastName != null)
+                {
+                    model.LastName.Trim();
+                }
+                if (model.Degree != null)
+                {
+                    model.Degree.Trim();
+                }
+                if (model.Experience != null)
+                {
+                    model.Experience.Trim();
+                }
+                if (model.SpecialityList == null)
+                {
+                    model.SpecialityList = new List<int>();
+                }
+                if (model.WorkingDay == null)
+                {
+                    model.WorkingDay = new List<int>();
+                }
                 ViewBag.UpdateDoctorStatus = DoctorModel.UpdateDoctor(model);
 
                 return View(model);
@@ -279,11 +362,10 @@ namespace HospitalF.Controllers
             try
             {
                 int hospitalId = 0;
-                if (SimpleSessionPersister.Username != null)
-                {
-                    string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
-                    hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
-                }
+
+                string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+                hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+
                 DateTime fromDate = new DateTime();
                 DateTime toDate = new DateTime();
                 if (string.IsNullOrEmpty(sFromDate) || string.IsNullOrEmpty(sToDate))
@@ -336,11 +418,10 @@ namespace HospitalF.Controllers
         public ActionResult ApproveFeedback(int feedbackId = 0)
         {
             int hospitalId = 0;
-            if (SimpleSessionPersister.Username != null)
-            {
-                string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
-                hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
-            }
+
+            string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+            hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+
             TempData["ApproveStatus"] = FeedBackModel.ApproveHospitalUserFeedback(feedbackId, hospitalId);
             return Redirect(Request.UrlReferrer.AbsoluteUri);
         }
@@ -380,11 +461,10 @@ namespace HospitalF.Controllers
         public ActionResult DeactivateDoctor(int doctorId)
         {
             int hospitalId = 0;
-            if (SimpleSessionPersister.Username != null)
-            {
-                string email = SimpleSessionPersister.Username.Split(Char.Parse(Constants.Minus))[0];
-                hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
-            }
+
+            string email = User.Identity.Name.Split(Char.Parse(Constants.Minus))[0];
+            hospitalId = (int)AccountModel.LoadUserByEmail(email).Hospital_ID;
+
             TempData["DeactivateStatus"] = DoctorModel.DeactivateDoctor(doctorId, hospitalId);
             return Redirect(Request.UrlReferrer.AbsoluteUri);
         }

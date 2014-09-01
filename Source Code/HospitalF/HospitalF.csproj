@@ -351,7 +351,9 @@
     <Content Include="Content\img\Appointment_Banner.jpg" />
     <Content Include="Content\img\avatars\avatar-doctor.jpg" />
     <Content Include="Content\img\avatars\doctor_ logo.jpg" />
+    <Content Include="Content\img\avatars\female.jpg" />
     <Content Include="Content\img\avatars\images.jpg" />
+    <Content Include="Content\img\avatars\male.jpg" />
     <Content Include="Content\img\avatars\sunny-big.png" />
     <Content Include="Content\img\avatars\sunny.png" />
     <Content Include="Content\img\background_1.jpg" />
