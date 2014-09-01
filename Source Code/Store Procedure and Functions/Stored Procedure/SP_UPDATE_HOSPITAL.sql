@@ -24,12 +24,12 @@ CREATE PROCEDURE SP_UPDATE_HOSPITAL
 	@Coordinate VARCHAR(26),
 	@IsAllowAppointment BIT,
 	@CreatedPerson INT,
-	@FullDescription NVARCHAR(4000),
+	@FullDescription NVARCHAR(MAX),
 	@SpecialityList NVARCHAR(4000),
 	@ServiceList NVARCHAR(4000),
 	@FacilityList NVARCHAR(4000),
 	@TagInput NVARCHAR(4000),
-	@PhotoList NVARCHAR(4000)
+	@PhotoList NVARCHAR(MAX)
 AS
 BEGIN
 	BEGIN TRANSACTION T
@@ -86,7 +86,7 @@ BEGIN
 		BEGIN
 			DECLARE @RowNumber INT = 1
 			DECLARE @TotalToken INT = 0
-			DECLARE @Token VARCHAR(4)
+			DECLARE @Token NVARCHAR(256)
 			DECLARE @TotalSpeciality INT = 0
 			DECLARE @TempSpecialityID INT = 0
 			DECLARE @TempSpecialityName NVARCHAR(256) = N''
