@@ -213,7 +213,16 @@ namespace HospitalF.Models
         /// </summary>
         public string FacilityName { get; set; }
 
+        /// <summary>
+        /// Get/Set value for property SpecialityList
+        /// </summary>
         public List<Speciality> SpecialityList { get; set; }
+
+        /// <summary>
+        /// Get/Set value for property PhotoList
+        /// </summary>
+        public List<Photo> PhotoList { get; set; }
+
         public List<Service> ServiceList { get; set; }
         public List<Facility> FacilityList { get; set; }
         public string SpecialityName { get; set; }
@@ -574,6 +583,15 @@ namespace HospitalF.Models
                          DistrictName = h.District_Name,
                          WardName = h.Ward_Name
                      }).SingleOrDefault());
+
+                #endregion
+
+                #region Load photo
+
+                model.PhotoList = (await Task.Run(() =>
+                    (from p in data.Photos
+                     where p.Hospital_ID == model.HospitalID
+                     select p).ToList()));
 
                 #endregion
 

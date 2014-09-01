@@ -782,7 +782,10 @@ class="active"
                 var endValue = parseInt(endTime.replace(':', ''), 10);
 
                 if ((startValue >= 0) && (endValue <= 2400) && (startValue < endValue)) {
-                    return true;
+                    if (((startValue % 100 <= 59) && (startValue % 100 >= 0)) &&
+                        ((endValue % 100 <= 59) && (endValue % 100 >= 0))) {
+                        return true;
+                    }
                 }
 
                 return false;
@@ -1093,7 +1096,7 @@ class="active"
 
     @*Drop zone*@
     $(document).ready(function () {
-        $("div#my-awesome-dropzone").dropzone({
+        var myDropzoneOptions = {
             url: "@Url.Action("SaveUploadFile")",
             previewsContainer: ".dropzone-previews",
             maxFiles: 10,
@@ -1111,7 +1114,8 @@ class="active"
                     var res = eval('(' + data.xhr.responseText + ')');
                 });
             }
-        });
+        }
+        var myDropzone = new Dropzone('#my-awesome-dropzone', myDropzoneOptions);
     });
 
 </script>
