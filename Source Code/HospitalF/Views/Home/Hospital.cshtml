@@ -3,11 +3,13 @@
 }
 @using HospitalF.Constant;
 @using HospitalF.Entities;
+@using HospitalF.Models;
 @using Recaptcha.Web.Mvc;
 @model HospitalF.Models.HospitalModel
 @{
     HospitalEntity hospital = (HospitalEntity)ViewBag.HospitalEntity;
     List<DoctorEntity> doctorList = ViewBag.DoctorList;
+    List<Photo> photoList = ViewBag.Photos;
     ViewBag.Title = "Tìm kiếm bệnh viện - " + hospital.Hospital_Name;
 
     Uri uri = new Uri(Request.Url.AbsoluteUri);
@@ -176,8 +178,7 @@
                                     {
                                         <div class="form-group">
                                             <label><strong class="txt-color-red">Vui lòng nhập mã bảo mật bên dưới</strong></label>
-                                            <div id="recapcha">
-                                            </div>
+                                            @Html.Recaptcha(language: "vi")
                                         </div>          
                                     }
                                 </fieldset>
@@ -341,156 +342,142 @@
                     <div class="col-md-12">
                         <h5>Danh sách bác sĩ thuộc bệnh viện</h5>
                         <hr />
-                        <br />
-                        <br />
-                        <table class="table table-striped table-bordered table-hover" id="doctor-table">
-                            <thead>
-                                <tr>
-                                    <th>Hình ảnh</th>
-                                    <th>Họ tên</th>
-                                    <th>Chuyên khoa</th>
-                                    <th>Chứng chỉ / Bằng cấp</th>
-                                    <th>Kinh nghiệm</th>
-                                    <th>Lịch làm việc</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-body">
-                                @if (doctorList.Count == 0)
-                                {
+                        @if (doctorList.Count == 0)
+                        {
+                            <p><strong>Danh sách bác sĩ chưa cập nhật.</strong></p>
+                        }
+                        else
+                        {
+                            <br />
+                            <br />
+                            <table class="table table-striped table-bordered table-hover" id="doctor-table">
+                                <thead>
                                     <tr>
-                                        <td colspan="6">Danh sách bác sĩ chưa cập nhật.</td>
+                                        <th>Hình ảnh</th>
+                                        <th>Họ tên</th>
+                                        <th>Chuyên khoa</th>
+                                        <th>Chứng chỉ / Bằng cấp</th>
+                                        <th>Kinh nghiệm</th>
+                                        <th>Lịch làm việc</th>
                                     </tr>
-                                }
-                                else
-                                {
-                                    foreach (DoctorEntity doctor in doctorList)
-                                    {
-                                    <tr>
-                                        <td>
-                                            @if (doctor.Photo != null)
-                                            {
-                                                <img style="width:150px; height:150px" alt="@(doctor.Photo.Caption)" src="@(doctor.Photo.File_Path)">
-                                            }
-                                            else
-                                            {
-                                                <img style="width:150px; height:150px" alt="" src="@(doctor.Gender == true ? "../Content/img/avatars/male.jpg" : "../Content/img/avatars/female.jpg")">
-                                            }
-                                        </td>
-                                        <td><strong class="txt-color-blue">@(doctor.Last_Name + " " + doctor.First_Name)</strong></td>
-                                        <td>
-                                            @foreach (HospitalF.Models.Speciality speciality in doctor.Specialities)
-                                            {
-                                                <strong>@(speciality.Speciality_Name), </strong>
-                                            }
-                                        </td>
-                                        <td>@(doctor.Degree)</td>
-                                        <td>@(doctor.Experience)</td>
-                                        <td>
-                                            @if (doctor.Working_Day != null)
-                                            {
-                                                List<int> workingDayList = doctor.Working_Day.Split(',').Select(n => Convert.ToInt32(n)).ToList<int>();
-                                                foreach (int day in workingDayList)
-                                                {
-                                                    switch (day)
-                                                    {
-                                                        case 2:
-                                                <span>Thứ Hai, </span>
-                                                            break;
-                                                        case 3:
-                                                <span>Thứ Ba, </span>
-                                                            break;
-                                                        case 4:
-                                                <span>Thứ Tư, </span>
-                                                            break;
-                                                        case 5:
-                                                <span>Thứ Năm, </span>
-                                                            break;
-                                                        case 6:
-                                                <span>Thứ Sáu, </span>
-                                                            break;
-                                                        case 7:
-                                                <span>Thứ Bảy, </span>
-                                                            break;
-                                                        case 8:
-                                                <span>Chủ Nhật</span>
-                                                            break;
-                                                        default:
-                                                            break;
+                                </thead>
+                                <tbody id="table-body">
 
+                                    @foreach (DoctorEntity doctor in doctorList)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (doctor.Photo != null)
+                                                {
+                                                    <img style="width:150px; height:150px" alt="@(doctor.Photo.Caption)" src="@(doctor.Photo.File_Path)">
+                                                }
+                                                else
+                                                {
+                                                    <img style="width:150px; height:150px" alt="" src="@(doctor.Gender == true ? "../Content/img/avatars/male.jpg" : "../Content/img/avatars/female.jpg")">
+                                                }
+                                            </td>
+                                            <td><strong class="txt-color-blue">@(doctor.Last_Name + " " + doctor.First_Name)</strong></td>
+                                            <td>
+                                                @foreach (HospitalF.Models.Speciality speciality in doctor.Specialities)
+                                                {
+                                                    <strong>@(speciality.Speciality_Name), </strong>
+                                                }
+                                            </td>
+                                            <td>@(doctor.Degree)</td>
+                                            <td>@(doctor.Experience)</td>
+                                            <td>
+                                                @if (doctor.Working_Day != null)
+                                                {
+                                                    List<int> workingDayList = doctor.Working_Day.Split(',').Select(n => Convert.ToInt32(n)).ToList<int>();
+                                                    foreach (int day in workingDayList)
+                                                    {
+                                                        switch (day)
+                                                        {
+                                                            case 2:
+                                                    <span>Thứ Hai, </span>
+                                                                break;
+                                                            case 3:
+                                                    <span>Thứ Ba, </span>
+                                                                break;
+                                                            case 4:
+                                                    <span>Thứ Tư, </span>
+                                                                break;
+                                                            case 5:
+                                                    <span>Thứ Năm, </span>
+                                                                break;
+                                                            case 6:
+                                                    <span>Thứ Sáu, </span>
+                                                                break;
+                                                            case 7:
+                                                    <span>Thứ Bảy, </span>
+                                                                break;
+                                                            case 8:
+                                                    <span>Chủ Nhật</span>
+                                                                break;
+                                                            default:
+                                                                break;
+
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
                                     }
-                                }
-                            </tbody>
-                        </table>
-
+                                </tbody>
+                            </table>
+                        }
                     </div>
-            </div>
-        </div>
-        <div class="tab-pane fade in" id="s4">
-            <div class="row">
-                <div class="image-gallery col-md-12">
-                    <div class="image-box">
-                        <a href="~/Content/img/banner01.jpg" title="Shanghai Kiss" data-gallery="">
-                            <img src="~/Content/img/banner01.jpg"></a>
-                    </div>
-
-                    <div class="image-box">
-                        <a href="~/Content/img/banner02.jpg" title="Shanghai Kiss" data-gallery="">
-                            <img src="~/Content/img/banner02.jpg"></a>
-                    </div>
-
-                    <div class="image-box">
-                        <a href="http://farm4.static.flickr.com/3918/14739267834_c8eaca03b3_b.jpg" title="Shanghai Kiss" data-gallery="">
-                            <img src="http://farm4.static.flickr.com/3918/14739267834_c8eaca03b3_b.jpg"></a>
-                    </div>
-                    <div class="image-box">
-                        <a href="~/Content/img/banner03.jpg" title="Shanghai Kiss" data-gallery="">
-                            <img src="~/Content/img/banner03.jpg"></a>
-                    </div>
-                    <div class="image-box">
-                        <a href="~/Content/img/background_1.jpg" title="Shanghai Kiss" data-gallery="">
-                            <img src="~/Content/img/background_1.jpg"></a>
-                    </div>
-                    @foreach (HospitalF.Models.Photo p in ViewBag.Photos)
-                    {
-                        <div class="image-box">
-                            <a href="@(p.File_Path)" title="@(p.Caption)" data-gallery="">
-                                <img src="@(p.File_Path)"></a>
-                        </div>
-                    }
                 </div>
-                <div id="blueimp-gallery" class="blueimp-gallery">
-                    <!-- The container for the modal slides -->
-                    <div class="slides"></div>
-                    <!-- Controls for the borderless lightbox -->
-                    <h3 class="title"></h3>
-                    <a class="prev">‹</a>
-                    <a class="next">›</a>
-                    <a class="close">×</a>
-                    <a class="play-pause"></a>
-                    <ol class="indicator"></ol>
-                    <!-- The modal dialog, which will be used to wrap the lightbox content -->
-                    <div class="modal fade">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title"></h4>
-                                </div>
-                                <div class="modal-body next"></div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left prev">
-                                        <i class="glyphicon glyphicon-chevron-left"></i>
-                                        Trước
-                                    </button>
-                                    <button type="button" class="btn btn-primary next">
-                                        Tiếp
+            </div>
+            <div class="tab-pane fade in" id="s4">
+                <div class="row">
+                    <div class="image-gallery col-md-12">
+                        <h5>Hình ảnh của bệnh viện</h5>
+                        <hr />
+                        @if (photoList.Count > 0)
+                        {
+                            foreach (Photo p in photoList)
+                            {
+                            <div class="image-box">
+                                <a href="@(p.File_Path)" title="@(p.Caption)" data-gallery="">
+                                    <img src="@(p.File_Path)"></a>
+                            </div>
+                            }
+                        }
+                        else
+                        {
+                            <p><strong>Chưa cập nhật thông tin.</strong></p>
+                        }
+                    </div>
+                    <div id="blueimp-gallery" class="blueimp-gallery">
+                        <!-- The container for the modal slides -->
+                        <div class="slides"></div>
+                        <!-- Controls for the borderless lightbox -->
+                        <h3 class="title"></h3>
+                        <a class="prev">‹</a>
+                        <a class="next">›</a>
+                        <a class="close">×</a>
+                        <a class="play-pause"></a>
+                        <ol class="indicator"></ol>
+                        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+                        <div class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title"></h4>
+                                    </div>
+                                    <div class="modal-body next"></div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default pull-left prev">
+                                            <i class="glyphicon glyphicon-chevron-left"></i>
+                                            Trước
+                                        </button>
+                                        <button type="button" class="btn btn-primary next">
+                                            Tiếp
                         <i class="glyphicon glyphicon-chevron-right"></i>
-                                    </button>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -499,14 +486,13 @@
             </div>
         </div>
     </div>
-</div>
-<div class="col-md-12">
-    <hr />
-    <div class="fb-like" data-href="@(url)" data-layout="standard" data-action="recommend" data-show-faces="true" data-share="true"></div>
-    <hr />
-    <div class="fb-comments" data-href="@(url)" data-colorscheme="light" data-numposts="10" data-width="100%">
+    <div class="col-md-12">
+        <hr />
+        <div class="fb-like" data-href="@(url)" data-layout="standard" data-action="recommend" data-show-faces="true" data-share="true"></div>
+        <hr />
+        <div class="fb-comments" data-href="@(url)" data-colorscheme="light" data-numposts="10" data-width="100%">
+        </div>
     </div>
-</div>
 </div>
 </div>
 
@@ -652,7 +638,7 @@
 
                 var request = {
                     origin: userlocation,
-                    destination: '@(hospital.Address)',
+                    destination: '@Html.Raw(hospital.Address)',
                     unitSystem: google.maps.UnitSystem.METRIC,
                     provideRouteAlternatives: true,
                     travelMode: google.maps.TravelMode.DRIVING
@@ -796,17 +782,20 @@
     }
 
     function runDataTables() {
-		/*
+        /*
 		 * BASIC
 		 */
-		$('#doctor-table').dataTable({
-			"sPaginationType" : "bootstrap_full"
-		});
+        $('#doctor-table').dataTable({
+            "sPaginationType": "bootstrap_full"
+        });
     }
 
     @* Display notification messages *@
     $(document).ready(function () {
-        runDataTables();
+        var count = @(doctorList.Count);
+        if (count > 0) {
+            runDataTables();
+        }
         var rateActionStatus = '@(ViewBag.RateActionStatus)';
         if (rateActionStatus) {
             if (rateActionStatus == 'True') {
@@ -816,11 +805,4 @@
             }
         }
     });
-
-    Recaptcha.create("6LdtmfcSAAAAAG_B70ytdUBGpHMqwU_w_x19VizT", "recapcha",
-                        {
-                            theme: "red",
-                            callback: Recaptcha.focus_response_field
-                        }
-                    );
 </script>
