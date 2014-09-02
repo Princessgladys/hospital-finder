@@ -270,5 +270,46 @@ namespace HospitalF.Models
                 return true;
             }
         }
+
+        public static List<DoctorEntity> LoadDoctorListByHospitalId(int hospitalId)
+        {
+            List<DoctorEntity> doctorList = null;
+            using (LinqDBDataContext data = new LinqDBDataContext())
+            {
+                doctorList = (from d in data.Doctors
+                              from dh in d.Doctor_Hospitals
+                              where dh.Hospital_ID == hospitalId &&
+                                    d.Is_Active == true
+                              select new DoctorEntity()
+                              {
+                                  Doctor_ID = d.Doctor_ID,
+                                  First_Name = d.First_Name,
+                                  Last_Name = d.Last_Name,
+                                  Gender = d.Gender,
+                                  Degree = d.Degree,
+                                  Experience = d.Experience,
+                                  Working_Day = d.Working_Day,
+                                  Is_Active = d.Is_Active
+                              }).ToList<DoctorEntity>();
+
+                List<Speciality> specialities = null;
+                Photo photo = new Photo();
+                foreach (DoctorEntity doctor in doctorList)
+                {
+                    specialities = (from d in data.Doctors
+                                    from ds in d.Doctor_Specialities
+                                    where doctor.Doctor_ID == d.Doctor_ID
+                                    select ds.Speciality).ToList<Speciality>();
+                    photo = (from p in data.Photos
+                             where doctor.Doctor_ID == p.Doctor_ID
+                             select p).SingleOrDefault();
+
+                    doctor.Specialities = specialities;
+                    doctor.Photo = photo;
+                }
+            }
+            return doctorList;
+            
+        }
     }
 }

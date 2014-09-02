@@ -491,12 +491,12 @@ namespace HospitalF.Models
             // Search for suitable hospitals in database
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
+                /*
                 hospitalList = await Task.Run(() =>
                     (from h in data.SP_NORMAL_SEARCH_HOSPITAL(whatPhrase.Trim().ToLower(),
                          cityId, districtId)
                      select new HospitalEntity()
                      {
-                         /*
                          Hospital_ID = h.Hospital_ID,
                          Hospital_Name = h.Hospital_Name,
                          Address = h.Address,
@@ -507,8 +507,8 @@ namespace HospitalF.Models
                          Coordinate = h.Coordinate,
                          Is_Active = h.Is_Active,
                          Rating = h.Rating
-                          * */
                      }).ToList());
+            */
             }
 
             // Return list of hospitals
