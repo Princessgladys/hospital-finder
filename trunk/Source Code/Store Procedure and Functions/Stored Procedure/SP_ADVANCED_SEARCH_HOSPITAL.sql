@@ -105,7 +105,7 @@ BEGIN
 
 				INSERT INTO @ResultHospitalList
 				SELECT @TempHospitalID,
-					   [dbo].[RETURN_SORT_PRIORITY] (@TempHospitalID, 99, NULL)
+					   [dbo].[RETURN_SORT_PRIORITY] (@TempHospitalID, 99, NULL, NULL)
 
 				SET @RowNum += 1
 			END
@@ -188,7 +188,7 @@ BEGIN
 
 				INSERT INTO @ResultHospitalList
 				SELECT @TempHospitalID,
-					   [dbo].[RETURN_SORT_PRIORITY] (@TempHospitalID, 99, NULL)
+					   [dbo].[RETURN_SORT_PRIORITY] (@TempHospitalID, 99, NULL, NULL)
 
 				SET @RowNum += 1
 			END
