@@ -489,7 +489,18 @@ namespace HospitalF.Models
                     {
                         i = inputQuery.IndexOf(firstLocation.ToLower());
                         tempWhat = inputQuery.Substring(0, i);
-                        where = inputQuery.Substring(i).Trim().ToLower();
+                        if (string.IsNullOrEmpty(tempWhat))
+                        {
+                            where = firstLocation;
+                            if (firstLocation.Length != inputQuery.Length)
+                            {
+                                tempWhat = inputQuery.Substring(firstLocation.Length).Trim().ToLower();
+                            }
+                        }
+                        else
+                        {
+                            where = inputQuery.Substring(i).Trim().ToLower();
+                        }
                     }
                     else
                     {
