@@ -223,7 +223,7 @@ namespace HospitalF.Controllers
                 cityList = await LocationUtil.LoadCityAsync();
                 ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
                 // Load list of districts
-                districtList = new List<District>();
+                districtList = await LocationUtil.LoadDistrictInCityAsync(model.CityID);
                 ViewBag.DistrictList = new SelectList(districtList, Constants.DistrictID, Constants.DistrictName);
                 // Load list of specialities
                 specialityList = await SpecialityUtil.LoadSpecialityAsync();
@@ -390,6 +390,7 @@ namespace HospitalF.Controllers
                         ViewBag.FeedbackStatus = TempData["FeedbackStatus"];
                         ViewBag.FeedbackMessage = TempData["FeedbackMessage"];
                         ViewBag.HospitalEntity = hospital;
+                        ViewBag.DoctorList = DoctorModel.LoadDoctorListByHospitalId(hospitalId);
                         ViewBag.Photos = HomeModel.LoadPhotosByHospitalId(hospitalId);
                     }
                     else
@@ -525,34 +526,5 @@ namespace HospitalF.Controllers
         }
         #endregion
 
-        #region search doctor
-        public async Task<ActionResult> SearchDoctor(string SpecialityID, string DoctorName, string HospitalID)
-        {
-            try
-            {
-                int tempSpecialityID, tempHospitalID;
-                List<Doctor> doctorList = new List<Doctor>();
-                ViewBag.Hospital = Int32.Parse(HospitalID);
-                if (SpecialityID == "")
-                {
-                    SpecialityID = "0";
-                }
-                if (!String.IsNullOrEmpty(SpecialityID) && Int32.TryParse(SpecialityID, out tempSpecialityID)
-                    && Int32.TryParse(HospitalID, out tempHospitalID))
-                {
-                    doctorList = await HospitalUtil.SearchDoctor(DoctorName, tempSpecialityID, tempHospitalID);
-                    ViewBag.DoctorList = doctorList;
-                    ViewBag.HospitalID = tempHospitalID;
-                }
-                return PartialView("SearchDoctor");
-            }
-            catch (Exception ex)
-            {
-                LoggingUtil.LogException(ex);
-                return RedirectToAction(Constants.SystemFailureHospitalUserAction, Constants.ErrorController);
-            }
-
-        }
-        #endregion
     }
 }

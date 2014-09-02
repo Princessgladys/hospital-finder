@@ -8,6 +8,7 @@
     ViewBag.Title = "Tìm kiếm bệnh viện - Kết quả tìm kiếm";
     IPagedList<HospitalEntity> hospitalList = (IPagedList<HospitalEntity>)ViewBag.HospitalList;
     string suggestionSentence = (string)@ViewBag.SuggestionSentence;
+    string button = ViewBag.SearchType;
 }
 
 <!-- MAIN CONTENT -->
@@ -65,18 +66,17 @@
 
         <div class="col-md-12 no-padding">
             <hr />
-            @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = ViewBag.SearchType }))
-            {
-                string button = ViewBag.SearchType;
-                <div class="panel-group smart-accordion-default" id="accordion">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" @(Constants.LocationSearchForm.Equals(button) ? string.Empty : "class=collapsed")>
-                                <i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>Tìm Kiếm Theo Vị Trí </a>
-                            </h4>
-                        </div>
-                        <div id="collapseOne" class="panel-collapse collapse @(Constants.LocationSearchForm.Equals(button) ? "in" : string.Empty)">
-                            <div class="panel-body no-padding">
+            <div class="panel-group smart-accordion-default" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" @(Constants.LocationSearchForm.Equals(button) ? string.Empty : "class=collapsed")>
+                            <i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>Tìm Kiếm Theo Vị Trí </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse @(Constants.LocationSearchForm.Equals(button) ? "in" : string.Empty)">
+                        <div class="panel-body no-padding">
+                            @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = Constants.LocationSearchForm }))
+                            {
                                 <fieldset>
                                     <legend>Nhập thông tin vị trí</legend>
                                     <div class="row">
@@ -110,16 +110,19 @@
                                         <i class="fa fa-search"></i>&nbsp;Tìm kiếm
                                     </button>
                                 </footer>
-                            </div>
+                            }
                         </div>
                     </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" @(Constants.AdvancedSearchForm.Equals(button) ? string.Empty : "class=collapsed")>
-                                <i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>Tìm Kiếm Nâng Cao </a></h4>
-                        </div>
-                        <div id="collapseTwo" class="panel-collapse collapse @(Constants.AdvancedSearchForm.Equals(button) ? "in" : string.Empty)">
-                            <div class="panel-body no-padding">
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" @(Constants.AdvancedSearchForm.Equals(button) ? string.Empty : "class=collapsed")>
+                            <i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>Tìm Kiếm Nâng Cao </a></h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse @(Constants.AdvancedSearchForm.Equals(button) ? "in" : string.Empty)">
+                        <div class="panel-body no-padding">
+                            @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = Constants.AdvancedSearchForm }))
+                            {
                                 <fieldset>
                                     <legend>Nhập thông tin bệnh viện</legend>
                                     <div class="row">
@@ -154,11 +157,11 @@
                                             <label class="input">
                                                 <i class="icon-append fa fa-plus-square"></i>
                                                 @Html.TextBoxFor(m => m.DiseaseName, new
-                                       {
-                                           @class = "form-control",
-                                           @placeholder = "Triệu chứng...",
-                                           @id = "disease-tag"
-                                       })
+                                           {
+                                               @class = "form-control",
+                                               @placeholder = "Triệu chứng...",
+                                               @id = "disease-tag"
+                                           })
                                                 <b class="tooltip tooltip-top-right">Nhập triệu chứng bệnh</b>
                                             </label>
                                         </section>
@@ -169,105 +172,13 @@
                                         <i class="fa fa-search"></i>&nbsp;Tìm kiếm
                                     </button>
                                 </footer>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
-            }
-            @*
-            @using (Html.BeginForm(Constants.SearchResultAction, Constants.HomeController, FormMethod.Get, new { @class = "smart-form", @id = ViewBag.SearchType }))
-            {
-                string button = ViewBag.SearchType;
-                if (Constants.LocationSearchForm.Equals(button))
-                {
-                <fieldset>
-                    <legend>Nhập thông tin vị trí</legend>
-                    <div class="row">
-                        <label class="label col col-2">Tìm theo</label>
-                        <section class="col col-4">
-                            <label class="select">
-                                @Html.DropDownListFor(m => m.LocationType, (SelectList)ViewBag.LocationTypeList, new { @class = "form-control" })
-                                <i></i>
-                            </label>
-                        </section>
-                        <label class="label col col-2" id="CurrentLocationLabel">Vị trí cần tìm</label>
-                        <section class="col col-4" id="CurrentLocationSection">
-                            <label class="input">
-                                <i class="icon-append fa fa-location-arrow"></i>
-                                @Html.TextBoxFor(m => m.Position, new { @class = "form-control", @placeholder = "Vị trí cần tìm...", })
-                                @Html.TextBoxFor(m => m.Coordinate, new { @type = "hidden" })
-                                <b class="tooltip tooltip-top-right">Nhập vị trí cần tìm</b>
-                            </label>
-                        </section>
-                        <label class="label col col-2">Bán kính</label>
-                        <section class="col col-4">
-                            <label class="select">
-                                @Html.DropDownListFor(m => m.Radius, (SelectList)ViewBag.RadiusList, new { @class = "form-control" })
-                                <i></i>
-                            </label>
-                        </section>
-                    </div>
-                </fieldset>
-                <footer>
-                    <button class="btn btn-default btn-primary" type="submit" value="@(ViewBag.SearchType)" name="@(Constants.Button)">
-                        <i class="fa fa-search"></i>&nbsp;Tìm kiếm
-                    </button>
-                </footer>
-                }
-                else if (Constants.AdvancedSearchForm.Equals(button))
-                {
-                <fieldset>
-                    <legend>Nhập thông tin bệnh viện</legend>
-                    <div class="row">
-                        <label class="label col col-2">Tỉnh / Thành phố</label>
-                        <section class="col col-4">
-                            <label class="select">
-                                @Html.DropDownListFor(m => m.CityID, (SelectList)ViewBag.CityList,
-                                                Constants.RequireCity, new { @class = "form-control" })
-                                <i></i>
-                            </label>
-                        </section>
-                        <label class="label col col-2">Quận / Huyện</label>
-                        <section class="col col-4">
-                            <label class="select">
-                                @Html.DropDownListFor(m => m.DistrictID, (SelectList)ViewBag.DistrictList,
-                                                Constants.RequireDistrict, new { @class = "form-control" })
-                                <i></i>
-                            </label>
-                        </section>
-                    </div>
-                    <div class="row">
-                        <label class="label col col-2">Chuyên khoa</label>
-                        <section class="col col-4">
-                            <label class="select">
-                                @Html.DropDownListFor(m => m.SpecialityID, (SelectList)ViewBag.SpecialityList,
-                                                Constants.RequireSpeciality, new { @class = "form-control" })
-                                <i></i>
-                            </label>
-                        </section>
-                        <label class="label col col-2">Triệu chứng</label>
-                        <section class="col col-4">
-                            <label class="input">
-                                <i class="icon-append fa fa-plus-square"></i>
-                                @Html.TextBoxFor(m => m.DiseaseName, new
-                                       {
-                                           @class = "form-control",
-                                           @placeholder = "Triệu chứng...",
-                                           @id = "disease-tag"
-                                       })
-                                <b class="tooltip tooltip-top-right">Nhập triệu chứng bệnh</b>
-                            </label>
-                        </section>
-                    </div>
-                </fieldset>
-                <footer>
-                    <button class="btn btn-default btn-primary" type="submit" value="@(ViewBag.SearchType)" name="@(Constants.Button)">
-                        <i class="fa fa-search"></i>&nbsp;Tìm kiếm
-                    </button>
-                </footer>
-                }
-            }
-            *@
+            </div>
+
+
         </div>
     </div>
 
@@ -340,6 +251,10 @@
                     <br>
                     <br>
                 </div>
+            }
+            else
+            {
+                <p><strong>Không có kết quả tìm kiếm. Xin hãy thử lại với truy vấn khác.</strong></p>
             }
         </div>
 
