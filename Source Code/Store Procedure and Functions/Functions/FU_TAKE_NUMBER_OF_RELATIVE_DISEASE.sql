@@ -33,17 +33,14 @@ BEGIN
 	ELSE
 	BEGIN
 		SELECT @NumberOfDisease = (SELECT COUNT(d.Disease_ID)
-								   FROM Disease d, Speciality_Disease sd,
+								   FROM [NON_DIACRITIC_DISEASE] d, Speciality_Disease sd,
 										Hospital h, Hospital_Speciality hs, Speciality s
 								   WHERE h.Hospital_ID = @HospitalID AND
 									     h.Hospital_ID = hs.Hospital_ID AND
 									     hs.Speciality_ID = sd.Speciality_ID AND
 									     s.Speciality_ID = sd.Speciality_ID AND
 									     sd.Disease_ID = d.Disease_ID AND
-										(N'%' + Disease_Name + N'%' LIKE
-									     N'%' + @WhatPhrase + N'%' OR
-										 N'%' + @WhatPhrase + N'%' LIKE
-										 N'%' + Disease_Name + N'%'))
+										 FREETEXT(d.Disease_Name, N'ngoai'))
 	END
 
 	IF (@NumberOfDisease IS NULL)

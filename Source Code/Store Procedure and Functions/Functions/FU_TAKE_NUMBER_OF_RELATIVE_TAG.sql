@@ -34,10 +34,7 @@ BEGIN
 							   FROM [NON_DIACRITIC_TAG] w, Tag_Hospital wh
 							   WHERE wh.Hospital_ID = @HospitalID AND
 									 w.Word_ID = wh.Word_ID AND
-									 (N'%' + w.Word + N'%' LIKE
-								      N'%' + @WhatPhrase + N'%' OR
-								      N'%' + @WhatPhrase + N'%' LIKE
-								      N'%' + w.Word + N'%'))
+									 FREETEXT (w.Word, @WhatPhrase))
 	END
 	
 	IF (@NumberOfTag IS NULL)

@@ -26,7 +26,7 @@ BEGIN
 									  WHERE h.Hospital_ID = @HospitalID AND
 											h.Hospital_ID = hs.Hospital_ID AND
 											hs.Speciality_ID = s.Speciality_ID AND
-											FREETEXT (Speciality_Name, @WhatPhrase))
+											FREETEXT (s.Speciality_Name, @WhatPhrase))
 	END
 	ELSE
 	BEGIN
@@ -35,10 +35,7 @@ BEGIN
 									  WHERE h.Hospital_ID = @HospitalID AND
 											h.Hospital_ID = hs.Hospital_ID AND
 											hs.Speciality_ID = s.Speciality_ID AND
-											(N'%' + @WhatPhrase + N'%' LIKE 
-										     N'%' + s.Speciality_Name + N'%' OR
-										     N'%' + s.Speciality_Name + N'%' LIKE
-										     N'%' + @WhatPhrase + N'%'))
+											FREETEXT (s.Speciality_Name, @WhatPhrase))
 	END
 
 

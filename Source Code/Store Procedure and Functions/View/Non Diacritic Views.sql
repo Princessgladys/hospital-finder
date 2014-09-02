@@ -12,7 +12,9 @@ WHERE [Type] = 3
 
 CREATE UNIQUE CLUSTERED INDEX [NON_DIACRITIC_INDEX]
 ON [dbo].[NON_DIACRITIC_TAG] (Word_ID)
-GO    
+
+CREATE INDEX [NON_DIACRITIC_NAME_INDEX]
+ON [dbo].[NON_DIACRITIC_TAG] (Word)
 
 -- SPECIALITY ----------------------------------------------------------------------
 IF OBJECT_ID ('[dbo].[NON_DIACRITIC_SPECIALITY]', 'V') IS NOT NULL
@@ -27,7 +29,9 @@ FROM [dbo].[Speciality]
 
 CREATE UNIQUE CLUSTERED INDEX [NON_DIACRITIC_INDEX]
 ON [dbo].[NON_DIACRITIC_SPECIALITY] (Speciality_ID)
-GO
+
+CREATE INDEX [NON_DIACRITIC_NAME_INDEX]
+ON [dbo].[NON_DIACRITIC_SPECIALITY] (Speciality_Name)
 
 -- DISEASE -------------------------------------------------------------------------
 IF OBJECT_ID ('[dbo].[NON_DIACRITIC_DISEASE]', 'V') IS NOT NULL
@@ -42,4 +46,6 @@ FROM [dbo].[Disease]
 
 CREATE UNIQUE CLUSTERED INDEX [NON_DIACRITIC_INDEX]
 ON [dbo].[NON_DIACRITIC_DISEASE] (Disease_ID)
-GO
+
+CREATE INDEX [NON_DIACRITIC_NAME_INDEX]
+ON [dbo].[NON_DIACRITIC_DISEASE] (Disease_Name)
