@@ -106,7 +106,7 @@
 
     <!-- RECAPCHA -->
     <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
-    
+
     <!-- DATA TABLE -->
     <script src="~/Content/js/plugin/datatables/jquery.dataTables-cust.min.js"></script>
     <script src="~/Content/js/plugin/datatables/ColReorder.min.js"></script>
@@ -114,7 +114,7 @@
     <script src="~/Content/js/plugin/datatables/media/js/TableTools.min.js"></script>
     <script src="~/Content/js/plugin/datatables/DT_bootstrap.js"></script>
     <script src="~/Content/js/plugin/datatables/jquery.tablesorter.js"></script>
-    
+
 </head>
 <body>
     <!-- HEADER -->
@@ -189,7 +189,7 @@
 
     <!-- FOOTER -->
     <div class="col-md-12 no-padding">
-        <div class="well" style="margin-bottom: 0px;">
+        <div class="well" style="margin-bottom: 0;">
             <div class="row">
                 <div class="col-md-8">
                     <p>
@@ -375,14 +375,14 @@
         @* Display notification messages *@
         $(document).ready(function () {
             var feedbackStatus = '@(ViewBag.FeedbackStatus)';
-        if (feedbackStatus) {
-            if (feedbackStatus == 'True') {
-                setNotification('Cám ơn bạn đã đóng góp ý kiến.', 1);
-            } else {
-                setNotification('Sai mã bảo mật. Vui lòng thao tác lại.', 3);
+            if (feedbackStatus) {
+                if (feedbackStatus == 'True') {
+                    setNotification('Cám ơn bạn đã đóng góp ý kiến.', 1);
+                } else {
+                    setNotification('Sai mã bảo mật. Vui lòng thao tác lại.', 3);
+                }
             }
-        }
-    });
+        });
     </script>
 </body>
 </html>
