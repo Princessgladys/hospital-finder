@@ -35,7 +35,8 @@ namespace HospitalF.Models
                               from dh in d.Doctor_Hospitals
                               where (d.Last_Name + " " + d.First_Name).Contains(doctorName) &&
                                     dh.Hospital_ID == hospitalId &&
-                                    d.Is_Active == true
+                                    d.Is_Active == true &&
+                                    dh.Is_Active == true
                               select new DoctorEntity()
                               {
                                   Doctor_ID = d.Doctor_ID,
@@ -263,14 +264,14 @@ namespace HospitalF.Models
         {
             using (LinqDBDataContext data = new LinqDBDataContext())
             {
-                Doctor doctor = (from d in data.Doctors
-                                 from dh in d.Doctor_Hospitals
-                                 where d.Doctor_ID == doctorId &&
-                                       dh.Hospital_ID == hospitalId
-                                 select d).SingleOrDefault();
-                if (doctor != null)
+                Doctor_Hospital doctor_hospital = (from d in data.Doctors
+                                                   from dh in d.Doctor_Hospitals
+                                                   where d.Doctor_ID == doctorId &&
+                                                         dh.Hospital_ID == hospitalId
+                                                   select dh).SingleOrDefault();
+                if (doctor_hospital != null)
                 {
-                    doctor.Is_Active = false;
+                    doctor_hospital.Is_Active = false;
                     data.SubmitChanges();
                 }
                 return true;
@@ -285,7 +286,8 @@ namespace HospitalF.Models
                 doctorList = (from d in data.Doctors
                               from dh in d.Doctor_Hospitals
                               where dh.Hospital_ID == hospitalId &&
-                                    d.Is_Active == true
+                                    d.Is_Active == true &&
+                                    dh.Is_Active == true
                               select new DoctorEntity()
                               {
                                   Doctor_ID = d.Doctor_ID,
@@ -315,7 +317,7 @@ namespace HospitalF.Models
                 }
             }
             return doctorList;
-            
+
         }
     }
 }
