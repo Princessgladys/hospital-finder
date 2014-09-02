@@ -619,6 +619,7 @@
     <Content Include="Views\Hospital\UpdateDoctor.cshtml" />
     <Content Include="Views\Hospital\Feedback.cshtml" />
     <Content Include="Views\Hospital\SearchQueryStatistic.cshtml" />
+    <Content Include="Views\Account\AddAccountSeperate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />

@@ -1,0 +1,333 @@
+﻿@model HospitalF.Models.AccountModel
+@using HospitalF.Constant
+
+@section AddAccountActive
+{
+    class="active"
+}
+
+@section BreadCrumb
+{
+    <ol class="breadcrumb">
+        <li>Trang Quản Lý</li>
+        <li>Tài khoản</li>
+        <li>Thêm Tài Khoản</li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-pencil-square-o fa-fw "></i>&nbsp;
+            Tài khoản
+            <span>
+                >
+                Thêm Tài Khoản
+            </span>
+        </h1>
+    </div>
+</div>
+
+<div class="alert alert-block alert-info">
+    <h4 class="alert-heading"><i class="fa fa-check-square-o"></i>&nbsp;Nhập thông tin</h4>
+    <p>
+        Điền những thông tin cần thiết vào bản mẫu. Sau đó ấn <code>Xác nhận</code> để tạo tài khoản bệnh viện mới.
+    </p>
+</div>
+
+<section id="widget-grid" class="">
+    <div class="alert alert-danger fade in" style="display: none;"
+         id="error-alert">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-times"></i>&nbsp;
+        <strong>Lỗi!</strong> Thao tác không thành công. Xin vui lòng thử lại.
+    </div>
+    <div class="alert alert-success fade in" style="display: none;"
+         id="success-alert">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>&nbsp;
+        <strong>Thành công</strong> Thêm mới bệnh viện thành công.
+    </div>
+    <!-- row -->
+    <div class="row">
+        <!-- NEW WIDGET START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0"
+                 data-widget-colorbutton="false"
+                 data-widget-editbutton="false"
+                 data-widget-togglebutton="false"
+                 data-widget-deletebutton="false"
+                 data-widget-fullscreenbutton="false"
+                 data-widget-custombutton="false"
+                 data-widget-collapsed="false"
+                 data-widget-sortable="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Thông tin tài khoản</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- end widget edit box -->
+                    <!-- widget content -->
+                    <div class="widget-body">
+                        <form action="/Account/AddAccountSeperate" id="add-user-form" class="smart-form" method="post">
+                            <fieldset>
+                                <section>
+                                    <div class="row">
+                                        <label class="label col col-2">Email chính</label>
+                                        <div class="col col-10">
+                                            <label class="input">
+                                                <i class="icon-append fa fa-envelope"></i>
+                                                <input type="email" name="Email" id="Email"
+                                                       placeholder="Nhập địa chỉ Email chính thức">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="label col col-2"></label>
+                                        <div class="col col-10">
+                                            <img src="../Content/img/loading-backup.gif" class="resizeIcon"
+                                                 style="display: none;" id="loaderIconEmail">
+                                            <img src="../Content/img/Status/Valid.ico" class="resizeIcon"
+                                                 style="display: none;" id="validIconEmail">
+                                            <img src="../Content/img/Status/Invalid.ico" class="resizeIcon"
+                                                 style="display: none;" id="invalidIconEmail">
+                                            <span id="email-message"></span>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section>
+                                    <div class="row">
+                                        <label class="label col col-2">Email phụ</label>
+                                        <div class="col col-10">
+                                            <label class="input">
+                                                <i class="icon-append fa fa-envelope"></i>
+                                                <input type="email" name="SecondaryEmail" id="SecondaryEmail"
+                                                       placeholder="Nhập địa chỉ Email phụ">
+                                            </label>
+                                            <div class="note">
+                                                <p>Sử dụng trong trường hợp cần tìm lại mật khẩu.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section>
+                                    <div class="row">
+                                        <label class="label col col-2">Họ</label>
+                                        <div class="col col-4">
+                                            <label class="input">
+                                                <i class="icon-append fa fa-male"></i>
+                                                <input name="LastName" id="LastName"
+                                                       placeholder="Họ">
+                                            </label>
+                                        </div>
+                                        <label class="label col col-2">Tên</label>
+                                        <div class="col col-4">
+                                            <label class="input">
+                                                <i class="icon-append fa fa-male"></i>
+                                                <input name="FirstName" id="FirstName"
+                                                       placeholder="Tên">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section>
+                                    <div class="row">
+                                        <label class="label col col-2">Số điện thoại</label>
+                                        <div class="col col-10">
+                                            <label class="input">
+                                                <i class="icon-append fa fa-phone"></i>
+                                                <input name="PhoneNumber" id="PhoneNumber"
+                                                       placeholder="Số điện thoại">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </section>
+                            </fieldset>
+
+                            <footer>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-save"></i>&nbsp;
+                                    Xác nhận
+                                </button>
+                            </footer>
+                        </form>
+                    </div>
+                    <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->
+    </div>
+    <!-- end row -->
+</section>
+
+<script>
+    @*Set user message notification*@
+    function setEmailNotificationMessage(message, mode) {
+        if (mode == 1) {
+            $("#loaderIconEmail").hide();
+            $("#validIconEmail").show();
+            $("#invalidIconEmail").hide();
+            $("#email-message").text(message);
+            $('#Email').css('background', '#f0fff0');
+            $('#Email').css('border-color', '#7DC27D');
+        } else {
+            $("#loaderIconEmail").hide();
+            $("#validIconEmail").hide();
+            $("#invalidIconEmail").show();
+            $("#email-message").text(message);
+            $('#Email').css('background', '#fff0f0');
+            $('#Email').css('border-color', '#A90329');
+        }
+    }
+
+    @*Check duplicated user*@
+    var timeoutReference;
+
+    $("#Email").on('input', function () {
+        $("#loaderIconEmail").show();
+        var email = $("#Email").val();
+        if (timeoutReference) clearTimeout(timeoutReference);
+        timeoutReference = setTimeout(function () {
+            if (email.trim() == "") {
+                $("#loaderIconEmail").hide();
+                $("#validIconEmail").hide();
+                $("#invalidIconEmail").hide();
+                $("#email-message").hide();
+                return false;
+            }
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("CheckValidUserWithEmail"))",
+                data: { "email": email },
+                success: function (data) {
+                    if (data.value == 0) {
+                        $("#loaderIconEmail").hide();
+                        $("#validIconEmail").hide();
+                        $("#invalidIconEmail").hide();
+                        $("#email-message").hide();
+                    }
+                    if (data.value == 1) {
+                        setEmailNotificationMessage("Email đã được sử dụng, xin vui lòng chọn địa chỉ khác.", 0);
+                    }
+                    if (data.value == 2) {
+                        setEmailNotificationMessage("Email đã được sử dụng, xin vui lòng chọn địa chỉ khác.", 0);
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                }
+            });
+        }, 1500);
+    });
+
+    @*Add new hospital user*@
+    $("#add-user-button").click(function () {
+        var email = $("#Email").val();
+        var secondEmail = $("#SecondaryEmail").val();
+        var firstName = $("#FirstName").val();
+        var lastName = $("#LastName").val();
+        var phoneNumber = $("#PhoneNumber").val();
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "@(Url.RouteUrl(Constants.AddAccountAction))",
+            data: {
+                "email": email,
+                "secondEmail": secondEmail,
+                "firstName": firstName,
+                "lastName": lastName,
+                "phoneNumber": phoneNumber
+            },
+            success: function (data) {
+                var returnValue = data.result.split('|');
+                var status = returnValue[0];
+                var email = returnValue[1];
+
+                if (status != 0) {
+                    $("#success-alert").show();
+                    setNotification("Thêm mới người dùng [" + email + "] thành công!", 1);
+                } else {
+                    $("#error-alert").show();
+                    setNotification("Thêm mới người dùng [" + email + "] không thành công, xin hãy thử lại.", 3);
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+
+        return false;
+    })
+
+    @*Data validation*@
+    var email = $("Email").val();
+    $("#add-user-form").validate({
+        rules: {
+            Email: {
+                required: true,
+                email: true
+            },
+            SecondaryEmail: {
+                notEqual: "#Email",
+                required: true,
+                email: true
+            },
+            FirstName: {
+                required: true,
+                maxlength: 16
+            },
+            LastName: {
+                required: true,
+                maxlength: 16
+            },
+            PhoneNumber: {
+                required: true,
+                minlength: 8,
+                maxlength: 13
+            }
+        },
+
+        messages: {
+            Email: {
+                required: '@string.Format(ErrorMessage.CEM001, Constants.Email)',
+                email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
+            },
+            SecondaryEmail: {
+                required: '@string.Format(ErrorMessage.CEM001, Constants.Email)',
+                email: '@string.Format(ErrorMessage.CEM005, Constants.Email)'
+            },
+            FirstName: {
+                required: '@string.Format(ErrorMessage.CEM001, Constants.FirstName)',
+            },
+            LastName: {
+                required: '@string.Format(ErrorMessage.CEM001, Constants.LastName)',
+            },
+            PhoneNumber: {
+                required: '@string.Format(ErrorMessage.CEM001, Constants.PhoneNo)',
+                minlength: '@string.Format(ErrorMessage.CEM012, Constants.PhoneNo, 8)',
+                maxlength: '@string.Format(ErrorMessage.CEM003, Constants.PhoneNo, 13)'
+            }
+        },
+
+        errorPlacement: function (error, element) {
+            error.insertAfter(element.parent());
+        }
+    });
+</script>
+
+<style>
+    .resizeIcon {
+        width: 16px;
+        height: auto;
+    }
+</style>
