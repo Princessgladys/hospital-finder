@@ -86,8 +86,6 @@ BEGIN
 				  w.[Type] = 3 AND
 				  (N'%' + Word + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
 				   N'%' + @WhatPhrase + N'%' LIKE N'%' + Word + N'%')
-				  
-				  
 		END
 		-- FIND RELATIVE MATCHING TAGS WORD
 		ELSE
@@ -120,10 +118,7 @@ BEGIN
 				SELECT DISTINCT wh.Hospital_ID, @NonDiacriticIndexOfTag
 				FROM [NON_DIACRITIC_TAG] w, Tag_Hospital wh
 				WHERE w.Word_ID = wh.Word_ID AND
-					  (N'%' + w.Word + N'%' LIKE
-					   N'%' + @NonDiacriticWhatPhrase + N'%' OR
-					   N'%' + @NonDiacriticWhatPhrase + N'%' LIKE
-					   N'%' + w.Word + N'%')		  
+					  FREETEXT (w.Word, @WhatPhrase)		  
 			END
 		END
 
@@ -144,8 +139,8 @@ BEGIN
 			FROM Speciality s, Hospital h, Hospital_Speciality hs
 			WHERE h.Hospital_ID = hs.Hospital_ID AND
 				  hs.Speciality_ID = s.Speciality_ID AND
-				  (N'%' + Speciality_Name + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
-				   N'%' + @WhatPhrase + N'%' LIKE N'%' + Speciality_Name + N'%')
+				  (N'%' + s.Speciality_Name + N'%' LIKE N'%' + @WhatPhrase + N'%' OR
+				   N'%' + @WhatPhrase + N'%' LIKE N'%' + s.Speciality_Name + N'%')
 		END
 		-- FIND RELATIVE MATCHING SPECIALITY
 		ELSE
@@ -158,7 +153,7 @@ BEGIN
 					 FROM Speciality s, Hospital h, Hospital_Speciality hs
 					 WHERE h.Hospital_ID = hs.Hospital_ID AND
 						   hs.Speciality_ID = s.Speciality_ID AND 
-						   FREETEXT (Speciality_Name, @WhatPhrase))
+						   FREETEXT (s.Speciality_Name, @WhatPhrase))
 
 			IF (@NumOfHospitalFoundByRelativeSpeciality > 0)
 			BEGIN
@@ -168,7 +163,7 @@ BEGIN
 				FROM Speciality s, Hospital h, Hospital_Speciality hs
 				WHERE h.Hospital_ID = hs.Hospital_ID AND
 					  hs.Speciality_ID = s.Speciality_ID AND 
-					  FREETEXT (Speciality_Name, @WhatPhrase)
+					  FREETEXT (s.Speciality_Name, @WhatPhrase)
 			END
 			-- NON-DIACRITIC VIETNAMESE
 			ELSE
@@ -178,10 +173,7 @@ BEGIN
 				FROM [NON_DIACRITIC_SPECIALITY] s, Hospital h, Hospital_Speciality hs
 				WHERE h.Hospital_ID = hs.Hospital_ID AND
 					  hs.Speciality_ID = s.Speciality_ID AND
-					  (N'%' + s.Speciality_Name + N'%' LIKE
-					   N'%' + @NonDiacriticWhatPhrase + N'%'OR
-					   N'%' + @NonDiacriticWhatPhrase + N'%' LIKE 
-					   N'%' + s.Speciality_Name + N'%')	  
+					  FREETEXT (s.Speciality_Name, @WhatPhrase)  
 			END
 		END
 
@@ -248,10 +240,7 @@ BEGIN
 					  hs.Speciality_ID = s.Speciality_ID AND
 					  s.Speciality_ID = sd.Speciality_ID AND
 					  sd.Disease_ID = d.Disease_ID AND
-					  (N'%' + d.Disease_Name + N'%' LIKE
-					   N'%' + @NonDiacriticWhatPhrase + N'%' OR
-					   N'%' + @NonDiacriticWhatPhrase + N'%' LIKE 
-					   N'%' + d.Disease_Name + N'%')
+					  FREETEXT(d.Disease_Name, @WhatPhrase)
 			END
 		END
 	END
