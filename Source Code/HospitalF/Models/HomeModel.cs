@@ -156,8 +156,8 @@ namespace HospitalF.Models
             {
                 // Find matching result for cities
                 if (!string.IsNullOrEmpty(city.City_Name) &&
-                        StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr),
-                        StringUtil.RemoveDiacriticMarks(city.City_Name.Trim().ToLower())))
+                    StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr),
+                    StringUtil.RemoveDiacriticMarks(city.City_Name.Trim().ToLower())))
                 {
                     this.CityID = city.City_ID;
                     this.CityName = city.City_Name;
@@ -166,18 +166,46 @@ namespace HospitalF.Models
                 }
             }
 
-            // Check every word in district list to see if the input token is match
-            foreach (District district in districtList)
+            // Check special district case
+            string nonDiacriticeQueryStr = StringUtil.RemoveDiacriticMarks(inputStr);
+            if (nonDiacriticeQueryStr.Contains("quan 12"))
             {
-                // Find matching result for districts
-                if (!string.IsNullOrEmpty(district.District_Name) &&
+                this.DistrictID = 761;
+                this.DistrictName = "12";
+                isDistrictFount = true;
+            }
+            if (nonDiacriticeQueryStr.Contains("quan 11"))
+            {
+                this.DistrictID = 772;
+                this.DistrictName = "11";
+                isDistrictFount = true;
+            }
+            if (nonDiacriticeQueryStr.Contains("quan 10"))
+            {
+                this.DistrictID = 771;
+                this.DistrictName = "10";
+                isDistrictFount = true;
+            }
+
+            if (this.DistrictID == 0)
+            {
+                // Check every word in district list to see if the input token is match
+                foreach (District district in districtList)
+                {
+                    int tempDistrictIndex = StringUtil.TakeMatchedStringPosition(
+                             StringUtil.RemoveDiacriticMarks(inputStr),
+                             StringUtil.RemoveDiacriticMarks(district.Type.ToLower()) + Constants.WhiteSpace +
+                             StringUtil.RemoveDiacriticMarks(district.District_Name.ToLower()));
+                    // Find matching result for districts
+                    if (!string.IsNullOrEmpty(district.District_Name) &&
                         StringUtil.IsPatternMatched(StringUtil.RemoveDiacriticMarks(inputStr),
                         StringUtil.RemoveDiacriticMarks(district.District_Name.Trim().ToLower())))
-                {
-                    this.DistrictID = district.District_ID;
-                    this.DistrictName = district.District_Name;
-                    isDistrictFount = true;
-                    break;
+                    {
+                        this.DistrictID = district.District_ID;
+                        this.DistrictName = district.District_Name;
+                        isDistrictFount = true;
+                        break;
+                    }
                 }
             }
 
@@ -231,23 +259,48 @@ namespace HospitalF.Models
                 }
             }
 
-            // Check every word in district list to see in the input token is match
-            foreach (District district in districtList)
+            // Check special district case
+            string nonDiacriticeQueryStr = StringUtil.RemoveDiacriticMarks(queryStr);
+            if (nonDiacriticeQueryStr.Contains("quan 12"))
             {
-                if (!string.IsNullOrEmpty(district.District_Name))
+                this.DistrictID = 761;
+                this.DistrictName = "12";
+                isDistrictFound = true;
+            }
+            if (nonDiacriticeQueryStr.Contains("quan 11"))
+            {
+                this.DistrictID = 772;
+                this.DistrictName = "11";
+                isDistrictFound = true;
+            }
+            if (nonDiacriticeQueryStr.Contains("quan 10"))
+            {
+                this.DistrictID = 771;
+                this.DistrictName = "10";
+                isDistrictFound = true;
+            }
+
+            if (this.DistrictID == 0)
+            {
+                // Check every word in district list to see in the input token is match
+                foreach (District district in districtList)
                 {
-                    tempDistrictIndex = StringUtil.TakeMatchedStringPosition(
-                         StringUtil.RemoveDiacriticMarks(queryStr),
-                         StringUtil.RemoveDiacriticMarks(district.Type.ToLower()) + Constants.WhiteSpace +
-                         StringUtil.RemoveDiacriticMarks(district.District_Name.ToLower()));
-                    if (tempDistrictIndex != Constants.DefaultMatchingValue)
+                    if (!string.IsNullOrEmpty(district.District_Name))
                     {
-                        districtPosition = tempDistrictIndex;
-                        this.DistrictID = district.District_ID;
-                        this.DistrictName = district.District_Name;
-                        tempDistrict = district.Type + Constants.WhiteSpace + district.District_Name;
-                        isDistrictFound = true;
-                        break;
+                        tempDistrictIndex = StringUtil.TakeMatchedStringPosition(
+                             StringUtil.RemoveDiacriticMarks(queryStr),
+                             StringUtil.RemoveDiacriticMarks(district.Type.ToLower()) + Constants.WhiteSpace +
+                             StringUtil.RemoveDiacriticMarks(district.District_Name.ToLower()));
+
+                        if (tempDistrictIndex != Constants.DefaultMatchingValue)
+                        {
+                            districtPosition = tempDistrictIndex;
+                            this.DistrictID = district.District_ID;
+                            this.DistrictName = district.District_Name;
+                            tempDistrict = district.Type + Constants.WhiteSpace + district.District_Name;
+                            isDistrictFound = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -350,9 +403,13 @@ namespace HospitalF.Models
             string tempWhere = string.Empty;        // Temporary value for Where phrase
             bool isComplete = false;                // Indicate if the process is complete or not
 
+            // Remove redundant white space between words in inputquery
+            inputQuery = Regex.Replace(inputQuery, @"\s+", " ");
+
             // Create a list of tokens
             List<string> tokens = StringUtil.StringTokenizer(inputQuery);
             int sizeOfTokens = tokens.Count();
+
 
             // Load relation word dictionary
             List<string> wordDic = await DictionaryUtil.LoadRelationWordAsync();
