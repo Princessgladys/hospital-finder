@@ -423,10 +423,18 @@ BEGIN
 					END
 					ELSE
 					BEGIN
-						INSERT INTO Tag_Hospital
-						VALUES ((SELECT Word_ID
-								 FROM Tag
-								 WHERE LOWER(Word) = LOWER(@Token)), @HospitalID)
+						IF (NOT EXISTS(SELECT *
+							   FROM Tag_Hospital
+							   WHERE Hospital_ID = @HospitalID AND
+									 Word_ID = (SELECT Word_ID
+												FROM Tag
+												WHERE LOWER(Word) = LOWER(@Token))))
+						BEGIN
+							INSERT INTO Tag_Hospital
+							VALUES ((SELECT Word_ID
+									 FROM Tag
+									 WHERE LOWER(Word) = LOWER(@Token)), @HospitalID)
+						END
 					END
 
 					SET @RowNumber += 1
