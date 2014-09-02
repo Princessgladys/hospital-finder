@@ -161,6 +161,77 @@ namespace HospitalF.Controllers
         /// <returns>ActionResult</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
         [Authorize(Roles = Constants.AdministratorRoleName)]
+        public ActionResult AddAccountSeperate()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// POST: /Account/AddAccount
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <param name="secondEmail">Secondary email</param>
+        /// <param name="firstName">Firstname</param>
+        /// <param name="lastName">Lastname</param>
+        /// <param name="phoneNumber">Phone number</param>
+        /// <returns>AJAX result</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
+        [HttpPost]
+        public async Task<ActionResult> AddAccountSeperate(string email, string secondEmail,
+            string firstName, string lastName, string phoneNumber)
+        {
+            try
+            {
+                int result = 0;
+
+                // Prepare data
+                AccountModel model = new AccountModel();
+                model.Email = email;
+                model.SecondaryEmail = secondEmail;
+                model.FirstName = firstName;
+                model.LastName = lastName;
+                model.PhoneNumber = phoneNumber;
+                model.ConfirmedPerson = Int32.Parse(
+                    User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.InsertHospitalUserAsync(model);
+                }
+
+                // Check returned result
+                if (result == 1)
+                {
+                    return Json(new
+                    {
+                        result = 1.ToString() +
+                            Constants.VerticalBar + model.Email
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        result = 0.ToString() +
+                            Constants.VerticalBar + model.Email
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+        }
+
+        /// <summary>
+        /// Load paritial view Add Account
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [LayoutInjecter(Constants.AdmidLayout)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public ActionResult AddAccount()
         {
             return PartialView(Constants.AddAccountAction);
