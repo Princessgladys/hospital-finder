@@ -1364,6 +1364,7 @@ namespace HospitalF.Controllers
                                         geoJsonObject[Constants.GeoCodeResults].
                                             First[Constants.GeoCodeGemometry][Constants.GeoCodeLocation].
                                             Value<double>(Constants.GeoCodeLongitude));
+                                    record.Coordinate = record.Coordinate.Replace("\r\n", string.Empty);
                                 }
                                 else
                                 {
