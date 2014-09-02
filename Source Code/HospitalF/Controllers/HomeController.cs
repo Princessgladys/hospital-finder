@@ -340,7 +340,7 @@ namespace HospitalF.Controllers
                 // Transfer list of hospitals to Search Result page
 
                 ViewBag.HospitalList = pagedHospitalList;
-                ViewBag.JsonHospitalList = JsonConvert.SerializeObject(pagedHospitalList);
+                ViewBag.JsonHospitalList = JsonConvert.SerializeObject(pagedHospitalList).Replace("\r\n", string.Empty);
 
                 NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(Request.Url.Query);
                 queryString.Remove("page");
