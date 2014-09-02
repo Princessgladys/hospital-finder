@@ -926,12 +926,205 @@ namespace HospitalF.Controllers
         #region Update Hospital
 
         /// <summary>
+        /// GET: /Hospital/Index (Hospital User)
+        /// </summary>
+        /// <returns>Task[ActionResult]</returns>
+        [LayoutInjecter(Constants.HospitalUserLayout)]
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        public async Task<ActionResult> Index()
+        {
+            HospitalModel model = new HospitalModel();
+            try
+            {
+                int? hospitalId = null;
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    hospitalId = await Task.Run(() =>
+                        (from u in data.Users
+                        where u.User_ID == Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2])
+                        select u.Hospital_ID).SingleOrDefault());
+                }
+
+                //  Load hospital in database
+                model = await model.LoadSpecificHospital(hospitalId.Value);
+
+                #region cascading dropdownlist
+
+                // Load list of cities
+                cityList = await LocationUtil.LoadCityAsync();
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+
+                // Load list of districts
+                districtList = await LocationUtil.LoadDistrictInCityAsync(model.CityID);
+                var districtResult = (from d in districtList
+                                      select new
+                                      {
+                                          District_ID = d.District_ID,
+                                          District_Name = d.Type + Constants.WhiteSpace + d.District_Name
+                                      });
+                ViewBag.DistrictList = new SelectList(districtResult, Constants.DistrictID, Constants.DistrictName);
+
+                // Load list of districts
+                wardList = await LocationUtil.LoadWardInDistrictAsync(model.DistrictID);
+                var wardResult = (from w in wardList
+                                  select new
+                                  {
+                                      Ward_ID = w.Ward_ID,
+                                      Ward_Name = w.Type + Constants.WhiteSpace + w.Ward_Name
+                                  });
+                ViewBag.WardList = new SelectList(wardResult, Constants.WardID, Constants.WardName);
+
+                // Load list of hospital types
+                hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
+
+                //Load list of specialities
+                model.SpecialityList = await SpecialityUtil.LoadSpecialityAsync();
+
+                //Load list of services
+                serviceList = await ServiceFacilityUtil.LoadServiceAsync();
+                ViewBag.ServiceList = serviceList;
+
+                // Load list of facilitites
+                facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
+                ViewBag.FacilityList = facilityList;
+
+                #endregion
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// POST: /Hospital/UpdateHospital (Hospital User)
+        /// </summary>
+        /// <param name="model">Hospital Model</param>
+        /// <param name="files">Photo files</param>
+        /// <returns>Task[ActionResult]</returns>
+        [HttpPost]
+        [LayoutInjecter(Constants.HospitalUserLayout)]
+        [Authorize(Roles = Constants.HospitalUserRoleName)]
+        [ValidateInput(false)]
+        public async Task<ActionResult> Index(HospitalModel model, List<HttpPostedFileBase> file)
+        {
+            try
+            {
+                // Prepare data
+                int result = 0;
+                string updatedContent = string.Empty;
+                model.CreatedPerson = Int32.Parse(User.Identity.Name.Split(Char.Parse(Constants.Minus))[2]);
+
+                #region Handle photo
+
+                // Take file path from session
+                List<string> filePath = new List<string>();
+                if (Session[Constants.FileInSession] != null)
+                {
+                    filePath = (List<string>)Session[Constants.FileInSession];
+                    for (int n = 0; n < filePath.Count; n++)
+                    {
+                        if (n == (filePath.Count - 1))
+                        {
+                            model.PhotoFilesPath += filePath[n];
+                        }
+                        else
+                        {
+                            model.PhotoFilesPath += filePath[n] +
+                                Constants.VerticalBar.ToString();
+                        }
+                    }
+                    // Set photo session to null value
+                    Session[Constants.FileInSession] = null;
+                }
+                else
+                {
+                    model.PhotoFilesPath = string.Empty;
+                }
+
+                #endregion
+
+                // Return list of dictionary words
+                using (LinqDBDataContext data = new LinqDBDataContext())
+                {
+                    result = await model.UpdateHospitalAsync(model);
+                }
+
+                // Check if insert process is success or not
+                if (result == 0)
+                {
+                    ViewBag.UpdateHospitalStatus = 0.ToString() + Constants.Minus + model.HospitalName;
+                }
+                else
+                {
+                    ViewBag.UpdateHospitalStatus = 1.ToString() + Constants.Minus + model.HospitalName;
+                }
+
+                model = await model.LoadSpecificHospital(model.HospitalID);
+
+                #region cascading dropdownlist
+
+                // Load list of cities
+                cityList = await LocationUtil.LoadCityAsync();
+                ViewBag.CityList = new SelectList(cityList, Constants.CityID, Constants.CityName);
+
+                // Load list of districts
+                districtList = await LocationUtil.LoadDistrictInCityAsync(model.CityID);
+                var districtResult = (from d in districtList
+                                      select new
+                                      {
+                                          District_ID = d.District_ID,
+                                          District_Name = d.Type + Constants.WhiteSpace + d.District_Name
+                                      });
+                ViewBag.DistrictList = new SelectList(districtResult, Constants.DistrictID, Constants.DistrictName);
+
+                // Load list of districts
+                wardList = await LocationUtil.LoadWardInDistrictAsync(model.DistrictID);
+                var wardResult = (from w in wardList
+                                  select new
+                                  {
+                                      Ward_ID = w.Ward_ID,
+                                      Ward_Name = w.Type + Constants.WhiteSpace + w.Ward_Name
+                                  });
+                ViewBag.WardList = new SelectList(wardResult, Constants.WardID, Constants.WardName);
+
+                // Load list of hospital types
+                hospitalTypeList = await HospitalUtil.LoadHospitalTypeAsync();
+                ViewBag.HospitalTypeList = new SelectList(hospitalTypeList, Constants.TypeID, Constants.TypeName);
+
+                //Load list of specialities
+                model.SpecialityList = await SpecialityUtil.LoadSpecialityAsync();
+
+                //Load list of services
+                serviceList = await ServiceFacilityUtil.LoadServiceAsync();
+                ViewBag.ServiceList = serviceList;
+
+                // Load list of facilitites
+                facilityList = await ServiceFacilityUtil.LoadFacilityAsync();
+                ViewBag.FacilityList = facilityList;
+
+                #endregion
+            }
+            catch (Exception exception)
+            {
+                LoggingUtil.LogException(exception);
+                return RedirectToAction(Constants.SystemFailureHomeAction, Constants.ErrorController);
+            }
+
+            return View(model);
+        }
+
+        /// <summary>
         /// Update hospital information
         /// </summary>
         /// <param name="hospitalId">Hospital ID</param>
         /// <returns>Task[ActionResult]</returns>
         [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles = Constants.AdministratorRoleName + Constants.Comma + Constants.HospitalUserRoleName)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         public async Task<ActionResult> UpdateHospital(int hospitalId)
         {
             HospitalModel model = new HospitalModel();
@@ -1000,7 +1193,7 @@ namespace HospitalF.Controllers
         /// <returns>Task[ActionResult]</returns>
         [HttpPost]
         [LayoutInjecter(Constants.AdmidLayout)]
-        [Authorize(Roles = Constants.AdministratorRoleName + Constants.Comma + Constants.HospitalUserRoleName)]
+        [Authorize(Roles = Constants.AdministratorRoleName)]
         [ValidateInput(false)]
         public async Task<ActionResult> UpdateHospital(HospitalModel model, List<HttpPostedFileBase> file)
         {
