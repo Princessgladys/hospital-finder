@@ -96,18 +96,21 @@ namespace HospitalF.Models
                     data.Doctors.InsertOnSubmit(doctor);
                     data.SubmitChanges();
 
-                    Photo photo = new Photo()
+                    if (!string.IsNullOrEmpty(model.PhotoFilePath))
                     {
-                        File_Path = model.PhotoFilePath,
-                        Caption = model.LastName + " " + model.FirstName,
-                        Add_Date = DateTime.Now,
-                        Doctor_ID = doctor.Doctor_ID,
-                        Uploaded_Person = model.UploadedPerson,
-                        Is_Active = true
-                    };
+                        Photo photo = new Photo()
+                        {
+                            File_Path = model.PhotoFilePath,
+                            Caption = model.LastName + " " + model.FirstName,
+                            Add_Date = DateTime.Now,
+                            Doctor_ID = doctor.Doctor_ID,
+                            Uploaded_Person = model.UploadedPerson,
+                            Is_Active = true
+                        };
 
-                    data.Photos.InsertOnSubmit(photo);
-                    data.SubmitChanges();
+                        data.Photos.InsertOnSubmit(photo);
+                        data.SubmitChanges();
+                    }
 
                     foreach (int specilityId in model.SpecialityList)
                     {
@@ -221,29 +224,32 @@ namespace HospitalF.Models
                             data.SubmitChanges();
                         }
 
-                        Photo photo = (from p in data.Photos
-                                       where p.Doctor_ID == doctor.Doctor_ID
-                                       select p).SingleOrDefault();
-                        if (photo != null)
+                        if (!string.IsNullOrEmpty(model.PhotoFilePath))
                         {
-                            photo.File_Path = model.PhotoFilePath;
-                            photo.Uploaded_Person = model.UploadedPerson;
-                            data.SubmitChanges();
-                        }
-                        else
-                        {
-                            Photo newPhoto = new Photo()
+                            Photo photo = (from p in data.Photos
+                                           where p.Doctor_ID == doctor.Doctor_ID
+                                           select p).SingleOrDefault();
+                            if (photo != null)
                             {
-                                File_Path = model.PhotoFilePath,
-                                Caption = model.LastName + " " + model.FirstName,
-                                Add_Date = DateTime.Now,
-                                Doctor_ID = doctor.Doctor_ID,
-                                Uploaded_Person = model.UploadedPerson,
-                                Is_Active = true
-                            };
+                                photo.File_Path = model.PhotoFilePath;
+                                photo.Uploaded_Person = model.UploadedPerson;
+                                data.SubmitChanges();
+                            }
+                            else
+                            {
+                                Photo newPhoto = new Photo()
+                                {
+                                    File_Path = model.PhotoFilePath,
+                                    Caption = model.LastName + " " + model.FirstName,
+                                    Add_Date = DateTime.Now,
+                                    Doctor_ID = doctor.Doctor_ID,
+                                    Uploaded_Person = model.UploadedPerson,
+                                    Is_Active = true
+                                };
 
-                            data.Photos.InsertOnSubmit(newPhoto);
-                            data.SubmitChanges();
+                                data.Photos.InsertOnSubmit(newPhoto);
+                                data.SubmitChanges();
+                            }
                         }
                     }
 
