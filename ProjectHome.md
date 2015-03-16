@@ -1,0 +1,1 @@
+Building the web application which compatible with both computer and mobile devices supports user to find the appropriate hospitals for their conditions
